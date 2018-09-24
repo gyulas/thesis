@@ -1,0 +1,133 @@
+	\section{Turn on sequence}\label{ii.-turn-on-sequence}
+	
+	If one of the following steps are ambiguous or the function does not
+	work properly, \textbf{STOP} the process, and do not attempt to fly with
+	the system.
+	
+	\begin{todolist}
+	\itemsep1pt\parskip0pt\parsep0pt
+	\item
+	  Turn on the JETI transmitter and select the proper flight model -
+	  \textbf{Sindy-Flight} for the Sindy aircraft
+	
+	  \begin{itemize}
+	  \itemsep1pt\parskip0pt\parsep0pt
+	  \item
+	    Check every control switch on the transmitter, and set them to the
+	    \textbf{default position}. See \emph{Appendix}
+	  \end{itemize}
+	\item
+	  Powering the \emph{RX-MUX} units
+	
+	  \begin{itemize}
+	  \itemsep1pt\parskip0pt\parsep0pt
+	  \item
+	    plug in the 2 pieces of \textbf{2S} battery at front of the fuselage
+	    according to the labeling
+	  \end{itemize}
+	\item
+	  Checking that the RX-MUX is working (RC communication)
+	
+	  \begin{itemize}
+	  \itemsep1pt\parskip0pt\parsep0pt
+	  \item
+	    Connection is indicated on DC-24's screen upper left corner: two
+	    green \emph{tick}s are present if radio connection is established.
+	  \item
+	    Search the two red LED indicators on RX-MUX (at the top of the FCC
+	    case, left and right side). The RX-MUX for the left and the right
+	    side works separately and independently. Now turn on and off the
+	    autopilot with the labeled arm and check the LEDs.
+	  \item
+	    If the red LEDs on the RX-MUX units are turning off and then back
+	    again indicating Autopilot state, then you can move to the next
+	    step. Leave the transmitter in \textbf{manual flight mode/autopilot
+	    off}. See \emph{Appendix}.
+	  \end{itemize}
+	\item
+	  Powering the \emph{servos}
+	
+	  \begin{itemize}
+	  \itemsep1pt\parskip0pt\parsep0pt
+	  \item
+	    Connect the servo batteries to their respective cables: 2 pieces of
+	    \textbf{2S} battery at the back of the fuselage according to the
+	    labeling
+	  \item
+	    Remove the RBF jumpers at the back of the fuselage
+	  \item
+	    Put the RBF jumpers into the toolkit
+	  \item
+	    If the main receiver (fuselage front), the satellite receiver (RSAT,
+	    at fuselage back) and the RX-MUX are connected and the transmitter
+	    is turned on, the servos are about to start working now.
+	  \item
+	    Check that every control surface deflects in the right direction, by
+	    controlling the aircraft with the transmitter.
+	  \end{itemize}
+	\item
+	  Powering the \emph{flightHAT}
+	
+	  \begin{itemize}
+	  \itemsep1pt\parskip0pt\parsep0pt
+	  \item
+	    Connect the \textbf{6S} battery at front of the fuselage (for
+	    flightHAT)
+	  \item
+	    Wait until the Pi boots up - it may take a minute
+	  \item
+	    \textbf{Connect to the RaspberryPI} and start the SW\_PI software.
+	    For details see \emph{Appendix}
+	  \item
+	    The software was started at: (table necess.)
+	  \end{itemize}
+	\item
+	  Fire up both the Ground Control Station and the EDL system and check
+	  the connection and the received data on both interface
+	\item
+	  Put on the top casing of the main fuselage
+	\item
+	  Just before the actual flight, remove the protective cap from the
+	  aeroprobe
+	\item
+	  Put the throttle stick of the transmitter to the middle state
+	\item
+	  Fix the aircraft - at least one man should hold it on the ground from
+	  behind
+	\item
+	  Connect the two halves of the inline circuit breaker at each nacelle
+	  (with caution!), and wait for the beeping sounds
+	\item
+	  Set the throttle stick to the lowest position. At this point, the
+	  throttle is armed, \textbf{stay clear of the airscrews} for safety
+	  reasons!
+	\item
+	  The aircraft is ready for takeoff
+	\end{todolist}
+
+	\begin{table}[H]
+		\centering
+		\caption*{Time of the flight events}
+		\renewcommand{\arraystretch}{2} % to increase cell height
+		\begin{tabular}{|c|p{2cm}|c|}
+			\hline
+			
+			% header
+			\multirow{2}{*}
+			{Event} & \multicolumn{2}{c|}{Time} \\	\cline{2-3}
+			& First flight & Second flight\\ \hline
+
+			% entries - event names aligned left with multicolumn
+			\multicolumn{1}{|l|}{flightHAT turned on} 	& & \\ \hline
+
+			\multicolumn{1}{|l|}{Takeoff} 				& & \\ \hline
+
+			\multicolumn{1}{|l|}{Landing} 				& & \\ \hline
+
+			\multicolumn{1}{|l|}{Logfile No.} 			& & \\ \hline
+
+		\end{tabular}
+	\end{table}
+
+%	\begin{center}\rule{3in}{0.4pt}\end{center}
+	

@@ -1,0 +1,19 @@
+\pagebreak
+\section{Bekapcsolás folyamata}\label{section-turnon}
+
+A demonstrátor repülőgép bekapcsolása összetett és egymásra épülő folyamat. A motorvezérlőnek külön van logikai tápja és külön tápja a teljesítményfokozathoz.
+ 
+\input{src/tikz/flexop_layout}
+
+%A repülőgépnek jól meghatározott bekapcsolási sorrendje van, hogy az események jól kézben trathatóak legyenek. (megmagyarázandó!!!!)
+%
+%A Twitter bekapcsolása az RX-MUX után lehetséges.
+%A Twitter a logikai tápját 3S LiPo-ról kapja, azaz az RX-MUX után kapcsol be. Az RX-MUX így el tudja kapni a bekapcsolási üzenetét, így ellenőrizve azt hogy online vgauynk. Ezt az EDL-ben is meg lehet jeleníteni.
+%
+%A Twitter bekapcsolásakor üzenetet küld hogy feszültséget kapott a logikai része.
+%Ezt a CAN kábelen fogja kapni és 3S LiPo lesz a logikai táp.
+%Az RX-MUX ekkor NMT üzenetet küld neki, azthiszem ready to sw on-ba küldi.
+%
+%Ha már tud PDO-t küldeni (olyan állapotban van), akkor jelez az RX-MUXnak hogy feszültséget kapott.
+%
+%Aztán lehet aktiválni a szabályzást és bizonyos időközönként setpointokat küldeni, kb. 5ms-ként. Ha ehhez nem elég a bw.,  PVT-re kell váltani.

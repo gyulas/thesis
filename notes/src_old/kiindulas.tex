@@ -1,0 +1,49 @@
+\section*{Feladat}
+
+A félév során a DirectDrive áttétel nélküli szervóhajtás rendszerintegrációjával foglalkoztam. Előző félévben a szervóhajtás szabályzó köreit hangoltam, melyhez a gyártó által biztosított szoftver állt rendelkezésre, az Elmo Application Studio. Ezzel lehetett beállítani a szabályzást és kézi módban tesztelni az alapjelkövetést. Ez elkészült, a nyári gyakorlat során így megvizsgáltam, hogy tudja egy beágyazott rendszer irányítani a hajtást.  
+
+\begin{figure}[H]
+	\centering
+	%\begin{subfigure}[t]{0.8\textwidth}
+	\centering
+	\includegraphics[width=12cm]{figures/hw/dd}
+	\caption{A DirectDrive szervóhajtás}
+	\label{fig:dd}
+	%	\end{subfigure}
+\end{figure}
+
+%A szervóhajtás egy kísérleti repülőgépen fog helyet kapni, ahol a fedélzeti beágyazott számítógép fogja vezérelni. A szoftver funkcióit kell átültetni és az igényeinkre szabni, hogy ezek a automatizáltan végrehajthatók legyenek. A fedélzeti számítógép feladata a hajtás:
+
+A hajtást irányító eszköz feladatai:
+\begin{itemize}[noitemsep,topsep=-8pt,parsep=0pt,partopsep=-6pt]
+	\item a motor engedélyezése, a mozgás paraméterezése
+	\item referenciajel kiadása
+	\item pozíció és egyéb adatok visszamérése
+\end{itemize}
+
+A szabályzó hangolása és az alapjelkövetés tesztelése során az alábbi ábra szerinti eszközöket használtam. A szoftverben egy gombbal lehet a motort engedélyezni, a mozgás paraméterei részletesen beállíthatók, az encoder által mért pozíciót annak inkremenseiben leolvashatjuk. 
+
+\begin{figure}[H]
+	\centering
+	\input{src/tikz/controlsys_layout}
+	\label{fig:control}
+	\caption{Szervóhajtás tesztje a gyártói szoftverrel}
+\end{figure}
+%Ezeket eddig a szoftverben grafikus felületről lehetett kezelni illetve leolvasni. 
+%Azokat az információkat is fel kell dolgozni, amik a szoftverből leolvashatók voltak, mivel a referenciajelet egy magasabb szintű szabályzás számítja.
+%Így meg kellett valósítani a szabályzó tesztelése során szoftverből, grafikus felületen használt funkciókat.
+
+
+\begin{figure}[H]
+%	\begin{subfigure}[t]{0.8\textwidth}
+	\centering
+	\includegraphics[width=13cm]{figures/measure/elmo}
+	\caption{Mozgás végrehajtása grafikus szoftverből}
+	\label{fig:elmo}
+%	\end{subfigure}
+\end{figure}
+
+A hajtás egy kísérleti repülőgépen fog helyet kapni, ahol szöghelyzet referenciajelet kap majd a fedélzeti számítógéptől. A nyári gyakorlatom során a fenti szoftver helyett a motorvezérlővel CANopen protokoll szerinti üzenetekkel kommunikáltam.
+%\vspace{12pt}
+
+% {\color{red}\hrule}

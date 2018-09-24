@@ -1,0 +1,56 @@
+\section*{A téma}
+
+\begin{scriptsize}
+\textcolor{red}{Fejlécben ne legyen benne a módosítás dátuma. Nem egy élő dokumentomot készítesz, így ezt nem kell minden oldalon az olvasó képébe tolni. A Fedlapon elhelyezett dátum teljes mértékben kielégíti ezeket a funkciókat!}
+\end{scriptsize}
+
+
+\subsection*{Abstract}
+A hallgató megismeri a CANopen szabvány tulajdonságait, üzenetcsomagagjainak felépítését, típusát és az ezt implementáló Gold Twitter motorvezérlő elektronika működését. CANopen szabvány szerinti üzeneteket állít össze, amik segítségével a szervóhajtást a fedélzeti számítógép irányítja, ehhez tartozik annak engedélyezése, monitorozása, a referenciajel küldése és a pozíciójának mérése.
+
+\begin{scriptsize}
+\textcolor{red}{Első olvasásra nem teljesen tiszta ez apján, hogy akkor a Gold Twitter illetve a CANOpen mit is és miért csinál. Én ebből a dokksiból az absztraktot kihagynám, nincs jelentősége és szerepe. Ha ragaskodsz hozzá, hogy legyen benne akkor foglamazzad át. De inkább dobd ki.}
+\end{scriptsize}
+
+
+\subsection*{Bevezető}
+Az előző félévben önálló labor keretében az MTA SZTAKI-ban behangoltam egy BLDC motor alapú szervóhajtás szabályzási köreit, ami így képes lett a pozíció alapjel követésére. Ezt a munkát folytatva most a motorvezérlő kommunikációs funkcióival foglalkoztam. 
+
+\begin{scriptsize}
+\textcolor{red}{Ez egy önálló dokumentum kellene, hogy legyen. Így olyan érzést kelt a dolog, mintha elvárt lenne az olvasótól, hogy ő tisztában van az Önlab teljes tartalmával. Ez biztosan nincs így. Ide bevezetőnek bőven elférne az ott leírt bevezető is. Majd kitérni rá, hogy most a kommunikációs részt írod.  }
+\end{scriptsize}
+
+
+Az említett hajtás egy kísérleti repülőgépen fog helyet kapni és az alapjelet a fedélzeti számítógépen futó szabályzótól kapja majd. Ahhoz, hogy a fedélzeti számítógép irányíthassa a hajtást, a megfelelő protokoll szerint kell a motorvezérlőnek utasításokat adni. A mozgás részletesen beállítható és monitorozható, a feladat így túlmutat csupán egy referenciajel kiadásán. A motorvezérlő képes:
+
+\begin{scriptsize}
+\textcolor{red}{Nettó kötekedés következik: Most képes rá, vagy ezen feladatokat kell tudnia ellátni? Ha már most tudja akkor miért is kellett neked ezzel dolgoznod?
+}
+\end{scriptsize}
+
+
+\begin{itemize}
+	\item üzemi állapotba kapcsolni, a motort bekapcsolni
+	\item a motor bekapcsolt állapota mellett adott szögkitérésre beállni, beállítható mozgási paraméterekkel
+	\item a kívánt paramétereket ill. mért értékeket, úgy  
+	 mint tápfeszültséget, jelenlegi pozíciót, stb. visszaküldeni
+\end{itemize}
+
+\begin{scriptsize}
+\textcolor{red}{Milyen üzenetek?, hogy jönnek ők ide? --- 2 vagy 3 olvasás után már tiszta, de \HUGE{NE} várd el senkitől sem, hogy végig olvassa majd a dokksit, hogyha többször neki kell futnia... Te se olvasol végig dokumentáció/könyvet hogyha adott ponton nem tetszik, és megtalálod máshol is a benne rejlő infót, illetve nem is fontos az annyira.
+}
+\end{scriptsize}
+
+
+Ahhoz hogy megértsük, hogyan épülnek fel ezek az üzenetek és hogyan fejtik ki hatásukat, át fogjuk tekinteni a kommunikáció különböző rétegeit, a részt vevő eszközök feladatát.
+
+
+
+\begin{scriptsize}
+\textcolor{red}{
+}
+\end{scriptsize}
+
+
+\pagebreak
+

@@ -1,0 +1,36 @@
+\section{Eszközök}
+
+A fedélzeti számítógép egyik CAN csatlakozójára kapcsolódik majd a motorvezérlő elektronika. Ám a beágyazott szoftver megírása előtt (agilisan közben.....) egy USB-CAN konverter (UCC) segítségével tudok manuálisan összeállított üzeneteket küldeni a motorvezérlőre.
+
+% Ábra:
+\input{src/tikz/testlayout}
+
+A részegységek:
+\begin{itemize}[topsep=-8pt,parsep=0pt,partopsep=-6pt]
+	\item Matlab alkalmazás: összeállítja az üzenetet az általunk megadott mezőkkel.
+	\item UCC: USB-ről beolvassa azt és CAN-en kiküldi a csomagokat. Ő modellezi a végső hardvert, hiszen a CANopen master funkcionalitást majd az aktuátorokat vezérlő RX-MUX panel kezeli majd.
+	\item NI-CAN bus monitor: a CAN buszt figyeli, statisztikát gyűjt, ezen látni a választ (diagnosztikai eszköz). Opcionálisan használható erre a feladatra oszcilloszkóp vagy logikai analizátor is.
+	\item 	Az Elmo Gold Twitter egy olyan hajtásszabályzó elektronika, amiben integráltan megtalálható:
+	\begin{itemize}
+		\item az I/O és kommunikációs egység, ennek a CANopen fukncióit használjuk,
+		\item a szabályzó, illetve védelmi és biztonsági funkciókat is ellátó processzor egység,
+		\item a teljesítményfokozat, ami a szabályzó beavatkozó jelét a motorra küldi,
+		\item és bemenet a visszacsatoláshoz, pl. inkrementális encoderhez.
+	\end{itemize}
+\end{itemize}
+
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=15cm]{figures/hw/comm2}
+	\caption{Teszt összeállítás}
+	\label{fig-DD}
+\end{figure}
+
+%
+%\begin{scriptsize}
+%    \textcolor{red}{Értem én a próbálkozást ez mögött a kép mögött, de az egy mérnököknek készülő dokumentum, nem pedig youtube videó 10 éveseknek... és nem is reklám. Azért van a képhez jegyzet, hogy ott fel lehessen sorolni, hogy mi van a képen és miért. Illetve elvadult esetben lehet a komponensekről külön is képet csinálni, de az más néha sok.
+%    }
+%\end{scriptsize}
+
+

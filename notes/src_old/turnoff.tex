@@ -1,0 +1,75 @@
+	\section{Turn off sequence}\label{iii.-turn-off-sequence}
+	
+	\begin{todolist}
+	\itemsep1pt\parskip0pt\parsep0pt
+	\item
+	  Set the system to autopilot off / human pilot mode
+	\item
+	  Set the throttle stick to lowest position
+	\item
+	  Disconnect the power from the ESCs: open the circuit breaker at side
+	  of nacelles
+	\item
+	  Place back the protective cap of the aeroprobe as soon as possible
+	\item
+	  Connect to the Raspberry Pi via WiFi or cable,
+	
+	  \begin{itemize}
+	  \itemsep1pt\parskip0pt\parsep0pt
+	  \item
+	    Copy/transfer the logs from the RPI if needed - You can do this
+	    later on
+	  \end{itemize}
+	\item
+	  Turn off the Raspberry Pi:
+	
+	  \begin{itemize}
+	  \itemsep1pt\parskip0pt\parsep0pt
+	  \item
+	    Shut down the SW\_PI software with \textbf{Ctrl+C}
+	  \item
+	    Send a \texttt{sudo poweroff} command to the system, and wait for
+	    10s
+	  \end{itemize}
+	\item
+	  Remove the top casing from the main fuselage
+	\item
+	  Plug the BEC RBF jumpers to the back of the fuselage
+	\item
+	  Unplug the \textbf{6S} battery at the front of fuselage (flightHAT)
+	\item
+	  Unplug the \textbf{2S} batteries at the back of the fuselage (servo
+	  batteries)
+	\item
+	  Unplug the remaining two \textbf{2S} batteries at the front of the
+	  fuselage (RX-MUX units)
+	\item
+	  Turn off the JETI transmitter (take back into its casing if not used
+	  further)
+	\end{todolist}
+	
+	Now everything is unpowered.
+	
+	\subsubsection*{Battery replacement of nacelles after flight}\label{battery-replacement-after-flight}
+	
+	For battery replacement or A/C disassembly, do the following steps:
+	
+	\begin{todolist}
+	\itemsep1pt\parskip0pt\parsep0pt
+	\item
+	  Remove the nacelle covers - put back the screws to their places
+	\item
+	  Disconnect the \textbf{6S} battery connectors from the ESCs inside
+	  each nacelle
+	\item
+	  Remove all the discharged batteries and \textbf{separate the used}
+	  from charged ones!
+	\item
+	  Remove all battery alarms from the batteries
+	\end{todolist}
+	
+	If the A/C is about to be dissassembled, go to the next section. If not,
+	then you should repeat from \emph{Battery check and placement} section.
+	
+	\begin{center}\rule{3in}{0.4pt}\end{center}
+	

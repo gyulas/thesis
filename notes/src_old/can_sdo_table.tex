@@ -1,0 +1,23 @@
+\begin{tabu}{p{3.3cm}|C{1cm}|C{0.8cm}|C{1cm}|C{1cm}|C{1cm}|C{1.1cm}|C{2cm}|}
+	%\multirow{2}{1.5cm}{text}
+	\multicolumn{1}{l}{}&\multicolumn{7}{l}{Előforduló SDO típusok}
+	
+	\\ 		\cline{2-8}\cline{2-8}
+	& COBID & length & header & \multicolumn{2}{c|}{index} & subindex & Data 4 byte 
+	\\ 		\cline{2-8}		
+	\multicolumn{8}{l}{}
+	
+	\\ \cline{2-8}
+	lekérdezés & 67F & 8 & 40 & $idx_{low}$ & $idx_{high}$ & 00 & 00 00 00 00 
+	\\ 		\cline{2-8}
+	adat & 5FF & 8 & 40 & $idx_{low}$ & 00 & 00 & adat 
+	\\ 		\cline{2-8}
+	\multicolumn{8}{l}{}
+	
+	\\      \cline{2-8}
+	beállítás & 67F & 8 & 22 & $idx_{low}$ & 0 & 0 & adat 
+	\\ 		\cline{2-8}
+	megerősítés & 5FF & 8 & 60 & $idx_{low}$ & 0 & 0 & 00 00 00 00
+	\\ 		\cline{2-8}
+
+\end{tabu}

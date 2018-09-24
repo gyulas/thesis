@@ -1,0 +1,368 @@
+\section{A CAN protokoll}
+
+	%Az RC szervóknál háromvezetékes csati van ami miatt minden szervóhoz tartozik egy jelvezeték és egy táp érpár.
+	%A repülőn lévő két DirectDrive aktuátor külön CAN buszon lesz...
+
+	%\subsection{general}
+	
+	A CAN (Controller Area Network) kommunikációs busz egy elterjedt protokoll, mely soros átvitelre szolgál. Az OSI modell szerint felbontva (\ref{fig-OSIcan}. ábra) specifikál:
+	
+	\begin{itemize}[noitemsep,topsep=0pt,parsep=0pt,partopsep=0pt]
+		\item fizikai réteget: a drótok számát, az eszközök összekötésének módját, a drótokon a logikai szinteknek megfelelő feszültségeket
+		\item adatkapcsolati réteget: a buszra csatlakozó eszközök (ún. node-ok) címét, egy \textit{keret} átvitelének módját, a sikeres csomagküldés feltétekeit (ACK-olás).
+
+%\begin{scriptsize}
+%\textcolor{red}{Ack-olast mint olyan en kivennem innen, mert nem az a legfontosabb ezen a szinten. Hanem minden mas is legalább annyira fontos.
+%}
+%\end{scriptsize}
+
+	\end{itemize}
+	
+	\begin{figure}[H]
+%		\begin{subfigure}[t]{0.49\textwidth}
+%			\centering
+%			% trim={<left> <lower> <right> <upper>}
+%			\includegraphics[trim={0cm 11cm 0 0},clip,width=8cm]{figures/hw/sindyCANwirecolor}
+%			\caption{CAN bus kábel keresztmetszete}
+%			\label{fig-CANwire}
+%		\end{subfigure}
+%		~
+		\raisebox{18pt}[0pt][0pt]{
+			\begin{subfigure}[t]{0.49\textwidth}
+				\centering
+				\includegraphics[width=8.5cm]{figures/measure/labeledCAN}
+			\end{subfigure}
+		}
+		~
+		\begin{subfigure}[t]{0.49\textwidth}
+			\centering
+			\includegraphics[width=6cm]{figures/sw/osi}
+		\end{subfigure}
+		\\
+		\begin{minipage}{.49\textwidth}
+			\leavevmode\subcaption{CAN busz jelszintek}
+			\label{fig-CANwaveform}
+		\end{minipage}
+		~
+		\begin{minipage}{.49\textwidth}
+			\leavevmode\subcaption{OSI modell rétegei}
+			\label{fig-OSIcan}
+		\end{minipage}
+		\caption{A CAN fizikai rétege}
+		\label{fig-CANhw}
+	\end{figure}
+	
+	A CAN protokollt elsősorban autóipari célokra fejlesztették ki. Gyors és megbízható kommunikációs busz, zavartűrő és a hibák detektálása, kezelése is biztosított. Akár 1Mbps sebesség is elérhető, ha a teljes busz maxiumum 40m. A buszon minden eszköznek tudnia kell, milyen sebességű a kommunikáció, be kell állítani a jelzési sebességet. Az idő- és biztonságkritikus feladatok (motorvezérlés, ABS, légzsákok) biztos kiszolgálásához olyan protokollt fejlesztettek ki, amiben egy detektálatlan hiba várhatóan kb. ezer év folyamatos működés során lehetséges.
+	
+	A \ref{fig-CANwaveform} ábrán látható egy üzenet eleje. Differenciális jelátvitelt alkalmaznak, a feszültségszintek szerint a logikai nulla a domináns\footnote{A buszmeghajtó áramkör a domináns értéknél hajtja meg a \texttt{CAN\_LOW} és \texttt{CAN\_HIGH} vonalat 0 és 5V értékkel, így az információt nem a jelszint, hanem a két jelvezeték közötti differenciális feszültség hordozza.}, a logikai \texttt{1} pedig a recesszív bit. Ez azt jelenti hogyha több node csatlakozik a buszra akkor a logikai \texttt{0} jut érvényre. Ezt használjuk ki az arbitrációnál és az üzenetek ACK-olása is egy ilyen logikai nullába húzással történik\footnote{Logikai nulla érték esetén a meghajtó áramkör feszültségkülönbséget kapcsol a kommunikációs vonalakra, ha nem hajtja meg a buszt senki, a jelszintek a lezáró ellenállások miatt kiegyenlítődnek (logikai 1 érték). Ha valaki fogadja a CAN üzenetcsomagot, a vonalat a keret végén meghajtja, így ACK jelzést ad a küldőnek.}.
+		
+	A gyors átvitel eléréséhez a busz megszerzésének joga (arbitráció) is speciális: a CAN üzenetek ID-ja határozza meg az üzenet prioritását. Alacsonyabb ID magasabb prioritást jelöl, a buszfoglalás pedig úgy történik, hogy az ún. arbitrációs fázisban automatikusan a kisebb ID-jű eszköz kapja a küldés jogát, az arbitráció nem destruktív. Ez adatkapcsolati rétegbeli funkció. %Ezt azért lehet megvalósítani, mert idle állapotban a CAN-low és CAN-high vonalak...	
+		
+%	\subsection{cimek, uzenethossz, arbitracio, zavartures}
+%	2.0A verzió, itt a cím 11 bit.
+%	\subsection{general}
+
+
+%	\paragraph{A Twitter motorvezérlő elektronika beállításai}
+%
+%    \begin{scriptsize}
+%        \textcolor{red}{Ennek biztosan van köze a CAN protokollhoz? Ez az ELMŰ sajátja, ne keverd ide!
+%        }
+%    \end{scriptsize}
+%
+%
+%	
+%	A kommunikációban minden eszközön meg kell adni a CAN busz sebességét: a motorvezérlőnek, a fedélzeti számítógépnek (a mérések során az azt szimuláló CAN konverter) és a buszt figyelő NI-CAN monitornak is. Ez esetünkben 1Mbps sebességet jelent. A Twitter saját, Windows-os szoftverén ezt be kell állítani mivel a gyári értéktől különbözik. Rossz beállítás vagy egyéb buszhibák esetén könnyű a diagnosztika az NI busz monitor szoftverével. Az eszköz címe a node ID-jén alapszik, ami most \texttt{0x7F}, azaz 127.
+
+\pagebreak
+\section{A CANopen protokoll}
+
+%\begin{scriptsize}
+%    \textcolor{red}{Mi szükség a CANopenre, ha van CAN? hogy jön-ő a képbe? méirt ezt használják? stb..
+%    }
+%\end{scriptsize}
+
+
+
+	A CANopen az automatizálás-technikában használatos. A protokoll hálózati rétegbeli funkciókat implementál, de vannak szállítási rétegbeli funkciói is. A kommunikáció fizikai rétege többnyire a CAN busz, erre a következő funkciókat építi:
+%    \begin{scriptsize}
+%        \textcolor{red}{Vissza köszönő OSI modellbeli elemek, amik nem igazán lettek bemutatva eddig.
+%        }
+%    \end{scriptsize}
+	
+	\begin{itemize}
+		\item Címeket specifikál a különböző célú üzeneteknek - hiszen a hálózati réteg célja a \textit{routing}. A címeket, és ezzel a prioritásokat is az üzenetek funkciója adja meg.
+        \item Megkövetel egy paraméterlistát a kommunikációban résztvevő egységtől, hogy az azonosítható illetve irányítható legyen. A paramétereket tartalmazó object dictionary egy részét minden CANopen eszköznek implementálnia kell. Így gyártó- és eszközfüggetlenül kezelhetők különböző eszközök a buszon.
+
+		\item Könnyen beállítható és monitorozható az eszközök állapota.
+		\item Broadcast üzenetekkel minden eszköz reset-elhető, leállítható 
+		\item A buszra csatlakozó eszközök órája szinkronizálható
+	\end{itemize}
+	
+	
+	A következőkben bemutatom a CANopen node-ok működését és az irányításhoz szükséges üzenetek felépítését. Ezután konkrét példa következik a bekapcsoláshoz és a motor mozgatásához.
+	%Fontos az egyes parancsok szekvenciája és azok állapotátmeneteket eredményeznek a rendszerben.
+	%Ezeket az információkat ismerve tudjuk értelmezni a \ref{section-turnon}. fejezetben található üzenetek jelentését.
+	
+	
+%    \begin{scriptsize}
+%        \textcolor{red}{Jó Jó, de mi a NODE, Eddig mire koncentráltál? Elég leírni, hogy a továbbiakban ez és ez lesz. HA eddig nem használtál E/1 et, akkor már ne kezd el itt. lehet az nélkül is szépen írni dolgokat és bemutatni. 
+%            A soron következő információk szükségesek a kommunikációs üzenetek megértéséhez.
+%        }
+%    \end{scriptsize}
+	
+	\subsection{Object dictionary}
+	
+	A szabvány minden CANopen eszközre előírja object dictionary implementálását. Ennek felépítése memóriatérképre vagy regiszterekhez hasonló, egy-egy rekeszt (változót) indexével lehet megcímezni, azon belül pedig subindexek is vannak. Meghatározott címen találhatók az egyes paraméterek, melyek írhatók és/vagy olvashatók. Ezen változók listáját a DS301 és DS402 leírásból érhetjük el, attól függően hogy azok milyen funckcióval bírnak. Itt szerepel az is, hogy adott változónak milyen a számábrázolása, esetleg tartoznak-e hozzá limitek vagy default érték, beállítás.
+	
+%    \begin{scriptsize}
+%        \textcolor{red}{OD == Objektum könyvtár == object dictionary ???? A dolgok nem egyértelmű megnevezése nem vezet jóra. Természetesen kerülni kell a szóismétlést és megfelelő szinonimákat használni már leírt szavak helyett hogyha verset írsz. Itt nem az a cél, hogy változatos dokumentumot készíts, hanem hogy érthető legyen és egyértelmű. Adott dologra hivatkozó nevet, ne cserélgesd annak a szinonimájára, mert elveszíti a lényegét. Adott obejtumra mutató pointer helyett se használt minden második sorban más pointert nem?
+%        }
+%    \end{scriptsize}
+
+
+	
+	Ez igazából az OSI-nak a kódolás/dekódolás része, hiszen a bitek, byteok interpretálási sorrendjét, rendszerét adja meg.
+	
+	
+	Az object dictionary-ból elérhetők a különböző paraméterek, ezek kategorizálva vannak. Egyesek minden CANopen eszközön elérhetőek, mások az eszköz szerepétől függnek, a kiegészítő funkciók mások encodereken, I/O fieldeken, motorvezérlőkön.
+	
+	Az egyik legfontosabb elem az object dictionary-ban a statusword. Ez tükrözi a CANopen eszköz állapotgépét. Ez a rekord csak olvasható, befolyásolni a controlword küldésével tudjuk, ami írható is. Érvényes parancs esetén a statusword az elküldött controlword lesz.
+	
+	
+	  \begin{minipage}{\textwidth}
+		\begin{minipage}[b]{0.49\textwidth}
+			\centering
+			\includegraphics[width=9cm]{figures/sw/statemac}
+			\captionof{figure}{CANopen eszköz - a Gold Twitter állapotgépe}
+			\label{fig-CANopenState}
+		\end{minipage}
+		\hfill% \hspace{10pt}
+		\begin{minipage}[b]{0.45\textwidth}
+			\centering
+			\renewcommand{\arraystretch}{1.1} % to increase cell height
+			\taburulecolor{gray}
+
+			\newcolumntype{C}[1]{>{\centering\arraybackslash}p{#1}}
+			\newcolumntype{R}[1]{>{\raggedleft\arraybackslash}p{#1}}
+			
+			%content in tabu environment:
+			\input{src/sw_bits_table}
+			
+			\captionof{table}{Statusword bitjei}
+			\label{table-statusword}
+		\end{minipage}
+	\end{minipage}
+
+	
+	
+	\subsection{Communication objects (COB)}
+	
+
+	A \ref{fig-CANcomm}. ábrán látható egy üzenetváltás szerver és kliens között. A nevezéktan szerinti Upload és Download a szerver nézőpontjából van értelmezve. 
+	
+	Minden CANopen üzenet besorolható az alábbi kategóriák egyikébe, annak célja szerint. Ez dönti el a prioritását és ez alapján kap egy  COB-ID-t (Communication Object ID), ez lesz a CAN üzenet ID-je. Ennek  8-11. bitjét a COB típusa határozza meg, alsó 7 byteja pedig a node-id (egy buszon ezért max. 127 eszköz lehet). Az üzenettípustól függ a csomag hossza és az adatbyteok jelentése.
+	 
+%    \begin{scriptsize}
+%        \textcolor{red}{Ez légből kapottnak tűnik. Magyarázd meg a jelentését, és helyét a rendszerben jobban.
+%            Ez egyes betű szavakat fejtsed ki - angolul és magyarul is. Így tett érhetővé h mi micsoda.
+%        }
+%    \end{scriptsize}
+
+		\subsubsection{NMT}
+		A Networt Management üzenet minden node-nak szól a buszon, azok állapotgépeinek reset-elésére és engedélyezésére szolgál. COB-ID-je 1, ez a broadcast cím. (NMT reset parancs minden esetben visszaállítja a node-ok állapotgépét \texttt{Not readz to switch on}-ba.)
+	
+		\subsubsection{SDO}
+		
+		Ay SDO (Service Data Object) üzenettípus főként üzenetparaméterek beállítására és lekérésére szolgál. A kapcsolatot \textbf{mindig} a master kezdeményezi és a kliens mindig válaszol rá. Felépítésük a \ref{table-sdotypes}. táblázatban látható: adathosszuk mindig 8 byte, COBID-jük 8-11. bitje különbözik aszerint, hogy Upload vagy Download SDO-ról van szó.
+		
+		\begin{table}[H]
+			\centering
+			
+			\renewcommand{\arraystretch}{1.5} % to increase cell height
+			\taburulecolor{gray}
+			
+			%\begin{tabular}{|p{0.8cm}|p{1cm}|p{1cm}|p{1cm}|p{1cm}|p{1cm}|p{1cm}|p{1cm}|}
+			\newcolumntype{C}[1]{>{\centering\arraybackslash}p{#1}}
+			\newcolumntype{R}[1]{>{\raggedleft\arraybackslash}p{#1}}
+			
+			
+			\input{src/can_sdo_table}
+			
+			\caption{Különböző SDO típusok felépítése - minden adat hexában értendő}
+			\label{table-sdotypes}
+		\end{table}
+%        \begin{scriptsize}
+%            \textcolor{red}{A tartalomból itélbe ez egy viszonylag fontos része a dolgonak. Ehhez képest ritka fosul struktuált és nehezen olvashato/értelmezhető. Kevered benne a Hungariant és az angolt. Ez viszonylag érthetetlnné teszi a dolgot. Az, hogy ez egy szerver kliens atchitektúra az ok h megjelenik képen, de írd, le h miért pont ez és h hogyan működik. A képek illetve bitfildek értelmezése mint olyan az szerintem simán mehet appendix jelleggel a végére a dokksinak. 
+%            }
+%        \end{scriptsize}
+
+		\begin{figure}
+			\centering
+			\begin{sequencediagram}
+				\newthread{a}{\parbox{3cm}{\centering \vspace{9pt}  \textbf{Client}\\ \vspace{3pt} CANopen master\vspace{9pt}}}
+				\newthreaddist{b}{\parbox{3cm}{\centering \vspace{3pt} \textbf{Server}\\ \vspace{3pt} CANopen slave\\ node-id=\texttt{7F}\vspace{3pt}}}
+				%{Server - CANopen slave}
+				
+				\mess[1]{a}{SDO Download}{b}
+				%\node [anchor = east] (id-1) at (mess from) {COB-ID = \texttt{67F} };
+				\node [anchor = west] (id-1) at (mess to) { SDO Receive COB-ID: \texttt{67F}};			
+				\mess[1]{b}{SDO Upload}{a}
+				\node [anchor = west] (id-1) at (mess from) { SDO Transmit COB-ID: \texttt{5FF}};			
+			\end{sequencediagram}
+			\caption{A CANopen üzenetváltások szereplői és SDO üzeneteik}
+			\label{fig-CANsdo}
+		\end{figure}
+		
+
+		\paragraph{Az üzenet COB-ID-je}	
+		
+		Az üzenetek címzését befolyásolja, hogy az adott üzenet SDO és hogy mi a node-id. A COB-ID hexában 700 + a node ID, ami most 127. Hossza mindig 8 byte.
+	
+		\textbf{Az üzenet adatbytejai} közül az első a message header, ami megadja hogy az SDO típusát. Minden SDO-nak van ilyen mezője, ezen belül pedig lehetnek alábbi bitek, bitmezők:
+		
+			\begin{itemize}
+				\item[-] scs - server command specifier
+				\item[-] ccs - client command specifier
+				\item[-] s - size given
+				\item[-] n - size in bytes
+				\item[-] e - expedited transfer
+			\end{itemize}
+			
+			Különböző típusú és célú SDO-k különböző headerrel rendelkeznek. A header alapján meg lehet határozni, milyen típusú az üzenet.
+	
+			Ennek a bytenak a 3 MSB-je dönt a típusról (a táblázatban ezt ccs-nek, azaz client command specifier-nek hívtam):
+			\begin{itemize}
+				\item Initiate Upload SDO - query from master -  slave will upload some information
+				
+				Az Object Dictionaryben egy-egy objektum lekérdezésére szolgál. A server szempontjából feltöltés történik, az eszköz információt \textit{tölt fel} a masternek.
+			
+			
+				\item Initiate Download SDO - set from master - some data will be downloaded to slave	
+				
+				Az Object Dictionaryben egy-egy objektum állítására szolgál. A server szempontjából letöltés történik, hiszen a CANopen eszköz szemszögéből van a nevezéktan.
+				
+				\begin{table}[h]
+					\centering
+					
+					\renewcommand{\arraystretch}{1.5} % to increase cell height
+					\taburulecolor{gray}
+					
+					%\begin{tabular}{|p{0.8cm}|p{1cm}|p{1cm}|p{1cm}|p{1cm}|p{1cm}|p{1cm}|p{1cm}|}
+					\newcolumntype{C}[1]{>{\centering\arraybackslash}p{#1}}
+					\newcolumntype{R}[1]{>{\raggedleft\arraybackslash}p{#1}}
+					
+					
+					\begin{tabu}{p{1.5cm}|C{0.8cm}|C{0.8cm}|C{0.8cm}|C{0.8cm}|C{0.8cm}|C{0.8cm}|C{0.8cm}|C{0.8cm}|}
+						
+						\multicolumn{1}{l}{}&\multicolumn{8}{l}{SDO header (első adatbyte) - master kérése}
+						\\ 		\cline{2-9}\cline{2-9}
+						bit&7 & 6 & 5 & 4 & 3 & 2 & 1 & 0  
+						\\ 		\cline{2-9}\cline{2-9}
+						bináris &0 & 0 & 1 & 0 & 0 & 0 & 1 & 0
+						\\ 		\cline{2-9}
+						jelentés&\multicolumn{3}{c|}{ccs=1} & x & \multicolumn{2}{c|}{n} & e & s
+						\\ 		\cline{2-9}
+						hexa & \multicolumn{4}{c|}{2} & \multicolumn{4}{c|}{2}
+						\\ 		\cline{2-9}
+					\end{tabu}
+					
+					\vspace{18pt}
+					
+					\begin{tabu}{p{1.5cm}|C{0.8cm}|C{0.8cm}|C{0.8cm}|C{0.8cm}|C{0.8cm}|C{0.8cm}|C{0.8cm}|C{0.8cm}|}
+						\multicolumn{1}{l}{}&\multicolumn{8}{l}{SDO header (első adatbyte) - slave válasza}
+						\\ 		\cline{2-9}\cline{2-9}
+						bit&7 & 6 & 5 & 4 & 3 & 2 & 1 & 0  
+						\\ 		\cline{2-9}\cline{2-9}
+						bináris &0 & 1 & 1 & 0 & 0 & 0 & 0 & 0
+						\\ 		\cline{2-9}
+						jelentés&\multicolumn{3}{c|}{scs=3} & \multicolumn{5}{c|}{x}
+						\\ 		\cline{2-9}
+						hexa & \multicolumn{4}{c|}{6} & \multicolumn{4}{c|}{0}
+						\\ 		\cline{2-9}
+					\end{tabu}
+					
+					\caption*{Példa egy SDO headerre - initiate download (set)}
+				\end{table}
+			
+				\item Upload SDO - szegmentált átvitel, itt most nem használjuk, csak nagyon hosszú üzenetek esetén van szerepe
+				\item Download SDO - szegmentált
+				\item Abort SDO - hibajelzés, hibakód	
+			\end{itemize}
+		
+			Egy bit felhasználatlanul marad. A message header alsó nibble-je tartalmazza a következőket:
+			
+			Expedited SDO: Az expedited lekéréssel egy SDO 4 adatbyteot tartalmazhat. Nagyobb adategységek átvitele SDO-val ún. szegmentált átvitellel történik, ezt mi most nem fogjuk használni (footnote: recorder adatok lekérésére jó).
+			Üzenetméret: az SDO lehetséges 4 bytejából hány byte hasznos adat
+			Size indicated: az üzenetméret meg van adva
+			
+		\paragraph{Az SDO további bytejai:}	
+		
+		A második és harmadik adatbyte az object dict. index fordítva. A negyedik adatbyte a subindexe az adott OD entrynek.
+		
+		Itt szokás az SDO-k adatmezőjét félbe vágni, mert a maradék 4 byte a hasznos adat SET SDO esetén. Query esetén üresen marad. Twitter által küldött "ack" sdo esetén is üres.
+		
+		Az SDO Byte0-jának 3 most significant bitje jelzi az SDO típust. Az SDO-kat mindig a master (client) kezdeményezi és a slave (server) válaszol rájuk.
+	
+		
+		\subsubsection{PDO}
+		
+%		\begin{figure}
+%			\centering
+%			\begin{sequencediagram}
+%				\newthread{a}{\parbox{3cm}{\centering \vspace{9pt}  \textbf{Client}\\ \vspace{3pt} CANopen master\vspace{9pt}}}
+%				\newthreaddist{b}{\parbox{3cm}{\centering \vspace{3pt} \textbf{Server}\\ \vspace{3pt} CANopen slave\\ node-id=\texttt{7F}\vspace{3pt}}}
+%				%{Server - CANopen slave}
+%				
+%				\mess[1]{a}{SDO Download}{b}
+%				\node [anchor = east] (id-1) at (mess from) {COB-ID = 67F };
+%				\node [anchor = west] (id-1) at (mess to) { SDO Receive COB-ID: 67F};			
+%				\mess[1]{b}{SDO Upload}{a}
+%				\node [anchor = west] (id-1) at (mess from) { SDO Transmit COB-ID: 5FF};			
+%			\end{sequencediagram}
+%			\caption{A CANopen üzenetváltások szereplői és SDO üzeneteik}
+%			\label{fig-CANpdo}
+%		\end{figure}
+		
+		
+		Az előzőkben láttuk, hogy SDO-kat hogyan lehet küldeni és milyen válasz fog rá érkezni. 
+		Az SDO-k viszont nem előnyösek, ha hatékonyságról van szó. Gyakran 1-2 byteos változókat kérdezünk le egy 8 byteos üzenettel, amire szintén 8 byteos válasz érkezik. Ha viszont ezt a változót rendszeresen (folyamatosan) lekérnénk, célszerű figyelni a jobb kihasználtságra.
+		
+		Ezért a PDO adatbyteok nem tartalmaznak olyan részt, ami utalna az üzenet típusára vagy interpretálási módjára. Helyette az üzenet tartalmát előre meg kell mondani és hozzárendelni egy specifikus címhez. Ez a PDO mapping folyamata.
+		
+		Egy példa a PDO-ra az engedélyezés után kapott \texttt{1FF 2 50 02} üzenet, mely a statuswordot tartalmazza. Látható hogy nincs semmilyen overheadje a küldésnek, innen ered a \textbf{Process Data Object} elnevezés, azaz a folyamat adatait lehet vele jó hatékonysággal továbbítani. 
+		
+		A PDO-k küldése részletesen konfigurálható. SDO-t csak kérésre küld vissza a CANopen slave, viszont egy PDO elküldésre kerülhet pl. fix időközönként, vagy ha a tartalmazó adatok megváltoznak. Ahogy SDO-ból, PDO-ból is kétfélét különböztetünk meg, a server szempontjából Transmit és Receive PDO-kat. Ezeknek TPDO és RPDO a szokásos rövidítése. A vonatkozó COBID címek a \ref{table-pdotypes} 
+		
+		
+		\begin{table}[H]
+			\centering
+			
+			\renewcommand{\arraystretch}{1.5} % to increase cell height
+			\taburulecolor{gray}
+			
+			%\begin{tabular}{|p{0.8cm}|p{1cm}|p{1cm}|p{1cm}|p{1cm}|p{1cm}|p{1cm}|p{1cm}|}
+			\newcolumntype{C}[1]{>{\centering\arraybackslash}p{#1}}
+			\newcolumntype{R}[1]{>{\raggedleft\arraybackslash}p{#1}}
+			
+			\input{src/can_pdo_table}
+			
+			\caption{Különböző PDO típusok felépítése}
+			\label{table-pdotypes}
+		\end{table}
+		
+%		nem jön rá válasz, hatékony/gyors adatátvitelt segíti.
+	
+%	\subsection{DS301}
+%	Alap funckionalitas ami minden CANopen eszkozben meg kell hogy legyen fizikai funckiotol ftn-ül
+%	Mit definial, mit tudunk meg belole, mennyire altalanos, mi a manufacturer specific resze
+%	
+%	\subsection{DS402}
+%	Specko funkciok, mit implemental.
+%	
+%	\subsection{CANopen master szerepe}
+%	NMT funkciok, heartbeat, PDO, SDO,
+%	
+%	\subsection{CANopen slave viselkedese}
+%	NMT funkciok, heartbeat, PDO, SDO
+

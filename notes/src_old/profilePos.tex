@@ -1,0 +1,74 @@
+Parameters to be set:
+
+\begin{itemize}
+\item
+  6060 - motion mode - 1 = profile pos.
+\item
+  607F - max. profile velocity (1.333.333 ())
+\item
+  6080 - max. motor speed
+\item
+  6081 profile velocity - mozgás sebessége -\textgreater{} 0x1F4=500
+\item
+  6082 - end velocity - mozgás végeztével
+\item
+  6083 \& 6084 profile accel/deccel. -\textgreater{} 0x5DC=1500
+\item
+  60c5 \& 60c6 - max. accel. + decel. limits the ones above
+  -\textgreater{} 0x5DC=1500
+\item
+  0x607A - target Pos. - legzen realative 1000 cnt -\textgreater{}
+  0x3e8=1000
+\end{itemize}
+
+Start of the motion / Mozgás indítása:
+
+DS-402 v.1.016 p.~133 - 12.2.1 CW of PP mode
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  Bit 0..3 straightforward as descr. in CW.md (rising edge in bit0
+  needed)
+\item
+  Bit 4 - rising edge in this bit means a new setpoint
+\item
+  bit 5 is immediate sp chg
+\item
+  bit 6 is relative motion if \texttt{1} (see x60f2, too)
+\end{itemize}
+
+These are used.
+
+Turn on:
+
+%\begin{longtable}[c]{@{}llll@{}}
+%\toprule\addlinespace
+%COBID & length & data & data
+%\\\addlinespace
+%\midrule\endhead
+%0x67F & 8 & 22 40 60 00 & 06 00 00 00 - enable
+%\\\addlinespace
+%0x67F & 8 & 22 40 60 00 & 0f 00 00 00 - motor on
+%\\\addlinespace
+%0x67F & 8 & 22 40 60 00 & 7f 00 00 00 - motion - just once!
+%\\\addlinespace
+%0x67F & 8 & 22 40 60 00 & 6f 00 00 00 - motion clear
+%\\\addlinespace
+%0x67F & 8 & 22 40 60 00 & 7f 00 00 00 - motion - again!
+%\\\addlinespace
+%\bottomrule
+%\end{longtable}
+
+While this, on TPDO the state of motion is reflected. (At the log, the
+power shutoff can't be seen,)
+
+If motion is not relative, bit 6 to be turned off.
+
+\begin{center}\rule{3in}{0.4pt}\end{center}
+
+Inspiration:
+
+%Fig. ‎12-4: Profile position mode of two single set points
+
+//clear SP

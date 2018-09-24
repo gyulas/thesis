@@ -1,0 +1,178 @@
+
+\documentclass[a4paper, hidelinks]{article}
+\newcommand\tab[1][1cm]{\hspace*{#1}}
+
+%\sloppy
+\usepackage[pdfnewwindow=true]{hyperref}
+\frenchspacing
+\usepackage{ragged2e}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[magyar]{babel}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage[left=2.1cm,right=2.1cm,top=2cm,bottom=2cm]{geometry}
+
+\usepackage{siunitx} %celsius
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+
+\usepackage{array}
+\usepackage{caption}
+% for captions under the table:
+\captionsetup[table]{position=bottom} 
+
+% for different table line colors
+\usepackage{xcolor}
+\usepackage{tabu}
+
+\usepackage{subcaption} % subfigure
+\usepackage[framed]{matlab-prettifier}
+\usepackage{enumitem}
+\usepackage{setspace}
+
+\setstretch{1.5}
+
+% for tables
+\usepackage{multirow} % join cells
+\usepackage{makecell} % multiple row
+
+
+% for page layout
+\usepackage{anysize}
+
+
+% for font typesetting
+\renewcommand{\familydefault}{\sfdefault}
+
+% for EPC flow charts
+% Author: Fabian Schuh
+\usepackage{pgf}
+\usepackage{tikz}
+\usepackage{verbatim}
+
+\usepackage{titlesec}
+
+\setcounter{secnumdepth}{4}
+
+\titleformat{\paragraph}
+{\normalfont\normalsize\bfseries}{\theparagraph}{1em}{}
+\titlespacing*{\paragraph}
+{0pt}{3.25ex plus 1ex minus .2ex}{1.5ex plus .2ex}
+
+
+
+%
+% for the tikz
+\usetikzlibrary{arrows,automata}
+\usetikzlibrary{positioning}
+\usetikzlibrary{calc}
+
+
+\tikzset{
+	state/.style={
+		rectangle,
+		rounded corners,
+		draw=black, very thick,
+		minimum height=2em,
+		inner sep=2pt,
+		text centered,
+	},
+}
+
+\newenvironment{itemize*}%
+{\begin{itemize}%
+		\setlength{\itemsep}{0pt}%
+		\setlength{\parsep}{0pt}}%
+		%\setlength{\parskip}{0pt}}%
+{\end{itemize}}
+
+% for message sequence diagram
+\usepackage{pgf-umlsd}
+
+\renewcommand{\newthread}[3][0.2]{
+	\newinst[#1]{#2}{#3}
+	\stepcounter{threadnum}
+	\node[below of=inst\theinstnum,node distance=1.1cm] (thread\thethreadnum) {};
+	\tikzstyle{threadcolor\thethreadnum}=[fill=gray!30]
+	\tikzstyle{instcolor#2}=[fill=gray!30]
+}
+
+\newcommand{\newthreaddist}[3][2]{
+	\newinst[#1]{#2}{#3}
+	\stepcounter{threadnum}
+	\node[below of=inst\theinstnum,node distance=1.1cm] (thread\thethreadnum) {};
+	\tikzstyle{threadcolor\thethreadnum}=[fill=gray!30]
+	\tikzstyle{instcolor#2}=[fill=gray!30]
+}
+
+\usepackage{color}
+
+\usepackage{framed} % for defining framed environment
+\newenvironment{formal}{
+	\def\FrameCommand{{\hspace{20pt}\color{gray}\vrule width 2pt}\hspace{18pt}}
+	\MakeFramed{\advance\hsize-\width}
+	\vspace{2pt}\noindent\hspace{2pt}\vspace{3pt}
+}{\vspace{3pt}\endMakeFramed}
+
+
+%% for the todo list with checkbox
+%\usepackage{enumitem,amssymb}
+%\newlist{todolist}{itemize}{2}
+%\setlist[todolist]{label=$\square$}
+
+% for fancy indexing
+%\renewcommand{\thesection}{\Roman{section}\normalfont\normalsize\bfseries}% from \Large 
+%\renewcommand{\thesubsection}{\thesection.\Roman{subsection}}
+
+\includeonly{onoff/preparations}
+
+
+
+
+\newcommand{\vikszerzo}{Gyulai László}
+\newcommand{\vikkonzulens}{dr. Kiss Bálint}
+\newcommand{\kulsokonzulens}{Kurbucz Máté}
+\newcommand{\vikcim}{Korszerű fűtési rendszerek szabályzása - munkapéldány}
+\newcommand{\viktanszek}{Irányítástechnika és Informatika Tanszék}
+
+\newcommand{\vikdoktipus}{Szakmai gyakorlat}
+
+%--------------------------------------------------------------------------------------
+% Page layout setup
+%--------------------------------------------------------------------------------------
+% we need to redefine the pagestyle plain
+% another possibility is to use the body of this command without \fancypagestyle
+% and use \pagestyle{fancy} but in that case the special pages
+% (like the ToC, the References, and the Chapter pages)remain in plane style
+
+\pagestyle{plain} % ellentmond a pagestyle fancy-nek
+\setlength{\parindent}{0pt} % áttekinthetőbb, angol nyelvű dokumentumokban jellemző
+\setlength{\parskip}{9pt plus 3pt minus 3pt} % áttekinthetőbb, angol nyelvű dokumentumokban jellemző
+%\setlength{\parindent}{12pt} % magyar nyelvű dokumentumokban jellemző
+%\setlength{\parskip}{0pt}    % magyar nyelvű dokumentumokban jellemző
+
+%\marginsize{35mm}{25mm}{15mm}{15mm} % anysize package
+\marginsize{30mm}{20mm}{12mm}{12mm} % anysize package
+
+%Headerhez opcionálisan:
+
+%header and footer
+\usepackage{fancyhdr}
+
+\pagestyle{fancy}
+\fancyhf{}
+\rhead{modified on \today}
+\lhead{Szakmai gyakorlat}
+\cfoot{\thepage}
+
+
+
+\begin{document}
+	\input{src/titlepage}
+%	\input{src/kiiras}
+	\input{src/model}
+%	\input{src/motivation}	
+	
+\end{document}

@@ -1,0 +1,27 @@
+\section{Referenciajel kiadása, mozgás indítása}
+
+
+A mozgás sebességét meg kell határozni. (Gyorsulás, lassulás inerciája ne legyen olyan hogy szétbassza a gépet, ránt rajta.) Le kell limitálni az abszolút pozíciót az aileron kitérési értékének megfelelően.
+
+Majd ki lehet adni a szabályzó által az aileron szögére vonatkozó referenciajelet. Ezt transzformálni kell ha a rudazat nem megfelelő.
+
+
+
+\subsection{Single setpoint}
+
+	\begin{itemize}
+		\item limitek, gyorsulás
+		\item abszolút pozíció
+		\item méret
+		\item típus
+	\end{itemize}
+
+A mozgást a commandword ütemezi. Az abszolút pozíció megadása után a CW megfelelő bitfieldjében egy felfutó él kell a mozgás elindításához.
+
+\subsection{PT, PVT interpolation}
+
+Mivel a szabályzó 5ms-ként ad ki referenciajel demand-et, ez a megoldás jobban illeszkedik, de a sebességet nem limitálja.
+Jó kérdés, a "négyszögjel" szerű pozíció referenciát hogy limitálja a DD  arángás elkerülése érdekében, és erre a szabályzó hogy reagál.
+
+PT: position time pontokra illeszt valami görbét.
+DS402 164. oldal az interpoláció működését írja le.

@@ -1,0 +1,25 @@
+\begin{tabu}{p{3.5cm}|C{2cm}|C{2cm}|C{3cm}|}
+	%\multirow{2}{1.5cm}{text}
+	\multicolumn{1}{l}{}&\multicolumn{3}{l}{A motorvezérlőn elérhető PDO-k}
+	
+	\\ 		\cline{2-4}
+	& COBID & length & data
+	\\ 		\cline{2-4}		
+	\multicolumn{4}{l}{}
+	
+	\\ \cline{2-4}
+	TPDO1 - alapbeállítás & 1FF & 2 & statusword (16 bit)
+	\\ 		\cline{2-4}
+	RPDO1 & 27F & 1 - 8 & konfigurálható
+	\\ 		\cline{2-4}
+	\multicolumn{4}{l}{}
+	
+	\\ \cline{2-4}
+	TPDO2 & 2FF & 1 - 8 & konfigurálható
+	\\ 		\cline{2-4}
+	RPDO2 & 37F & 1 - 8 & konfigurálható
+	\\ 		\cline{2-4}
+	\multicolumn{4}{l}{}
+	
+	%\\      \cline{2-8}
+\end{tabu}
