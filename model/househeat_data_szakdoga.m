@@ -34,12 +34,12 @@ wallArea = 2*lenHouse*htHouse + 2*widHouse*htHouse + ...
 % Define the type of insulation used
 % -------------------------------
 % Glass wool in the walls, 0.2 m thick
-% k is in units of J/sec/m/C - convert to J/hr/m/C multiplying by 3600
-kWall = 0.038*3600;   % hour is the time unit
+% k is in units of J/sec/m/C                                                       NOT convert to J/hr/m/C multiplying by 3600
+kWall = 0.038;   % second is the time unit
 LWall = .2;
 RWall = LWall/(kWall*wallArea);
 % Glass windows, 0.01 m thick
-kWindow = 0.78*3600;  % hour is the time unit
+kWindow = 0.78;  % second is the time unit
 LWindow = .01;
 RWindow = LWindow/(kWindow*windowArea);
 % -------------------------------
@@ -54,17 +54,17 @@ c = 1005.4;
 % The air exiting the heater has a constant temperature which is a heater
 % property. THeater = 50 deg C
 THeater = 50;
-% Air flow rate Mdot = 1 kg/sec = 3600 kg/hr
-Mdot = 3600;  % hour is the time unit
+                                                                                % Air flow rate Mdot = 1 kg/sec = 3600 kg/hr
+                                                                                Mdot = 3600;  % hour is the time unit
 % energy per hour is c*Mdot*?t
 % -------------------------------
 % Radiator parameters
 % -------------------------------
 % Q=h*A*(Ts-Ti)
 % A=n*A0, n tagú radiátorra
-N_heater=20; % ennyi db radiator
-A_heater=2;   % [m^2]
-h_heater=150;      % [W/m^2K]
+N_heater=15; % ennyi db radiator
+A_heater=3.5;   % [m^2]
+h_heater=11;      % [W/m^2K]
 T_heater=60;
 % -------------------------------
 % Determine total internal air mass = M
