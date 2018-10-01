@@ -6,21 +6,25 @@ A ház veszteségeit a méretei és az ablakai alapján kiszámítja.
 
 A modellezendő objektum a fűtési rendszer, itt kell számba venni hogy egy jól méretezett rendszernek mennyi a felfutási illetve a beállási ideje. Ezt számolni a kazán, a fűtővíz illetve a fűtőtest teljesítményeiből, illetve kapacitásaiból lehetne.
 
-A fűtőtestek hőátadását számos tényező befolyásolja, paraméterei pl.
-\begin{itemize}[noitemsep,topsep=0pt,parsep=0pt,partopsep=0pt]
-	\item a bejövő és kimenő víz hőmérséklet-különbsége (radiátoros / falfűtés / padlófűtés / mennyezetfűtés)
-	\item azok területe, orientációja, azokon a légáramlás sebessége, típusa
-	\item 
-\end{itemize}
+A fűtőtestek hőátadását számos tényező befolyásolja, ezekre az előzóekben egyenletet is felírtam. Az egyenletet Simulinkben valósítottam meg, a fűtési rendszer így beilleszthető a Matlab példájába.
+%, paraméterei pl.
+%\begin{itemize}[noitemsep,topsep=0pt,parsep=0pt,partopsep=0pt]
+%	\item a bejövő és kimenő víz hőmérséklet-különbsége (radiátoros / falfűtés / padlófűtés / mennyezetfűtés)
+%	\item azok területe, orientációja, azokon a légáramlás sebessége, típusa
+%	\item 
+%\end{itemize}
 
-Először célszerű lenne állandósult állapotot figyelembe venni és úgy számolni a teljesítményeket.
+%Először célszerű lenne állandósult állapotot figyelembe venni és úgy számolni a teljesítményeket.
+%
+%Kezdetben fel kellene írni átviteli függvényeket az alábbiakra:
 
-Kezdetben fel kellene írni átviteli függvényeket az alábbiakra:
 
-\begin{itemize}[noitemsep,topsep=0pt,parsep=0pt,partopsep=0pt]
-	\item fűtőtest hőleadása a vízhőmérséklet függvényében
-	\item vízhőmérséklet (felfűtés) időfüggvénye
-	\item forró fűtőtest lehűlése a keringetés kikapcsolásával
-	\item 
-	\item 
-\end{itemize}
+
+%\begin{itemize}[noitemsep,topsep=0pt,parsep=0pt,partopsep=0pt]
+%	\item fűtőtest hőleadása a vízhőmérséklet függvényében
+%	\item vízhőmérséklet (felfűtés) időfüggvénye
+%	\item forró fűtőtest lehűlése a keringetés kikapcsolásával
+%	\item 
+%	\item 
+%\end{itemize}
+

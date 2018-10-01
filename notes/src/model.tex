@@ -30,6 +30,7 @@ A felírandó átviteli függvények:
 	\item levegő felmelegedése fűtés kikapcsolt állapota mellett, környezeti hőmérséklet ugrásával
 \end{itemize}
 
+\pagebreak
 
 \subsection{Radiátor modelljének felírása}
 
@@ -40,53 +41,115 @@ Gouda2000 és mások alapján számolva irreális teljesítményértékeket kapt
 
 Az \textit{Épületgépészet a gyakorlatban} (5.11.6, 2. o.) egy Dunaferr radiátor tényleges hőleadását vezetik le. Ebben a hőátbocsátási tényezőt is hőmérsékletfüggőnek veszik.
 
-Ez bővebben a \textit{Herz II - Több mint hidraulika} 4.2.4.1 (Fűtőtest lehűlése) részben is szerepel.
+Ez bővebben a \cite[4.2.4.1]{Herz} (Fűtőtest lehűlése) részben is szerepel.
 
 Pontosabban a 4.2.7.3 - Radiátorok résznél olvasható. Itt a hőveszteség adott. Esetünkben ezt a házra a Matlab számolja és jól méretezett rendszert tételezünk fel. Csupán azért kell a hőleadást jól felírni, hogy a felfutás, hőkapacitás, stb. során átadott energiát is belekalkuláljuk.
 
 Persze ilyenkor egyedi esetekből indulok ki, de remélhetőleg ez paraméterezhetően elvezet az általános, többféle házra alkalmazható megoldáshoz.
 
-A fűtőtestek hőleadását befolyásolja a fűtőtestek közepes hőmérsékletkülönbsége (\ref{termeszeteshk}, ahol $t_e$ és $t_v$ az előremenő és visszamenő vízhőmérsékletek és  $t_{bo}$ a helyiség belső hőmérséklete), a felülete és a hőleadási tényezője. (A 86. oldalon $\Delta t_k$, a 358.-on $\Delta t_m$ jelöléssel találkozunk. A 359. oldalon ismét változik ugyanannak a jelölése. (\ref{termeszeteshk_359}) Ezutóbbi angol jelölés szimpatikusabb.)
-
-A hőleadás egyenlete általánosan \ref{holeadas} (Több, m. h. 358.~o.), ahol a $\dot{Q}$ [\SI{}{\watt}] a leadott hő, $\Delta t_m$ [\SI{}{\kelvin}] a közepes hőmérsékletkülönbség.
-
-
-
-
-%\begin{equation} \label{termeszeteshk}
-%\Delta t_k = \frac{t_e+t_v}{2} -t_{bo}
-%\end{equation}
-
-%\begin{equation} \label{termeszeteshk_359}
-%\Delta t_m = \frac{t_s+t_r}{2} -t_{i}
-%\end{equation}
-
-
-\begin{equation} \label{holeadas}
-\dot Q = k_e \cdot A_e \cdot \Delta t_m
+\subsubsection{Hőleadás}
+A fűtőtestek hőleadását befolyásolja a fűtőtestek közepes hőmérsékletkülönbsége (ld. a \ref{termeszeteshk_359}. egyenletet), a felülete és a hőleadási tényezője.
+%(A 86. oldalon $\Delta t_k$, a 358.-on $\Delta t_m$ jelöléssel találkozunk. A \cite[359.~o.]{Herz} ismét változik ugyanannak a jelölése. (\ref{termeszeteshk_359}) Ezutóbbi angol jelölés szimpatikusabb.)
 %
-%\begin{pmatrix}
-%x_{1}\\
-%x_{2}
-%\end{pmatrix}
-%+
-%0 \cdot{} F
+Ezek közötti kapcsolatot adja az \ref{holeadas}. egyenlet (\cite[358.~o.]{Herz}-ből): 
+\begin{equation} \label{holeadas}
+\dot Q_{le} = k_e ~ A_e ~ \Delta t_m
 \end{equation}
-
+%
+%
+ahol
+\begin{itemize}[itemsep=6pt,topsep=0pt,parsep=0pt,partopsep=0pt]
+\item[] $\dot{Q}_{le}$ [\SI{}{\watt}] a leadott hő
+\item[] $k_e$ [\si[per-mode = fraction]{\watt\per\meter\squared\per\kelvin}]
+\item[] $A_e$ [\si{\metre\squared}] a radiátor felülete
+\item[] $\Delta t_m$ [\SI{}{\kelvin}] a közepes hőmérsékletkülönbség:
+\end{itemize}
+%
 \begin{equation} \label{termeszeteshk_359}
 \Delta t_m = \frac{t_s+t_r}{2} -t_{i}
 \end{equation}
+ahol
+%
+\begin{itemize}[itemsep=6pt,topsep=0pt,parsep=0pt,partopsep=0pt]
+	\item[] $t_s$ a radiátorba befolyó, $t_r$ az onnan kifolyó víz hőmérséklete \si{\degreeCelsius}-ban
+	\item[] $t_i$ a szoba hőmérséklete
+\end{itemize}
+%
+A hőátadási tényező is hőmérsékletfüggő, de ezzel egyelőre nem foglalkozom, állandónak tekintem.
+%
+%\begin{equation} \label{k_e}
+%k_e = \frac{\dot{Q}}{A~ \Delta t_m}
+%\end{equation}
+%
+%A hőteljesítmény hőmérsékletfüggő (361.~o.). Az $x^{1.33}$ az egyenletekben $x~ x^{1/3}$, ebből pedig $ x ~ \sqrt[3]{x}$ formában jelenik meg.
+%
+%
+%Nominálisan $\Delta t_m$ = \SI{60}{\celsius}-ra adott érték a közepes hőmérsékletkülönbség függvényében változik:
 
-A hőátadási tényező egy bizonyos hőmérsékleten:
+\subsubsection{Hőfelvétel}
+A vízből felvett hő felírható:
 
-\begin{equation} \label{termeszeteshk_359}
-k_e = \frac{\dot{Q}}{A\cdot \Delta t_m}
+\begin{equation} \label{hofelvetel}
+\dot Q_{fel} = c ~ \dot{m} ~ \Delta t
 \end{equation}
 
-A hőteljesítmény hőmérsékletfüggő (361.~o.). Az $x^{1.33}$ az egyenletekben $x\cdot x^{1/3}$, ebből pedig $ x \cdot \sqrt[3]{x}$ formában jelenik meg.
+ahol
+
+\begin{itemize}[itemsep=6pt,topsep=0pt,parsep=0pt,partopsep=0pt]
+	\item[] $\dot{Q}_{fel}$ [\SI{}{\watt}] a vízből felvett hő, ami annak lehűléséből adódik
+	\item[] $c$ [\si[per-mode = fraction]{\joule\per\kg\per\kelvin}] a víz fajhője
+	\item[] $\dot{m}$ [\si[per-mode = fraction]{\kg\per\second}] a víz tömegárama
+	\item[] $\Delta t = t_s-t_r$ [\SI{}{\kelvin}] a víz lehűlésének mértéke
+\end{itemize}
+
+\subsubsection{Energiamérleg állandósult állapotban}
+\textbf{Állandósult állapot} esetén a leadott hő egyenlő a felvettel, mivel akkor nem történik hőfelhalmozás, hőtárolás.
+Azaz ekkor a radiátor hőkapacitását nem kell figyelembe vennem.
+
+Beírva a (\ref{termeszeteshk_359})-ba (\ref{holeadas})-t:
+\begin{equation} \label{holeadas2}
+\begin{aligned}
+\dot Q_{le} = k_e ~ A_e ~ \left( \frac{t_s+t_r}{2}-t_i\right) = k_e ~ A_e ~ \left( \frac{t_s+(t_s-\Delta t)}{2}-t_i\right)
+\end{aligned}
+\end{equation}
+
+Ahol felhasználtuk azt is, hogy $t_r = t_s-\Delta t$, majd $\Delta t$ helyére beírhatjuk a (\ref{hofelvetel})  átrendezett alakját:
+\begin{equation} \label{hofelvetel2}
+~~\Delta t = \frac{\dot Q_{fel}}{c ~ \dot{m}}
+\end{equation}
+
+Beírva (\ref{holeadas2})-ba (\ref{hofelvetel2})-t:
+\begin{equation} \label{holeadas3}
+\begin{aligned}
+\dot Q_{le} ~=~ & k_e ~ A_e ~ \left( t_s-t_i-\frac{\dot Q_{fel}}{c ~ \dot{m}}\right)  \\[18pt]
+\dot Q_{le} + \frac{k_e ~ A_e ~ \dot Q_{fel}}{2 ~ c ~ \dot{m}} ~ = ~ & k_e ~ A_e ~(t_s-t_i) \\[24pt]
+2 ~ c ~ \dot{m} ~ \dot Q_{le} + k_e ~ A_e ~ \dot Q_{fel} ~ = ~ &  k_e ~ A_e ~ 2~ c~ \dot{m} ~(t_s-t_i)
+\end{aligned}
+\end{equation}
+
+\textbf{Csak abban az esetben, ha} $\dot Q_{le}=\dot Q_{fel}$:
 
 
-Nominálisan $\Delta t_m$ = \SI{60}{\celsius}-ra adott érték a közepes hőmérsékletkülönbség függvényében változik:
+
+
+\begin{equation} \label{holeadas4}
+\begin{aligned}
+~~~~~~\dot Q (2 ~ c ~ \dot{m} + k_e ~ A_e) & ~=~ 2 ~ k_e ~ A_e ~ c~ \dot{m} ~(t_s-t_i) \\[18pt]
+~~~~~~\dot Q &~=~ \frac{2~c~\dot{m}~k_e~A_e}{2 ~c ~ \dot{m} + k_e ~ A_e}~(t_s-t_i)
+\end{aligned}
+\end{equation}
+
+\subsubsection{Modellparaméterek}
+
+
+
+
+
+
+
+
+
+
 
 
 \pagebreak
