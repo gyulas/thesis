@@ -74,12 +74,34 @@ heat_transfer_const_radiator=11;    % k [W/m^2K]
 area_radiator=2;                    % A [m^2]
 % -------------------------------
 
+
+% -------------------------------
+% Custom ház adatai
+% -------------------------------
+% Koli: külsõ falból ablak fémkeretes, 1.75m2/db, ebbõl üveg 1m2/db.
+% Kerekítettem 2m^2-re.
+% Rétegtervi h.áb. tény. kb. 2-4.5 W/m^2-K
+%
+% Külsõ fal 4m^2, bels[ falak 80m^2, h.áb. tény rendre 1.3 / 1.5.
+
+q_sch_ablak=2*2*4.5;                  % [W/K]
+q_sch_fal_kulso=3.3*(0.25+0.95)*1.3;  % [W/K] - kepletben geom. meretekkel
+q_sch_fal_belso=2*6*3.3 + ...
+                2*6*2.6 + 2.6*3.3;
+
+% Hoveszteseg a kulso homersekletkulonbseg fv.: Q=?t*?q [W]
+q_sch_ext=q_sch_ablak+q_sch_fal_kulso;
+
+%Bentivel egzelore nem szamolok.
+
 % -------------------------------
 % Determine total internal air mass = M
 % -------------------------------
 % Density of air at sea level = 1.2250 kg/m^3
 densAir = 1.2250;
 M = (lenHouse*widHouse*htHouse+tan(pitRoof)*widHouse*lenHouse)*densAir;
+c_air = 1005.4;
+M_air = 51.5*densAir;
 % -------------------------------
 % Enter the cost of electricity and initial internal temperature
 % -------------------------------
