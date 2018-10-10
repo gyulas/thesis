@@ -68,7 +68,7 @@ THeater = 50;
                                     T_heater=60;
 % -------------------------------
 water_heat_capacity=4183;           % c [J/kgK]
-supp_water_flow=0.03;               % m [kg/s]
+supp_water_flow=0.01;               % m [kg/s]
 supp_water_initial_temp=20;         %   [Celsius]
 heat_transfer_const_radiator=11;    % k [W/m^2K]
 area_radiator=2;                    % A [m^2]
