@@ -68,7 +68,7 @@ THeater = 50;
                                     T_heater=60;
 % -------------------------------
 water_heat_capacity=4183;           % c [J/kgK]
-supp_water_flow=0.05;               % m [kg/s]
+supp_water_flow=0.01;               % m [kg/s]
 supp_water_initial_temp=20;         %   [Celsius]
 %heat_transfer_const
 %h_c_rad=11;                                                                % k [W/m^2K]
@@ -80,14 +80,7 @@ area_radiator=2;                    % A [m^2]
 % C22 600 mm magas:
 l_r=1.5;                            % l [m] a radiator hossza
 m_r=33.4*l_r;                       % m [kg]    --     tomege
-c_metal=464;                           % c [J/kgK] acel fajhoje
 m_w_r=6.6*l_r;                      % m [kg] = rho*V a viz tomege, 1kg/l/rel szamolva
-c_w=4189;                           % c [J/kgK] viz fajhoje
-
-
-water_heat_capacity=c_w;
-heat_transfer_const_radiator=h_c_radi;
-
 % -------------------------------
 
 
@@ -128,4 +121,3 @@ M_air = 51.5*densAir;
 cost = 0.09/3.6e6;
 % TinIC = initial indoor temperature = 20 deg C
 TinIC = 15;
-TinHeatK=273+15; %[K] heating elements
