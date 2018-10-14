@@ -69,7 +69,6 @@ THeater = 50;
 % -------------------------------
 water_heat_capacity=4183;           % c [J/kgK]
 supp_water_flow=0.05;               % m [kg/s]
-supp_water_initial_temp=20;         %   [Celsius]
 %heat_transfer_const
 %h_c_rad=11;                                                                % k [W/m^2K]
 h_r_radi=0.1*5.67e-8;               % k [W/m^2K^4] q=eps*sigma*A*T^4
@@ -127,5 +126,6 @@ M_air = 51.5*densAir;
 % cost = $0.09 per 3.6e6 J
 cost = 0.09/3.6e6;
 % TinIC = initial indoor temperature = 20 deg C
-TinIC = 15;
-TinHeatK=273+15; %[K] heating elements
+TinIC = 5;
+TinHeatK=273+5; %[K] heating elements
+supp_water_initial_temp=5;         %   [Celsius]
