@@ -126,6 +126,6 @@ M_air = 51.5*densAir;
 % cost = $0.09 per 3.6e6 J
 cost = 0.09/3.6e6;
 % TinIC = initial indoor temperature = 20 deg C
-TinIC = 5;
-TinHeatK=273+5; %[K] heating elements
-supp_water_initial_temp=5;         %   [Celsius]
+TinIC = 0;
+TinHeatK=273; %[K] heating elements
+supp_water_initial_temp=0;         %   [Celsius]
