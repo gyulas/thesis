@@ -1,0 +1,38 @@
+\section{Szabályzó kiválasztása és tervezése}
+
+
+Az identifikált modellekre többféle szabályzót tervezek, illetve próbálok ki.
+
+\subsection{Ismerkedés az MPC szabályzással}
+
+Ahhoz, hogy az MPC szabályzás működését, tulajdonságait meg tudjam figyelni, lépésről lépésre fogok feature-öket hozzáadni.
+
+A kezdeti cél egy "sima" szabályzás. Kérdés, hogy egyáltalán tud-e ilyet az MPC. Gyanítom, hogy a hibaminimalizáló függvény megfelelő megadásával tud: ha egy négyzetes hibaminimalizáló van rajta, \textit{biztosan "jó"} lesz.\footnote{Bármit is jelentsen a \textit{jó} szabályzás.}
+
+\begin{formal}
+	Plant bemenetek lehetnek:
+	\begin{itemize}[noitemsep,topsep=-8pt,parsep=0pt,partopsep=0pt]
+		\item kazán bekapcsolása
+		\item előremenő hőmérséklet - unmeasured VAGY uncontrolled inputként
+		\item 1 db. fűtőtest (most radiátor) szelepének tömegárama (szelep áteresztése)
+		\item Később több fűtőtest vagy többféle fűtőtestek (padlófűtés, különböző teljesítményű radiátorok) szabályozása
+		\item környezeti hőmérséklet: mért bemenet - később predikció is lesz rá. Hatása a kimeneten már identifikálva lett, 3 pólussal és 2 zérussal tökéletesen lekövethető.
+		\item napsugárzás zavaró hatása - szimulálható  a bizonytalansága valószínűleg nagy lesz
+	\end{itemize}
+
+	Belső változók - fűtési rendszer és ház kapcsolata
+	\begin{itemize}[noitemsep,topsep=-6pt,parsep=0pt,partopsep=0pt]
+			\item napsugárzás - radiatív, az ablak felületével és a szöggel arányos
+			\item fűtőtestek sugárzó és konvektív hőárama
+	\end{itemize}
+
+	Paraméterek a plantben nem állandók:
+	\begin{itemize}[noitemsep,topsep=-6pt,parsep=0pt,partopsep=0pt]
+		\item hőátadási tényezők hőmérsékletfüggők, áramlási sebesség-függők (szél)
+		\item szellőztetés, belső hőterhelés hatása
+	\end{itemize}
+\end{formal}
+
+Az elvárás a következő lépésben az, hogy ha egy $t_0$ időpontban a rendszer egy adott állapotban van, és várható egy zavarás $\Delta t$ idő múlva (vagy mértem egy zavarást MOST és a hatása csak később jelenne meg a kimeneten), akkor a rendszer megfelelően beavatkozzon.
+
+(Azaz ha fél óra múlva \SI{10}{\celsius}-al melegebb lesz, ne fűtsön.)
