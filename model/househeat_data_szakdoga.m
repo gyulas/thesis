@@ -3,7 +3,8 @@
 %   house thermodynamics example. Note that time is given in units of hours
 
 %   Copyright 1990-2012 The MathWorks, Inc.
-
+addpath('components', 'toMPC')
+import('toMPC/mpc_model_and_initial_controller')
 % -------------------------------
 % Problem constant
 % -------------------------------
