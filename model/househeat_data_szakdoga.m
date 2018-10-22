@@ -4,7 +4,7 @@
 
 %   Copyright 1990-2012 The MathWorks, Inc.
 addpath('components', 'toMPC')
-import('toMPC/mpc_model_and_initial_controller')
+load('toMPC/mpc_model_and_initial_controller.mat')
 % -------------------------------
 % Problem constant
 % -------------------------------
@@ -127,6 +127,6 @@ M_air = 51.5*densAir;
 % cost = $0.09 per 3.6e6 J
 cost = 0.09/3.6e6;
 % TinIC = initial indoor temperature = 20 deg C
-TinIC = 0;
-TinHeatK=273; %[K] heating elements
-supp_water_initial_temp=0;         %   [Celsius]
+TinIC = 10;
+TinHeatK=273+10; %[K] heating elements
+supp_water_initial_temp=10;         %   [Celsius]
