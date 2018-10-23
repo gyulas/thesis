@@ -40,3 +40,28 @@ Az elvárás a következő lépésben az, hogy ha egy $t_0$ időpontban a rendsz
 \subsection{Offline MPC - supervisory control}
 
 \textit{4.4. Approaches without real-time dynamic optimization}\footnote{Thieblemont-ból. A real-time update nélküli MPC a legegyszerűbb és a leggyorsabban kiszámolható. Gyakran más irányítási technikákon alapul.} Döntési fa, affin leképezés ilyenek.
+
+Elkészíteni az offline döntési hálót viszont nehezebb.
+
+\subsection{A MATLAB MPC Toolbox elemei}
+Az MPC blokknak van egy alapértelmezett költségfüggvénye, és ennek a súlyozását lehet beállítani.
+Külön beállítható a szabályzási és a szimulációs horizont.
+Ezek optimális beállításai 
+
+A kezdeti MPCkontrollert egyszerűen étre lehet hozni az identifikált modellből és a bemenetek típusának megadásával. (A szelep a beavatkozó jelem, ebből származik a kazán bekapcsolása (hiszterézises cucc), illetve a plantnek van még egy bemenete, egy mérhető zavarás.) Ezután a bemenetek értékkészletét adtam meg, illetve van egy normalizáló faktor, ami a jellemző\textit{full scale}.
+
+Az optimalizálás egy költségfüggvény minimalizálását jelenti, amiben \textit{büntetjük} a referenciajeltől való eltérést és a beavatkozó jelek \textbf{értékét vagy változását}.
+
+A fenti a klasszikus MPC, tov. info. Baochang DING, Modern MPC című könyvében olvasható.
+ 
+\subsubsection{Módosítások az MPC-ben}
+
+A súlyozástmódosítva adhatunk költséget a beavatkozásnak, csökkentve így pl. annak a frekvenciáját. Ez a referenciakövetést rontja, de esetünkben nem cél a tized \si{\celsius}-os pontosság, hanem az energiamegtakarítás.
+Pontosan fel kellene ezért írni a forintosított költségét a beavatkozásnak, és ezt minimalizálni.
+
+\subsection{Validálás}
+Szimulációval ellenőrizzük a szabályzás robosztusságát. Ehhez megnöveltem a hőtároló tömegeket.
+
+Ötlet: random időpontban lehetne ablaknyitást szimulálni.
+Napsütés hatásmechanizmusa.
+Radiant heat transfer paramétere továbbra sem olyan világos: sok publikációban a hőmérsékletkülönbség lineáris függését tartalmazza és nem a Stefan-Boltzmann törvény szerinti negyedik hatvány szerintit

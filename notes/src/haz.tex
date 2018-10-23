@@ -13,11 +13,12 @@ A Simscape-ben hőátadási tényezőket és hőtároló tömegeket vettem fel.
 
 \section{A felírt modell}
 
-A schönherzes kollégiumi szoba határoló elemeit vettem fel. Ez \SI{80}{\meter\squared}-nyi belső falfelület, 4
-
-Táblázatban össze kellene foglalni.
-
+A schönherzes kollégiumi szoba határoló elemeit vettem fel:
 \input{src/haz_hatarolo_feluletek}
+
+A belső falakon nem vesztünk hőt, csak az ablakon ill. a külső falon.
+A napsütés hőnyereségét is figyelembe vehetjük, úgy, hogy egy hőforrás a padlót melegíti.
+
 
 
 \subsection{Fűtési rendszer és ház kapcsolata}
@@ -35,14 +36,14 @@ A gyakorlati alkalmazásokban szeretnék majd az energetikai tanúsítványból 
 
 Ashrae HVAC - 6.19 Panel H \& C. - Controls strategy
 
-Ezért utánanéztem a jellemző szerkezeti tulajdonságoknak. A modellezés Gouda alapján történik, gyakorlatilag csomóponti egyenleteket kell felírni az alábbi hálózatra, amiben az ellenállások a rétegrendi hőátbocsátási tényező reciprokai. A hőtároló képességeket kapacitások modellezik.
+Ezért utánanéztem a jellemző szerkezeti tulajdonságoknak. A modellezés Gouda alapján történik, gyakorlatilag csomóponti egyenleteket kell felírni az alábbi hálózatra, amiben az ellenállások a rétegrendi hőátbocsátási tényező reciprokai. A hőtároló képességeket kapacitások modellezik. Ezeket az elemeket Simscape-ben implementáltam, a hőáramok így áttekinthetők és a paraméterek könnyen változtathatók.
 
 A ház modelljének felírásakor figyelembe vettem a hőtároló elemeket. A pontos (reális) modell felállításakor ezek hőtartalmát (a hőáram integrálja egyensúlyi állapotban legyen 0, azaz egy nagyobb ciklusban a felvett és leadott hője egyenlő) az egyensúlyi állapothoz közelinek vettem.
 
 Viszont a szabályzótervezéshez identifikálni kell, ekkor pedig a falak, ill. szoba levegőjének kezdeti állapotát (hőmérsékletét) azonosnak vettem a külső hőmérséklettel. Így ha a hőkülönbség a modell kimenő jele, akkor lineáris a rendszer: 0 bemenetre (fűtés) 0 kimenetet ad.
 
-Az identifikációnál így minden hőtároló elem (levegő, külső és belső falak) kezdeti hőmérsékletét a környezeti hőmérséklettel azonosnak vettem.
-(Még egy mérés lehet az, ha mérhető zavarásunk van, pl. kezdeti \SI{20}{\celsius} hőmérsékletet beállítva a környezeti hőmérséklet zuhan 20-ról \SI{10}{\celsius}-ra. )
+\subsection{Megvalósítás MATLAB-ban}
+
 
 
 
