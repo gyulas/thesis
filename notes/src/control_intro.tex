@@ -1,4 +1,4 @@
-\section{Szabályzó kiválasztása és tervezése}
+\section{Szabályzó kiválasztása és analízise}
 
 
 Az identifikált modellekre többféle szabályzót tervezek, illetve próbálok ki.
@@ -37,12 +37,6 @@ Az elvárás a következő lépésben az, hogy ha egy $t_0$ időpontban a rendsz
 
 (Azaz ha fél óra múlva \SI{10}{\celsius}-al melegebb lesz, ne fűtsön.)
 
-\subsection{Offline MPC - supervisory control}
-
-\textit{4.4. Approaches without real-time dynamic optimization}\footnote{Thieblemont-ból. A real-time update nélküli MPC a legegyszerűbb és a leggyorsabban kiszámolható. Gyakran más irányítási technikákon alapul.} Döntési fa, affin leképezés ilyenek.
-
-Elkészíteni az offline döntési hálót viszont nehezebb.
-
 \subsection{A MATLAB MPC Toolbox elemei}
 Az MPC blokknak van egy alapértelmezett költségfüggvénye, és ennek a súlyozását lehet beállítani.
 Külön beállítható a szabályzási és a szimulációs horizont.
@@ -53,11 +47,47 @@ A kezdeti MPCkontrollert egyszerűen étre lehet hozni az identifikált modellb�
 Az optimalizálás egy költségfüggvény minimalizálását jelenti, amiben \textit{büntetjük} a referenciajeltől való eltérést és a beavatkozó jelek \textbf{értékét vagy változását}.
 
 A fenti a klasszikus MPC, tov. info. Baochang DING, Modern MPC című könyvében olvasható.
- 
+
+
+
+\subsection{Az automatikusan létrehozott MPC tulajdonságai}
+
+Az MPC szabályzót létrehoztam a toolbox-szal, az identfikált szakaszból. Beállítottam a be-és kimenetek jellegét, korlátait. A ki-és bemeneteket helyesen bekötve már működött is a szabályzás.
+
+\subsubsection{A kezdeti szabályzó problémái}
+Igaz, hogy az alapjelkövetés gyakorlatilag tökéletes volt, de a beavatkozó jelnek a gyakorlatban nem csak a nagysága, hanem a frekvenciája is korlátos. Ezért a beavatkozó szervnek is kell egy átviteli függvény ideális esetben. (Itt most a szelepről van szó.)
+
+A \textit{súlyozatlan} MPC nem vette figyelembe a beavatkozójel változásának \textit{nagy} költségét, ezért irreálisan gyorsan nyitotta és zárta azt.
+A gyakorlatban nincs szükség tűpontos referenciakövetésre, a hőmérséklet kb. \SI{1}{\celsius}-ot ingadozhat. ($\pm$ \SI{0.5}{\celsius}) Ha ezt megengedjük, a beavatkozás költsége lecsökkenhet.
+
+\subsubsection{Robosztusság}
+
+A Simulinkben identifikált modellre pontosan lehetett átviteli függvényt illeszteni, így a szabályzóban futó modell gyakorlatilag tökéletes volt. Gyakorlatban viszont a modellek igencsak pontatlanok lehettek, így megvizsgáltam a szabályzás viselkedését megváltozott paraméterekkel is. Ezt a szabályzás alapvetően jól viselte, a referenciakövetés minősége megmaradt.
+
+\section{A szabályzó paramétereinek finomítása, hangolása, alapbeállítások felülírása}
+
+
 \subsubsection{Módosítások az MPC-ben}
 
-A súlyozástmódosítva adhatunk költséget a beavatkozásnak, csökkentve így pl. annak a frekvenciáját. Ez a referenciakövetést rontja, de esetünkben nem cél a tized \si{\celsius}-os pontosság, hanem az energiamegtakarítás.
+A súlyozást módosítva adhatunk költséget a beavatkozásnak, csökkentve így pl. annak a frekvenciáját. Ez a referenciakövetést rontja, de esetünkben nem cél a tized \si{\celsius}-os pontosság, hanem az energiamegtakarítás.
 Pontosan fel kellene ezért írni a forintosított költségét a beavatkozásnak, és ezt minimalizálni.
+
+\subsection{Az MPC költségfüggvénye}
+Nem csak a bemenetek értékei súlyozhatók. Az egyik kinyomtatott doksiban nem csak a bemenetek, vagy a hibajel kap súlyozást, hanem a villamos energia aktuális ára is tényező.
+
+Kell keresni egy suitable költségfüggvényt. Illetve megfontolandó lenne vízhőmérsékletre szabályozni, annak a költsége szemléletesebb.
+
+\hrulefill
+
+\subsection{Offline MPC - supervisory control}
+
+\textit{4.4. Approaches without real-time dynamic optimization}\footnote{Thieblemont-ból. A real-time update nélküli MPC a legegyszerűbb és a leggyorsabban kiszámolható. Gyakran más irányítási technikákon alapul.} Döntési fa, affin leképezés ilyenek.
+
+Elkészíteni az offline döntési hálót viszont nehezebb.
+
+
+	
+
 
 \subsection{Validálás}
 Szimulációval ellenőrizzük a szabályzás robosztusságát. Ehhez megnöveltem a hőtároló tömegeket.

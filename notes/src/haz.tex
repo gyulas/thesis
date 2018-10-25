@@ -4,34 +4,34 @@
 
 A modellalkotásnál igyekszek energetikai tanúsítványban szereplő adatokat felhasználni.
 Figyelembe kell vennem a ház hőveszteségeit és hőtároló képességét is.
-
-A kinyerhető adatok: a határoló elemek felszíne,
-
-hőigény numerikusan is szerepel
+Az kinyerhető adatok között van a határoló elemek felszíne, hőátbocsátási tényezője, a hőtároló elemek fajhője. Az alábbi táblázat értékeinek nagy részét ki lehet tölteni a tanúsítványból.
+Az épület hőigénye numerikusan is szerepel, ám ez pl. éves átlagolással adódik, nem csak a fűtési rendszert, hanem a várható időjárást is figyelembe veszi.
 A Simscape-ben hőátadási tényezőket és hőtároló tömegeket vettem fel.
 
 
 \section{A felírt modell}
 
-A schönherzes kollégiumi szoba határoló elemeit vettem fel:
+Egyzónás hőmérsékletszabályzást veszek alapul, azaz egy referenciajelem és egy mért hőmérsékletem van, a modellben a szoba levegőjének hőmérsékletét mindenhol ugyanakkorának feltételezem. A példában a schönherzes kollégiumi szoba határoló elemeit vettem fel.
 \input{src/haz_hatarolo_feluletek}
 
-A belső falakon nem vesztünk hőt, csak az ablakon ill. a külső falon.
+Egy átlagos szobát 4 másik vesz körül, van ablaka, egy radiátora. A belső falakon nem vesztünk hőt, csak az ablakon ill. a külső falon. Tegyük fel, hogy a radiátoros fűtést egy szeleppel szabályozhatjuk, amit tetszőleges mértékben nyithatunk ki.
 A napsütés hőnyereségét is figyelembe vehetjük, úgy, hogy egy hőforrás a padlót melegíti.
 
 
 
 \subsection{Fűtési rendszer és ház kapcsolata}
 
+Nyilván egy kész házban a fűtési rendszer méretezve van az épülethez, így rendelkezésre áll megfelelő teljesítmény.
+
+(Gondolatkísérlet: HA nem hatna zavarás, csak az időállandók számítanának, a pontos teljesítményveszteségek, nyereségek nem. Azaz mindegy volna hogy 1000W hő szökik ki és ehhez tartozik 1500W-nyi fűtési kapacitás, vagy hogy 5000W és 7500W ezek az értékek. Ám pl. napsütés hatásakor nem csak az arányok hanem a konkrét teljesítmények is kellenek...
+
+Így a modell egyik belső változója bizonyosan a teljesítmény kell, hogy legyen. Erre a belső változóra hat majd zavarás: emberek jelenléte kb. \SI{80}{\watt} 1 főre, napsütés, szellőztetés, stb.)
+
+\hrulefill
 
 
-
-
-A fűtési rendszer és a szabályzás alapvető validálásához egyszerű házmodelleket fogok felállítani.
-
-Szinte a legegyszerűbb ilyen tekintetben egy kollégiumi szoba modellje. Egy átlagos szobát 4 másik vesz körül, van ablaka, egy radiátora.
-Erre ki kellene számítani a hőigényt, figyelembe véve azt hogy mennyi hő szökik el a külső és belső határoló felületeken keresztül.
-A gyakorlati alkalmazásokban szeretnék majd az energetikai tanúsítványból kiindulni, így gyakorlatilag a szoba energetikai tanúsítását végzem el - olyan szinten, amennyire nekem szükséges.
+%Erre ki kellene számítani a hőigényt, figyelembe véve azt hogy mennyi hő szökik el a külső és belső határoló felületeken keresztül.
+A gyakorlati alkalmazásokban szeretnék majd az energetikai tanúsítványból kiindulni%, így gyakorlatilag a szoba energetikai tanúsítását végzem el - olyan szinten, amennyire nekem szükséges.
 
 
 Ashrae HVAC - 6.19 Panel H \& C. - Controls strategy
@@ -44,7 +44,7 @@ Viszont a szabályzótervezéshez identifikálni kell, ekkor pedig a falak, ill.
 
 \subsection{Megvalósítás MATLAB-ban}
 
-
+a simscape elemek kapcsolatai
 
 
 \pagebreak
