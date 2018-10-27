@@ -1,50 +1,83 @@
 \section{Ház modellje}
 
-\subsection{Big picture}
-
-A modellalkotásnál igyekszek energetikai tanúsítványban szereplő adatokat felhasználni.
-Figyelembe kell vennem a ház hőveszteségeit és hőtároló képességét is.
-Az kinyerhető adatok között van a határoló elemek felszíne, hőátbocsátási tényezője, a hőtároló elemek fajhője. Az alábbi táblázat értékeinek nagy részét ki lehet tölteni a tanúsítványból.
-Az épület hőigénye numerikusan is szerepel, ám ez pl. éves átlagolással adódik, nem csak a fűtési rendszert, hanem a várható időjárást is figyelembe veszi.
-A Simscape-ben hőátadási tényezőket és hőtároló tömegeket vettem fel.
-
-
-\section{A felírt modell}
-
-Egyzónás hőmérsékletszabályzást veszek alapul, azaz egy referenciajelem és egy mért hőmérsékletem van, a modellben a szoba levegőjének hőmérsékletét mindenhol ugyanakkorának feltételezem. A példában a schönherzes kollégiumi szoba határoló elemeit vettem fel.
-\input{src/haz_hatarolo_feluletek}
-
-Egy átlagos szobát 4 másik vesz körül, van ablaka, egy radiátora. A belső falakon nem vesztünk hőt, csak az ablakon ill. a külső falon. Tegyük fel, hogy a radiátoros fűtést egy szeleppel szabályozhatjuk, amit tetszőleges mértékben nyithatunk ki.
-A napsütés hőnyereségét is figyelembe vehetjük, úgy, hogy egy hőforrás a padlót melegíti.
-
-
+A szabályzótervezéshez rendelkezésre kell, hogy álljon a szabályzott szakasz modellje. Ehhez egy könnyen módosítható, koncentrált paraméterű rendszert vettem fel. Felépítettem egy hálózatot\footnote{Fodor HáRe alapján nézzük meg a különbséget rendszer és hálózat között.}, ahol minden elemhez lehet fizikai tartalmat rendelni. Majd ahhoz, hogy ehhez szabályzót lehessen tervezni, identifikáltam azt az ugrásválaszával.
 
 \subsection{Fűtési rendszer és ház kapcsolata}
 
-Nyilván egy kész házban a fűtési rendszer méretezve van az épülethez, így rendelkezésre áll megfelelő teljesítmény.
+Amikor a fűtési rendszer viselkedését szimulálom, nekem kell megalkotni mind a szabályzott épületrész, mind a fűtési rendszer modelljét. Így tehát ez a modellezésen felül egy méretezési feladat is, amit egy kész épületnél már elvégeztek a tervezés során, és a megfelelő fűtési teljesítmény áll rendelkezésre. %illeszkedik az igényekhez és a körülményekhez.
 
-(Gondolatkísérlet: HA nem hatna zavarás, csak az időállandók számítanának, a pontos teljesítményveszteségek, nyereségek nem. Azaz mindegy volna hogy 1000W hő szökik ki és ehhez tartozik 1500W-nyi fűtési kapacitás, vagy hogy 5000W és 7500W ezek az értékek. Ám pl. napsütés hatásakor nem csak az arányok hanem a konkrét teljesítmények is kellenek...
+Ha a szabályzást egy már meglévő épületre tervezzük, akkor csak a rendszerek adatait kell felvenni, illetve identifikálni. A szakdolgozatban tárgyalt egyszerű példa során csak egy részét ismerem a paramétereknek, tehát méretezési kérdéseket is fogok érinteni.  Szerencsére új építésű házaknál kötelező az energetikai tanúsítás\footnote{TNM 2006 rendelet alapján kötelező az energetikai tanúsítvány pl. \textit{átlagos} lakóépületekre, irodákra.}, ami egy meglehetősen részletes lajstromot ad az épület hőtechnikai tulajdonságairól. Ez alapján lehet egy hozzávetőlegesen jó modellünk az épületről, illetve a fűtési rendszerről is találhatók adatok paraméterek. Az interneten számos tanúsító cég töltött fel minta tanúsítványokat, amiben a számítások levezetése, indoklása is megtalálható. Így az energetikai tanúsítvány lehet egy interface a szakdolgozatban bemutatott modell és a gyakorlati alkalmazások között: valódi épület tanúsítványa alapján a modellem paraméterezhető.
 
-Így a modell egyik belső változója bizonyosan a teljesítmény kell, hogy legyen. Erre a belső változóra hat majd zavarás: emberek jelenléte kb. \SI{80}{\watt} 1 főre, napsütés, szellőztetés, stb.)
+\subsection{A modellalkotás folyamata}
 
-\hrulefill
+White-box
+grey-box
+black-box
+
+Említést érdemel, hogy a szakirodalomban hogy állnak hozzá ehhez a kérdéshez, a szabályzótervezés során néhányan egyáltalán nem alkotnak modellt, csak a mért adatokat használják fel. Lényegében én is mért adatokat használok, tulajdonképpen, mivel a modellt olyan alakban kéne felírni, hogy a szabályzó azt futtatni tudja. (?)
+
+Viszont az ident toolbox tf identjénél kihasználtam azt, hogy a rendszer jellegét ismerem, azaz hogy hány pólusa és hány zérusa van a szakasznak  / felnyitott körnek. Így lett egy nagyon jól illeszkedő átviteli függvényem.
+
+Én összeraktam a fizikai modellt simulinkben (ez white-box) majd annak az ugrásválaszát mértem. Így nem egy állapotteres modell, hanem egy átviteli fv. "keletkezett".
+
+
+Egyzónás hőmérsékletszabályzást veszek alapul, azaz egy referenciajelem és egy mért hőmérsékletem van, a modellben a szoba levegőjének hőmérsékletét mindenhol ugyanakkorának feltételezem. A szabályzás külső behatások ellenében történik, úgy mint alacsonyabb külső hőmérséklet, illetve a napsütés, szellőzés hatása. Nem foglalkozok viszont belső zavarással, pl. több szoba különböző típusú fűtésével, vagy a belső hőterheléssel, ami pl. emberek jelenlétéből fakad.
+
+Természetesen lehetett volna nagyon sok állapotú állapoteres modellt is létrehozni, ám rengeteg nem mérhető belső változója lett volna, emiatt nem biztos hogy teljesen irányítható vagy megfigyelhető rendszert kaptam volna, így pedig a szabályzótervezés nem működik.
+
+
+
+
+
+\subsection{A megvalósított modell / a modell hatóköre, használhatósága, assumptions}
+
+%A modellalkotásnál igyekszek energetikai tanúsítványban szereplő adatokat felhasználni.
+Figyelembe kell vennem a ház hőveszteségeit és hőtároló képességét is.
+Kell a határoló elemek felszíne, hőátbocsátási tényezője, a hőtároló elemek fajhője. Az alábbi táblázat értékeinek nagy részét ki lehet tölteni a tanúsítványból.
+Az épület hőigénye numerikusan is szerepel, ám ez pl. éves átlagolással adódik, nem csak a fűtési rendszert, hanem a várható időjárást is figyelembe veszi, illetve az energiaigénynél nem csak a fűtési, hanem használati melegvíz előállítására felhasznált energiát is.
+
+%(Baromi érdekes, hogy nálunk otthon van egy hőcserélő a használati melegvíz és a fűtési rendszer között, annak a hatásait is lehetne nézni.)
+
+
+\input{src/haz_hatarolo_feluletek}
+
+ A példában a schönherzes kollégiumi szoba határoló elemeit vettem fel. Minden szobának van ablaka és külső fala, egy átlagos szobát 4 másik vesz körül. A belső falakon nem veszt hőt, csak az ablakon ill. a külső falon. Feltételezzük, hogy a radiátoros fűtést egy szeleppel szabályozhatjuk, amit tetszőleges mértékben nyithatunk ki.
+ A napsütés hőnyereségét is figyelembe vehetjük.%, úgy, hogy egy hőforrás a padlót melegíti.
+
+
+
+
+%(Gondolatkísérlet: HA nem hatna zavarás, csak az időállandók számítanának, a pontos teljesítményveszteségek, nyereségek nem. Azaz mindegy volna hogy 1000W hő szökik ki és ehhez tartozik 1500W-nyi fűtési kapacitás, vagy hogy 5000W és 7500W ezek az értékek. Ám pl. napsütés hatásakor nem csak az arányok hanem a konkrét teljesítmények is kellenek...
+
+%Így a modell egyik belső változója bizonyosan a teljesítmény kell, hogy legyen. Erre a belső változóra hat majd zavarás: emberek jelenléte kb. \SI{80}{\watt} 1 főre, napsütés, szellőztetés, stb.)
+
+%\hrulefill
 
 
 %Erre ki kellene számítani a hőigényt, figyelembe véve azt hogy mennyi hő szökik el a külső és belső határoló felületeken keresztül.
-A gyakorlati alkalmazásokban szeretnék majd az energetikai tanúsítványból kiindulni%, így gyakorlatilag a szoba energetikai tanúsítását végzem el - olyan szinten, amennyire nekem szükséges.
+%A gyakorlati alkalmazásokban szeretnék majd az energetikai tanúsítványból kiindulni.%, így gyakorlatilag a szoba energetikai tanúsítását végzem el - olyan szinten, amennyire nekem szükséges.
 
 
-Ashrae HVAC - 6.19 Panel H \& C. - Controls strategy
+%Ashrae HVAC - 6.19 Panel H \& C. - Controls strategy
+%
+%A modellt a jellemző szerkezeti tulajdonságok alapján írtam fel (indoklás a táblázathoz). A modellezés Gouda alapján történik, gyakorlatilag csomóponti egyenleteket kell felírni az alábbi hálózatra, amiben az ellenállások a rétegrendi hőátbocsátási tényező reciprokai. A hőtároló képességeket kapacitások modellezik. Ezeket az elemeket Simscape-ben implementáltam, a hőáramok így áttekinthetők és a paraméterek könnyen változtathatók.
+%
+%A ház modelljének felírásakor figyelembe vettem a hőtároló elemeket. A pontos (reális) modell felállításakor ezek hőtartalmát (a hőáram integrálja egyensúlyi állapotban legyen 0, azaz egy nagyobb ciklusban a felvett és leadott hője egyenlő) az egyensúlyi állapothoz közelinek vettem.
+%
+%Viszont a szabályzótervezéshez identifikálni kell, ekkor pedig a falak, ill. szoba levegőjének kezdeti állapotát (hőmérsékletét) azonosnak vettem a külső hőmérséklettel. Így ha a hőkülönbség a modell kimenő jele, akkor lineáris a rendszer: 0 bemenetre (fűtés) 0 kimenetet ad.
 
-Ezért utánanéztem a jellemző szerkezeti tulajdonságoknak. A modellezés Gouda alapján történik, gyakorlatilag csomóponti egyenleteket kell felírni az alábbi hálózatra, amiben az ellenállások a rétegrendi hőátbocsátási tényező reciprokai. A hőtároló képességeket kapacitások modellezik. Ezeket az elemeket Simscape-ben implementáltam, a hőáramok így áttekinthetők és a paraméterek könnyen változtathatók.
+%\subsection{Megvalósítás MATLAB-ban}
 
-A ház modelljének felírásakor figyelembe vettem a hőtároló elemeket. A pontos (reális) modell felállításakor ezek hőtartalmát (a hőáram integrálja egyensúlyi állapotban legyen 0, azaz egy nagyobb ciklusban a felvett és leadott hője egyenlő) az egyensúlyi állapothoz közelinek vettem.
+%a simscape elemek kapcsolatai
 
-Viszont a szabályzótervezéshez identifikálni kell, ekkor pedig a falak, ill. szoba levegőjének kezdeti állapotát (hőmérsékletét) azonosnak vettem a külső hőmérséklettel. Így ha a hőkülönbség a modell kimenő jele, akkor lineáris a rendszer: 0 bemenetre (fűtés) 0 kimenetet ad.
+\subsection{Alkalmazott fűtési rendszerek}
 
-\subsection{Megvalósítás MATLAB-ban}
+Az alkalmazott fűtési rendszerek az épületet annak különböző pontjain gerjesztik. (Belső változóira nem egyformán hatnak: a kimeneten a változás intenzitása és sebessége más-más.) A teljes plant modell a fűtési rendszer és a ház sorba kötésével adódik.
 
-a simscape elemek kapcsolatai
+A kettő között az interface az, hogy hol avatkozunk be. Így a ház bemenetei igazából a belső változókra vonatkozó "zavarások" (a külső hőmérséklethez képest)
 
+\subsection{A modell átviteli függvénye}
+A Simulinkben identifikáltam, aztán az adatokat a sys ident toolbox-szal dolgoztam fel, tudva a modell struktúráját. (az átviteli fv. számlálójának, nevezőjének a fokszámait)
 
 \pagebreak
+%\hrulefill

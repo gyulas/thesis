@@ -1,7 +1,7 @@
-\section{Fűtési rendszer modellje}
+\section{Fűtési rendszerek modellje}
 
 
-\subsection{Radiátor modelljének felírása}
+\subsection{Általános összefüggések, ill. a radiátor modelljének felírása}
 
 Mivel a Matlab szimulációban a legbefúvásos fűtés modelljének teljesítmény kimenete van, fel akartam állítani egy olyan modellt, ami beillesztehető az eredeti légbefúvó rendszer helyére. A ház hőveszteségeit a Matlab számolja\footnote{Pontosításra szorul ez a modell is, mert valószínűleg csak a konvektív hővezetéssel számol (a sugárzásival pedig nem). A légbefúvás a ház levegőjét melegíti. Ám a modellben a ház hőtároló tömege nem jelenik meg, csak egy hőellenállás a veszteségek modellezéséhez.}, ebből pedig adódik a szoba levegőjének hőmérséklete. A rendszer szabályozását így visszavezettem a leadott teljesítmény szabályzására. A levezetett egyenletnek köszönhetően egy teljesítményigényhez meg tudom majd mondani hogy mennyire kell a szabályzószelepeket kinyitni.
 
@@ -75,7 +75,7 @@ ahol
 
 \subsubsection{Hőkapacitás}
 
-Katalógusból radiátorok tömege és a bennük lévő víz térfogata leolvasható.
+Katalógusból radiátorok tömege és a bennük lévő víz térfogata leolvasható. A hőkapac számítása:
 
 \subsubsection{Energiamérleg állandósult állapotban}
 \textbf{Állandósult állapot} esetén a leadott hő egyenlő a felvettel, mivel akkor nem történik hőfelhalmozás, hőtárolás.
@@ -104,7 +104,7 @@ Beírva (\ref{holeadas2})-ba (\ref{hofelvetel2})-t:
 
 \textbf{Csak abban az esetben, ha} $\dot Q_{le}=\dot Q_{fel}$:
 
-
+%(meggondolandó hogy a hőkapacitások szerepe hogy alakul...)
 
 
 \begin{equation} \label{holeadas4}
@@ -127,13 +127,38 @@ Mivel a hőleadást, hőtárolást Simscape-ben valósítottam meg, a radiátorb
 
 Fun facts:
 ~
-\begin{itemize}
+\begin{itemize}[itemsep=6pt,topsep=0pt,parsep=0pt,partopsep=0pt]
 	\item A falakra az $\alpha$ = 10 \si[per-mode = fraction]{\watt\per\meter\squared\per\kelvin} érték a sugárzó és konvektív hőleadást is tartalmazza. A konvektív hőleadás függ a felületi áramlási sebességtől: falsaroknál ez az érték alacsonyabb, kb. a fele.
-	\item A sugárzó hő a Stefan-Boltzmann törvény alapján függ az emisszivitástól. (Annak a mértéke, hogy a test a feketetesthez képest mennyi hőt bocsát ki). A hőmennyiség a hőmérséklet negyedik hatványával arányos. A \textbf{sugárzott hő meghatározásához} még meg kell keresni és be kell írni a Simscape blokkba a megfelelő együtthatókat. Valami általános összefüggést kell találni, hogy a radiátor milyen arányban melegíti a külső falat, ahol van, ill. az ablakra milyen hatással van: még nem kezelem le ezeket az aszimmetriákat, hanem minden hőmérsékleteloszlást homogénnek veszek.
+	\item A sugárzó hő a Stefan-Boltzmann törvény alapján függ az emisszivitástól. (Annak a mértéke, hogy a test a feketetesthez képest mennyi hőt bocsát ki). A hőmennyiség a hőmérséklet negyedik hatványával arányos. A \textbf{sugárzott hő meghatározásához} még meg kell keresni és be kell írni a Simscape blokkba a megfelelő együtthatókat. Valami általános összefüggést kell találni, hogy a radiátor milyen arányban melegíti a külső falat, ahol van, ill. az ablakra milyen hatással van: még nem kezelem le ezeket az aszimmetriákat, hanem minden hőmérsékleteloszlást homogénnek veszek. A Stefan-Boltzmann törvény direkt alkalmazása helyett a szabványokban és irodalomban található közelítésekkel élek.
 	\item A $q_r$ [\si[per-mode = fraction]{\watt\per\meter\squared}] \textit{radiant heat flux density} a T. Cholewa\footnote{On the heat transfer coefficients between heated/cooled radiant floor and room. \\ DOI: http://dx.doi.org/10.1016/j.enbuild.2013.07.065} (5.) egyenlet alapján számítható.
 	\item A hőhidak a hőveszteségek meglepően nagy részéért felelősek, jelentős hibát követünk el, ha ezekkel nem számolunk. Meg kell keresni az energ. tanúsítványokban hogy hol tüntetik fel ezek mértékét.
 	
 \end{itemize} 
+
+Fűtött padló, falak, mennyezet esetén jelentős szerepe van a sugárzó hőleadásnak.
+
+\begin{itemize}[itemsep=0pt,topsep=0pt,parsep=0pt,partopsep=0pt]
+	\item A.Laouadi / Building and Environment 39 (2004) 421 – 431 - p424, eq. 10-11: radiant heat transfer model
+	\item TEMPERATURE CONTROL STRATEGIES FOR RADIANT FLOOR EIEATING SYSTEMS, Zhi Long Zhang: 40.o.  
+	\item \cite{CHOLEWA2013599} T. Cholewa et al. / Energy and Buildings 66 (2013) 599–606 - Table 5: coefficient
+	\item Kilkis1994 A simplified model for radiant heating and cooling panels: itt van képlet sugárzóra
+\end{itemize}  
+
+Ebből a sugárzásra az alábbi adódott:
+
+\begin{equation} \label{equation-radi-and-convective-htotal}
+\dot Q_{r} = h_r ~ A_e ~ \left(t_{surf}-t_{AUST}\right)
+\end{equation}
+
+ahol
+\begin{itemize}[itemsep=3pt,topsep=0pt,parsep=0pt,partopsep=0pt]
+	\item[] $\dot{Q}_{r}$ [\SI{}{\watt}] a leadott sugárzó hő
+	\item[] $h_r$ [\si[per-mode = fraction]{\watt\per\meter\squared\per\kelvin}] sugárzó hőleadási tényező
+	\item[] $A_e$ [\si{\metre\squared}] a padló felülete
+	\item[] $t_{surf}$ [\SI{}{\kelvin}] padló hőmérséklete
+	\item[] $t_{AUST}$ [\SI{}{\kelvin}] fűtetlen felületek átlagos hőmérséklete - a fal hőmérsékletének veszem a Simscapeben
+\end{itemize}
+
 
 \subsubsection{Dinamikus modell}
 
