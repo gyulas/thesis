@@ -101,12 +101,12 @@ heat_transfer_const_radiator=h_c_radi;
 q_sch_ablak=2*2*4.5;                  % [W/K]
 q_sch_fal_kulso=3.3*(0.25+0.95)*1.3;  % [W/K] - kepletben geom. meretekkel
 q_sch_fal_belso=2*6*3.3 + ...
-                2*6*2.6 + 2.6*3.3;
+                2*6*2.6 + 2.6*3.3;%??? [m2]
 
 % Hoveszteseg a kulso homersekletkulonbseg fv.: Q=?t*?q [W]
 q_sch_ext=q_sch_ablak+q_sch_fal_kulso;
 
-%Bentivel egzelore nem szamolok.
+%Bentire nem szamolok.
 
 % -------------------------------
 % Determine total internal air mass = M
