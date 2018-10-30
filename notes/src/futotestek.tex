@@ -123,6 +123,26 @@ Mivel a hőleadást, hőtárolást Simscape-ben valósítottam meg, a radiátorb
 \end{formal}
 
 
+\subsubsection{Dinamikus modell}
+
+A felmelegedéskor és lehűléskor a pontos hőleadást akkor tudjuk modellezni, ha ismerjük a radiátor hőkapacitását. Ehhez tudnunk kell, hogy a radiátorban mennyi víz van, illetve hogy a radiátortest milyen nehéz.
+
+Radiátor katalógusokból\footnote{Purmo Ventil Compact - purmo.com} azt találtam, hogy az egyes radiátor típusokra ezek a paraméterek milyen értékűek.
+
+Ismert a radiátor hossza, magassága, konstrukciója. Ezalapján a
+tömege, illetve az acél hőkapacitása alapján a radiátortest hőkapacitása - simscape termikus hőtároló elem blokként
+víztérfogata, a víz fajhője még egy hőtároló elem.
+
+Ezen hőtároló elemek feltöltődése szimulálva adja a dinamikus viselkedést.
+
+%A modell kimenetén külön szerepelhet a sugárzás és a konvekció.
+
+\subsection{Padlófűtés modellje}
+
+Aljzat, aljzatbeton: slab
+facade: frontal - homlokzat
+
+
 \subsubsection{Sugárzó és konvektív teljesítmény szétválasztása}
 
 Fun facts:
@@ -130,8 +150,9 @@ Fun facts:
 \begin{itemize}[itemsep=6pt,topsep=0pt,parsep=0pt,partopsep=0pt]
 	\item A falakra az $\alpha$ = 10 \si[per-mode = fraction]{\watt\per\meter\squared\per\kelvin} érték a sugárzó és konvektív hőleadást is tartalmazza. A konvektív hőleadás függ a felületi áramlási sebességtől: falsaroknál ez az érték alacsonyabb, kb. a fele.
 	\item A sugárzó hő a Stefan-Boltzmann törvény alapján függ az emisszivitástól. (Annak a mértéke, hogy a test a feketetesthez képest mennyi hőt bocsát ki). A hőmennyiség a hőmérséklet negyedik hatványával arányos. A \textbf{sugárzott hő meghatározásához} még meg kell keresni és be kell írni a Simscape blokkba a megfelelő együtthatókat. Valami általános összefüggést kell találni, hogy a radiátor milyen arányban melegíti a külső falat, ahol van, ill. az ablakra milyen hatással van: még nem kezelem le ezeket az aszimmetriákat, hanem minden hőmérsékleteloszlást homogénnek veszek. A Stefan-Boltzmann törvény direkt alkalmazása helyett a szabványokban és irodalomban található közelítésekkel élek.
-	\item A $q_r$ [\si[per-mode = fraction]{\watt\per\meter\squared}] \textit{radiant heat flux density} a T. Cholewa\footnote{On the heat transfer coefficients between heated/cooled radiant floor and room. \\ DOI: http://dx.doi.org/10.1016/j.enbuild.2013.07.065} (5.) egyenlet alapján számítható.
+	\item A $q_r$ [\si[per-mode = fraction]{\watt\per\meter\squared}] \textit{radiant heat flux density} a T. Cholewa\footnote{On the heat transfer coefficients between heated/cooled radiant floor and room. \\ DOI: http://dx.doi.org/10.1016/j.enbuild.2013.07.065} (5.) egyenlet alapján számítható de az a geometriától is angyban függ. Helyette Kilkis1994 (4) és (6) javasolt, illetve a \cite{CHOLEWA2013599}-ból is lehet mért értékekkel számolni / a szabványok ajánlását használni.
 	\item A hőhidak a hőveszteségek meglepően nagy részéért felelősek, jelentős hibát követünk el, ha ezekkel nem számolunk. Meg kell keresni az energ. tanúsítványokban hogy hol tüntetik fel ezek mértékét.
+	
 	
 \end{itemize} 
 
@@ -142,9 +163,10 @@ Fűtött padló, falak, mennyezet esetén jelentős szerepe van a sugárzó hől
 	\item TEMPERATURE CONTROL STRATEGIES FOR RADIANT FLOOR EIEATING SYSTEMS, Zhi Long Zhang: 40.o.  
 	\item \cite{CHOLEWA2013599} T. Cholewa et al. / Energy and Buildings 66 (2013) 599–606 - Table 5: coefficient
 	\item Kilkis1994 A simplified model for radiant heating and cooling panels: itt van képlet sugárzóra
+	\item Kiegészítés: \cite[349.~o.]{Herz}
 \end{itemize}  
 
-Ebből a sugárzásra az alábbi adódott:
+A sugárzó hőleadási tényező bevezetésével viszont linearizálhatjuk a hőleadást, a hőleadás így egyszerűen lineárisan függ majd a hőmérséklet-különbségtől.
 
 \begin{equation} \label{equation-radi-and-convective-htotal}
 \dot Q_{r} = h_r ~ A_e ~ \left(t_{surf}-t_{AUST}\right)
@@ -159,19 +181,9 @@ ahol
 	\item[] $t_{AUST}$ [\SI{}{\kelvin}] fűtetlen felületek átlagos hőmérséklete - a fal hőmérsékletének veszem a Simscapeben
 \end{itemize}
 
+\subsubsection{Problémák, eltérések a radiátoros fűtéshez képest}
 
-\subsubsection{Dinamikus modell}
-
-A felmelegedéskor és lehűléskor a pontos hőleadást akkor tudjuk modellezni, ha ismerjük a radiátor hőkapacitását. Ehhez tudnunk kell, hogy a radiátorban mennyi víz van, illetve hogy a radiátortest milyen nehéz.
-
-Radiátor katalógusokból\footnote{Purmo Ventil Compact - purmo.com} azt találtam, hogy az egyes radiátor típusokra ezek a paraméterek milyen értékűek.
-
-Ismert a radiátor hossza, magassága, konstrukciója. Ezalapján a
-tömege, illetve az acél hőkapacitása alapján a radiátortest hőkapacitása - simscape termikus hőtároló elem blokként
-víztérfogata, a víz fajhője még egy hőtároló elem.
-
-Ezen hőtároló elemek feltöltődése szimulálva adja a dinamikus viselkedést.
-
-A modell kimenetén külön szerepelhet a sugárzás és a konvekció.
+%Hasonló képlettel számolok, mint a radiátornál.
+Tegyük fel ho  
 
 \pagebreak
