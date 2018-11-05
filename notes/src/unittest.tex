@@ -1,0 +1,21 @@
+\section{Modellek tesztje}
+
+\subsection{Radiátor unit test}
+
+\subsubsection{Állandósult állapot numerikus modellje}
+
+Annak ellenőrzése, hogy a \ref{holeadas4} egyenlet jó-e. Azaz elfogadható-e ez a közelítés állandósult állapotban, illetve a tranziens alatt mennyire feasible. 
+
+Az egyenletben a mintavételi idő egy szorzóként jelenik meg, 
+
+Az egyenlet wattban adja a kimenetét.
+A teszt egy formája lehet, ha a gyári adatokat (fűtési teljesítmény) összevetem az általam számoltakkal.
+
+\subsubsection{Tranziens Simscape modellje}
+A bejövő hő függvényében a hőleadás tranziensei. A bejövő hőt a képlet numerikusan számítja. A tranzienst viszont Simscape-ben szimulálom. Ez folytonos rendszert feltételez.
+
+\subsubsection{Szabályzás célja}
+
+Állandósult állapotban olyan bemenő hőáramot elérni, ami épp fedezi a veszteségeket.
+
+\subsection{Padlófűtés unit test}
