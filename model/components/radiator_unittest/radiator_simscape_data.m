@@ -11,8 +11,8 @@ timeUnit_1day=timeUnit_1hour*24;
 timeUnit_1week=7*timeUnit_1day;
 
 % TinIC = initial indoor temperature = 20 deg C
-TinIC = 20;
-TinHeatK=273+20; %[K] heating elements
+TinIC = 5;
+TinHeatK=273+5; %[K] heating elements
 
             % -------------------------------
             % Radiator parameters
