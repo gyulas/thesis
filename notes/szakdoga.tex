@@ -1,5 +1,5 @@
-
-\documentclass[a4paper, hidelinks]{article}
+\documentclass[11pt,a4paper,oneside, hidelinks]{report}             % Single-side
+%\documentclass[a4paper, hidelinks]{article}
 \newcommand\tab[1][1cm]{\hspace*{#1}}
 
 %\sloppy
@@ -11,7 +11,7 @@
 \usepackage[magyar]{babel}
 \usepackage{graphicx}
 \usepackage{float}
-\usepackage[left=2.1cm,right=2.1cm,top=2cm,bottom=2cm]{geometry}
+%\usepackage[left=2.1cm,right=2.1cm,top=2cm,bottom=2cm]{geometry}
 
 \usepackage{siunitx} %celsius
 \usepackage{amsmath}
@@ -134,7 +134,7 @@
 \newcommand{\vikszerzo}{Gyulai László}
 \newcommand{\vikkonzulens}{dr. Kiss Bálint}
 \newcommand{\kulsokonzulens}{Kurbucz Máté}
-\newcommand{\vikcim}{Korszerű fűtési rendszerek szabályzása - munkapéldány}
+\newcommand{\vikcim}{Korszerű fűtési rendszerek szabályzása - \\  kismargós munkapéldány}
 \newcommand{\viktanszek}{Irányítástechnika és Informatika Tanszék}
 
 \newcommand{\vikdoktipus}{Szadolgozat}
@@ -155,7 +155,7 @@
 
 %\marginsize{35mm}{25mm}{15mm}{15mm} % anysize package
 \marginsize{30mm}{20mm}{12mm}{12mm} % anysize package
-
+%\marginsize{35mm}{25mm}{15mm}{15mm} % anysize package - VÉGLEGESHEZ
 %Headerhez opcionálisan:
 
 %header and footer
@@ -173,13 +173,14 @@
 	\input{src/titlepage}
 %	\input{src/kiiras}
 	\input{src/model}
-	\input{src/haz}
 	\input{src/futotestek}
+	\input{src/haz}
 	\input{src/unittest}
 	\input{src/heating}
 	\input{src/ident}
 	\input{src/control_intro}
-	
+	\input{src/optimality}
+	\input{src/summary}
 	
 	\pagebreak
 	\bibliographystyle{plain}

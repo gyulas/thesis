@@ -1,14 +1,9 @@
-\section{Hagyományos szabályzás performanciája}
-
-PI, miért nem jó
-Csak SISO-ra működik és itt esetünkben itt több bemenetről van szó mindenképpen. Irodalom: S. Prívara et al. 
-
-\section{Szabályzó kiválasztása és analízise}
+\chapter{Szabályzó kiválasztása és analízise}
 
 
 Az identifikált modellekre többféle szabályzót tervezek, illetve próbálok ki.
 
-\subsection{Ismerkedés az MPC szabályzással}
+\section{Ismerkedés az MPC szabályzással}
 
 Ahhoz, hogy az MPC szabályzás működését, tulajdonságait meg tudjam figyelni, lépésről lépésre fogok feature-öket hozzáadni.
 
@@ -148,7 +143,8 @@ Unconstrained
 >> mpc_control_slab.ManipulatedVariables(1).Min = 0;
 >> mpc_control_slab.ManipulatedVariables(2).Min = 0;
 >> mpc_control_slab.ManipulatedVariables(2).Max = 1;
-mpc_control_slab.ManipulatedVariables(1).Max = 1;
+mpc_control_slab.ManipulatedVariables(1).Max = 1;
+
 \end{lstlisting}
 
 

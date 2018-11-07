@@ -1,14 +1,14 @@
-\section{Ház modellje}
+\chapter{Ház modellje}
 
 A szabályzótervezéshez rendelkezésre kell, hogy álljon a szabályzott szakasz modellje. Ehhez egy könnyen módosítható, koncentrált paraméterű rendszert vettem fel. Felépítettem egy hálózatot\footnote{Fodor HáRe alapján nézzük meg a különbséget rendszer és hálózat között.}, ahol minden elemhez lehet fizikai tartalmat rendelni. Majd ahhoz, hogy ehhez szabályzót lehessen tervezni, identifikáltam azt az ugrásválaszával.
 
-\subsection{Fűtési rendszer és ház kapcsolata}
+\section{Fűtési rendszer és ház kapcsolata}
 
 Amikor a fűtési rendszer viselkedését szimulálom, nekem kell megalkotni mind a szabályzott épületrész, mind a fűtési rendszer modelljét. Így tehát ez a modellezésen felül egy méretezési feladat is, amit egy kész épületnél már elvégeztek a tervezés során, és a megfelelő fűtési teljesítmény áll rendelkezésre. %illeszkedik az igényekhez és a körülményekhez.
 
 Ha a szabályzást egy már meglévő épületre tervezzük, akkor csak a rendszerek adatait kell felvenni, illetve identifikálni. A szakdolgozatban tárgyalt egyszerű példa során csak egy részét ismerem a paramétereknek, tehát méretezési kérdéseket is fogok érinteni.  Szerencsére új építésű házaknál kötelező az energetikai tanúsítás\footnote{TNM 2006 rendelet alapján kötelező az energetikai tanúsítvány pl. \textit{átlagos} lakóépületekre, irodákra.}, ami egy meglehetősen részletes lajstromot ad az épület hőtechnikai tulajdonságairól. Ez alapján lehet egy hozzávetőlegesen jó modellünk az épületről, illetve a fűtési rendszerről is találhatók adatok paraméterek. Az interneten számos tanúsító cég töltött fel minta tanúsítványokat, amiben a számítások levezetése, indoklása is megtalálható. Így az energetikai tanúsítvány lehet egy interface a szakdolgozatban bemutatott modell és a gyakorlati alkalmazások között: valódi épület tanúsítványa alapján a modellem paraméterezhető.
 
-\subsection{A modellalkotás folyamata}
+\section{A modellalkotás folyamata}
 
 White-box
 grey-box
@@ -29,7 +29,7 @@ Természetesen lehetett volna nagyon sok állapotú állapoteres modellt is lét
 
 
 
-\subsection{A megvalósított modell / a modell hatóköre, használhatósága, assumptions}
+\section{A megvalósított modell / a modell hatóköre, használhatósága, assumptions}
 
 %A modellalkotásnál igyekszek energetikai tanúsítványban szereplő adatokat felhasználni.
 Figyelembe kell vennem a ház hőveszteségeit és hőtároló képességét is.
@@ -71,14 +71,17 @@ A teljesítményeket megnöveljük és semmi mást, az nem lesz ekvivalens.
 
 %a simscape elemek kapcsolatai
 
-\subsection{Alkalmazott fűtési rendszerek}
+\section{Alkalmazott fűtési rendszerek}
 
 Az alkalmazott fűtési rendszerek az épületet annak különböző pontjain gerjesztik. (Belső változóira nem egyformán hatnak: a kimeneten a változás intenzitása és sebessége más-más.) A teljes plant modell a fűtési rendszer és a ház sorba kötésével adódik.
 
 A kettő között az interface az, hogy hol avatkozunk be. Így a ház bemenetei igazából a belső változókra vonatkozó "zavarások" (a külső hőmérséklethez képest)
 
-\subsection{A modell átviteli függvénye}
+\section{A modell átviteli függvénye}
 A Simulinkben identifikáltam, aztán az adatokat a sys ident toolbox-szal dolgoztam fel, tudva a modell struktúráját. (az átviteli fv. számlálójának, nevezőjének a fokszámait)
+
+\section{TABS}
+
 
 \pagebreak
 %\hrulefill
