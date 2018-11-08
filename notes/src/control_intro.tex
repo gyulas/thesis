@@ -1,23 +1,35 @@
 \chapter{Szabályzó kiválasztása és analízise}
 
+Már a modell identifikációját is bonyolította az egynél több bemenet. Illetve kettő van kimenetből is. A szabályzásnál különösen nehéz több bemenetű rendszerre tervezni, esetleg a modellek szétválasztásával lehetséges: külön beavatkozójel a 
+
 
 Az identifikált modellekre többféle szabályzót tervezek, illetve próbálok ki.
 
+A hasonló feladatokra leggyakrabban modell-prediktív (MPC) szabályzást használnak. Ehhez szükség van a szakasz modelljére, ami alapján a szabályzó szimulálhatja a szakasz kimenetét. A szimuláció több mintavételi perióduson, egy predikciós horizonton keresztül fut le, minden lehetséges  beavatkozójel-sorozatra a kimenetet szimulálva. Ezen sorozatok közül a legjobbat kiválasztja és egy lépést végrehajt. Ezután a szimuláció újrakezdődik. Az optimális beavatkozójelet egy költségfüggvény minimalizálásával kapja. A költségfüggvényben különböző eltéréseknek vagy abszolútértékeknek különböző súlya lehet.
+
+Egy irodában, vagy lakásban 0.1\si{\celsius}-os vagy 1\si{\celsius}-os pontosságú hőmérsékletszabályzás közötti különbség komfortban aligha érezhető. Ám a követelmények megengedhető mértékű lazítása az energiafogyasztást nagyban lecsökkentheti.
+
+\begin{formal}
+	Ha az mpc blokknak van külső ktsg fv. bemenete, használjuk azt. Ebből kössük rá a numerikus képleteket. A teljesítmény integrálját és pillanatértékét, ill. túl gyors változását is lehet büntetni és energetikai szempontotkat (kazán hatásfoka, energia ára, napelemmel megtermelt mennyiség, azaz törés az energiaköltségben, ha egy külön blokkban megadjuk ezeket.)
+\end{formal}
+
 \section{Ismerkedés az MPC szabályzással}
+
+\input{tikz/mpcinout}
 
 Ahhoz, hogy az MPC szabályzás működését, tulajdonságait meg tudjam figyelni, lépésről lépésre fogok feature-öket hozzáadni.
 
 A kezdeti cél egy "sima" szabályzás. Kérdés, hogy egyáltalán tud-e ilyet az MPC. Gyanítom, hogy a hibaminimalizáló függvény megfelelő megadásával tud: ha egy négyzetes hibaminimalizáló van rajta, \textit{biztosan "jó"} lesz.\footnote{Bármit is jelentsen a \textit{jó} szabályzás.}
 
 \begin{formal}
-	Plant bemenetek lehetnek:
+	Még lehetséges:
 	\begin{itemize}[noitemsep,topsep=-8pt,parsep=0pt,partopsep=0pt]
-		\item kazán bekapcsolása
-		\item előremenő hőmérséklet - unmeasured VAGY uncontrolled inputként
-		\item 1 db. fűtőtest (most radiátor) szelepének tömegárama (szelep áteresztése)
-		\item Később több fűtőtest vagy többféle fűtőtestek (padlófűtés, különböző teljesítményű radiátorok) szabályozása
-		\item környezeti hőmérséklet: mért bemenet - később predikció is lesz rá. Hatása a kimeneten már identifikálva lett, 3 pólussal és 2 zérussal tökéletesen lekövethető.
-		\item napsugárzás zavaró hatása - szimulálható  a bizonytalansága valószínűleg nagy lesz
+%		\item kazán bekapcsolása
+%		\item előremenő hőmérséklet - unmeasured VAGY uncontrolled inputként
+%		\item 1 db. fűtőtest (most radiátor) szelepének tömegárama (szelep áteresztése)
+%		\item Később több fűtőtest vagy többféle fűtőtestek (padlófűtés, különböző teljesítményű radiátorok) szabályozása
+		\item környezeti hőmérséklet: predikció / szekvencia használata% is lesz rá. Hatása a kimeneten már identifikálva lett, 3 pólussal és 2 zérussal tökéletesen lekövethető.
+		\item napsugárzás zavaró hatása% - szimulálható  a bizonytalansága valószínűleg nagy lesz
 	\end{itemize}
 
 	Belső változók - fűtési rendszer és ház kapcsolata
@@ -28,14 +40,14 @@ A kezdeti cél egy "sima" szabályzás. Kérdés, hogy egyáltalán tud-e ilyet 
 
 	Paraméterek a plantben nem állandók:
 	\begin{itemize}[noitemsep,topsep=-6pt,parsep=0pt,partopsep=0pt]
-		\item hőátadási tényezők hőmérsékletfüggők, áramlási sebesség-függők (szél)
+%		\item hőátadási tényezők hőmérsékletfüggők, áramlási sebesség-függők (szél)
 		\item szellőztetés, belső hőterhelés hatása
 	\end{itemize}
 \end{formal}
 
-Az elvárás a következő lépésben az, hogy ha egy $t_0$ időpontban a rendszer egy adott állapotban van, és várható egy zavarás $\Delta t$ idő múlva (vagy mértem egy zavarást MOST és a hatása csak később jelenne meg a kimeneten), akkor a rendszer megfelelően beavatkozzon.
-
-(Azaz ha fél óra múlva \SI{10}{\celsius}-al melegebb lesz, ne fűtsön.)
+%Az elvárás a következő lépésben az, hogy ha egy $t_0$ időpontban a rendszer egy adott állapotban van, és várható egy zavarás $\Delta t$ idő múlva (vagy mértem egy zavarást MOST és a hatása csak később jelenne meg a kimeneten), akkor a rendszer megfelelően beavatkozzon.
+%
+%(Azaz ha fél óra múlva \SI{10}{\celsius}-al melegebb lesz, ne fűtsön.)
 
 \subsection{A MATLAB MPC Toolbox elemei}
 Az MPC blokknak van egy alapértelmezett költségfüggvénye, és ennek a súlyozását lehet beállítani.
@@ -151,7 +163,7 @@ mpc_control_slab.ManipulatedVariables(1).Max = 1;
 \subsection{Az automatikusan létrehozott MPC tulajdonságai}
 
 Az MPC szabályzót létrehoztam a toolbox-szal, az identfikált szakaszból. Beállítottam a be-és kimenetek jellegét, korlátait. A ki-és bemeneteket helyesen bekötve már működött is a szabályzás.
-
+Fontos, hogy helyesen válasszuk meg a mintavételi időt, illetve a súlyokat
 
 
 \subsubsection{A kezdeti szabályzó problémái}
@@ -172,12 +184,12 @@ A mintavételi időt megnöveltem. A ház identifikációját és az MPC tervez�
 	\item A mintavételi idő növelése a Matlab default workspace-ben magával vonja, hogy a Simulink blokkban is módosul a $T_s$. 
 	\item A Simulinkben az időt a jobb alsó sarokban mindig mp-ben írja ki. Ámde ha a steppingnél 1000 step-et állítok be, az a jobb alsó sarokban $T_s$-sel felskálázva fogja a mp-t mutatni. Azaz 5 perces sampling time esetén 1 step a jobb alsó sarokban T=300 mp-nek felel meg.
 	\item A mintavételi idő megválasztása nagyban meghatározza a költségfüggvény értékét.
-	\item
-	\item
-	\item
-	\item
-	\item
-	\item	
+%	\item
+%	\item
+%	\item
+%	\item
+%	\item
+%	\item	
 \end{itemize}
 
 
@@ -205,6 +217,8 @@ A beavatkozó jelek és a szakasz kimenete is súlyozható, hogy azok a költsé
 Valójában fordítva kell. Kis amplitúdó esetén NULLA pluszköltség még jobban kinyitni ("Szívesen" növekedjen tovább ha még csak kicsit van nyitva.) Csak ha félig van kinyitva, akkor növeljük a költséget.
 
 Sajnos viszont a fenti költségeket nem lehet (nehéz) megfeleltetni forintosított tételeknek.
+
+Fel kellene írni egy ideális scenario-t és ahhoz igazítani a ktsg-fv-t, hogy annak az esetnek a kialakulása legyen valószínűbb.
 
 \hrulefill
 

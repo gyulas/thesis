@@ -1,7 +1,4 @@
 \chapter{Fűtőtestek modellje}
-
-%\section{Fűtőtestek modellje}
-
 A következőkben egy radiátort és egy padlófűtést fogok modellezni, ezekre képlettel felírom az állandósult állapotbeli hőleadást. Szimuláció során viszont bekapcsolási tranziensekkel is számolnom kell, ami légbefúvásos rendszer esetén elhanyagolható lenne. Ehhez már a Matlab Simscape környezetét fogom használni, amely képes termikus rendszerek modellezésére.
 
 %A modellalkotás során kétféle probléma merül fel. Egyrészt modellezni kell a fűtőtestek állandósult állapotbeli hőleadást. Másrészt, ha a fűtési rendszer időállandója nagy, akkor a tranziens lefolyása is lényeges a szabályzás szempontjából.
@@ -15,44 +12,7 @@ A tranziensek a fűtőtestek fizikai kialakításától függnek. Minél nagyobb
 
 \textbf{\textit{TIKZPICTURE A MODELLRŐL, DIMENZIÓKRÓL}}
 
-
-\begin{tikzpicture}[>=stealth]
-\node[draw,rectangle,inner sep=0.65cm] (y) at (0,0) {controller};
-\node[draw,rectangle, minimum height=2cm,minimum width=5.5cm] (d) at (0,3.5) {\parbox{2cm}{\centering fűtési rendszer}};
-\node[draw,rectangle,inner sep=1cm] (house) at (7,3.5) {\parbox{2cm}{\centering fűtési rendszer}};
-
-\draw[->] (y.191) -| ++(-2.7,1.3)|-  (d.172) node[right]{$\alpha_{radiator}$};  %node[above left]{$\alpha_{radiator}$}; 
-\draw[->] (y.169) -| ++(-2,0.8)  |-  (d.188) node[right]{$\alpha_{floor}$} ;
-
-\draw[->] (d.0) node[left]{heat [W]} node[anchor=north]{telesítmény} (house.180);
-%\draw[->] (d.20) -| ++(1,-1) |- (y.350);
-
-%\path 
-%(d.150)	 edge[<->] 	node[anchor=north,above]{valvePercent}	(y.270);
-
-
-
-\end{tikzpicture}
-
-\vspace*{10pt}
-
-%\begin{tikzpicture}[>=stealth,remember picture]
-%\node[draw,rectangle,inner sep=0.5cm] (y) at (0,0) {$A$};
-%\node[draw] (d) at (0,2) {%
-%%	\begin{tikzpicture}[remember picture]
-%%	\matrix [matrix of math nodes] (mat)
-%%	{
-%%		B & \phantom{C}   \\
-%%		\phantom{B} & C \\
-%%	};
-%%	\end{tikzpicture}
-%%};
-%%\draw[->,shorten >= 6pt] (y.west) -| ++(-1,1) |- (mat-1-1);
-%%\draw[->,shorten >= 6pt] (y.west) -| ++(-0.8,1) |- (mat-2-1);
-%%\draw[->] ($(mat-2-2)+(14pt,0)$) -| ++(0.8,-1) |- (y.east);
-%%\draw[->] ($(mat-1-2)+(14pt,0)$) -| ++(1,-1) |- (y.east);
-%\end{tikzpicture}
-
+\input{tikz/controlloop}
 
 \section{Állandósult állapotbeli hőleadás}
 
@@ -169,7 +129,7 @@ Beírva (\ref{holeadas2})-ba (\ref{hofelvetel2})-t:
 \end{equation}
 
 Ez adja meg a fűtési rendszer által szolgáltatott teljesítményt állandósult állapotban.
-A fenti képletet kiegészítve kezelhető lenne a hőmérsékletfüggő hőleadási tényező.
+A fenti képletben a hőleadási tényezőt hőmérsékletfüggőnek is lehet venni, \cite{CHOLEWA2013599} mérései alapján.
 
 Mivel a hőleadást, hőtárolást Simscape-ben valósítottam meg, a radiátorba bemenő hőt kell csak kiszámítani. Erre meg kell vizsgálni, hogy az állandósult állapotbeli képlet helyes-e.
 
@@ -183,9 +143,52 @@ Mivel a hőleadást, hőtárolást Simscape-ben valósítottam meg, a radiátorb
 %
 %A közepes vízhőmérséklet, a közepes felületi hőmérséklet is jöhet kimeneten ahhoz, hogy a steady-state model számolhassa a bemenő hőmérsékletet.
 
-\subsection{A modell validálása}
+
+
+\subsection{A modell alkalmazhatósága, validálása}
 
 Nyilvánvalóan nehéz lenne a felírt modellt egyénileg validálni, főleg hogy sehol sem találkoztam ilyen formában felírt képlettel a szakirodalomban. Szerencsére Cholewa \cite{CHOLEWA2013599} és Koca \cite{Koca} végzett méréseket falfűtés és mennyezetfűtés esetére. Ezen mérési eredmények paramétereit helyettesítettem be a hőleadás egyenletébe ahhoz hogy eldöntsem, helytálló-e a felírt modell. Az említett publikációkban minden adat rendelkezésre áll. A következő eseteket vizsgáltam:
+
+\begin{table}[H]
+	\vspace{12pt}
+	\centering
+	\renewcommand{\arraystretch}{1.4} % to increase cell height..
+	\begin{tabular}{
+			l
+			S[table-format=-3.2]
+			S[table-format=-3.2]
+			S[table-format=-3.2]
+			S[table-format=-3.2]
+			S[table-format=-3.2]
+			%cccc
+			}
+		%\hline
+		\multicolumn{1}{c}{Paraméter} & \multicolumn{5}{c}{Cholewa mérései}\\%& \multicolumn{1}{c}{dummy} \\
+		\hline%\cline{1-2}
+	%	$T_{water}$    & Description & Price & (\$) \\
+	%	\hline
+		$T_{water},\si{\celsius}$      								& 30	& 30	& 40	& 50	& 55   		\\
+		%$\dot{m}$ [\si[per-mode=fraction]{\kilogram\per\second}]  	& 0.0167& 0.055	& 0.0167& 0.0167& 0.055    	\\
+		$\dot{m}$ [\si[per-mode=fraction]{\kilogram\per\minute}]  	& 1		& 3		& 1		& 1		& 3		    \\
+		$T_{surf}$													& 25.3	& 26.2	& 32    & 37.4  & 42.4		\\
+		$T_{a0.6}$       											& 22.3  & 23.3 	& 26.9	& 30.8  & 34.3 		\\
+		$h_{total0.6}$ \small{$\left[ \frac{\si{\watt}}{\si{\metre\squared\kelvin}} \right]$ }
+																	& 8.7   & 9.4  	& 9.7  	& 10.5  & 10.8  	\\[5pt] \hline 
+		%$\Delta T$       											& 3     & 2.9	& 5.1  	& 6.6   & 8.1 		\\[5pt] \hline 
+		$q_{total}$ \small{$\left[ \frac{\si{\watt}}{\si{\metre\squared}} \right]$}
+																	& 25.1  & 26.4  & 47.8  &  68.8	& 88.4   	\\[5pt] 		
+		$q_{formula}$ \small{$\left[ \frac{\si{\watt}}{\si{\metre\squared}} \right]$}
+																	& 24.6  & 26.7  & 46.3  &  64.5 & 85.5   	\\%[5pt] \hline 
+		%Pontosság \%												& 98	& 101	&  97	& 93.75 & 96.7		\\
+		\hline
+	\end{tabular}
+	\caption{A \ref{holeadas4}. képlettel kapott eredmények és a \cite{CHOLEWA2013599} és \cite{Koca} eredményeinek összevetése}
+
+\end{table}
+
+
+% Az 1.1 méréseket használva rendre 10%-kal alábecsültük a hőt.
+{\Large }
 
 
 A hőleadás egyenletével számolt és a fent hivatkozott, méréssel kapott eredmények elég jól követik egymást. Padlófűtésnél a padló felületi hőmérséklettel számoltam, ugyanis a padló hőmérséklete jóval alacsonyabb, mint a fűtővíz hőmérséklete.
