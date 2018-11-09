@@ -1,9 +1,39 @@
+\chapter*{Abstract}
+
+A szakdolgozatban fűtési rendszerek modell-prediktív szabályzásának lehetőségeit vizsgálom Matlab Simulinkben. %Szimulációval
+Végighaladok az MPC tervezés lépésein, a tervezést és a validálást is szimulált szakaszmodellen végzem. A szakaszmodellt a fűtési rendszer és a szoba alkotja, a fűtés hője a szobából külső falon távozik a környezet felé. Az állandósult állapotban szükséges fűtési teljesítményt képlettel számítom, ebből kapható a beavatkozó jel egy adott teljesítményigényhez. A hőkapacitásokat és hőátadási, hővezetési tényezőket Simscape modell tartalmazza%(\ref{table_heater_parameters}. és \ref{table_house_parameters}. táblázat)
+, meghatározva a szakasz dinamikáját. Megvizsgálom az MPC predikciós horizontjának, költségfüggvényének illetve mintavételi idejének hatását a zárt szabályzási kör viselkedésére.  %tranziens viselkedését
+%A szimulációhoz felállított modellhez számításokra is szükség van,
+%Állandósult állapotra felírt képlet adja a szükséges fűtési teljesítményt
+
+A tervezési lépéseket ezután valós, fizikai modellen is elvégzem, így látható lesz, hogy egy kész házra, vagy annak egy részére mennyi munkával jár a szabályzó beállítása. Ha a modellezésre, hangolásra fordított idő megtérül, azaz komfortnövekedéssel, illetve az üzemeltetési költségek csökkenésével jár, akkor a funkciókat akár az iContrALL okosház platformba is be lehet illeszteni.
+%a módszer pénzbeli haszonnal is kecsegtet.
+
+ % rendezzük a  \ref{eq_holeadas4}-t alpha-ra!
+
+%a beavatkozók, a mérhető zavarások és a hibajel függvényében.
+% kapom, ez méretezéshez és költségek számításához használható. 
+
 \chapter{Modellalkotás, irodalomkutatás}
+
+
+A fűtőtestek feladata, hogy az adott szobában teljesítményt (hőt\footnote{A hő mértékegysége \si{\joule}, a teljesítményé [\si{\watt}]~=~[\si[per-mode=fraction]{\joule\per\second}]}) adjanak le. A leadott teljesítmény növeli a levegő és az épületszerkezet hőjét (\ref{eq_holeadas4}. egyenlet). A levegőnek, padlónak, falaknak tömegüknél és fajhőjüknél fogva mind-mind van egy hőtároló képességük (\ref{table_housesurf}. táblázat), így ezen elemek hőmérséklete nem változhat ugrásszerűen, hanem egy bizonyos idő alatt tudnak feltöltődni vagy hőenergiájukat leadni. %Mindezekben villamosmérnöki szemszögből felfedezhetjük az analógiát a villamos hálózatokkal.
+
+A hasonlóság nem véletlen a villamos hálózatokkal. Felfedezhető, hogy a hő\textbf{áram}ot a hőmérsékletkülönbség hozza létre, nagysága pedig fordítottan arányos a hővezetési tényezővel. 
+
 
 Munkámban elsősorban a különböző fűtési típusok közti különbségeket szeretném megvizsgálni. A ház modelljét először adottnak venném, az eltérést pedig a különböző fűtési módok jelentenék.
 Azaz megpróbálom felírni a környezet belső hőmérsékletre való ráhatását, eztán pedig modellezem többféle fűtőtest viselkedését.
 
-Ehhez először áttekintettem a hőátadás lehetséges formáit és forrásait. Arra jutottam, hogy ha a levegő hőmérsékletére szabályzok, akkor az abba beleszóló tényezőket veszem sorra:
+Ehhez először áttekintettem a hőátadás lehetséges formáit és forrásait.
+Ezután fűtőtestek modelljét állítom fel.
+
+
+
+
+\pagebreak
+
+ Arra jutottam, hogy ha a levegő hőmérsékletére szabályzok, akkor az abba beleszóló tényezőket veszem sorra:
 \begin{itemize}[noitemsep,topsep=0pt,parsep=0pt,partopsep=0pt]
 	\item konvektív hőátadás: a felszín közelében felmelegedett levegő áramlani kezd
 	\item radiatív hőátadás: sugárzással kibocsátott energia a környezetbe
@@ -44,25 +74,27 @@ Ezeket ráadtam a rendszerre és két bemenetű, egy kimenetű rendszerként ide
 
 %\subsubsection{Modellparaméterek}
 
-\subsection{-----}
+%\subsection{-----}
+%
+%Fűtési típusok szerint:
+%
+%\begin{itemize}[noitemsep,topsep=0pt,parsep=0pt,partopsep=0pt]
+%	\item radiátoros fűtés hőátvitele
+%	\item padlófűtés hőátvitele
+%\end{itemize}
+%
+%A fentiekre különböző értékű lesz a 
+%
+%\begin{itemize}[noitemsep,topsep=0pt,parsep=0pt,partopsep=0pt]
+%	\item hőátadási tényező
+%	\item hőtároló tömeg
+%	\item költségfüggvény?
+%	\item előremenő vízhőmérséklet és ezzel a leadott teljesítmény maximumértéke
+%\end{itemize}
+%
+%ami így eltérő ház-modelleket fog eredményezni.
+%
 
-Fűtési típusok szerint:
-
-\begin{itemize}[noitemsep,topsep=0pt,parsep=0pt,partopsep=0pt]
-	\item radiátoros fűtés hőátvitele
-	\item padlófűtés hőátvitele
-\end{itemize}
-
-A fentiekre különböző értékű lesz a 
-
-\begin{itemize}[noitemsep,topsep=0pt,parsep=0pt,partopsep=0pt]
-	\item hőátadási tényező
-	\item hőtároló tömeg
-	\item költségfüggvény?
-	\item előremenő vízhőmérséklet és ezzel a leadott teljesítmény maximumértéke
-\end{itemize}
-
-ami így eltérő ház-modelleket fog eredményezni.
 
 
 

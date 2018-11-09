@@ -5,6 +5,11 @@ A fűtési teljesítményt halogén izzókkal juttattuk a rendszerbe. Ezek fény
 A szimulációt és a fizikai modellt
 
 \section{A Simulink konfigurálása}
-A real time futáshoz Simulink  Real-time szükséges. A real-time itt nem jelent szigorú megkötéseket, csupán azt jelenti, hogy a szimulációt a Simulink nem futtatja le a lehető leggyorsabban, hanem csak bizonyos mintavételi időnként. A Real-time UDP-t használom. https://uk.mathworks.com/help/xpc/io_ref/udp-transport-protocol.html
+A real time futáshoz Simulink  Real-time szükséges. A real-time itt nem jelent szigorú megkötéseket, csupán azt jelenti, hogy a szimulációt a Simulink nem a lehető leggyorsabban futtatja le az elérhető számítási teljesítményt kihasználva, hanem csak bizonyos mintavételi időnként. 
+%A Real-time UDP-t használom. %https://uk.mathworks.com/help/xpc/io_ref/udp-transport-protocol.html
 
-https://uk.mathworks.com/products/simulink-desktop-real-time.html
+%https://uk.mathworks.com/products/simulink-desktop-real-time.html
+
+A szabályzó a számítógépen fog futni, és mintavételi időnként a jelenlegi hőmérsékletet beolvassa, az MPC-t lefuttatja, a beavatkozó jeleket pedig elküldi a beágyazott számítógépnek.
+
+\input{tikz/realtimesimulink}

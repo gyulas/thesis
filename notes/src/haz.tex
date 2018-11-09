@@ -38,8 +38,19 @@ Az épület hőigénye numerikusan is szerepel, ám ez pl. éves átlagolással 
 
 %(Baromi érdekes, hogy nálunk otthon van egy hőcserélő a használati melegvíz és a fűtési rendszer között, annak a hatásait is lehetne nézni.)
 
-
-\input{src/haz_hatarolo_feluletek}
+\begin{table}[H]
+	\centering
+	
+	\renewcommand{\arraystretch}{2} % to increase cell height
+	\taburulecolor{gray}
+	
+	%\begin{tabular}{|p{0.8cm}|p{1cm}|p{1cm}|p{1cm}|p{1cm}|p{1cm}|p{1cm}|p{1cm}|}
+	
+	\input{src/house_surface_table}
+	
+	\caption{Egy szoba határoló felületei és azok termikus tulajdonságai}
+	\label{table_house_parameters}
+\end{table}
 
  A példában a schönherzes kollégiumi szoba határoló elemeit vettem fel. Minden szobának van ablaka és külső fala, egy átlagos szobát 4 másik vesz körül. A belső falakon nem veszt hőt, csak az ablakon ill. a külső falon. Feltételezzük, hogy a radiátoros fűtést egy szeleppel szabályozhatjuk, amit tetszőleges mértékben nyithatunk ki.
  A napsütés hőnyereségét is figyelembe vehetjük.%, úgy, hogy egy hőforrás a padlót melegíti.
