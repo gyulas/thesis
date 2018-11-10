@@ -200,13 +200,18 @@ Ezen hőtároló elemek feltöltődése szimulálva adja a dinamikus viselkedés
 
 Katalógusból radiátorok tömege és a bennük lévő víz térfogata leolvasható. A hőkapac számítása:
 
+\begin{equation} \label{eq_hotartalom}
+Q = c_{m} ~ m_m ~ \Delta t_k + c_{w} ~ m_w ~ \Delta t_k
+\end{equation}
+
+Ahol m a material, azaz a fűtőtest anyagára utal, w pedig a víz mennyiségére. A hőmennyiség joule-ban adott.
 %\subsection{Padlófűtés modellje}
 
 Aljzat, aljzatbeton: slab
 facade: frontal - homlokzat
 
 
-
+\subsection{Hőleadás hőmérsékletfüggése}
 
 
 \subsection{Sugárzó és konvektív teljesítmény szétválasztása}
@@ -252,9 +257,11 @@ ahol
 
 \section{Radiátor modellje}
 
+A képletben élhetünk azzal a közelítéssel, hogy $\Delta t_k=\frac{t_{ws}+t_{wr}}{2}-t_i$. Ezzel a következő alakban számolhatunk:
+
 \subsection{Paraméterek}
 A felmelegedéskor és lehűléskor a pontos hőleadást akkor tudjuk modellezni, ha ismerjük a radiátor hőkapacitását. Ehhez tudnunk kell, hogy a radiátorban mennyi víz van, illetve hogy a radiátortest milyen nehéz.
-
+A radiátorokat mindig az adott helyiséghez méretezik, ezért az adatokat leolvasással / katalógusból kapjuk normál esetben. A modellezéshez választanom kellett egy típust. Itt még csak paraméteresen kellene megadni az értékeket, avgy előbb a ház modelljét, hőszükségletét felírni, elvégre is a házhoz tervezzü
 
 Radiátor katalógusokból\footnote{Purmo Ventil Compact - purmo.com} azt találtam, hogy az egyes radiátor típusokra ezek a paraméterek milyen értékűek.
 

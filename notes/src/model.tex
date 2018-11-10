@@ -14,7 +14,33 @@ A tervezési lépéseket ezután valós, fizikai modellen is elvégzem, így lá
 %a beavatkozók, a mérhető zavarások és a hibajel függvényében.
 % kapom, ez méretezéshez és költségek számításához használható. 
 
-\chapter{Modellalkotás, irodalomkutatás}
+\chapter{Bevezetés}
+
+%Van egy ház
+%
+%Van egy fűtési rendszere
+%
+%Vannak szabályozható szelepek a szobákban
+%
+%Hogyan szabályozzuk?
+
+
+Európa / Magyarország energiafelhasználásának x százalékát az épületek adják, így a kibocsátás x százaléka is innen származik.
+%A szmogot, a nagy szállópor-koncentrációt számos vidéki városban az elavult fűtési rendszerek okozzák.
+Ezek a tényezők életminőségünkre is kihatással vannak, ezért manapság számos újépítésű lakó- vagy irodaháznál figyelembe veszik az energiahatékonysági szempontokat. A törvények előírják energetikai tanúsítvány készítését szerte az Unióban. Számos megtakarítási forma már régóta él a köztudatban, ezek például a szigetelés, az ablakcsere, a háztartási gépek cseréje. Az ágazat úttörői az építészek, többnyire a szerkezetek tervezésénél veszik figyelembe a fenti szempontokat.
+%Az üzemeltetési időszakra viszont kevesebb figyelem kerül, szerencsére manapság már a teljes élettartamra vetített költséget is figyelembe szokás venni.
+Az épületgépészeti rendszerek automatizálása viszont kevesebb embernek fontos, lakóházakban elterjedtek az egyszerű termosztátok.
+%Irodaházakban van piaca bonyolultabb eljárásoknak.
+
+%különben lakókörnyezetünkben
+%A környezetvédelem és a költséghatékonyság 
+
+
+
+Fel kell állítani egy paraméterezhető ház- és fűtőtest modellt, hogy annak paramétereit az energetikai tanúsítványból le tudjuk olvasni, ezzel egy közelítő modelljét megkapjuk a háznak. Ezen modell alapján már identifikáció nélkül is lehetséges a szabályzás, így a telepítés ideje lecsökkenthető, az identifikációt potenciálisan elrontó hatások pedig nem jelentkeznek. Ugyanis megbízható identifikáció nagyon sok időt venne igénybe.\footnote{Thieblemont state of art weather fc MPC-ben szót ejt róla}(Adaptív szabályzást egyelőre nem használok.)
+
+
+
 
 
 A fűtőtestek feladata, hogy az adott szobában teljesítményt szolgáltassanak / (hőt\footnote{A hő mértékegysége \si{\joule}, a teljesítményé [\si{\watt}]~=~[\si[per-mode=fraction]{\joule\per\second}]}) adjanak le. A leadott teljesítmény növeli a levegő és az épületszerkezet hőjét (\ref{eq_holeadas4}. egyenlet). A levegőnek, padlónak, falaknak tömegüknél és fajhőjüknél fogva mind-mind van egy hőtároló képességük (\ref{table_house_parameters}. táblázat), így ezen elemek hőmérséklete nem változhat ugrásszerűen, hanem egy bizonyos idő alatt tudnak feltöltődni vagy hőenergiájukat leadni. %Mindezekben villamosmérnöki szemszögből felfedezhetjük az analógiát a villamos hálózatokkal.
@@ -28,7 +54,9 @@ Azaz megpróbálom felírni a környezet belső hőmérsékletre való ráhatás
 Ehhez először áttekintettem a hőátadás lehetséges formáit és forrásait.
 Ezután fűtőtestek modelljét állítom fel.
 
+Helyi szabályzást valósítok meg, \cite[118.~o.]{Herz} szerint.
 
+Méretezés, stacioner állapot, kazánok \cite[235.~o.]{Herz} szerint. kazánok hatásfoka, túlméretezése. 313.o: fűtőtest mérés, be kell helyettesíteni.
 
 
 \pagebreak

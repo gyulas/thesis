@@ -69,6 +69,7 @@
 \usetikzlibrary{arrows,automata}
 \usetikzlibrary{positioning}
 \usetikzlibrary{calc}
+%\tikzset{anchor/.append code=\let\tikz@auto@anchor\relax} %no auto anchor
 
 
 \tikzset{
@@ -135,7 +136,7 @@
 \newcommand{\vikszerzo}{Gyulai László}
 \newcommand{\vikkonzulens}{dr. Kiss Bálint}
 \newcommand{\kulsokonzulens}{Kurbucz Máté}
-\newcommand{\vikcim}{Korszerű fűtési rendszerek szabályzása - \\  kismargós munkapéldány}
+\newcommand{\vikcim}{Korszerű fűtési rendszerek szabályzása}
 \newcommand{\viktanszek}{Irányítástechnika és Informatika Tanszék}
 
 \newcommand{\vikdoktipus}{Szadolgozat}
@@ -155,8 +156,8 @@
 %\setlength{\parskip}{0pt}    % magyar nyelvű dokumentumokban jellemző
 
 %\marginsize{35mm}{25mm}{15mm}{15mm} % anysize package
-\marginsize{30mm}{20mm}{12mm}{12mm} % anysize package
-%\marginsize{35mm}{25mm}{15mm}{15mm} % anysize package - VÉGLEGESHEZ
+%\marginsize{30mm}{20mm}{12mm}{12mm} % anysize package
+\marginsize{35mm}{25mm}{15mm}{15mm} % anysize package - VÉGLEGESHEZ
 %Headerhez opcionálisan:
 
 %header and footer
@@ -174,8 +175,8 @@
 	\input{src/titlepage}
 %	\input{src/kiiras}
 	\input{src/model}
-	\input{src/futotestek}
 	\input{src/haz}
+	\input{src/futotestek}
 	\input{src/unittest}
 	\input{src/heating}
 	\input{src/ident}

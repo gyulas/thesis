@@ -1,20 +1,20 @@
-\begin{figure}
+\begin{figure}[h]
 	\centering
 	\begin{tikzpicture}[>=stealth]
 
 	
-	\node[draw,rectangle, minimum height=2cm,minimum width=6cm] (Numeric) at (2.3,2.5) {\parbox{2cm}{\centering fűtési rendszer}};
+	\node[draw,rectangle, minimum height=2cm,minimum width=6cm] (Heat) at (6,2.5) {\parbox{2cm}{\centering fűtési rendszer}};
 	%\node[draw,rectangle, minimum height=2cm,minimum width=5.5cm] (Simsc) at (9,2.5) {\parbox{2cm}{\centering fűtési rendszer Simscape}};
-	\node[draw,rectangle, minimum height=1.5cm,minimum width=3cm] (house) at (5,0) {\parbox{2cm}{\centering ház Simscape}};
-	\node[draw,rectangle, minimum height=1.5cm,minimum width=3cm] (ctr) at (0,0) {controller};
+	\node[draw,rectangle, minimum height=1.5cm,minimum width=3cm] (House) at (4.5,0) {\parbox{2cm}{\centering ház Simscape}};
+	\node[draw,rectangle, minimum height=1.5cm,minimum width=3cm] (Control) at (0,2.5) {controller};
 	
-	\draw[->] (ctr.191) node[right]{${u_{2}}$} -| ++(-1.7,1.3)|-  (Numeric.172) node[right]{$\alpha_{floor}$};  %node[above left]{$\alpha_{radiator}$}; 
-	\draw[->] (ctr.169) node[right]{${u_{1}}$}-| ++(-1,0.8)  |-  (Numeric.188) node[right]{$\alpha_{radiator}$} ;
+	\draw[->] (Control.350) node[left]{${u_{2}}$} --  (Heat.185) node[right]{$\alpha_{floor}$};  %node[above left]{$\alpha_{radiator}$}; 
+	\draw[->] (Control.10) node[left]{${u_{1}}$} --  (Heat.175) node[right]{$\alpha_{radiator}$} ;
 	
 	%\draw[->] (d.0) node[left]{heat [W]} ->  ++(3,0) ->  (house.180);
-	\draw [->] (Numeric.0) node[left]{$Q_r, Q_c$ [W]} -| ++(2,-2.5)  |- (house.0) node[left]{${Q_{be}}$}; %++(1.5cm,0) -- (2cm,0pt) -- (2.5cm,10pt);
+	\draw [->] (Heat.0) node[left]{$Q_r, Q_c$ [W]} -| ++(1,-2)  |- (House.0) node[left]{${Q_{be}}$}; %++(1.5cm,0) -- (2cm,0pt) -- (2.5cm,10pt);
 	
-	\draw[->] (house.180)  node[right]{${T_i}$} -- (ctr.0) ;
+	\draw[->] (House.180)  node[right]{${T_i}$} -| ++(-5.5,2)  |- (Control.180) ;
 	%\draw[->] (d.20) -| ++(1,-1) |- (y.350);
 	
 	%\path 
