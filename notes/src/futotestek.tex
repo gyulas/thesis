@@ -1,7 +1,40 @@
 \chapter{Fűtőtestek modellje}
 
+Ebben a fejezetben először hőtani alapösszefüggéseket ismertetek, amelyekből előáll majd a fűtőtestek teljesítményét leíró modell. Majd a modell által számolt teljesítményt egy Simscape-ben megvalósított termikus hálózatra vezetem, ami a fűtőtest tranziens viselkedését adja meg. Így szimulálható a szoba felfűtése
 
-A következőkben egy radiátort és egy padlófűtést fogok modellezni, ezekre képlettel felírom az állandósult állapotbeli hőleadást. Szimuláció során olyan bekapcsolási tranziensekkel is számolnom kell, amik egy kis időállandós fűtés (pl. légbefúvás, fan-coil) esetén elhanyagolhatók lennének. Ehhez már a Matlab Simscape környezetét fogom használni, amely képes termikus rendszerek modellezésére.
+
+
+
+
+
+A hőnyereség számításakor a be- és kikapcsolási tranzienseket is figyelembe kell venni, ez az az idő, ami alatt a hőtároló elemek beállnak az állandósult állapotbeli hőmérsékletükre.
+A fenti két megoldás máshogy fejti ki hatását Szimuláció során olyan bekapcsolási tranziensekkel is számolnom kell, amik egy kis időállandós fűtés (pl. légbefúvás, fan-coil) esetén elhanyagolhatók lennének.
+Ehhez már a Matlab Simscape környezetét fogom használni, amely képes termikus rendszerek modellezésére.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+A következőkben radiátoros és padlófűtés modelljét írom fel, hogy azok hőleadását a szoba felé szimulálni lehessen.
+
+% ezek együttes hőleadása adja a szoba hőnyereségét. %Állandósult állapotban ezzel megegyezik hőveszteséget pedig a külső hőmérséklet határozza meg.
+
+
+
+
+
+
+
 
 %A modellalkotás során kétféle probléma merül fel. Egyrészt modellezni kell a fűtőtestek állandósult állapotbeli hőleadást. Másrészt, ha a fűtési rendszer időállandója nagy, akkor a tranziens lefolyása is lényeges a szabályzás szempontjából.
 Állandósult állapotra a fűtőtestek teljesítménye felírható a szabályzott jellemzők és a környezeti jellemzők függvényében. Mivel vizsgált fűtési rendszerek hője melegvízből származik, \textbf{szabályzott jellemző}ként a kazán (hőszivattyú, stb.) által előállított melegvíz hőmérséklete, illetve a keringető szivattyú tömegárama jöhet szóba.\footnote{A kazánok a víz hőmérsékletét képesek változtatni időjárás függvényében, így az egy külön rendszer része lehet. Nem célom kazánvezérlést írni, az egyszerűség kedvéért feltételezem, hogy a melegvíz pl. távhő formában rendelkezésre áll.} Az elképzelésemmel jobban összhangban áll az utóbbi választása, hiszen ezzel elosztottan, szobánként is szabályozható az egyes fűtőtestekbe táplált hőmennyiség: a víz tömegáramát folytonosan tudom szabályozni egy szelep segítségével, a fűtőtestekbe betáplált víz hőmérséklete (ún. előremenő hőmérséklet) állandó.
