@@ -1,20 +1,37 @@
 \chapter{Ház modellje}
 
-A szabályzótervezéshez rendelkezésre kell, hogy álljon a szabályzott szakasz modellje. Ehhez egy könnyen módosítható, koncentrált paraméterű rendszert vettem fel. Felépítettem egy hálózatot\footnote{Fodor HáRe alapján nézzük meg a különbséget rendszer és hálózat között.}, ahol minden elemhez lehet fizikai tartalmat rendelni. Majd ahhoz, hogy ehhez szabályzót lehessen tervezni, identifikáltam azt az ugrásválaszával.
+A szabályzótervezéshez rendelkezésre kell, hogy álljon a szabályzott szakasz modellje. Ehhez egy könnyen módosítható, koncentrált paraméterű hálózatot vettem fel,
+%. Felépítettem egy hálózatot\footnote{Fodor HáRe alapján a különbség rendszer és hálózat között: a hálózat a rendszer egy lehetséges megvalósítása. A Simscape blokkok összekapcsolva hálózatot alkotnak. Az Ident toolbox-szal egy átviteli függvényt identifikálok, az így kapott rendszer viselkedése valamilyen pontossággal megfelel a hálózaténak, amiből kiindultunk.},
+ahol minden elemhez lehet fizikai tartalmat rendelni. Ahhoz, hogy ehhez szabályzót lehessen tervezni, identifikáltam azt az ugrásválaszával. %a Simscape használatával
+
+A modell paraméterei ideális esetben az épület energetikai tanúsítványából kiolvashatók. Így a Matlab-ba ezeket az adatokat felvéve, és a tervezési lépéseket ott elvégezve a szabályzót rögtön használatba vehetjük, nincs szükség hosszas kalibrációs időszakra beüzemelésnél. A modellbeli eltéréseket esetlegesen kompenzálni lehet később, mérési adatok felhasználásával.% (historikus adatok felhasználásával). %A modellben a bizonytalanságok hatása adaptív szabályozással kezelhető (lesz).
 
 \section{Fűtési rendszer és ház kapcsolata}
 
-Amikor a fűtési rendszer viselkedését szimulálom, nekem kell megalkotni mind a szabályzott épületrész, mind a fűtési rendszer modelljét. Így tehát ez a modellezésen felül egy méretezési feladat is, amit egy kész épületnél már elvégeztek a tervezés során, és a megfelelő fűtési teljesítmény áll rendelkezésre. %illeszkedik az igényekhez és a körülményekhez.
-
 Ha a szabályzást egy már meglévő épületre tervezzük, akkor csak a rendszerek adatait kell felvenni, illetve identifikálni. A szakdolgozatban tárgyalt egyszerű példa során csak egy részét ismerem a paramétereknek, tehát méretezési kérdéseket is fogok érinteni.  Szerencsére új építésű házaknál kötelező az energetikai tanúsítás\footnote{TNM 2006 rendelet alapján kötelező az energetikai tanúsítvány pl. \textit{átlagos} lakóépületekre, irodákra.}, ami egy meglehetősen részletes lajstromot ad az épület hőtechnikai tulajdonságairól. Ez alapján lehet egy hozzávetőlegesen jó modellünk az épületről, illetve a fűtési rendszerről is találhatók adatok paraméterek. Az interneten számos tanúsító cég töltött fel minta tanúsítványokat, amiben a számítások levezetése, indoklása is megtalálható. Így az energetikai tanúsítvány lehet egy interface a szakdolgozatban bemutatott modell és a gyakorlati alkalmazások között: valódi épület tanúsítványa alapján a modellem paraméterezhető.
 
+
+Amikor a fűtési rendszer viselkedését szimulálom, nekem kell megalkotni mind a szabályzott épületrész, mind a fűtési rendszer modelljét. Így tehát ez a modellezésen felül egy méretezési feladat is, amit egy kész épületnél már elvégeztek a tervezés során, és a megfelelő fűtési teljesítmény áll rendelkezésre. %illeszkedik az igényekhez és a körülményekhez.
+
 \section{A modellalkotás folyamata}
+%
+%White-box
+%grey-box
+%black-box
 
-White-box
-grey-box
-black-box
+Többféle módszer is elterjedt hasonló, nagy időállandójú rendszerek szabályozásánál \cite{THIEBLEMONT2017485}
 
-Említést érdemel, hogy a szakirodalomban hogy állnak hozzá ehhez a kérdéshez, a szabályzótervezés során néhányan egyáltalán nem alkotnak modellt, csak a mért adatokat használják fel. Lényegében én is mért adatokat használok, tulajdonképpen, mivel a modellt olyan alakban kéne felírni, hogy a szabályzó azt futtatni tudja. (?)
+\cite{SCHIRRER201686} is írja....
+
+
+
+Említést érdemel, hogy a szakirodalomban hogy állnak hozzá ehhez a kérdéshez, a szabályzótervezés során néhányan egyáltalán nem alkotnak modellt, csak a mért adatokat használják fel, ami eléggé időigényes: az identifikációhoz egy megfelelően nagy amplitúdójú vizsgálójelre van szükség. Viszont egy 10\si{\celsius}-kal felfűteni egy helyiséget hosszú ideig tart, ami alatt biztosan meg fog változni pl. a külső hőmérséklet. Ha a mérésekben a különböző inputok hatása a kimeneten nem különíthető el jó, az identifikáció nehéz lesz. Illetve külső hőmérséklet sem változik ugrásszerűen, a lassú időbeli változás \textit{nem jó vizsgálójel} identifikációhoz.
+%Lényegében én is mért adatokat használok NEMMM, EZÉRT VAN A TANÚSÍTVÁNY!, tulajdonképpen, mivel a modellt olyan alakban kéne felírni, hogy a szabályzó azt futtatni tudja. (?)
+
+Vizsgálójel kiválasztása
+
+Modell struktúra kiválasztása - átviteli függvények pólusainak, zérusainak száma
+
 
 Viszont az ident toolbox tf identjénél kihasználtam azt, hogy a rendszer jellegét ismerem, azaz hogy hány pólusa és hány zérusa van a szakasznak  / felnyitott körnek. Így lett egy nagyon jól illeszkedő átviteli függvényem.
 

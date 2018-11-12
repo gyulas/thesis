@@ -25,19 +25,42 @@ A tervezési lépéseket ezután valós, fizikai modellen is elvégzem, így lá
 %Hogyan szabályozzuk?
 
 
-Európa / Magyarország energiafelhasználásának x százalékát az épületek adják, így a kibocsátás x százaléka is innen származik.
+
+Az Európai Unió energiafogyasztásának 40\%-át az épületek adják, a szén-dioxid-kibocsátás 36\%-a származik innen. Az energiahatékonyság növelése kiemelten fontos: a korszerűbb közintézmények, munkahelyek, lakóingatlanok olcsóbban fenntarthatók és javítják az emberek életminőségét. %A szmogot, a nagy szállópor-koncentrációt számos vidéki városban az elavult fűtési rendszerek okozzák. A szektorban hatalmas a potenciál
+
+Az új építésű ingatlanoknak egyre szigorodó követelményeknek kell megfelelniük\footnote{2021-ben használatba vett ingatlanoknak már teljesíteniük kell a közel nulla energiaigényű épületekre vonatkozó szabályokat. Forrás: \\ e-epites.hu/e-tanusitas/az-energetikai-tanusitvany-kiallitasa-2016-tol \\ ec.europa.eu/energy/en/topics/energy-efficiency/buildings/nearly-zero-energy-buildings}.
+%Európa / Magyarország energiafelhasználásának x százalékát az épületek adják, így a kibocsátás x százaléka is innen származik.
 %A szmogot, a nagy szállópor-koncentrációt számos vidéki városban az elavult fűtési rendszerek okozzák.
-Ezek a tényezők életminőségünkre is kihatással vannak, ezért manapság számos újépítésű lakó- vagy irodaháznál figyelembe veszik az energiahatékonysági szempontokat. A törvények előírják energetikai tanúsítvány készítését szerte az Unióban. Számos megtakarítási forma már régóta él a köztudatban, ezek például a szigetelés, az ablakcsere, a háztartási gépek cseréje. Az ágazat úttörői az építészek, többnyire a szerkezetek tervezésénél veszik figyelembe a fenti szempontokat.
+%Ezek a tényezők életminőségünkre is kihatással vannak, ezért manapság számos újépítésű lakó- vagy irodaháznál figyelembe veszik az energiahatékonysági szempontokat.
+A törvények előírják energetikai tanúsítvány készítését szerte az Unióban, ami ellenőrzi az épület megfelelőségét energetikai szempontból.
+A legújabb építésű, fenntartható irodaházak az emberek egészségének és jó közérzetének fenntartását is segítik, ezt a WELL minősítési rendszer igazolhatja.
+
+Ilyen fejlett technológiákat felvonultató épületekben nagy szerepet játszanak az épületgépészeti rendszerek (HVAC), a 7/2006. TNM rendelet\cite{TNM2006} is megfogalmaz szabályokat és ajánlásokat ezzel kapcsolatban. Eszerint \say{új fűtési rendszer létesítésekor és meglévő fűtési rendszer korszerűsítésekor a helyiségenkénti hőmérséklet-szabályozást javasolt megvalósítani gazdaságossági számítás alapján}. 
+
+
+%WELL tanúsítványt szerzett épületek ezen felül az emberek egészségének és jó közérzetének fenntartását is segítik.
+%Itt viszont a fűtési, hűtési rendszerek szabályozására kevesebb hangsúly kerül, pedig ezekkel további megtakarítások érhetők el,
+
+% lévén ezekre nehezebben írható elő általános kritérium.
+% További megtakarítások illetve nagyobb komfortérzet érhető el a megfelelő szabályozással is. 
+
+
+% Számos megtakarítási forma már régóta él a köztudatban, például a szigetelés, az ablakcsere. Alacsonyabb besorolás esetén az energetikai tanúsítványban is szerepel javaslat a korszerűsítésre. %Az ágazat úttörői az építészek, többnyire a szerkezetek tervezésénél veszik figyelembe a fenti szempontokat.
 %Az üzemeltetési időszakra viszont kevesebb figyelem kerül, szerencsére manapság már a teljes élettartamra vetített költséget is figyelembe szokás venni.
-Az épületgépészeti rendszerek automatizálása viszont kevesebb embernek fontos, lakóházakban elterjedtek az egyszerű termosztátok.
+
+%Sokszor ilyen esetben csak az épületszerkezetek kialakítására fordítanak kellő figyelmet - az előírások is erre vonatkoznak, az épületgépészeti rendszerek automatizálása viszont kevésbé elterjedt. Helyette sok helyen egyszerű termosztátokat használnak.% FORRÁS!!
+
 %Irodaházakban van piaca bonyolultabb eljárásoknak.
 
 %különben lakókörnyezetünkben
 %A környezetvédelem és a költséghatékonyság 
 
+Munkámban szeretnék megvalósítani egy helyiségenkénti hőmérséklet-szabályozást, ezen keresztül pedig megmutatni a különböző fűtési típusok viselkedését egy helyiségen belül.%Kiindulási alapként az energetikai tanúsítványban szereplő paramétereket használom az épületek modellezésére
 
+\pagebreak
 
-Fel kell állítani egy paraméterezhető ház- és fűtőtest modellt, hogy annak paramétereit az energetikai tanúsítványból le tudjuk olvasni, ezzel egy közelítő modelljét megkapjuk a háznak. Ezen modell alapján már identifikáció nélkül is lehetséges a szabályzás, így a telepítés ideje lecsökkenthető, az identifikációt potenciálisan elrontó hatások pedig nem jelentkeznek. Ugyanis megbízható identifikáció nagyon sok időt venne igénybe.\footnote{Thieblemont state of art weather fc MPC-ben szót ejt róla}(Adaptív szabályzást egyelőre nem használok.)
+Felállítok egy paraméterezhető ház- és fűtőtest modellt, hogy annak paramétereit az energetikai tanúsítványból le tudjuk olvasni, ezzel egy közelítő modelljét megkapjuk a háznak. Ezen modell alapján már identifikáció nélkül is lehetséges a szabályzás, így a telepítés ideje lecsökkenthető, az identifikációt potenciálisan elrontó hatások pedig nem jelentkeznek. Ugyanis megbízható identifikáció nagyon sok időt venne igénybe.\cite{THIEBLEMONT2017485}%\footnote{Thieblemont state of art weather fc MPC-ben szót ejt róla}
+(Adaptív szabályzást egyelőre nem használok.)
 
 
 
@@ -48,8 +71,7 @@ A fűtőtestek feladata, hogy az adott szobában teljesítményt szolgáltassana
 A hasonlóság nem véletlen a villamos hálózatokkal. Felfedezhető, hogy a hő\textbf{áram}ot a hőmérsékletkülönbség hozza létre, nagysága pedig fordítottan arányos a hővezetési tényezővel. 
 
 
-Munkámban elsősorban a különböző fűtési típusok közti különbségeket szeretném megvizsgálni. A ház modelljét először adottnak venném, az eltérést pedig a különböző fűtési módok jelentenék.
-Azaz megpróbálom felírni a környezet belső hőmérsékletre való ráhatását, eztán pedig modellezem többféle fűtőtest viselkedését.
+
 
 Ehhez először áttekintettem a hőátadás lehetséges formáit és forrásait.
 Ezután fűtőtestek modelljét állítom fel.
@@ -88,14 +110,14 @@ A modellben feltételezem, hogy a fűtőtest felületi hőmérsékletével tudun
 
 A modell felírásához a fűtőtest tulajdonságain kívül szükség van a szobában található levegő mennyiségére is. A zavarás hatását is fel kell írni, azaz hogy egy külső hőmérsékletváltozás hogyan jelenik meg a kimeneten. (Célszerű itt egy átviteli függvényt felírni először, szuperpozíciószerűen. A zavarás viszont nem a modell bemenetén és nem is a kimenetén hat.)
 
-A felírandó átviteli függvények:
-
-\begin{itemize}[noitemsep,topsep=0pt,parsep=0pt,partopsep=0pt]
-	\item levegő felmelegedése konstans külső hőmérsékletet feltételezve, fűtőtest egységugrással
-	\item levegő felmelegedése fűtés kikapcsolt állapota mellett, környezeti hőmérséklet ugrásával
-\end{itemize}
-
-Ezeket ráadtam a rendszerre és két bemenetű, egy kimenetű rendszerként identifikáltam.
+%A felírandó átviteli függvények:
+%
+%\begin{itemize}[noitemsep,topsep=0pt,parsep=0pt,partopsep=0pt]
+%	\item levegő felmelegedése konstans külső hőmérsékletet feltételezve, fűtőtest egységugrással
+%	\item levegő felmelegedése fűtés kikapcsolt állapota mellett, környezeti hőmérséklet ugrásával
+%\end{itemize}
+%
+%Ezeket ráadtam a rendszerre és két bemenetű, egy kimenetű rendszerként identifikáltam.
 
 %\pagebreak
 
