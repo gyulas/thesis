@@ -225,6 +225,7 @@ Fun facts:
 	%\footnote{On the heat transfer coefficients between heated/cooled radiant floor and room. \\ DOI: http://dx.doi.org/10.1016/j.enbuild.2013.07.065}
 	(5.) egyenlet alapján számítható de az a geometriától is nagyban függ. Helyette Kilkis1994 (4) és (6) javasolt, illetve a \cite{CHOLEWA2013599}-ból is lehet mért értékekkel számolni / a szabványok ajánlását használni.
 	\item A hőhidak a hőveszteségek meglepően nagy részéért felelősek, jelentős hibát követünk el, ha ezekkel nem számolunk. Meg kell keresni az energ. tanúsítványokban hogy hol tüntetik fel ezek mértékét.
+	\item \cite[5.188.~o.]{watson2002radiant} szerint az operatív hőmérséklet $t_{op}~=~\frac{h_rT_{mrt}~+~h_cT_{air}}{h_{tot}}$, ahol $T_{mrt}~=~\frac{\sum\limits_{k=1}^{n}A_k\epsilon_kT_k}{\sum\limits_{k=1}^{n}A_k\epsilon_k}$. Az $\epsilon$ emittancia a StefBol képletből való.
 	
 	
 \end{itemize} 
@@ -273,6 +274,7 @@ víztérfogata, a víz fajhője még egy hőtároló elem.
 
 \subsection{A modell validálása}
 
+A \ref{eq_hofelvetel}. egyenlet meglehetősen általános. Ha mérjük az előre- és visszamenő víz hőmérséklet-különbségét, a tömegáram függvényében meghatározható a felvett hő.
 
 
 \section{Padlófűtés modellje}

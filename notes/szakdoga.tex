@@ -4,6 +4,8 @@
 
 %\sloppy
 \usepackage[pdfnewwindow=true]{hyperref}
+\newcommand{\urlNewWindow}[1]{\href[pdfnewwindow=true]{#1}{\nolinkurl{#1}}}
+
 \frenchspacing
 \usepackage{ragged2e}
 \usepackage[utf8]{inputenc}
@@ -17,6 +19,7 @@
 \usepackage{amsmath}
 \usepackage{amssymb}
 
+%\usepackage{fixltx2e} % subscript with \textsubscript without math mode - already in kernel
 
 \usepackage{array}
 \usepackage{caption}
@@ -31,6 +34,9 @@
 \usepackage[framed]{matlab-prettifier}
 \usepackage{enumitem}
 \usepackage{setspace}
+
+\usepackage{dirtytalk} %\say
+
 
 \setstretch{1.5}
 
@@ -128,7 +134,6 @@
 %\renewcommand{\thesection}{\Roman{section}\normalfont\normalsize\bfseries}% from \Large 
 %\renewcommand{\thesubsection}{\thesection.\Roman{subsection}}
 
-\includeonly{onoff/preparations}
 
 
 
