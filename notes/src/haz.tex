@@ -8,7 +8,7 @@ A modell paraméterei ideális esetben az épület energetikai tanúsítványáb
 
 \section{Fűtési rendszer és ház kapcsolata}
 
-Ha a szabályzást egy már meglévő épületre tervezzük, akkor csak a rendszerek adatait kell felvenni, illetve identifikálni. A szakdolgozatban tárgyalt egyszerű példa során csak egy részét ismerem a paramétereknek, tehát méretezési kérdéseket is fogok érinteni.  Szerencsére új építésű házaknál kötelező az energetikai tanúsítás\footnote{TNM 2006 rendelet alapján kötelező az energetikai tanúsítvány pl. \textit{átlagos} lakóépületekre, irodákra.}, ami egy meglehetősen részletes lajstromot ad az épület hőtechnikai tulajdonságairól. Ez alapján lehet egy hozzávetőlegesen jó modellünk az épületről, illetve a fűtési rendszerről is találhatók adatok paraméterek. Az interneten számos tanúsító cég töltött fel minta tanúsítványokat, amiben a számítások levezetése, indoklása is megtalálható. Így az energetikai tanúsítvány lehet egy interface a szakdolgozatban bemutatott modell és a gyakorlati alkalmazások között: valódi épület tanúsítványa alapján a modellem paraméterezhető.
+Ha a szabályzást egy már meglévő épületre tervezzük, akkor csak a rendszerek adatait kell felvenni, illetve identifikálni. A szakdolgozatban tárgyalt egyszerű példa során csak egy részét ismerem a paramétereknek, tehát méretezési kérdéseket is fogok érinteni.  Szerencsére az új építésű házaknál kötelező energetikai tanúsítás\footnote{TNM 2006 rendelet alapján kötelező az energetikai tanúsítvány pl. \textit{átlagos} lakóépületekre, irodákra.} egy meglehetősen részletes lajstromot ad az épület hőtechnikai tulajdonságairól. Ez alapján lehet egy hozzávetőlegesen jó modellünk az épületről, illetve a fűtési rendszerről is találhatók adatok paraméterek. Az interneten számos tanúsító cég töltött fel minta tanúsítványokat, amiben a számítások levezetése, indoklása is megtalálható. Így az energetikai tanúsítvány lehet egy interface a szakdolgozatban bemutatott modell és a gyakorlati alkalmazások között: valódi épület tanúsítványa alapján a modellem paraméterezhető.
 
 
 Amikor a fűtési rendszer viselkedését szimulálom, nekem kell megalkotni mind a szabályzott épületrész, mind a fűtési rendszer modelljét. Így tehát ez a modellezésen felül egy méretezési feladat is, amit egy kész épületnél már elvégeztek a tervezés során, és a megfelelő fűtési teljesítmény áll rendelkezésre. %illeszkedik az igényekhez és a körülményekhez.
@@ -75,6 +75,8 @@ Az épület hőigénye numerikusan is szerepel, ám ez pl. éves átlagolással 
 A modell mintavételi ideje?
 A teljesítményeket megnöveljük és semmi mást, az nem lesz ekvivalens. 
 
+
+\textbf{HŐIGÉNY SZÁMÍTÁS}
 
 %(Gondolatkísérlet: HA nem hatna zavarás, csak az időállandók számítanának, a pontos teljesítményveszteségek, nyereségek nem. Azaz mindegy volna hogy 1000W hő szökik ki és ehhez tartozik 1500W-nyi fűtési kapacitás, vagy hogy 5000W és 7500W ezek az értékek. Ám pl. napsütés hatásakor nem csak az arányok hanem a konkrét teljesítmények is kellenek...
 

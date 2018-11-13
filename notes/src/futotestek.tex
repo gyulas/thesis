@@ -1,6 +1,10 @@
 \chapter{Fűtőtestek modellje}
 
-Ebben a fejezetben először hőtani alapösszefüggéseket ismertetek, amelyekből előáll majd a fűtőtestek teljesítményét leíró modell. Majd a modell által számolt teljesítményt egy Simscape-ben megvalósított termikus hálózatra vezetem, ami a fűtőtest tranziens viselkedését adja meg. Így szimulálható a szoba felfűtése
+A fűtőtestek feladata, hogy az adott szobában teljesítményt szolgáltassanak / (hőt\footnote{A hő mértékegysége \si{\joule}, a teljesítményé [\si{\watt}]~=~[\si[per-mode=fraction]{\joule\per\second}]}) adjanak le. A leadott teljesítmény növeli a levegő és az épületszerkezet hőjét (\ref{eq_holeadas4}. egyenlet). A levegőnek, padlónak, falaknak tömegüknél és fajhőjüknél fogva mind-mind van egy hőtároló képességük (\ref{table_house_parameters}. táblázat), így ezen elemek hőmérséklete nem változhat ugrásszerűen, hanem egy bizonyos idő alatt tudnak feltöltődni vagy hőenergiájukat leadni. %Mindezekben villamosmérnöki szemszögből felfedezhetjük az analógiát a villamos hálózatokkal.
+
+A hasonlóság nem véletlen a villamos hálózatokkal. Felfedezhető, hogy a hő\textbf{áram}ot a hőmérsékletkülönbség hozza létre, nagysága pedig fordítottan arányos a hővezetési tényezővel. 
+
+Ebben a fejezetben először hőtani alapösszefüggéseket ismertetek, amelyekből előáll majd a fűtőtestek teljesítményét leíró modell. A modell által számolt teljesítményt egy Simscape-ben megvalósított termikus hálózatra vezetem, ami a fűtőtest tranziens viselkedését adja meg. Így szimulálható a szoba felfűtése, tranziensével együtt.
 
 
 
