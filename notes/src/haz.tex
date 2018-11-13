@@ -1,5 +1,7 @@
 \chapter{Ház modellje}
 
+% Kiindulás ssc_house_heating_system
+
 A szabályzótervezéshez rendelkezésre kell, hogy álljon a szabályzott szakasz modellje. Ehhez egy könnyen módosítható, koncentrált paraméterű hálózatot vettem fel,
 %. Felépítettem egy hálózatot\footnote{Fodor HáRe alapján a különbség rendszer és hálózat között: a hálózat a rendszer egy lehetséges megvalósítása. A Simscape blokkok összekapcsolva hálózatot alkotnak. Az Ident toolbox-szal egy átviteli függvényt identifikálok, az így kapott rendszer viselkedése valamilyen pontossággal megfelel a hálózaténak, amiből kiindultunk.},
 ahol minden elemhez lehet fizikai tartalmat rendelni. Ahhoz, hogy ehhez szabályzót lehessen tervezni, identifikáltam azt az ugrásválaszával. %a Simscape használatával
@@ -50,8 +52,14 @@ Természetesen lehetett volna nagyon sok állapotú állapoteres modellt is lét
 
 %A modellalkotásnál igyekszek energetikai tanúsítványban szereplő adatokat felhasználni.
 Figyelembe kell vennem a ház hőveszteségeit és hőtároló képességét is.
-Kell a határoló elemek felszíne, hőátbocsátási tényezője, a hőtároló elemek fajhője. Az alábbi táblázat értékeinek nagy részét ki lehet tölteni a tanúsítványból.
+Ennek paraméterei: a határoló elemek felszíne, hőátbocsátási tényezője, a hőtároló elemek fajhője. Az alábbi táblázat értékeinek nagy részét ki lehet tölteni a tanúsítványból.
 Az épület hőigénye numerikusan is szerepel, ám ez pl. éves átlagolással adódik, nem csak a fűtési rendszert, hanem a várható időjárást is figyelembe veszi, illetve az energiaigénynél nem csak a fűtési, hanem használati melegvíz előállítására felhasznált energiát is.
+
+A Matlab Simscape model és Lapusan\footnote{Development of a Multi-Room Building Thermodynamic Model Using Simscape Library - Ciprian Lapusan} hőátadásnál a réteges szerkezetekben számolt konvekcióval és kondukcióval is. Viszont ezek az adatok egyben is kezelhetők, a követelményeket ezekre a költségoptimalizált követelményszint\footnote{ A  költségoptimalizált követelményszintek megtalálhatók a 7/2006. rendelet \cite{TNM2006} 5. mellékletében.} adja meg. Régebbi épületek ezt a szintet nem tudják teljesíteni, ezekre jellemző értékeket adtam meg az alábbi táblázatban. 
+
+
+Ám nem szabad összekeverni az U értéket (hőátbocsátási tényező) és az $\alpha_i$ konvektív hőátadási tényezőt, amit a válaszfalakra, padlóra és mennyezetre adtam meg, hiszen ezeken a modell szerint a helyiség nem veszt hőt, csak a hőtároló elemeknek adódik át. Viszont itt célszerű lenne a konvektív hőátadást is beleszámolni. 
+
 
 %(Baromi érdekes, hogy nálunk otthon van egy hőcserélő a használati melegvíz és a fűtési rendszer között, annak a hatásait is lehetne nézni.)
 
@@ -72,11 +80,25 @@ Az épület hőigénye numerikusan is szerepel, ám ez pl. éves átlagolással 
  A példában a schönherzes kollégiumi szoba határoló elemeit vettem fel. Minden szobának van ablaka és külső fala, egy átlagos szobát 4 másik vesz körül. A belső falakon nem veszt hőt, csak az ablakon ill. a külső falon. Feltételezzük, hogy a radiátoros fűtést egy szeleppel szabályozhatjuk, amit tetszőleges mértékben nyithatunk ki.
  A napsütés hőnyereségét is figyelembe vehetjük.%, úgy, hogy egy hőforrás a padlót melegíti.
 
-A modell mintavételi ideje?
-A teljesítményeket megnöveljük és semmi mást, az nem lesz ekvivalens. 
+%A modell mintavételi ideje?
+%A teljesítményeket megnöveljük és semmi mást, az nem lesz ekvivalens. 
 
 
-\textbf{HŐIGÉNY SZÁMÍTÁS}
+%\textbf{HŐIGÉNY SZÁMÍTÁS}
+
+\subsubsection*{Hőigény:}
+
+A külső falon
+
+\begin{equation}\label{eq_hoigeny}
+\begin{aligned}
+		Q_{ki,fal} &= U_{fal}A_{fal}\Delta T = 200\si{\watt}\\[10pt]
+		Q_{ki,ablak} &= U_{ablak}A_{ablak}\Delta T = 400\si{\watt}
+\end{aligned}
+\end{equation}
+
+Amennyiben a méretezési hőmérséklet $\Delta T=$ \SI{-2}{\celsius}, ami a téli átlaghőmérséklet Magyarországon.\footnote{Épületfizika kurzus alapján vettem az átlaghőmérsékletet \SI{-2}{\celsius}-nak.}
+
 
 %(Gondolatkísérlet: HA nem hatna zavarás, csak az időállandók számítanának, a pontos teljesítményveszteségek, nyereségek nem. Azaz mindegy volna hogy 1000W hő szökik ki és ehhez tartozik 1500W-nyi fűtési kapacitás, vagy hogy 5000W és 7500W ezek az értékek. Ám pl. napsütés hatásakor nem csak az arányok hanem a konkrét teljesítmények is kellenek...
 
@@ -107,8 +129,8 @@ Az alkalmazott fűtési rendszerek az épületet annak különböző pontjain ge
 
 A kettő között az interface az, hogy hol avatkozunk be. Így a ház bemenetei igazából a belső változókra vonatkozó "zavarások" (a külső hőmérséklethez képest)
 
-\section{A modell átviteli függvénye}
-A Simulinkben identifikáltam, aztán az adatokat a sys ident toolbox-szal dolgoztam fel, tudva a modell struktúráját. (az átviteli fv. számlálójának, nevezőjének a fokszámait)
+%\section{A modell átviteli függvénye}
+%A Simulinkben identifikáltam, aztán az adatokat a sys ident toolbox-szal dolgoztam fel, tudva a modell struktúráját. (az átviteli fv. számlálójának, nevezőjének a fokszámait)
 
 %\section{TABS}
 

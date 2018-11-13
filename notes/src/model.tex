@@ -16,16 +16,6 @@ A tervezési lépéseket ezután valós, fizikai modellen is elvégzem, így lá
 
 \chapter{Bevezetés}
 
-%Van egy ház
-%
-%Van egy fűtési rendszere
-%
-%Vannak szabályozható szelepek a szobákban
-%
-%Hogyan szabályozzuk?
-
-
-
 Az Európai Unió energiafogyasztásának 40\%-át az épületek adják, a szén-dioxid-kibocsátás 36\%-a származik innen. Az energiahatékonyság növelése kiemelten fontos: a korszerűbb közintézmények, munkahelyek, lakóingatlanok olcsóbban fenntarthatók és javítják az emberek életminőségét. %A szmogot, a nagy szállópor-koncentrációt számos vidéki városban az elavult fűtési rendszerek okozzák. A szektorban hatalmas a potenciál
 
 Az új építésű ingatlanoknak egyre szigorodó követelményeknek kell megfelelniük\footnote{2021-ben használatba vett ingatlanoknak már teljesíteniük kell a közel nulla energiaigényű épületekre vonatkozó szabályokat. Forrás: \\ e-epites.hu/e-tanusitas/az-energetikai-tanusitvany-kiallitasa-2016-tol \\ ec.europa.eu/energy/en/topics/energy-efficiency/buildings/nearly-zero-energy-buildings}.
@@ -34,6 +24,7 @@ Az új építésű ingatlanoknak egyre szigorodó követelményeknek kell megfel
 %Ezek a tényezők életminőségünkre is kihatással vannak, ezért manapság számos újépítésű lakó- vagy irodaháznál figyelembe veszik az energiahatékonysági szempontokat.
 A törvények előírják energetikai tanúsítvány készítését szerte az Unióban, ami ellenőrzi az épület megfelelőségét energetikai szempontból.
 Azok a legújabb építésű, fenntartható irodaházak, amelyek WELL minősítést kapnak, az emberek egészségének és jó közérzetének fenntartását is segítik.
+% LEED: https://www.terc.hu/tudastar/leed
 
 Ilyen fejlett technológiákat felvonultató épületekben nagy szerepet játszanak az épületgépészeti rendszerek (HVAC),
 %\footnote{A HVAC (heating, ventilation, and air conditioning) rendszerek közé tartoznak a fűtési rendszerek is. Részletesen pl. a }
@@ -67,7 +58,7 @@ A szabályzáshoz a klasszikus elképzelések szerint vagy ismerjük a szabályz
 %Mindhárom eset elképzelhető valamilyen szinten, egyes alrendszerek átvitelét esetleg könnyebben felírhatjuk, mások bizonytalan
 %A felállított szakaszmodellben valamennyire mindhárom megjelenik. Új építésű lakásoknál a paraméterek többnyire ismertek (valamilyen pontossággal). Épületfizikai összefüggéseket felhasználva egyenleteket is fel lehet írni a hőfelvételre, hőleadásra. Ezen összefüggésekkel egyenértékű átviteli függvény is felírható, ha a rendszer bemeneteire gerjesztéseket adunk és mérjük a kimeneteket.  %\cite{AFRAM2014343}
 %
-A 2.-3. fejezetekben felállítok egy helyiség és a hozzátartozó fűtőtestek modelljét. Itt röviden foglalkozok méretezési kérdésekkel is, illetve ezeket felhasználom a modell megalkotásához. Publikációk, könyvek, adatlapok alapján validálom a felírt összefüggéseket, az ottani mérések adataiból kiindulva. (\cite[313.~o.]{Herz} - fűtőtest mérés, be kell helyettesíteni)
+A 2.-3. fejezetekben felállítok egy helyiség és a hozzátartozó fűtőtestek modelljét. Itt röviden foglalkozok méretezési kérdésekkel is, illetve ezeket felhasználom a modell megalkotásához. Publikációk, könyvek, adatlapok alapján validálom a felírt összefüggéseket, az ottani mérések adataiból kiindulva. (\cite[313, 361.~o.]{Herz} - fűtőtest mérés, be kell helyettesíteni)
 
 
 A törvény is javasolja helyi szabályzás kiépítését, illetve Csoknyai \cite[118.~o.]{Herz} is összegyűjtötte azokat a zavarásokat, amelyeket egy elosztottan működő rendszer jobban tud kezelni, mint egy központi szabályzás. Épületautomatikai rendszerek használatával tovább pontosíthatók ezek az információk, ezért a fűtésszabályzás integrációja az iContrALL okosotthon rendszerébe azért is előnyös, a fellépő zavarásokat (emberek jelenléte, napsütés, szél) mérhetővé teszi. Az integrációval további beavatkozók is használhatók, pl. redőny. %pl. infraszenzorokkal megmondható, hogy adott szobában tartózkodnak-e További 
@@ -75,7 +66,7 @@ A törvény is javasolja helyi szabályzás kiépítését, illetve Csoknyai \ci
 % A hőátadási tényezők módosításával hűtés is szimulálható. Magasabb szintű szabályzással megadható a fűtő/hűtővíz hőmérséklete. Páratartalom mérése is megoldott, a szabályzás erre is kiterjeszthető.
 
 
-A helyiség modelljére Simulinkben átviteli függvényt identifikálok (4. fejezet), erre megtervezem az MPC szabályzást (5. fejezet). A Matlab alapértelmezett paramétereit beállítom a fizikai korlátoknak megfelelően(...). Megvizsgálom a kapott teljesítményt.
+A helyiség modelljére Simulinkben átviteli függvényt identifikálok, erre megtervezem az MPC szabályzást. A Matlab alapértelmezett paramétereit beállítom a fizikai korlátoknak megfelelően(...). Megvizsgálom a kapott teljesítményt.
 
 Az MPC-nek rendkívül sok paraméterezési lehetősége van ---- (kazánok \cite[235.~o.]{Herz} szerint: kazánok hatásfoka, túlméretezése. )
 
@@ -85,8 +76,6 @@ Az MPC szabályozás gyakorlati kipróbálásához fizikai tesztrendszert állí
 
 % az identifikációt potenciálisan elrontó hatások pedig nem jelentkeznek. Ugyanis megbízható identifikáció nagyon sok időt venne igénybe.\cite{THIEBLEMONT2017485}%\footnote{Thieblemont state of art weather fc MPC-ben szót ejt róla}
 %(Adaptív szabályzást egyelőre nem használok.)
-
-
 
 
 
@@ -160,16 +149,6 @@ Az MPC szabályozás gyakorlati kipróbálásához fizikai tesztrendszert állí
 %\end{itemize}
 %
 %ami így eltérő ház-modelleket fog eredményezni.
-%
-
-
-
-
-
-
-
-
-
 
 
 \pagebreak

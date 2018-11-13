@@ -4,46 +4,32 @@ A fűtőtestek feladata, hogy az adott szobában teljesítményt szolgáltassana
 
 A hasonlóság nem véletlen a villamos hálózatokkal. Felfedezhető, hogy a hő\textbf{áram}ot a hőmérsékletkülönbség hozza létre, nagysága pedig fordítottan arányos a hővezetési tényezővel. 
 
-Ebben a fejezetben először hőtani alapösszefüggéseket ismertetek, amelyekből előáll majd a fűtőtestek teljesítményét leíró modell. A modell által számolt teljesítményt egy Simscape-ben megvalósított termikus hálózatra vezetem, ami a fűtőtest tranziens viselkedését adja meg. Így szimulálható a szoba felfűtése, tranziensével együtt.
+Ebben a fejezetben először hőtani alapösszefüggéseket ismertetek, amelyekből előáll majd a fűtőtestek teljesítményét leíró modell. A modell által számolt teljesítményt egy Simscape-ben megvalósított termikus hálózatra vezetem\footnote{A termikus hálózatok alkotóelemei nem ellenállások és kondenzátorok, hanem hővezetési tényezők és hátároló elemek.}, ami a fűtőtest tranziens viselkedését adja meg. Így szimulálható a szoba felfűtése, tranziensével együtt.
 
 
 
 
 
 
-A hőnyereség számításakor a be- és kikapcsolási tranzienseket is figyelembe kell venni, ez az az idő, ami alatt a hőtároló elemek beállnak az állandósult állapotbeli hőmérsékletükre.
-A fenti két megoldás máshogy fejti ki hatását Szimuláció során olyan bekapcsolási tranziensekkel is számolnom kell, amik egy kis időállandós fűtés (pl. légbefúvás, fan-coil) esetén elhanyagolhatók lennének.
-Ehhez már a Matlab Simscape környezetét fogom használni, amely képes termikus rendszerek modellezésére.
+%Hőközlés során a be- és kikapcsolási tranzienseket is figyelembe kell venni, ez az az idő, 
 
+%A tranziensek ideje az, ami alatt a hőtároló elemek hőmérsékletei beállnak az állandósult állapotbeli értékükre.
 
+%A következőkben radiátoros és padlófűtés modelljét írom fel, hogy azok hőleadását a szoba felé szimulálni lehessen.
 
+%Szimuláció során olyan bekapcsolási tranziensekkel is számolnom kell, amik egy kis időállandós fűtés (pl. légbefúvás, fan-coil) esetén elhanyagolhatók lennének.
 
-
-
-
-
-
-
-
-
-
-
-
-A következőkben radiátoros és padlófűtés modelljét írom fel, hogy azok hőleadását a szoba felé szimulálni lehessen.
+%Ehhez már a Matlab Simscape környezetét fogom használni, amely képes termikus rendszerek modellezésére.
 
 % ezek együttes hőleadása adja a szoba hőnyereségét. %Állandósult állapotban ezzel megegyezik hőveszteséget pedig a külső hőmérséklet határozza meg.
-
-
-
-
-
-
 
 
 %A modellalkotás során kétféle probléma merül fel. Egyrészt modellezni kell a fűtőtestek állandósult állapotbeli hőleadást. Másrészt, ha a fűtési rendszer időállandója nagy, akkor a tranziens lefolyása is lényeges a szabályzás szempontjából.
 Állandósult állapotra a fűtőtestek teljesítménye felírható a szabályzott jellemzők és a környezeti jellemzők függvényében. Mivel vizsgált fűtési rendszerek hője melegvízből származik, \textbf{szabályzott jellemző}ként a kazán (hőszivattyú, stb.) által előállított melegvíz hőmérséklete, illetve a keringető szivattyú tömegárama jöhet szóba.\footnote{A kazánok a víz hőmérsékletét képesek változtatni időjárás függvényében, így az egy külön rendszer része lehet. Nem célom kazánvezérlést írni, az egyszerűség kedvéért feltételezem, hogy a melegvíz pl. távhő formában rendelkezésre áll.} Az elképzelésemmel jobban összhangban áll az utóbbi választása, hiszen ezzel elosztottan, szobánként is szabályozható az egyes fűtőtestekbe táplált hőmennyiség: a víz tömegáramát folytonosan tudom szabályozni egy szelep segítségével, a fűtőtestekbe betáplált víz hőmérséklete (ún. előremenő hőmérséklet) állandó.
 
-A fűtőtest hőleadása viszont függ a környezetétől is: a szabályzott jellemzőn felül a \textbf{modell bemenetéhez tartozik} a környezet hőmérséklete, ami a levegő vagy a fűtetlen objektumok hőmérséklete. (A hőleadás típusa dönti el, hogy ezek közül melyik mérvadó, lásd a sugárzó és konvektív fejezetet.)
+%\vspace{6pt}
+
+A fűtőtest hőleadása függ a környezetétől is: a szabályzott jellemzőn felül a \textbf{modell bemenetéhez tartozik} a környezet hőmérséklete, ami a levegő vagy a fűtetlen objektumok hőmérséklete. (A hőleadás típusa dönti el, hogy ezek közül melyik mérvadó, lásd a sugárzó és konvektív fejezetet.)
 Ezen bemenő paraméterek és a fizikai tulajdonságok alapján megadható az állandósult állapotbeli teljesítmény. Ennek levezetése a következő section-ben található.
 
 A tranziensek a fűtőtestek fizikai kialakításától függnek. Minél nagyobb tömeget kell átmelegíteni azelőtt, hogy a fűtőtest felszínén a hőleadás megindulna, annál lassabb a beállási ideje az állandósult állapotnak. Így egy adott referencia trajektória esetén figyelembe kell venni ezen rendszerek dinamikáját is. A pontos paramétereket könyvekből, publikációkból, gyártói katalógusokból, méréssel, vagy becsléssel határoztam meg. A Simscape-ben minden blokknak olyan fizikai tartalma van, amiben ezek a jellemzők bevihetők, hatásuk megfigyelhető. Ezt a modellt a simscapes section-ben láthatjuk.
@@ -238,7 +224,7 @@ Fűtött padló, falak, mennyezet esetén jelentős szerepe van a sugárzó hől
 
 \begin{itemize}[itemsep=0pt,topsep=0pt,parsep=0pt,partopsep=0pt]
 	\item A.Laouadi / Building and Environment 39 (2004) 421 – 431 - p424, eq. 10-11: radiant heat transfer model
-	\item TEMPERATURE CONTROL STRATEGIES FOR RADIANT FLOOR EIEATING SYSTEMS, Zhi Long Zhang: 40.o.  
+	\item TEMPERATURE CONTROL STRATEGIES FOR RADIANT FLOOR HEATING SYSTEMS, Zhi Long Zhang: 40.o.  
 	\item \cite{CHOLEWA2013599} T. Cholewa et al. / Energy and Buildings 66 (2013) 599–606 - Table 5: coefficient
 	\item Kilkis1994 A simplified model for radiant heating and cooling panels: itt van képlet sugárzóra
 	\item Kiegészítés: \cite[349.~o.]{Herz}
@@ -266,9 +252,11 @@ A képletben élhetünk azzal a közelítéssel, hogy $\Delta t_k=\frac{t_{ws}+t
 
 \subsection{Paraméterek}
 A felmelegedéskor és lehűléskor a pontos hőleadást akkor tudjuk modellezni, ha ismerjük a radiátor hőkapacitását. Ehhez tudnunk kell, hogy a radiátorban mennyi víz van, illetve hogy a radiátortest milyen nehéz.
-A radiátorokat mindig az adott helyiséghez méretezik, ezért az adatokat leolvasással / katalógusból kapjuk normál esetben. A modellezéshez választanom kellett egy típust. Itt még csak paraméteresen kellene megadni az értékeket, avgy előbb a ház modelljét, hőszükségletét felírni, elvégre is a házhoz tervezzü
+A radiátorokat mindig az adott helyiséghez méretezik, ezért az adatokat leolvasással / katalógusból kapjuk normál esetben. A modellezéshez választanom kellett egy típust. Itt még csak paraméteresen kellene megadni az értékeket, vagz előbb a ház modelljét, hőszükségletét felírni, elvégre is a házhoz tervezzü
 
-Radiátor katalógusokból\footnote{Purmo Ventil Compact - purmo.com} azt találtam, hogy az egyes radiátor típusokra ezek a paraméterek milyen értékűek.
+Radiátor katalógusokból\footnote{Purmo Ventil Compact - purmo.com/hu/termekek/lapradiatorok/purmo-ventil-compact.htm} azt találtam, hogy az egyes radiátor típusokra ezek a paraméterek milyen értékűek.
+
+% Lapradiátor használatát feltételeztem, erről kell egy kép.
 
 \input{src/heater_parameters}
 

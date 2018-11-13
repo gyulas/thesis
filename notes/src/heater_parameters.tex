@@ -9,7 +9,7 @@
 	\newcolumntype{C}[1]{>{\centering\arraybackslash}p{#1}}
 	\newcolumntype{R}[1]{>{\raggedleft\arraybackslash}p{#1}}
 	
-	\begin{tabu}{|p{3cm}|p{3cm}|p{3cm}|p{3cm}|c|}
+	\begin{tabu}{|p{3cm}|p{3cm}|p{3cm}|p{2.8cm}|c|}
 		\cline{2-5}
 		\multicolumn{1}{l|}{} 	& Komponens & hőleadás módja & Hőtároló tömeg & Fajhő \\ \cline{2-5}
 		\multicolumn{5}{c}{}\\ \hline
@@ -20,15 +20,15 @@
 		
 		
 		\multirow{2}{*}
-					{Radiátor} 	 & Víz 		&	&  	&	\\  \cline{2-5}
-								 & Fémtest 	&	& 	& 	\\  \hline
+					{Radiátor, h=900\si{\milli\metre}} 	 & Víz 		& 	& 8.9l/m 	&	\\  \cline{2-5}
+								 & Fémtest 	& 	& 50.1 \si[per-mode=fraction]{\kilogram\per\metre}	& 	\\  \hline
 								 
 		\multicolumn{5}{c}{}\\ \hline
 		
 		\multirow{3}{*}
 					{Padlófűtés} & Víz 		&	&  	&	\\  \cline{2-5}
-								 & Födém 	&	&  	&	\\  \cline{2-5}
-								 & Padló burkolat 	& 	&	& 	\\  \hline
+								 & Födém 	&	& 840  \si[per-mode=fraction]{\kilogram\per\metre\squared}	&	\\  \cline{2-5}
+								 & Padló burkolat 	& $h_c, h_r$ 	&	& 	\\  \hline
 	\end{tabu}						
 		% entries - event names aligned left with multicolumn
 %		\multicolumn{1}{|l|}{flightHAT turned on} 	& & \\ \hline
