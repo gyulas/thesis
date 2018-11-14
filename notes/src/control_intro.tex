@@ -254,7 +254,7 @@ A mintavételi időt megnöveltem. A ház identifikációját és az MPC tervez�
 \subsubsection{Módosítások az MPC-ben}
 
 A súlyozást módosítva adhatunk költséget a beavatkozásnak, csökkentve így pl. annak a frekvenciáját. Ez a referenciakövetést rontja, de esetünkben nem cél a tized \si{\celsius}-os pontosság, hanem az energiamegtakarítás.
-Pontosan fel kellene ezért írni a forintosított költségét a beavatkozásnak, és ezt minimalizálni.
+Pontosan fel kellene ezért írni a forintosított költségét a beavatkozásnak, és ezt minimalizálni\footnote{\textit{Model predictive control of radiant slab systems with evaporative cooling sources}, Fang is szelepet használt, de nem értem az ottani optimalizációs algoritmust.}
 
 Egyensúlyt kell találni a referenciakövetés és a beavatkozás között. Külön érdekesség, hogy ha nem távfűtést használunk, akkor a kis beavatkozásnak is nagy költsége van. Erre a súlyozásnál egy LUTot lehetne használni. Btw. a hőszivattyúk kis terhelésen is nagy hatásfokkal működnek. Online weight tune elképzelhető, pl. a beavatkozó jeltől függően.
 
@@ -277,7 +277,6 @@ Sajnos viszont a fenti költségeket nem lehet (nehéz) megfeleltetni forintosí
 
 Fel kellene írni egy ideális scenario-t és ahhoz igazítani a ktsg-fv-t, hogy annak az esetnek a kialakulása legyen valószínűbb.
 
-\hrulefill
 
 \subsection{Offline MPC - supervisory control}
 
