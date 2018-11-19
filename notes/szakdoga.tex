@@ -1,4 +1,4 @@
-\documentclass[11pt,a4paper,oneside, hidelinks]{report}             % Single-side
+\documentclass[12pt,a4paper,oneside, hidelinks]{report}             % Single-side
 %\documentclass[a4paper, hidelinks]{article}
 \newcommand\tab[1][1cm]{\hspace*{#1}}
 
@@ -22,9 +22,15 @@
 %\usepackage{fixltx2e} % subscript with \textsubscript without math mode - already in kernel
 
 \usepackage{array}
-\usepackage{caption}
 % for captions under the table:
-\captionsetup[table]{position=bottom} 
+%\captionsetup[table]{position=bottom} 
+
+
+\usepackage{setspace}  % Ettol a tablazatok, abrak, labjegyzetek maradnak 1-es sorkozzel!
+\usepackage[hang]{caption}
+
+
+
 
 % for different table line colors
 \usepackage{xcolor}
@@ -140,13 +146,12 @@
 
 
 
-\newcommand{\vikszerzo}{Gyulai László}
-\newcommand{\vikkonzulens}{dr. Kiss Bálint}
-\newcommand{\kulsokonzulens}{Kurbucz Máté}
-\newcommand{\vikcim}{Korszerű fűtési rendszerek szabályzása}
-\newcommand{\viktanszek}{Irányítástechnika és Informatika Tanszék}
-
-\newcommand{\vikdoktipus}{Szadolgozat}
+\usepackage{framed} % for defining framed environment
+\newenvironment{formal}{
+	\def\FrameCommand{{\hspace{20pt}\color{gray}\vrule width 2pt}\hspace{18pt}}
+	\MakeFramed{\advance\hsize-\width}
+	\vspace{2pt}\noindent\hspace{2pt}\vspace{3pt}
+}{\vspace{3pt}\endMakeFramed}
 
 %--------------------------------------------------------------------------------------
 % Page layout setup

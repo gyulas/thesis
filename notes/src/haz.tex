@@ -61,7 +61,28 @@ Természetesen lehetett volna nagyon sok állapotú állapoteres modellt is lét
  
 \subsection*{Hővezetés, hőáramlás, hősugárzás}
 
- \vspace{24pt}
+\begin{table}[ht]
+	\footnotesize
+	\centering
+	\caption{Hőközlés fajtái}
+	%\renewcommand{\arraystretch}{2} % to increase cell height
+	%\taburulecolor{gray}
+	%\begin{tabular}{|p{0.8cm}|p{1cm}|p{1cm}|p{1cm}|p{1cm}|p{1cm}|p{1cm}|p{1cm}|}
+	%
+	\input{src/table/hokozles_fajtai_table}
+	\label{tab:HeatExchangeTypes}
+	%
+	%\label{tab:TabularExample}
+	%\tabref{TabularExample}~táblázat
+\end{table}
+ 
+
+
+ 
+ 
+ 
+ 
+ 
 
 \subsection*{Hőátbocsátási tényező számítása}
 
@@ -96,9 +117,32 @@ A Matlab Simscape model és Lapusan\footnote{Development of a Multi-Room Buildin
 
 %(Baromi érdekes, hogy nálunk otthon van egy hőcserélő a használati melegvíz és a fűtési rendszer között, annak a hatásait is lehetne nézni.)
 
+%\begin{table}[ht]
+%	\footnotesize
+%	\centering
+%	\caption{Az órajel-generátor chip órajel-kimenetei.} \label{tab:SysClocks}
+%	\begin{tabular}{ | l | c | c |}
+%		\hline
+%		Órajel & Frekvencia & Cél pin \\ \hline
+%		CLKA & 100 MHz & FPGA CLK0\\
+%		CLKB & 48 MHz  & FPGA CLK1\\
+%		CLKC & 20 MHz  & Processzor\\
+%		CLKD & 25 MHz  & Ethernet chip \\
+%		CLKE & 72 MHz  & FPGA CLK2\\
+%		XBUF & 20 MHz  & FPGA CLK3\\
+%		\hline
+%	\end{tabular}
+%	\label{tab:TabularExample}
+%\end{table}
+
+
+
+
+
 \begin{table}[H]
+	\footnotesize
 	\centering
-	
+	\caption{Egy szoba határoló felületei és azok termikus tulajdonságai}
 	\renewcommand{\arraystretch}{2} % to increase cell height
 	\taburulecolor{gray}
 	
@@ -106,18 +150,19 @@ A Matlab Simscape model és Lapusan\footnote{Development of a Multi-Room Buildin
 	
 	\input{src/house_surface_table}
 	
-	\caption{Egy szoba határoló felületei és azok termikus tulajdonságai}
+
 	\label{table_house_parameters}
+	
+	%\label{tab:TabularExample}
+	%\tabref{TabularExample}~táblázat
+	
 \end{table}
 
- A példában a schönherzes kollégiumi szoba határoló elemeit vettem fel. Minden szobának van ablaka és külső fala, egy átlagos szobát 4 másik vesz körül. A belső falakon nem veszt hőt, csak az ablakon ill. a külső falon. Feltételezzük, hogy a radiátoros fűtést egy szeleppel szabályozhatjuk, amit tetszőleges mértékben nyithatunk ki.
+ A példában a Schönherz Zoltán kollégium egy szobájának megfelelő méretű helyiséget vettem fel. Minden szobának van ablaka és külső fala, egy átlagos szobát 4 másik vesz körül. A belső falakon nem veszt hőt, csak az ablakon ill. a külső falon. Feltételezzük, hogy a radiátoros fűtést egy szeleppel szabályozhatjuk, amit tetszőleges mértékben nyithatunk ki.
  A napsütés hőnyereségét is figyelembe vehetjük.%, úgy, hogy egy hőforrás a padlót melegíti.
 
 %A modell mintavételi ideje?
 %A teljesítményeket megnöveljük és semmi mást, az nem lesz ekvivalens. 
-
-
-%\textbf{HŐIGÉNY SZÁMÍTÁS}
 
 \subsubsection*{Hőigény:}
 

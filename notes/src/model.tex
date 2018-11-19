@@ -1,35 +1,33 @@
-\chapter*{Abstract}
+\chapter*{Kivonat}
 
-A szakdolgozatban fűtési rendszerek modell-prediktív szabályzásának lehetőségeit vizsgálom Matlab Simulinkben. %Szimulációval
+A szakdolgozatban fűtési rendszerek modell-prediktív szabályzásának lehetőségeit vizsgálom Matlab Simulinkben.
 Végighaladok az MPC tervezés lépésein, a tervezést és a validálást is szimulált szakaszmodellen végzem. A szakaszmodellt egy helyiség és annak fűtési rendszere alkotja, a fűtés hője a helyiségből külső homlokzaton távozik a környezet felé. Az állandósult állapotban szükséges fűtési teljesítményt képlettel számítom, ebből kapható a beavatkozó jel egy adott teljesítményigényhez. A hőkapacitásokat és hőátadási, hővezetési tényezőket Simscape modell tartalmazza%(\ref{table_heater_parameters}. és \ref{table_house_parameters}. táblázat)
-, meghatározva a szakasz dinamikáját. Megvizsgálom az MPC predikciós horizontjának, költségfüggvényének illetve mintavételi idejének hatását a zárt szabályzási kör viselkedésére.  %tranziens viselkedését
+, meghatározva a szakasz dinamikáját. Megvizsgálom az MPC predikciós horizontjának, költségfüggvényének illetve mintavételi idejének hatását a zárt szabályzási kör viselkedésére. 
+
+%tranziens viselkedését
 %A szimulációhoz felállított modellhez számításokra is szükség van,
 %Állandósult állapotra felírt képlet adja a szükséges fűtési teljesítményt
 
-A tervezési lépéseket ezután valós, fizikai modellen is elvégzem, így látható lesz, hogy egy kész házra, vagy annak egy részére mennyi munkával jár a szabályzó beállítása. Ha a modellezésre, hangolásra fordított idő megtérül, azaz komfortnövekedéssel, illetve az üzemeltetési költségek csökkenésével jár, akkor a funkciókat akár az iContrALL okosház platformba is be lehet illeszteni.
-%a módszer pénzbeli haszonnal is kecsegtet.
+A tervezési lépéseket ezután valós, fizikai modellen is elvégzem, így látható lesz, hogy egy kész házra, vagy annak egy részére mennyi munkával jár a szabályzó beállítása. Ha a modellezésre, hangolásra fordított idő megtérül, azaz komfortnövekedéssel, illetve az üzemeltetési költségek csökkenésével jár, akkor az iContrALL intelligens otthon rendszerbe is beilleszthetők lesznek az új funkciók.
 
- % rendezzük a  \ref{eq_holeadas4}-t alpha-ra!
-
-%a beavatkozók, a mérhető zavarások és a hibajel függvényében.
-% kapom, ez méretezéshez és költségek számításához használható. 
 
 \chapter{Bevezetés}
-
 Az Európai Unió energiafogyasztásának 40\%-át az épületek adják, a szén-dioxid-kibocsátás 36\%-áért felelősek. Az energiahatékonyság növelése kiemelten fontos: a korszerűbb közintézmények, munkahelyek, lakóingatlanok olcsóbban fenntarthatók és alacsonyabb károsanyag-kibocsátás mellett az emberek életminőségét is javítják.
 
-Az új épületekre egyre szigorodó követelmények vonatkoznak\footnote{2021-ben használatba vett ingatlanoknak már teljesíteniük kell a közel nulla energiaigényű épületekre vonatkozó szabályokat. Forrás: \\ e-epites.hu/e-tanusitas/az-energetikai-tanusitvany-kiallitasa-2016-tol \\ ec.europa.eu/energy/en/topics/energy-efficiency/buildings/nearly-zero-energy-buildings}.
+Az új épületekre egyre szigorodó követelmények vonatkoznak\footnote{2021-ben használatba vett ingatlanoknak már teljesíteniük kell a közel nulla energiaigényű épületekre \cite{NZEB} vonatkozó szabályokat. }.
 %Európa / Magyarország energiafelhasználásának x százalékát az épületek adják, így a kibocsátás x százaléka is innen származik.
 %A szmogot, a nagy szállópor-koncentrációt számos vidéki városban az elavult fűtési rendszerek okozzák.
 %Ezek a tényezők életminőségünkre is kihatással vannak, ezért manapság számos újépítésű lakó- vagy irodaháznál figyelembe veszik az energiahatékonysági szempontokat.
 A törvények előírják energetikai tanúsítvány készítését szerte az Unióban, ami ellenőrzi az épület megfelelőségét energetikai szempontból.
-Azok a legújabb építésű, fenntartható irodaházak, amelyek LEED, illetve WELL minősítést kapnak, az emberek egészségének és jó közérzetének fenntartását is segítik\footnote{A LEED (Leadership in Energy and Environmental Design) egy komplex minősítési rendszer, a szakdolgozat tematikájához az \textit{Energia és légkör} kategória tartozik. Bővebben: https://www.terc.hu/tudastar/leed \\
-A WELL hét szempontot vesz figyelembe ‒ levegőellátás, víz, egészséges táplálkozás, természetes fény, testmozgás, kényelem és szellemi frissesség ‒ és ezek technikai feltételeire tesz javaslatokat.}
+Azok a legújabb építésű, fenntartható irodaházak, amelyek LEED, illetve WELL minősítést kapnak, az emberek egészségének és jó közérzetének fenntartását is segítik\footnote{A LEED %(Leadership in Energy and Environmental Design)
+egy komplex minősítési rendszer, a szakdolgozat tematikájához az \textit{Energia és légkör} kategóriája tartozik leginkább. Bővebben: https://www.terc.hu/tudastar/leed \\
+A WELL hét szempontot vesz figyelembe ‒ levegőellátás, víz, egészséges táplálkozás, természetes fény, testmozgás, kényelem és szellemi frissesség ‒ és ezek technikai feltételeire tesz javaslatokat.}.
 
-Ilyen fejlett technológiákat felvonultató épületekben nagy szerepet játszanak az épületgépészeti rendszerek\footnote{Épületgépészeti rendszer \cite{TNM2006} szerint a  HVAC (heating, ventilation, and air conditioning) rendszerek, a melegvíz-ellátásra és világításra szolgáló berendezések összessége.},
+Ilyen fejlett technológiákat felvonultató épületekben nagy szerepet játszanak az épületgépészeti rendszerek\footnote{Épületgépészeti rendszer a \cite{TNM2006} rendelet szerint a  HVAC (heating, ventilation, and air conditioning), a melegvíz-ellátásra és világításra szolgáló berendezések összessége.},
 % közé tartoznak a fűtési rendszerek is. Részletesen pl. a }
-a 7/2006. TNM rendelet\cite{TNM2006} is megfogalmaz szabályokat és ajánlásokat ezzel kapcsolatban. Eszerint \say{új fűtési rendszer létesítésekor és meglévő fűtési rendszer korszerűsítésekor a helyiségenkénti hőmérséklet-szabályozást javasolt megvalósítani gazdaságossági számítás alapján}. 
-
+a 7/2006. TNM rendelet \cite{TNM2006} is megfogalmaz szabályokat és ajánlásokat ezzel kapcsolatban. Eszerint \say{új fűtési rendszer létesítésekor és meglévő fűtési rendszer korszerűsítésekor a helyiségenkénti hőmérséklet-szabályozást javasolt megvalósítani gazdaságossági számítás alapján}. 
+\vspace{10pt}
+\pagebreak
 
 %WELL tanúsítványt szerzett épületek ezen felül az emberek egészségének és jó közérzetének fenntartását is segítik.
 %Itt viszont a fűtési, hűtési rendszerek szabályozására kevesebb hangsúly kerül, pedig ezekkel további megtakarítások érhetők el,
@@ -49,32 +47,57 @@ a 7/2006. TNM rendelet\cite{TNM2006} is megfogalmaz szabályokat és ajánlások
 %A környezetvédelem és a költséghatékonyság 
 
 Munkámban szeretnék megvalósítani egy helyiségenkénti hőmérséklet-szabályozást, ezen keresztül pedig megmutatni a különböző fűtési típusok viselkedését egy helyiségen belül.
-\vspace{18pt}
 %Kiindulási alapként az energetikai tanúsítványban szereplő paramétereket használom az épületek modellezésére
 
-\pagebreak
 
 A szabályzáshoz a klasszikus elképzelések szerint vagy ismerjük a szabályzott szakasz modelljét, vagy identifikálnunk kell azt, vagy fel kell írni rá a gerjesztés-válasz kapcsolatot, pl. átviteli függvényeket. 
 %Mindhárom eset elképzelhető valamilyen szinten, egyes alrendszerek átvitelét esetleg könnyebben felírhatjuk, mások bizonytalan
 %A felállított szakaszmodellben valamennyire mindhárom megjelenik. Új építésű lakásoknál a paraméterek többnyire ismertek (valamilyen pontossággal). Épületfizikai összefüggéseket felhasználva egyenleteket is fel lehet írni a hőfelvételre, hőleadásra. Ezen összefüggésekkel egyenértékű átviteli függvény is felírható, ha a rendszer bemeneteire gerjesztéseket adunk és mérjük a kimeneteket.  %\cite{AFRAM2014343}
 %
-A 2.-3. fejezetekben felállítok egy helyiség és a hozzátartozó fűtőtestek modelljét. Itt röviden foglalkozok méretezési kérdésekkel is, illetve ezeket felhasználom a modell megalkotásához. Publikációk, könyvek, adatlapok alapján validálom a felírt összefüggéseket, az ottani mérések adataiból kiindulva. (\cite[313, 361.~o.]{Herz} - fűtőtest mérés, be kell helyettesíteni)
+A 2-3. fejezetekben felállítom egy helyiség és a hozzátartozó fűtőtestek modelljét. Itt röviden foglalkozok méretezési kérdésekkel is, illetve ezeket felhasználom a modell megalkotásához. Publikációk, könyvek, adatlapok alapján validálom a felírt összefüggéseket, az ottani mérések adataiból kiindulva. 
+
+%(TOVBÁBBI fűtőtestek mérése a \cite[313, 361.~o.]{Herz})
+
+%
+%A törvényi javaslat a helyiségenkénti szabályozásra szakmailag megalapozott: egy elosztottan működő rendszer figyelembe tudja venni az egyedi jellemzőket - 
+%%hiszen egy épület helyiségei különböznek
+%a helyiség nagyobb, nagy délre néző ablakai vannak, - melyek az egész épületre nem ugyanolyanok.
+%% például a napsütés függhet a helyiség orientációjától vagy hogy hány ablak van rajta
+%
+%
+%Csoknyai \cite[118.~o.]{Herz} is összegyűjtötte azokat a zavarásokat, amelyeket , mint egy központi szabályzás.
 
 
-A törvényi javaslat a helyiségenkénti szabályozásra szakmailag megalapozott: egy elosztottan működő rendszer figyelembe tudja venni azokat a jellemzőket, melyek az egész épületre nem állandók, például a napsütés függhet a helyiség orientációjától vagy hogy hány ablak van rajta
 
 
-Csoknyai \cite[118.~o.]{Herz} is összegyűjtötte azokat a zavarásokat, amelyeket , mint egy központi szabályzás.
-Épületautomatikai rendszerek használatával, pl. a fűtésszabályzás iContrALL intelligens otthon rendszerével a fellépő zavarásokat (emberek jelenléte, napsütés, szél) mérhetjük. A szabályzás a zavarások hatásmechanizmusának ismeretében jobb zavarelnyomást tud elérni, sőt az integrációval további beavatkozók is használhatók (pl. redőny). %pl. infraszenzorokkal megmondható, hogy adott szobában tartózkodnak-e További 
+A szabályzás azért van helyiségekre bontva, mert így számos egyedi tényezőt figyelembe lehet venni, amik a teljes épületre különbözőek. A helyiség tájolása, az ablakok mérete, a felhasználás módja mind jobban kezelhető \textit{helyben}, mint egy központi irányítással. A központi irányítás ebben az esetben a helyi szabályzók referenciajeleit biztosítja.
+
+A tényezőket Csoknyai \cite{Herz} gyűjtötte össze:
+
+
+
+
+
+Épületautomatikai rendszerek használatával, pl. a fűtésszabályzás iContrALL intelligens otthon rendszerével a fellépő zavarásokat (emberek jelenléte, napsütés, szél) mérhetjük. A szabályzás a zavarások hatásmechanizmusának ismeretében jobb zavarelnyomást tud elérni, sőt az integrációval további beavatkozók is használhatók (pl. árnyékolástechnikai eszközök).
+
 
 % A hőátadási tényezők módosításával hűtés is szimulálható. Magasabb szintű szabályzással megadható a fűtő/hűtővíz hőmérséklete. Páratartalom mérése is megoldott, a szabályzás erre is kiterjeszthető.
 
 
-A szakasz modelljére Simulinkben átviteli függvényt identifikálok, erre megtervezem az MPC szabályzást. Az alapértelmezett paramétereket módosítom a fizikai korlátoknak megfelelően,  amelyek a beavatkozókra vagy a szakaszra vonatkoznak.
+A szakasz modelljére Simulinkben átviteli függvényt identifikálok, erre megtervezem a szabályzást. A szabályzó választásakor világossá vált, hogy egy egyszerű PID típusú szabályzás nem képes ezeket jól kezelni. Igaz, hogy a PID közismert és az iparban egyszerűsége miatt széles körben használt, de itt nem olyan egyértelmű egy szabályzás performanciája. A referenciakövetést például elég egy hibahatáron belül megvalósítani, itt lazábbak a követelmények.
+A költségek és a károsanyag-kibocsátás egyre fontosabb szempont: előnyösebb, olcsóbb beavatkozó 
+
+
+
+
+Az alapértelmezett paramétereket módosítom a fizikai korlátoknak megfelelően,  amelyek a beavatkozókra vagy a szakaszra vonatkoznak.
 
 Az MPC-nek rendkívül sok paraméterezési lehetősége van, amitől függően a szabályzás agresszívebb vagy robusztusabb lehet.   %---- (kazánok \cite[235.~o.]{Herz} szerint: kazánok hatásfoka, túlméretezése. )
-
 Az MPC szabályozás gyakorlati kipróbálásához fizikai tesztrendszert állítunk fel, itt az MPC tervezési kérdésekre koncentrálok, átviteli függvény modellből.
+
+
+
+
 
 %, melynek paramétereit energetikai tanúsítványból vehetjük. Ezzel egy közelítő modelljét megkapjuk a háznak, terepi mérések nélkül is lehetséges a szabályzás. A telepítés ideje lecsökkenthető, hiszen a hosszas kalibrálás elmarad.  A modellezéshez külön írom fel a helyiség és a fűtőtestek modelljét.%Természetesen bevethetők zárt körben végzett identifikációs módszerek, adaptív szabályzók is.
 
