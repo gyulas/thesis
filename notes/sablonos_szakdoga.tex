@@ -1,13 +1,12 @@
 \documentclass[12pt,a4paper,oneside]{report}             % Single-side
 %\documentclass[11pt,a4paper,twoside,openright]{report}  % Duplex
-
 %\PassOptionsToPackage{chapternumber=Huordinal}{magyar.ldf}
 \usepackage{t1enc}
 \usepackage[utf8]{inputenc} % modified from latin2
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage{enumerate}
-\usepackage[thmmarks]{ntheorem}
+\usepackage{ntheorem} % [thmmarks] ELRONTJA a \ref-et
 \usepackage{graphics}
 \usepackage{epsfig}
 \usepackage{listings}
@@ -39,10 +38,13 @@
 \usepackage{enumitem}
 \usepackage{enumitem}
 \usepackage{dirtytalk} %say
+\usepackage{ntheorem} % cruical to have it WHITOUT [thmmarks] or dont have it all because it will ruin \REF
 
 \usepackage{siunitx}
 \usepackage{amsmath}
 \usepackage{amssymb}
+
+\usepackage{titlesec}
 
 %tables
 \usepackage{tabu}
@@ -160,17 +162,17 @@
 %\newcommand{\code}[1]{{\upshape\ttfamily\scriptsize\indent #1}}
 
 % define references
-%\newcommand{\figref}[1]{\ref{fig:#1}.}
-%\renewcommand{\eqref}[1]{(\ref{eq:#1})}
-%\newcommand{\listref}[1]{\ref{listing:#1}.}
-%\newcommand{\sectref}[1]{\ref{sect:#1}}
-%\newcommand{\tabref}[1]{\ref{tab:#1}.}
+\newcommand{\figref}[1]{\ref{fig:#1}.}
+\renewcommand{\eqref}[1]{(\ref{eq:#1})}
+\newcommand{\listref}[1]{\ref{listing:#1}.}
+\newcommand{\sectref}[1]{\ref{sect:#1}}
+\newcommand{\tabref}[1]{\ref{tab:#1}.}
 
 %\DeclareMathOperator*{\argmax}{arg\,max}
 %\DeclareMathOperator*[1]{\floor}{arg\,max}
 %\DeclareMathOperator{\sign}{sgn}
 %\DeclareMathOperator{\rot}{rot}
-\definecolor{lightgray}{rgb}{0.95,0.95,0.95}
+%\definecolor{lightgray}{rgb}{0.95,0.95,0.95}
 
 \author{\vikszerzo}
 \title{\viktitle}
@@ -196,18 +198,18 @@ aboveskip=10pt}
 \input{src/titlepage}
 \input{src/model}
 
-%\pagenumbering{arabic}
+\pagenumbering{arabic}
 \onehalfspacing
 
 
 \input{src/haz}
 \input{src/futotestek}
-%\input{src/unittest}
-%\input{src/ident}
-%\input{src/control_intro}
-%\input{src/phisical_model}
-%\input{src/optimality}
-%\input{src/summary}
+\input{src/unittest}
+\input{src/ident}
+\input{src/control_intro}
+\input{src/phisical_model}
+\input{src/optimality}
+\input{src/summary}
 
 \pagebreak
 \bibliographystyle{unsrt}

@@ -1,0 +1,30 @@
+\documentclass[12pt,a4paper,oneside]{report}             % Single-side
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{anysize}
+
+
+% EZZEL NEM JÓ
+%\usepackage[thmmarks]{ntheorem}
+
+% EZZEL JÓ
+\usepackage{ntheorem}
+
+%--------------------------------------------------------------------------------------
+% Page layout setup
+%--------------------------------------------------------------------------------------
+% we need to redefine the pagestyle plain
+% another possibility is to use the body of this command without \fancypagestyle
+% and use \pagestyle{fancy} but in that case the special pages
+% (like the ToC, the References, and the Chapter pages)remain in plane style
+
+\pagestyle{plain} % ellentmond a pagestyle fancy-nek
+\setlength{\parindent}{0pt} % áttekinthetőbb, angol nyelvű dokumentumokban jellemző
+\setlength{\parskip}{9pt plus 3pt minus 3pt} % áttekinthetőbb, angol nyelvű dokumentumokban jellemző
+\marginsize{35mm}{25mm}{15mm}{15mm} % anysize package - VÉGLEGESHEZ
+
+
+\begin{document}
+\input{eqref}
+\end{document}
