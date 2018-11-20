@@ -16,7 +16,7 @@ A modell paraméterei ideális esetben az épület energetikai tanúsítványáb
 
 % zavarás, bemenet, nem irányított bemenet
 
-A modellt többféle úton is megkaphatjuk, de mindegyiknek lesz előnye és hátránya is: fizikai összefüggések alapján felírhatunk egy olyan modellt, amiben a hatásmechanizmusok pontosan szerepelnek, de a paraméterek a ténylegestől eltérőek lehetnek. Ha ezek nem ismertek, black-boxként is kezelhetjük a rendszert, de az identifikációhoz nagyon sok mérésre van szükség, hogy a mérési hibákat, zavarásokat kiküszöbölhessük.
+A modellt többféle úton is megkaphatjuk, de mindegyiknek lesz előnye és hátránya is: fizikai összefüggések alapján felírhatunk egy olyan modellt, amiben a hatásmechanizmusok pontosan szerepelnek, de a paraméterek a ténylegestől eltérőek lehetnek. Ha ezek nem ismertek, fekete dobozként ("black-box") is kezelhetjük a rendszert, de az identifikációhoz nagyon sok mérésre van szükség, hogy a mérési hibákat, zavarásokat kiküszöbölhessük.
 
 Én a fizikai modell felírását választottam, de a szabályzótervezéshez így is egy átviteli függvényt használok. Ehhez azonban mégis sokkal egyszerűbb eljutni, mint mérésekkel:
 a Simulinkben megvalósított hálózatra az identifikáció sokkal egyszerűbb, mint valós rendszerre. A vizsgálójelek tetszőlegesen megválaszthatók, pl. a külső hőmérséklet hatása is pontosan meghatározható. A ház egy MISO rendszer, terepi méréseket használva csak hosszas mérésekből lehet szétválasztani a bemenetek (fűtés, külső hőmérséklet, napsütés) hatását a belső hőmérsékletre. Ha később páratartalom szabályzása is szóba kerül, még bonyolultabb a helyzet.
