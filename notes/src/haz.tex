@@ -8,6 +8,7 @@ ahol minden elemhez lehet fizikai tartalmat rendelni. Ahhoz, hogy ehhez szabály
 
 A modell paraméterei ideális esetben az épület energetikai tanúsítványából kiolvashatók. Így a Matlab-ba ezeket az adatokat felvéve, és a tervezési lépéseket ott elvégezve a szabályzót rögtön használatba vehetjük, nincs szükség hosszas kalibrációs időszakra beüzemelésnél. A modellbeli eltéréseket esetlegesen kompenzálni lehet később, mérési adatok felhasználásával.% (historikus adatok felhasználásával). %A modellben a bizonytalanságok hatása adaptív szabályozással kezelhető (lesz).
 
+
 \section{A modellalkotás folyamata}
 %
 %White-box
@@ -46,9 +47,24 @@ a Simulinkben megvalósított hálózatra az identifikáció sokkal egyszerűbb,
 %Én összeraktam a fizikai modellt simulinkben (ez white-box) majd annak az ugrásválaszát mértem. Így nem egy állapotteres modell, hanem egy átviteli fv. "keletkezett".
 
 
-Egyzónás hőmérsékletszabályzást veszek alapul, azaz egy referenciajelem és egy mért hőmérsékletem van, a modellben a szoba levegőjének hőmérsékletét mindenhol ugyanakkorának feltételezem. A szabályzás külső behatások ellenében történik, úgy mint alacsonyabb külső hőmérséklet, illetve a napsütés, szellőzés hatása. Nem foglalkozok viszont belső zavarással, pl. több szoba különböző típusú fűtésével, vagy a belső hőterheléssel, ami pl. emberek jelenlétéből fakad.
+Egyzónás hőmérsékletszabályzást veszek alapul, azaz egy referenciajelem és egy mért hőmérsékletem van, a modellben a szoba levegőjének hőmérsékletét mindenhol ugyanakkorának feltételezem. A szabályzás külső behatások ellenében történik, úgy mint alacsonyabb külső hőmérséklet, illetve a napsütés, szellőzés hatása. Nem foglalkozok viszont belső zavarással, ami származhat helyiségek közti hőmérséklet-különbségből\footnote{A modellezés egyszerűsítése végett több helyiség egymásra hatását nem veszem figyelembe.}, vagy emberek jelenlétéből.
 
 Természetesen lehetett volna nagyon sok állapotú állapoteres modellt is létrehozni, ám rengeteg nem mérhető belső változója lett volna, emiatt nem biztos hogy teljesen irányítható vagy megfigyelhető rendszert kaptam volna, így pedig a szabályzótervezés nem működik.
+
+\begin{table}[H]
+	\footnotesize
+	\centering
+	\caption{Jelölések}
+	%\renewcommand{\arraystretch}{2} % to increase cell height
+	%\taburulecolor{gray}
+	%\begin{tabular}{|p{0.8cm}|p{1cm}|p{1cm}|p{1cm}|p{1cm}|p{1cm}|p{1cm}|p{1cm}|}
+	%
+	\input{src/table/jelolesek_table}
+	\label{tab:Nomenclature}
+	%
+	%\label{tab:TabularExample}
+	%\tabref{TabularExample}~táblázat
+\end{table}
  
  \textbf{ÁBRA WHITE-BOX MODELRŐL, ÉS BLACKBOX IDENTIFIKÁCIÓRÓL. ILLETVE WHITEBOX IDENT.}
 
@@ -61,7 +77,19 @@ Természetesen lehetett volna nagyon sok állapotú állapoteres modellt is lét
  
 \subsection*{Hővezetés, hőáramlás, hősugárzás}
 
-\begin{table}[ht]
+A külső falon a hőáramsűrűség:
+
+\begin{equation}\label{eq_hoveszteseg}
+\begin{aligned}
+q &= U_{fal}\Delta t = \alpha_i\left(t_i-t_{i,fal}\right)
+\end{aligned}
+\end{equation}
+
+Az U hőátbocsátási tényező szerepe tehát az, hogy a rétegek hatását együttesen kezelhessük. A \ref{table_house_parameters} táblázatban szerepel mindkét féle hőátadási tényező. 
+
+
+
+\begin{table}[t]
 	\footnotesize
 	\centering
 	\caption{Hőközlés fajtái}
@@ -87,6 +115,12 @@ Természetesen lehetett volna nagyon sok állapotú állapoteres modellt is lét
 \subsection*{Hőátbocsátási tényező számítása}
 
 
+\begin{equation}\label{eq_hoatbcsatas_U}
+\begin{aligned}
+U = \frac{1}{\frac{1}{\alpha_e}+\sum\limits_{i}^{}\frac{d_i}{\lambda_i}+\frac{1}{\alpha_i}}
+\end{aligned}
+\end{equation}
+
 
 
 \subsection*{Hőtároló képesség}
@@ -107,7 +141,7 @@ Q_{ki,ablak} &= U_{ablak}A_{ablak}\Delta T = 400\si{\watt}
 Figyelembe kell vennem a ház hőveszteségeit és hőtároló képességét is, a () és () egyenletek alapján, melynek paraméterei a \ref{table_house_parameters}. táblázatban találhatók.
 %Ennek paraméterei: a határoló elemek felszíne, hőátbocsátási tényezője, a hőtároló elemek fajhője.
 Az alábbi táblázat értékeinek nagy részét ki lehet tölteni a tanúsítványból.
-Az épület hőigénye numerikusan is szerepel, ám ez pl. éves átlagolással adódik, nem csak a fűtési rendszert, hanem a várható időjárást is figyelembe veszi, illetve az energiaigénynél nem csak a fűtési, hanem használati melegvíz előállítására felhasznált energiát is.
+Az épület hőigénye numerikusan is szerepel a tanúsítványban, ám ez éves szinten adott, nem csak a fűtési rendszer paramétereit, hanem a várható napsütéses órák számát ls a használati melegvíz előállításának enegiaigényét figyelembe veszi\footnote{Még mindig suta kicsit ez a mondat}.
 
 A Matlab Simscape model és Lapusan\footnote{Development of a Multi-Room Building Thermodynamic Model Using Simscape Library - Ciprian Lapusan} hőátadásnál a réteges szerkezetekben számolt konvekcióval és kondukcióval is. Viszont ezek az adatok egyben is kezelhetők, a követelményeket ezekre a költségoptimalizált követelményszint\footnote{ A  költségoptimalizált követelményszintek megtalálhatók a 7/2006. rendelet \cite{TNM2006} 5. mellékletében.} adja meg. Régebbi épületek ezt a szintet nem tudják teljesíteni, ezekre jellemző értékeket adtam meg az alábbi táblázatban. 
 

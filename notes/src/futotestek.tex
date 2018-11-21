@@ -1,6 +1,6 @@
 \chapter{Fűtőtestek modellje}
 
-A fűtőtestek feladata, hogy az adott szobában teljesítményt szolgáltassanak / (hőt\footnote{A hő mértékegysége \si{\joule}, a teljesítményé [\si{\watt}]~=~[\si[per-mode=fraction]{\joule\per\second}]}) adjanak le. A leadott teljesítmény növeli a levegő és az épületszerkezet hőjét (\textit{\ref{eq_holeadas4}. egyenlet}). A levegőnek, padlónak, falaknak tömegüknél és fajhőjüknél fogva mind-mind van egy hőtároló képességük (\textit{\ref{table_house_parameters}. táblázat}), így ezen elemek hőmérséklete nem változhat ugrásszerűen, hanem egy bizonyos idő alatt tudnak feltöltődni vagy hőenergiájukat leadni. %Mindezekben villamosmérnöki szemszögből felfedezhetjük az analógiát a villamos hálózatokkal.
+A fűtőtestek feladata, hogy az adott szobában teljesítményt szolgáltassanak: hőt\footnote{A hő mértékegysége \si{\joule}, a teljesítményé [\si{\watt}]~=~[\si[per-mode=fraction]{\joule\per\second}]} adjanak le. A fűtőtest teljesítményével növeli a levegő és az épületszerkezet hőjét (\textit{\ref{eq_holeadas4}. egyenlet}). A levegőnek, padlónak, falaknak tömegüknél és fajhőjüknél fogva mind-mind van egy hőtároló képességük (\textit{\ref{table_house_parameters}. táblázat}), így ezen elemek hőmérséklete nem változhat ugrásszerűen, hanem egy bizonyos idő alatt tudnak feltöltődni vagy hőenergiájukat leadni. %Mindezekben villamosmérnöki szemszögből felfedezhetjük az analógiát a villamos hálózatokkal.
 
 A hasonlóság nem véletlen a villamos hálózatokkal. Felfedezhető, hogy a hő\textbf{áram}ot a hőmérsékletkülönbség hozza létre, nagysága pedig fordítottan arányos a hővezetési tényezővel. 
 
@@ -128,7 +128,7 @@ Azaz ekkor a radiátor hőkapacitását nem kell figyelembe vennem.
 Beírva a (\ref{eq_termeszeteshk_359})-ba (\ref{eq_holeadas})-t:
 \begin{equation} \label{eq_holeadas2}
 \begin{aligned}
-\dot Q_{le} = k_e ~ A_e ~ \left( \frac{t_s+t_r}{2}-t_i\right) = k_e ~ A_e ~ \left( \frac{t_s+(t_s-\Delta t)}{2}-t_i-t_{drop}\right)
+\dot Q_{le} = h_t ~ A_e ~ \left( \frac{t_w+t_r}{2}-t_i\right) = k_e ~ A_e ~ \left( \frac{t_w+(t_s-\Delta t)}{2}-t_i-t_{drop}\right)
 \end{aligned}
 \end{equation}
 
@@ -140,9 +140,11 @@ Ahol felhasználtuk azt is, hogy $t_r = t_s-\Delta t$, majd $\Delta t$ helyére 
 Beírva (\ref{eq_holeadas2})-ba (\ref{eq_hofelvetel2})-t:
 \begin{equation} \label{holeadas3}
 \begin{aligned}
-\dot Q_{le} ~=~ & k_e ~ A_e ~ \left( t_s-t_i-\frac{\dot Q_{fel}}{2~c ~ \dot{m}}\right)  \\[18pt]
-\dot Q_{le} + \frac{k_e ~ A_e ~ \dot Q_{fel}}{2 ~ c ~ \dot{m}} ~ = ~ & k_e ~ A_e ~(t_s-t_i) \\[24pt]
-2 ~ c ~ \dot{m} ~ \dot Q_{le} + k_e ~ A_e ~ \dot Q_{fel} ~ = ~ &  k_e ~ A_e ~ 2~ c~ \dot{m} ~(t_w-t_i)
+\dot Q_{le} ~=~ & h_t ~ A_e ~ \left( t_w-t_i-\frac{\dot Q_{fel}}{2~c ~ \dot{m}}\right)  \\[18pt]
+\Delta t_m &\triangleq  t_w-t_i-\frac{\dot Q_{fel}}{2~c ~ \dot{m}}
+\\[18pt]
+\dot Q_{le} + \frac{h_t ~ A_e ~ \dot Q_{fel}}{2 ~ c ~ \dot{m}} ~ = ~ & h_t ~ A_e ~\Delta T_{s,i} \\[24pt]
+2 ~ c ~ \dot{m} ~ \dot Q_{le} + h_t ~ A_e ~ \dot Q_{fel} ~ = ~ &  h_t ~ A_e ~ 2~ c~ \dot{m} ~\Delta T_{s,i}
 \end{aligned}
 \end{equation}
 
@@ -153,8 +155,8 @@ Beírva (\ref{eq_holeadas2})-ba (\ref{eq_hofelvetel2})-t:
 
 \begin{equation} \label{eq_holeadas4}
 \begin{aligned}
-~~~~~~\dot Q (2 ~ c ~ \dot{m} + k_e ~ A_e) & ~=~ 2 ~ k_e ~ A_e ~ c~ \dot{m} ~(t_w-t_{drop}-t_i) \\[18pt]
-~~~~~~\dot Q &~=~ \frac{2~c~\dot{m}~k_e~A_e}{2 ~c ~ \dot{m} + k_e ~ A_e}~(t_s-t_i)
+~~~~~~\dot Q (2 ~ c ~ \dot{m} + h_t ~ A_e) & ~=~ 2 ~ h_t ~ A_e ~ c~ \dot{m} ~(t_w-t_{drop}-t_i) \\[18pt]
+~~~~~~\dot Q &~=~ \frac{2~c~\dot{m}~h_t~A_e}{2 ~c ~ \dot{m} + h_t ~ A_e}~\Delta T_{s,i}
 \end{aligned}
 \end{equation}
 
@@ -166,7 +168,7 @@ A fenti képletben a hőleadási tényezőt hőmérsékletfüggőnek is lehet ve
 Mivel a hőleadást, hőtárolást Simscape-ben valósítottam meg, a radiátorba bemenő hőt kell csak kiszámítani. Erre meg kell vizsgálni, hogy az állandósult állapotbeli képlet helyes-e.
 
 \begin{formal}
-	\textbf{Megjegyzés:} A radiátorba bekerülő teljesítményt a $t_w-t_r$ szabja meg (\ref{eq_hofelvetel}. egyenlet), viszont itt $t_r$-t kiejtettem az egyenletekből. Viszonta REHVA Guidebook
+	\textbf{Megjegyzés:} A radiátorba bekerülő teljesítményt a $t_w-t_r$ szabja meg (\ref{eq_hofelvetel}. egyenlet), viszont itt $t_r$-t kiejtettem az egyenletekből. Viszont a \textit{REHVA Guidebook}
 	%(REHVA alacsony hom. futés és magas hom. hutés by Bjarne Olesen et. al.)
 	\cite{RehvaGuidebookNo7} szerint a $\Delta t= t_w-t_r$-re szabályozással megtakarítás érhető el. Meg kell vizsgálni, reális-e mindkét paraméter mérése, radiátorok esetén, vagy csak padlófűtésnél.
 \end{formal}
@@ -252,7 +254,7 @@ A képletben élhetünk azzal a közelítéssel, hogy $\Delta t_k=\frac{t_{ws}+t
 
 \subsection{Paraméterek}
 A felmelegedéskor és lehűléskor a pontos hőleadást akkor tudjuk modellezni, ha ismerjük a radiátor hőkapacitását. Ehhez tudnunk kell, hogy a radiátorban mennyi víz van, illetve hogy a radiátortest milyen nehéz.
-A radiátorokat mindig az adott helyiséghez méretezik, ezért az adatokat leolvasással / katalógusból kapjuk normál esetben. A modellezéshez választanom kellett egy típust. Itt még csak paraméteresen kellene megadni az értékeket, vagz előbb a ház modelljét, hőszükségletét felírni, elvégre is a házhoz tervezzü
+A radiátorokat mindig az adott helyiséghez méretezik, ezért az adatokat leolvasással / katalógusból kapjuk normál esetben. A modellezéshez választanom kellett egy típust. Itt még csak paraméteresen kellene megadni az értékeket, vagy előbb a ház modelljét, hőszükségletét felírni, hiszen a házhoz tervezzük a fűtést és nem fordítva.
 
 Radiátor katalógusokból\footnote{Purmo Ventil Compact - purmo.com/hu/termekek/lapradiatorok/purmo-ventil-compact.htm} azt találtam, hogy az egyes radiátor típusokra ezek a paraméterek milyen értékűek.
 
@@ -261,8 +263,8 @@ Radiátor katalógusokból\footnote{Purmo Ventil Compact - purmo.com/hu/termekek
 \input{src/heater_parameters}
 
 Ismert a radiátor hossza, magassága, konstrukciója. Ezalapján a
-tömege, illetve az acél hőkapacitása alapján a radiátortest hőkapacitása - simscape termikus hőtároló elem blokként
-víztérfogata, a víz fajhője még egy hőtároló elem.
+tömege, illetve az acél hőkapacitása alapján a radiátortest hőkapacitása katalógusadatként szerepel.
+A szimulációban a  Simscape termikus hőtároló elem blokk a víz térfogata%, a víz fajhője még egy hőtároló elem.
 
 \subsection{A modell validálása}
 

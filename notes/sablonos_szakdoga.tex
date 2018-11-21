@@ -48,6 +48,7 @@
 
 %tables
 \usepackage{tabu}
+\usepackage{tabulary}
 \usepackage{multirow} % join cells
 \usepackage{makecell} % multiple row
 
@@ -76,7 +77,7 @@
 %megjegyzésekhez: - nem official
 \usepackage{framed} % for defining framed environment
 \newenvironment{formal}{
-	\def\FrameCommand{{\hspace{20pt}\color{gray}\vrule width 2pt}\hspace{18pt}}
+	\def\FrameCommand{{\hspace{18pt}\color{gray}\vrule width 2pt}\hspace{18pt}}
 	\MakeFramed{\advance\hsize-\width}
 	\vspace{2pt}\noindent\hspace{2pt}\vspace{3pt}
 }{\vspace{3pt}\endMakeFramed}
