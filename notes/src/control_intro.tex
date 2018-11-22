@@ -51,18 +51,18 @@ Az MPC szintézis folyamata:% be kellene tabolni
 
 
 \begin{enumerate}[noitemsep,topsep=0pt,parsep=2pt,partopsep=4pt,leftmargin=30pt]
-	\item A szakaszt identifikálni kell, az átviteli függvény be- és kimeneteinek típusát be kell állítani
-	\item Létre kell hozni az MPC-t a megfelelő mintavételi frekvenciával
-	\item Be kell állítani a jelek fizikai korlátait és súlyukat a szabályzás költségfüggvényében
+	\item a szakaszt identifikálni kell, az átviteli függvény be- és kimeneteinek típusát be kell állítani,
+	\item létre kell hozni az MPC-t a megfelelő mintavételi frekvenciával,
+	\item be kell állítani a jelek fizikai korlátait és súlyukat a szabályzás költségfüggvényében,
 	%\item Be kell állítani a jelek fizikai korlátait
-	\item Hozzá kell adni a Simulink modell Model workspace-éhez a szabályzót és megadni a nevét az Explicit MPC blokkjában. Az itt található Review funciót érdemes használni.
-	\item Be kell kötni a jeleket és le kell futtatni a szimulációt
+	\item hozzá kell adni a Simulink modell Model workspace-éhez a szabályzót és megadni a nevét az Explicit MPC blokkjában (az itt található Review funciót is érdemes használni),
+	\item be kell kötni a jeleket és le kell futtatni a szimulációt.
 	
 \end{enumerate}
 
 %Identifikálni kell a szakaszt.
 
-A \verb|setmpcsignals()| függvény használatával egy új átviteli függvényt hozunk létre, amit az MPC függvénynek odaadhatunk. Ez annyival több az identifikált tf-nél, hogy benne vannak a be-és kimenetek típusai is, aszerint, hogy az említett jelek milyen típusúak. A szakasz átviteli függvényének be-és kimeneteit meg kell nevezni, a típusokat a \ref{nomencl_mpcsignals} listából választhatjuk ki. Ezután az \verb|mpc(tf, Ts)| függvénnyel létrehozhatjuk az MPC szabályzót a megadott szakaszmodellre.
+A \verb|"setmpcsignals()"| függvény használatával egy új átviteli függvényt hozunk létre, amit az MPC függvénynek odaadhatunk. Ez annyival több az identifikált tf-nél, hogy benne vannak a be-és kimenetek típusai is, aszerint, hogy az említett jelek milyen típusúak. A szakasz átviteli függvényének be- és kimeneteit meg kell nevezni, a típusokat a \ref{nomencl_mpcsignals} listából választhatjuk ki. Ezután az \verb|"mpc(tf, Ts)"| függvénnyel létrehozhatjuk az MPC szabályzót a megadott szakaszmodellre.
 
 Alapértelmezés szerint a költségfüggvény súlyai az alábbiak. A zárt szabályzási körben ezek a súlyok a hibajelet büntették a legjobban, ezért nagyon jó referenciakövetést sikerült elérni.
 
@@ -260,6 +260,26 @@ Egyensúlyt kell találni a referenciakövetés és a beavatkozás között. Kü
 
 \subsection{Az MPC költségfüggvénye}
 
+Az MPC diszkrét idejű szabályzó. Lépésszámokban gondolkodik. Alapvetése, hogy a  optimális beavatkozójelet adjon ki.
+
+A szabályzó a predikciós horizonton belül minden lehetséges beavatkozójel-sorozatra kiszámolja annak (várható, modell szerinti) költségét. Azt a beavatkozójel-sorozatot választja, ami a legkisebb költséggel jár. Eztán a szabályzási horizontnak megfelelő számú beavatkozást végez, nem adja ki a teljes sorozatot. (Azaz pred.hor>control hor.)
+
+A legbutább szabályzó control és prediction horizonja is 1. Azaz egy lépéssel lát előre és a legkedvezőbb esethez (J költség minimális) tartozó beavatkozó jelet végrehajtja\footnote{Ezt formalizálni kellene egyenletben is.}. $J=w_u u + w_e e$, ahol a hibát a szabályzóban lévő szakaszmodell alapján számítjuk. %(Gyakorlatilag egy állapotvisszacsatolás?)
+
+\begin{equation} \label{eq_mpc_cost}
+J = \sum_{i}^{N} \left(w_u \Delta u^2 + w_e (r_i-y_i)^2  \right)
+\end{equation}
+
+a 10.1002@9783527609475.ch2-ből. (itt még csak $r_i=r$ állandó referenciajellel tudtam csinálni. )
+
+ahol N a predikciós horizont, $w_u$ a beavatkozó jel változásának súlya, $w_e$ a hibajel súlya
+
+A költségfüggvényben a hibajelhez és beavatkozó jelekhez, ill. azok változásaihoz különböző súlyok tartozhatnak.
+Nagyobb súlyok nagyobb költséget eredményeznek, így a szabályzó a nagyobb költségű beavatkozójel-sorozatot kisebb valószínűséggel választja.
+
+%(Ez eszkalálódott):
+
+
 
 
 
@@ -277,12 +297,12 @@ Sajnos viszont a fenti költségeket nem lehet (nehéz) megfeleltetni forintosí
 
 Fel kellene írni egy ideális scenario-t és ahhoz igazítani a ktsg-fv-t, hogy annak az esetnek a kialakulása legyen valószínűbb.
 
-
-\subsection{Offline MPC - supervisory control}
-
-\textit{4.4. Approaches without real-time dynamic optimization}\footnote{Thieblemont-ból. A real-time update nélküli MPC a legegyszerűbb és a leggyorsabban kiszámolható. Gyakran más irányítási technikákon alapul.} Döntési fa, affin leképezés ilyenek.
-
-Elkészíteni az offline döntési hálót viszont nehezebb.
+%
+%\subsection{Offline MPC - supervisory control}
+%
+%\textit{4.4. Approaches without real-time dynamic optimization}\footnote{Thieblemont-ból. A real-time update nélküli MPC a legegyszerűbb és a leggyorsabban kiszámolható. Gyakran más irányítási technikákon alapul.} Döntési fa, affin leképezés ilyenek.
+%
+%Elkészíteni az offline döntési hálót viszont nehezebb.
 
 
 	
