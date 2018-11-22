@@ -2,14 +2,57 @@
 
 A fűtőtestek feladata, hogy az adott szobában teljesítményt szolgáltassanak: hőt\footnote{A hő mértékegysége \si{\joule}, a teljesítményé [\si{\watt}]~=~[\si[per-mode=fraction]{\joule\per\second}]} adjanak le. A fűtőtest teljesítményével növeli a levegő és az épületszerkezet hőjét (\textit{\ref{eq_holeadas4}. egyenlet}). A levegőnek, padlónak, falaknak tömegüknél és fajhőjüknél fogva mind-mind van egy hőtároló képességük (\textit{\ref{table_house_parameters}. táblázat}), így ezen elemek hőmérséklete nem változhat ugrásszerűen, hanem egy bizonyos idő alatt tudnak feltöltődni vagy hőenergiájukat leadni. %Mindezekben villamosmérnöki szemszögből felfedezhetjük az analógiát a villamos hálózatokkal.
 
-A hasonlóság nem véletlen a villamos hálózatokkal. Felfedezhető, hogy a hő\textbf{áram}ot a hőmérsékletkülönbség hozza létre, nagysága pedig fordítottan arányos a hővezetési tényezővel. 
+A hasonlóság nem véletlen a villamos hálózatokkal. Felfedezhető, hogy a hőáramot a hőmérséklet-különbség hozza létre, nagysága pedig fordítottan arányos a hővezetési tényezővel. 
+
+\begin{equation} \label{eq_hoaram_alap}
+\begin{aligned}
+q = U\Delta t = \frac{\Delta t}{R}
+\end{aligned}
+\end{equation}
+
+Ahol 
+
+\begin{itemize}[itemsep=6pt,topsep=0pt,parsep=0pt,partopsep=0pt]
+	\item[] $q$ a hőáram \si[per-mode=fraction]{\watt\per\metre\squared}
+	\item[] $\Delta t$ a hőmérséklet-különbség (a potenciálkülönbség analógiájára)
+	\item[] $U$ a hővezetési tényező, reciproka az $R$ hővezetési ellenállás.
+\end{itemize}
+
 
 Ebben a fejezetben először hőtani alapösszefüggéseket ismertetek, amelyekből előáll majd a fűtőtestek teljesítményét leíró modell. A modell által számolt teljesítményt egy Simscape-ben megvalósított termikus hálózatra vezetem\footnote{A termikus hálózatok alkotóelemei nem ellenállások és kondenzátorok, hanem hővezetési tényezők és hátároló elemek.}, ami a fűtőtest tranziens viselkedését adja meg. Így szimulálható a szoba felfűtése, tranziensével együtt.
 
 
+\begin{figure}[h!]
+	\begin{subfigure}[t]{\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{figures/SimscapeGeneral}
+		\caption{Simscape modell}
+		\label{fig:SimscapeGeneral}
+	\end{subfigure}%
+	\smallskip
+	\vspace*{10pt}
+	\begin{subfigure}[t]{0.49\textwidth}
+		\centering
+		% trim={<left> <lower> <right> <upper>}
+		\includegraphics[trim=2 12 5 0, clip,width=\textwidth]{figures/step_Simscape}
+		\caption{Modell ugrásválasza}
+		\label{fig:SimscapeStep}
+	\end{subfigure}
+	~
+	\begin{subfigure}[t]{0.49\textwidth}
+		\centering
+%		\includegraphics[height=1.9in]{SSy}
+%		\caption{Szimulált ugrásválasz}
+%		\label{fig:SSy}
+	\end{subfigure}	
+	\caption{Simscape termikus blokkok a Simulinkben}
+	\label{fig:Simscape}
+	\centering
+\end{figure}
 
+A \textit{\ref{fig:Simscape}. ábrán} látható a termikus hálózat. A források lehetnek fix hőmérsékletű elemek (feszültségforrás) illetve hőáram forrásai (áramforrás). A "vezetékek" így azonos hőmérsékletű (ekvipotenciális) pontokat kötnek össze. A különböző elemekkel sorba kapcsolva helyezhetők el hőáramlást mérő blokkok. A hőáramlást a hőellenállások korlátozzák: ezeken hőmérséklet esik, ha . A hőtároló elemeknek tömege és fajhője megadja a hőkapacitásukat, így ezek feltöltődhetnek, energiát tárolhatnak.
 
-
+A \textit{\ref{fig:Simscape}. ábra} tehát megfeleltethető egy RC-tagnak\footnote{A hőtároló elem kapacitásnak, a hőközlés blokk pedig ellenállásnak felel meg.}, így az átviteli függvény identifikációja is könnyen lehetséges.
 
 %Hőközlés során a be- és kikapcsolási tranzienseket is figyelembe kell venni, ez az az idő, 
 
@@ -60,10 +103,10 @@ Hasonlóan méretezési feladatot mutat be a \cite[4.2.7.3]{Herz} is. Ezek alapj
 %\subsection*{Nomenklatúra} az elejére.
 
 \subsection{Hőleadás alapegyenletei}
-A fűtőtestek hőleadását befolyásolja a fűtőtestek közepes hőmérsékletkülönbsége (ld. a \ref{eq_termeszeteshk_359}. egyenletet), a felülete és a hőleadási tényezője.
+A fűtőtestek hőleadását befolyásolja a fűtőtestek közepes hőmérséklet-különbsége (\textit{lásd \ref{eq_termeszeteshk_359}. egyenlet}), a felülete és a hőleadási tényezője.
 %(A 86. oldalon $\Delta t_k$, a 358.-on $\Delta t_m$ jelöléssel találkozunk. A \cite[359.~o.]{Herz} ismét változik ugyanannak a jelölése. (\ref{termeszeteshk_359}) Ezutóbbi angol jelölés szimpatikusabb.)
 %
-Ezek közötti kapcsolatot adja az \ref{eq_holeadas}. egyenlet (\cite[358.~o.]{Herz}-ből): 
+Ezek közötti kapcsolatot adja az alábbi egyenlet (\textit{Csoknyai} \cite[358.~o.]{Herz}): 
 \begin{equation} \label{eq_holeadas}
 \dot Q_{le} = h_t ~ A_e ~ \Delta t_m
 \end{equation}
@@ -79,18 +122,22 @@ ahol
 %
 \begin{equation} \label{eq_termeszeteshk_359}
 \begin{aligned}
-\Delta t_m = t_s - t_i \\[10pt]
-t_s = \frac{t_w+t_r}{2} -t_{drop}
+\Delta t_m = t_{surf} - t_i \\[10pt]
+t_{surf} = \frac{t_w+t_r}{2} -t_{drop}
 \end{aligned}
 \end{equation}
 ahol \si{\celsius}-ban szerepelnek:
 %
 \begin{itemize}[itemsep=6pt,topsep=0pt,parsep=0pt,partopsep=0pt]
-	\item[] $t_s$ a fűtőtest felületi hőmérséklete
+	\item[] $t_{surf}$ a fűtőtest felületi hőmérséklete
 	\item[] $t_i$ a szoba hőmérséklete
-	\item[] $t_w$ a radiátorba befolyó, $t_r$ az onnan kifolyó víz hőmérséklete
+	\item[] $t_w$ a radiátorba befolyó, $t_r$ az onnan kifolyó víz hőmérséklete, ebből $\frac{t_w+t_r}{2}$ az átlagos vízhőmérséklet
 	\item[] $t_{drop}$ hőmérsékletesés a közepes fűtővízhőmérséklethez képest\footnote{A hőleadás során a fűtőközeg és a fűtőtest felülete közötti konduktív hővezetés miatt hőmérsékletesés lép fel. A padlófűtésnél lesz ez különösen releváns, hiszen ott a felület hőmérséklete jóval alacsonyabb, mint a be- és kimenő vízhőmérsékletek átlaga: hiába fűtünk \SI{40}{\celsius}-os vízzel, a padló kb. \SI{25}{\celsius}-os lesz.}
 \end{itemize}
+
+
+
+
 
 %A hőátadási tényező is hőmérsékletfüggő, de ezzel egyelőre nem foglalkozom, állandónak tekintem.
 

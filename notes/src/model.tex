@@ -21,7 +21,7 @@ Az új épületekre egyre szigorodó követelmények vonatkoznak\footnote{2021-b
 A törvények előírják energetikai tanúsítvány készítését szerte az Unióban, ami ellenőrzi az épület megfelelőségét energetikai szempontból.
 Azok a legújabb építésű, fenntartható irodaházak, amelyek LEED, illetve WELL minősítést kapnak, az emberek egészségének és jó közérzetének fenntartását is segítik\footnote{A LEED %(Leadership in Energy and Environmental Design)
 egy komplex minősítési rendszer, a szakdolgozat tematikájához az \textit{Energia és légkör} kategóriája tartozik leginkább. Bővebben: https://www.terc.hu/tudastar/leed \\
-A WELL hét szempontot vesz figyelembe ‒ levegőellátás, víz, egészséges táplálkozás, természetes fény, testmozgás, kényelem és szellemi frissesség ‒ és ezek technikai feltételeire tesz javaslatokat.}.
+A WELL hét szempont alapján értékel - víz, egészséges táplálkozás, természetes fény, testmozgás, kényelem és szellemi frissesség ‒ és ezek technikai feltételeire tesz javaslatokat.}.
 
 Ilyen fejlett technológiákat felvonultató épületekben nagy szerepet játszanak az épületgépészeti rendszerek\footnote{Épületgépészeti rendszer a \cite{TNM2006} rendelet szerint a  HVAC (heating, ventilation, and air conditioning), a melegvíz-ellátásra és világításra szolgáló berendezések összessége.},
 % közé tartoznak a fűtési rendszerek is. Részletesen pl. a }
@@ -83,7 +83,7 @@ A tényezőket Csoknyai \cite{Herz} gyűjtötte össze:
 % A hőátadási tényezők módosításával hűtés is szimulálható. Magasabb szintű szabályzással megadható a fűtő/hűtővíz hőmérséklete. Páratartalom mérése is megoldott, a szabályzás erre is kiterjeszthető.
 
 
-A szakasz modelljére Simulinkben átviteli függvényt identifikálok, erre megtervezem a szabályzást. A szabályzó választásakor világossá vált, hogy egy egyszerű PID típusú szabályzás nem képes ezeket jól kezelni. Igaz, hogy a PID közismert és az iparban egyszerűsége miatt széles körben használt, de itt nem olyan egyértelmű egy szabályzás performanciája. A referenciakövetést például elég egy hibahatáron belül megvalósítani, itt lazábbak a követelmények.
+A szakasz modelljére Simulinkben átviteli függvényt identifikálok, erre megtervezem a szabályzást. A szabályzó választásakor világossá vált, hogy egy egyszerű PID típusú szabályzás nem képes ezeket jól kezelni. Igaz, hogy a PID közismert és az iparban egyszerűsége miatt széles körben használt, de épületgépészeti alkalmazásnál nem olyan egyértelmű egy szabályzás performanciája. A referenciakövetést például elég egy hibahatáron belül megvalósítani, itt lazábbak a követelmények.
 A költségek és a károsanyag-kibocsátás egyre fontosabb szempont: előnyösebb, olcsóbb beavatkozó 
 
 
