@@ -182,11 +182,21 @@
 %	Setup captions
 %--------------------------------------------------------------------------------------
 \captionsetup[figure]{
-%labelsep=none,
-%font={footnotesize,it},
-%justification=justified,
+%labelsep={:~},
+font={footnotesize,it},
+justification=justified,
 width=.75\textwidth,
 aboveskip=10pt}
+
+% MODIFIED: FOR SUBCAPTIONS
+\captionsetup[sub]{
+	%labelsep=none,
+	labelfont+={footnotesize},
+	font={footnotesize,it},
+	justification=justified,
+	width=.75\textwidth,
+	aboveskip=10pt
+}
 
 \renewcommand{\captionlabelfont}{\small\bf}
 \renewcommand{\captionfont}{\footnotesize\it}

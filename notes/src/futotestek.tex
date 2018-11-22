@@ -1,6 +1,9 @@
 \chapter{Fűtőtestek modellje}
 
-A fűtőtestek feladata, hogy az adott szobában teljesítményt szolgáltassanak: hőt\footnote{A hő mértékegysége \si{\joule}, a teljesítményé [\si{\watt}]~=~[\si[per-mode=fraction]{\joule\per\second}]} adjanak le. A fűtőtest teljesítményével növeli a levegő és az épületszerkezet hőjét (\textit{\ref{eq_holeadas4}. egyenlet}). A levegőnek, padlónak, falaknak tömegüknél és fajhőjüknél fogva mind-mind van egy hőtároló képességük (\textit{\ref{table_house_parameters}. táblázat}), így ezen elemek hőmérséklete nem változhat ugrásszerűen, hanem egy bizonyos idő alatt tudnak feltöltődni vagy hőenergiájukat leadni. %Mindezekben villamosmérnöki szemszögből felfedezhetjük az analógiát a villamos hálózatokkal.
+A fűtőtestek feladata, hogy az adott szobában teljesítményt szolgáltassanak: hőt\footnote{A hő mértékegysége \si{\joule}, a teljesítményé [\si{\watt}]~=~[\si[per-mode=fraction]{\joule\per\second}]} adjanak le. A fűtőtest teljesítményével növeli a környezet hőjét  (\textit{\ref{eq_holeadas4}. egyenlet})
+%, így a levegő és az épületszerkezetek felmelegszenek. 
+: a levegőnek konvektív hőátadás útján, légáramlással, a környezetnek pedig radiatív hőátadással, azaz hősugárzással.
+A levegőnek, padlónak, falaknak tömegüknél és fajhőjüknél fogva mind-mind van egy hőtároló képességük (\textit{\ref{table_house_parameters}. táblázat}), egy bizonyos idő alatt tudnak feltöltődni vagy hőenergiájukat leadni: hőmérsékletük nem változhat ugrásszerűen. %Mindezekben villamosmérnöki szemszögből felfedezhetjük az analógiát a villamos hálózatokkal.
 
 A hasonlóság nem véletlen a villamos hálózatokkal. Felfedezhető, hogy a hőáramot a hőmérséklet-különbség hozza létre, nagysága pedig fordítottan arányos a hővezetési tényezővel. 
 
@@ -18,41 +21,9 @@ Ahol
 	\item[] $U$ a hővezetési tényező, reciproka az $R$ hővezetési ellenállás.
 \end{itemize}
 
+Ebben a fejezetben először hőtani alapösszefüggéseket ismertetek, amelyekből előáll majd a fűtőtestek teljesítményét leíró modell. Az állandósult állapotban leadott hő megkapható a beavatkozó jelek és a környezeti jellemzők (mért hőmérsékletek) függvényében.
+A modell által számolt teljesítményt egy Simscape-ben megvalósított termikus hálózatra vezetem\footnote{A termikus hálózatok alkotóelemei nem ellenállások és kondenzátorok, hanem hővezetési tényezők és határoló elemek.}, ami a fűtőtest tranziens viselkedését adja meg. Így szimulálható a szoba felfűtése, tranziensével együtt.
 
-Ebben a fejezetben először hőtani alapösszefüggéseket ismertetek, amelyekből előáll majd a fűtőtestek teljesítményét leíró modell. A modell által számolt teljesítményt egy Simscape-ben megvalósított termikus hálózatra vezetem\footnote{A termikus hálózatok alkotóelemei nem ellenállások és kondenzátorok, hanem hővezetési tényezők és hátároló elemek.}, ami a fűtőtest tranziens viselkedését adja meg. Így szimulálható a szoba felfűtése, tranziensével együtt.
-
-
-\begin{figure}[h!]
-	\begin{subfigure}[t]{\textwidth}
-		\centering
-		\includegraphics[width=\textwidth]{figures/SimscapeGeneral}
-		\caption{Simscape modell}
-		\label{fig:SimscapeGeneral}
-	\end{subfigure}%
-	\smallskip
-	\vspace*{10pt}
-	\begin{subfigure}[t]{0.49\textwidth}
-		\centering
-		% trim={<left> <lower> <right> <upper>}
-		\includegraphics[trim=2 12 5 0, clip,width=\textwidth]{figures/step_Simscape}
-		\caption{Modell ugrásválasza}
-		\label{fig:SimscapeStep}
-	\end{subfigure}
-	~
-	\begin{subfigure}[t]{0.49\textwidth}
-		\centering
-%		\includegraphics[height=1.9in]{SSy}
-%		\caption{Szimulált ugrásválasz}
-%		\label{fig:SSy}
-	\end{subfigure}	
-	\caption{Simscape termikus blokkok a Simulinkben}
-	\label{fig:Simscape}
-	\centering
-\end{figure}
-
-A \textit{\ref{fig:Simscape}. ábrán} látható a termikus hálózat. A források lehetnek fix hőmérsékletű elemek (feszültségforrás) illetve hőáram forrásai (áramforrás). A "vezetékek" így azonos hőmérsékletű (ekvipotenciális) pontokat kötnek össze. A különböző elemekkel sorba kapcsolva helyezhetők el hőáramlást mérő blokkok. A hőáramlást a hőellenállások korlátozzák: ezeken hőmérséklet esik, ha . A hőtároló elemeknek tömege és fajhője megadja a hőkapacitásukat, így ezek feltöltődhetnek, energiát tárolhatnak.
-
-A \textit{\ref{fig:Simscape}. ábra} tehát megfeleltethető egy RC-tagnak\footnote{A hőtároló elem kapacitásnak, a hőközlés blokk pedig ellenállásnak felel meg.}, így az átviteli függvény identifikációja is könnyen lehetséges.
 
 %Hőközlés során a be- és kikapcsolási tranzienseket is figyelembe kell venni, ez az az idő, 
 
@@ -68,7 +39,10 @@ A \textit{\ref{fig:Simscape}. ábra} tehát megfeleltethető egy RC-tagnak\footn
 
 
 %A modellalkotás során kétféle probléma merül fel. Egyrészt modellezni kell a fűtőtestek állandósult állapotbeli hőleadást. Másrészt, ha a fűtési rendszer időállandója nagy, akkor a tranziens lefolyása is lényeges a szabályzás szempontjából.
-Állandósult állapotra a fűtőtestek teljesítménye felírható a szabályzott jellemzők és a környezeti jellemzők függvényében. Mivel vizsgált fűtési rendszerek hője melegvízből származik, \textbf{szabályzott jellemző}ként a kazán (hőszivattyú, stb.) által előállított melegvíz hőmérséklete, illetve a keringető szivattyú tömegárama jöhet szóba.\footnote{A kazánok a víz hőmérsékletét képesek változtatni időjárás függvényében, így az egy külön rendszer része lehet. Nem célom kazánvezérlést írni, az egyszerűség kedvéért feltételezem, hogy a melegvíz például távhő formában rendelkezésre áll.} Az elképzelésemmel jobban összhangban áll az utóbbi választása, hiszen ezzel elosztottan, szobánként is szabályozható az egyes fűtőtestekbe táplált hőmennyiség: a víz tömegáramát folytonosan tudom szabályozni egy szelep segítségével, a fűtőtestekbe betáplált víz hőmérséklete (úgynevezett előremenő hőmérséklet) állandó.
+\section{Állandósult állapotbeli hőleadás}\label{section:allandosult}
+
+\paragraph{Szabályzott jellemző: }Mivel vizsgált fűtési rendszerek hője melegvízből származik, a fűtővíz %kazán (hőszivattyú, stb.) által előállított melegvíz
+hőmérséklete, illetve a keringető szivattyú tömegárama lehet a hőleadást befolyásoló paraméter\footnote{A kazánok a víz hőmérsékletét képesek változtatni időjárás függvényében, így az egy külön rendszer része lehet. Nem célom kazánvezérlést írni, az egyszerűség kedvéért feltételezem, hogy a melegvíz például távhő formában rendelkezésre áll.}. Az elképzelésemmel jobban összhangban áll az utóbbi választása, hiszen ezzel elosztottan, szobánként is szabályozható az egyes fűtőtestekbe táplált hőmennyiség: a víz tömegáramát folytonosan tudom szabályozni egy szelep segítségével, a fűtőtestekbe betáplált víz hőmérséklete (úgynevezett előremenő hőmérséklet) állandó.
 
 %\vspace{6pt}
 
@@ -82,7 +56,7 @@ A tranziensek a fűtőtestek fizikai kialakításától függnek. Minél nagyobb
 
 \input{src/tikz/controlloop}
 
-\section{Állandósult állapotbeli hőleadás}\label{section:allandosult}
+
 
 \begin{formal}
 Mivel a Matlab szimulációban a légbefúvásos fűtés modelljének teljesítmény kimenete van, olyan modellt szerettem volna felírni, ami beilleszthető az eredeti légbefúvó rendszer helyére. A ház hőveszteségeit a Matlab számolja\footnote{Pontosításra szorul ez a modell is, mert valószínűleg csak a konvektív hővezetéssel számol (a sugárzásival pedig nem). A légbefúvás a ház levegőjét melegíti. Ám a modellben a ház hőtároló tömege nem jelenik meg, csak egy hőellenállás a veszteségek modellezéséhez.}, ebből pedig adódik a szoba levegőjének hőmérséklete. A rendszer szabályozását így visszavezettem a leadott teljesítmény szabályzására. A levezetett egyenletnek köszönhetően egy teljesítményigényhez meg tudom majd mondani hogy mennyire kell a szabályzószelepeket kinyitni.
@@ -227,11 +201,50 @@ Mivel a hőleadást, hőtárolást Simscape-ben valósítottam meg, a radiátorb
 
 
 
-\section{Dinamikus hőátadás modellje}\label{section:dinamikus}
+\section{Hőátadás tranziensének modellje}\label{section:dinamikus}
+
+A \textit{\ref{fig:Simscape}. ábrán} látható a termikus hálózat. A források lehetnek fix hőmérsékletű elemek (feszültségforrás) illetve hőáram forrásai (áramforrás). A "vezetékek" így azonos hőmérsékletű (ekvipotenciális) pontokat kötnek össze. A különböző elemekkel sorba kapcsolva helyezhetők el hőáramlást mérő blokkok. A hőáramlást a hőellenállások korlátozzák: ezeken hőmérséklet esik, ha . A hőtároló elemeknek tömege és fajhője megadja a hőkapacitásukat, így ezek feltöltődhetnek, energiát tárolhatnak.
+
+\begin{figure}[H]
+	\begin{subfigure}[t]{\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{figures/SimscapeGeneral}
+		\caption{Simscape termikus modell}
+		\label{fig:SimscapeGeneral}
+	\end{subfigure}%
+	\smallskip
+	\vspace*{10pt}
+	\begin{subfigure}[t]{\textwidth}
+		\centering
+		% trim={<left> <lower> <right> <upper>}
+		\includegraphics[trim=2 12 5 0, clip,width=0.49\textwidth]{figures/step_Simscape}
+		\caption{Modell ugrásválasza}
+		\label{fig:SimscapeStep}
+	\end{subfigure}
+	%	~
+	%	\begin{subfigure}[t]{0.49\textwidth}
+	%		\centering
+	%%		\includegraphics[height=1.9in]{SSy}
+	%%		\caption{Szimulált ugrásválasz}
+	%%		\label{fig:SSy}
+	%	\end{subfigure}	
+	\caption{Tranziens (instacioner) hőtranszfer modellezése}
+	\label{fig:Simscape}
+	\centering
+\end{figure}
+
+
+
+A \textit{\ref{fig:Simscape}. ábra} tehát megfeleltethető egy RC-tagnak\footnote{A hőtároló elem kapacitásnak, a hőközlés blokk pedig ellenállásnak felel meg.}, így az átviteli függvény identifikációja is könnyen lehetséges.
+
+
+
+
+
 
 % \subsubsection*{Nomenklatúra}
 
-Ezen hőtároló elemek feltöltődése szimulálva adja a dinamikus viselkedést.
+A különböző hőtároló elemek feltöltődése szimulálva adja a dinamikus viselkedést.
 
 %A modell kimenetén külön szerepelhet a sugárzás és a konvekció.
 
