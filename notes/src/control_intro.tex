@@ -1,11 +1,17 @@
-\chapter{Szabályzó kiválasztása és analízise}
+\chapter{Szabályzó kiválasztása és analízise}\label{chap:control}
+
+A fejezetben a Simulinkben átviteli függvényre megtervezem a szabályzást. A szabályzó választásakor világossá vált, hogy egy egyszerű PID típusú szabályzás nem képes a rendszert jól kezelni. Igaz, hogy a PID közismert és az iparban egyszerűsége miatt széles körben használt, de épületgépészeti alkalmazásnál nem olyan egyértelmű egy szabályzás performanciája. A referenciakövetést például elég egy hibahatáron belül megvalósítani, itt lazábbak a követelmények.
+%A költségek és a károsanyag-kibocsátás egyre fontosabb szempont: előnyösebb, olcsóbb beavatkozó 
+
 
 Már a modell identifikációját is bonyolította az egynél több bemenet. Illetve kettő van kimenetből is. A szabályzásnál különösen nehéz több bemenetű rendszerre tervezni, esetleg a modellek szétválasztásával lehetséges: külön beavatkozójel a 
 
 
 Az identifikált modellekre többféle szabályzót tervezek, illetve próbálok ki.
 
-A hasonló feladatokra leggyakrabban modell-prediktív (MPC) szabályzást használnak\cite{AFRAM2014343}. Ehhez szükség van a szakasz modelljére, ami alapján a szabályzó szimulálhatja a szakasz kimenetét. A szimuláció több mintavételi perióduson, egy predikciós horizonton keresztül fut le, minden lehetséges  beavatkozójel-sorozatra a kimenetet szimulálva. Ezen sorozatok közül a legjobbat kiválasztja és egy lépést végrehajt. Ezután a szimuláció újrakezdődik. Az optimális beavatkozójelet egy költségfüggvény minimalizálásával kapja. A költségfüggvényben különböző eltéréseknek vagy abszolútértékeknek különböző súlya lehet.
+A hasonló feladatokra leggyakrabban modell-prediktív (MPC) szabályzást használnak\cite{AFRAM2014343}. Ehhez szükség van a szakasz modelljére, ami alapján a szabályzó szimulálhatja a szakasz kimenetét. A szimuláció több mintavételi perióduson, egy predikciós horizonton keresztül fut le, minden lehetséges  beavatkozójel-sorozatra a kimenetet szimulálva.
+%A csúszóablak miatt receding horizon control
+Ezen sorozatok közül a legjobbat kiválasztja és egy lépést végrehajt. Ezután a szimuláció újrakezdődik. Az optimális beavatkozójelet egy költségfüggvény minimalizálásával kapja. A költségfüggvényben különböző eltéréseknek vagy abszolútértékeknek különböző súlya lehet.
 
 Egy irodában, vagy lakásban 0.1\si{\celsius}-os vagy 1\si{\celsius}-os pontosságú hőmérsékletszabályzás közötti különbség komfortban aligha érezhető. Ám a követelmények megengedhető mértékű lazítása az energiafogyasztást nagyban lecsökkentheti.
 
@@ -304,8 +310,10 @@ Fel kellene írni egy ideális scenario-t és ahhoz igazítani a ktsg-fv-t, hogy
 %
 %Elkészíteni az offline döntési hálót viszont nehezebb.
 
-
+\subsection{Fejlesztési lehetőségek a szabályzással kapcsolatban}
 	
+Épületautomatikai rendszerek használatával, például a fűtésszabályzás iContrALL intelligens otthon rendszerével a fellépő zavarásokat (emberek jelenléte, napsütés, szél) mérhetjük. A szabályzás a zavarások hatásmechanizmusának ismeretében jobb zavarelnyomást tud elérni, sőt az integrációval további beavatkozók is használhatók (például árnyékolástechnikai eszközök).
+
 
 
 \subsection{Validálás}
@@ -314,3 +322,4 @@ Szimulációval ellenőrizzük a szabályzás robosztusságát. Ehhez megnövelt
 Ötlet: random időpontban lehetne ablaknyitást szimulálni.
 Napsütés hatásmechanizmusa.
 Radiant heat transfer paramétere továbbra sem olyan világos: sok publikációban a hőmérsékletkülönbség lineáris függését tartalmazza és nem a Stefan-Boltzmann törvény szerinti negyedik hatvány szerintit
+

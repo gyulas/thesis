@@ -1,13 +1,10 @@
-\chapter{Ház modellje}
+\chapter{Helyiség modellje}\label{chap:helyiseg}
 
 % Kiindulás ssc_house_heating_system
 
-A szabályzótervezéshez rendelkezésre kell, hogy álljon a szabályzott szakasz modellje. Ehhez egy könnyen módosítható, koncentrált paraméterű hálózatot vettem fel,
-%. Felépítettem egy hálózatot\footnote{Fodor HáRe alapján a különbség rendszer és hálózat között: a hálózat a rendszer egy lehetséges megvalósítása. A Simscape blokkok összekapcsolva hálózatot alkotnak. Az Ident toolbox-szal egy átviteli függvényt identifikálok, az így kapott rendszer viselkedése valamilyen pontossággal megfelel a hálózaténak, amiből kiindultunk.},
-ahol minden elemhez lehet fizikai tartalmat rendelni. Ahhoz, hogy ehhez szabályzót lehessen tervezni, identifikáltam azt az ugrásválaszával. %a Simscape használatával
+A szabályzótervezéshez rendelkezésre kell, hogy álljon a szabályzott szakasz modellje. Ezt két részre bontottam: először az épületszerkezet, azaz a helyiség modelljét írom fel, a fűtőtestekkel a \textit{\ref{chap:futotest}. fejezetben} foglalkozom. Egy könnyen módosítható, koncentrált paraméterű hálózatot vettem fel, ahol minden elemhez lehet fizikai tartalmat rendelni. A szabályzótervezéshez a teljes modell gerjesztés-válasz kapcsolatára lesz majd szükségem.
 
-A modell paraméterei ideális esetben az épület energetikai tanúsítványából kiolvashatók. Így a Matlab-ba ezeket az adatokat felvéve, és a tervezési lépéseket ott elvégezve a szabályzót rögtön használatba vehetjük, nincs szükség hosszas kalibrációs időszakra beüzemelésnél. A modellbeli eltéréseket esetlegesen kompenzálni lehet később, mérési adatok felhasználásával.% (historikus adatok felhasználásával). %A modellben a bizonytalanságok hatása adaptív szabályozással kezelhető (lesz).
-
+Az energetikai jellemzők az épület energetikai tanúsítványából kiolvashatók, így a modell paraméterezhető. A tervezési lépéseket a névleges modellre elvégezve a szabályzás rögtön működőképes, nincs szükség hosszas kalibrációs időszakra beüzemelésnél. A modellbeli eltéréseket később kompenzálni lehet, mérési adatok felhasználásával.% (historikus adatok felhasználásával). %A modellben a bizonytalanságok hatása adaptív szabályozással kezelhető (lesz).
 
 \section{A modellalkotás folyamata}
 %
@@ -17,10 +14,12 @@ A modell paraméterei ideális esetben az épület energetikai tanúsítványáb
 
 % zavarás, bemenet, nem irányított bemenet
 
-A modellt többféle úton is megkaphatjuk, de mindegyiknek lesz előnye és hátránya is: fizikai összefüggések alapján felírhatunk egy olyan modellt, amiben a hatásmechanizmusok pontosan szerepelnek, de a paraméterek a ténylegestől eltérőek lehetnek. Ha ezek nem ismertek, fekete dobozként ("black-box") is kezelhetjük a rendszert, de az identifikációhoz nagyon sok mérésre van szükség, hogy a mérési hibákat, zavarásokat kiküszöbölhessük.
+A gerjesztés-válasz kapcsolatot megkaphatjuk méréssel, szimulációval vagy egyenletek felírásával. Mindegyik módszernek van előnye és hátránya is:  ha a hatásmechanizmusok pontosan ismertek, használhatunk "white-box" modellt, amiben fizikai összefüggések szerepelnek. Ha a hatásmechanizmus nem ismert, fekete dobozként ("black-box") is kezelhetjük a rendszert, de az identifikációhoz nagyon sok mérésre van szükség, hogy a mérési hibákat és zavarásokat kiküszöbölhessük.%\cite{THIEBLEMONT2017485}
 
-Én a fizikai modell felírását választottam, de a szabályzótervezéshez így is egy átviteli függvényt használok. Ehhez azonban mégis sokkal egyszerűbb eljutni, mint mérésekkel:
-a Simulinkben megvalósított hálózatra az identifikáció sokkal egyszerűbb, mint valós rendszerre. A vizsgálójelek tetszőlegesen megválaszthatók, pl. a külső hőmérséklet hatása is pontosan meghatározható. A ház egy MISO rendszer, terepi méréseket használva csak hosszas mérésekből lehet szétválasztani a bemenetek (fűtés, külső hőmérséklet, napsütés) hatását a belső hőmérsékletre. Ha később páratartalom szabályzása is szóba kerül, még bonyolultabb a helyzet.
+Én a fizikai modell felírását választottam, a szabályzótervezéshez ezt identifikálva átviteli függvényt kapok. Ehhez sokkal egyszerűbb eljutni, mint mérésekkel:
+a Simulinkben megvalósított hálózatra az identifikáció sokkal egyszerűbb, mint valós rendszerre. A vizsgálójelek tetszőlegesen megválaszthatók, pl. a külső hőmérséklet hatása is pontosan meghatározható. A ház egy MISO rendszer, terepi méréseket használva csak hosszas mérésekből lehet szétválasztani a bemenetek (fűtés, külső hőmérséklet, napsütés) hatását a belső hőmérsékletre.
+
+%Ha később páratartalom szabályzása is szóba kerül, még bonyolultabb a helyzet.
 
 
 %\cite{SCHIRRER201686}
@@ -47,9 +46,9 @@ a Simulinkben megvalósított hálózatra az identifikáció sokkal egyszerűbb,
 %Én összeraktam a fizikai modellt simulinkben (ez white-box) majd annak az ugrásválaszát mértem. Így nem egy állapotteres modell, hanem egy átviteli fv. "keletkezett".
 
 
-Egyzónás hőmérsékletszabályzást veszek alapul, azaz egy referenciajelem és egy mért hőmérsékletem van, a modellben a szoba levegőjének hőmérsékletét mindenhol ugyanakkorának feltételezem. A szabályzás külső behatások ellenében történik, úgy mint alacsonyabb külső hőmérséklet, illetve a napsütés, szellőzés hatása. Nem foglalkozok viszont belső zavarással, ami származhat helyiségek közti hőmérséklet-különbségből\footnote{A modellezés egyszerűsítése végett több helyiség egymásra hatását nem veszem figyelembe.}, vagy emberek jelenlétéből.
+Helyiségenkénti hőmérséklet-szabályzást valósítok meg, azaz a belső hőmérsékletre egy referenciajel és egy mért hőmérséklet értelmezett. A helyiség levegőjének hőmérsékletét mindenhol ugyanakkorának (homogénnek) feltételezem. A szabályzás külső behatások ellenében történik, úgy mint alacsonyabb külső hőmérséklet (szóba jöhet a napsütés, szellőzés hatása is). Nem foglalkozok belső zavarással, ami származhat helyiségek közti hőmérséklet-különbségből\footnote{A modellezés egyszerűsítése végett több helyiség egymásra hatását nem veszem figyelembe.}, vagy emberek jelenlétéből.
 
-Természetesen lehetett volna nagyon sok állapotú állapoteres modellt is létrehozni, ám rengeteg nem mérhető belső változója lett volna, emiatt nem biztos hogy teljesen irányítható vagy megfigyelhető rendszert kaptam volna, így pedig a szabályzótervezés nem működik.
+%Természetesen lehetett volna nagyon sok állapotú állapoteres modellt is létrehozni, ám rengeteg nem mérhető belső változója lett volna, emiatt nem biztos hogy teljesen irányítható vagy megfigyelhető rendszert kaptam volna, így pedig a szabályzótervezés nem működik.
 
 \begin{table}[H]
 	\footnotesize
@@ -67,6 +66,16 @@ Természetesen lehetett volna nagyon sok állapotú állapoteres modellt is lét
 \end{table}
  
  \textbf{ÁBRA WHITE-BOX MODELRŐL, ÉS BLACKBOX IDENTIFIKÁCIÓRÓL. ILLETVE WHITEBOX IDENT.}
+
+
+\begin{figure}[H]
+	\centering
+	% trim={<left> <lower> <right> <upper>}
+	\includegraphics[trim=0 12 5 0, clip,width=\textwidth]{figures/SimscapeHouse}
+	\caption{Helyiség termikus modellje}
+	\label{fig:SimscapeHouse}
+\end{figure}
+
 
 
 \section{Épületfizikai alapösszefüggések}
