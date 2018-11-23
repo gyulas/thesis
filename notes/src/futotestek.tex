@@ -1,27 +1,14 @@
 \chapter{Fűtőtestek modellje}
 
-A fűtőtestek feladata, hogy az adott szobában teljesítményt szolgáltassanak: hőt\footnote{A hő mértékegysége \si{\joule}, a teljesítményé [\si{\watt}]~=~[\si[per-mode=fraction]{\joule\per\second}]} adjanak le. A fűtőtest teljesítményével növeli a környezet hőjét  (\textit{\ref{eq_holeadas4}. egyenlet})
+A fűtőtestek feladata, hogy az adott szobában teljesítményt szolgáltassanak: hőt\footnote{A hő mértékegysége \si{\joule}, a teljesítményé [\si{\watt}]~=~[\si[per-mode=fraction]{\joule\per\second}]} adjanak le. A fűtőtest teljesítményével növeli a környezet hőjét:
 %, így a levegő és az épületszerkezetek felmelegszenek. 
-: a levegőnek konvektív hőátadás útján, légáramlással, a környezetnek pedig radiatív hőátadással, azaz hősugárzással.
+a levegőnek konvektív hőátadás útján, légáramlással, a környezetnek pedig radiatív hőátadással, azaz hősugárzással.
+%a levegő 
 A levegőnek, padlónak, falaknak tömegüknél és fajhőjüknél fogva mind-mind van egy hőtároló képességük (\textit{\ref{table_house_parameters}. táblázat}), egy bizonyos idő alatt tudnak feltöltődni vagy hőenergiájukat leadni: hőmérsékletük nem változhat ugrásszerűen. %Mindezekben villamosmérnöki szemszögből felfedezhetjük az analógiát a villamos hálózatokkal.
 
 A hasonlóság nem véletlen a villamos hálózatokkal. Felfedezhető, hogy a hőáramot a hőmérséklet-különbség hozza létre, nagysága pedig fordítottan arányos a hővezetési tényezővel. 
 
-\begin{equation} \label{eq_hoaram_alap}
-\begin{aligned}
-q = U\Delta t = \frac{\Delta t}{R}
-\end{aligned}
-\end{equation}
-
-Ahol 
-
-\begin{itemize}[itemsep=6pt,topsep=0pt,parsep=0pt,partopsep=0pt]
-	\item[] $q$ a hőáram \si[per-mode=fraction]{\watt\per\metre\squared}
-	\item[] $\Delta t$ a hőmérséklet-különbség (a potenciálkülönbség analógiájára)
-	\item[] $U$ a hővezetési tényező, reciproka az $R$ hővezetési ellenállás.
-\end{itemize}
-
-Ebben a fejezetben először hőtani alapösszefüggéseket ismertetek, amelyekből előáll majd a fűtőtestek teljesítményét leíró modell. Az állandósult állapotban leadott hő megkapható a beavatkozó jelek és a környezeti jellemzők (mért hőmérsékletek) függvényében.
+Ebben a fejezetben először hőtani alapösszefüggéseket ismertetek, amelyekből előáll majd a fűtőtestek teljesítményét leíró modell. Az állandósult állapotban leadott hő megkapható a beavatkozó jelek és a környezeti jellemzők (mért hőmérsékletek) függvényében (\textit{\ref{eq_holeadas4}. egyenlet}).
 A modell által számolt teljesítményt egy Simscape-ben megvalósított termikus hálózatra vezetem\footnote{A termikus hálózatok alkotóelemei nem ellenállások és kondenzátorok, hanem hővezetési tényezők és határoló elemek.}, ami a fűtőtest tranziens viselkedését adja meg. Így szimulálható a szoba felfűtése, tranziensével együtt.
 
 
