@@ -47,38 +47,34 @@ Munkámban szeretnék megvalósítani egy helyiségenkénti hőmérséklet-szab�
 A szabályozáshoz a klasszikus elképzelések szerint ismerjük a szabályzott szakasz viselkedését, ellenkező esetben identifikálnunk kell azt. Ismert hálózatokra felírható gerjesztés-válasz kapcsolat, például átviteli függvények formájában. % Viszont akkor is érdemes lehet identifikálni, ha analitikusan túl hosszadalmas volna az átviteli függvény felírása.
 %Épületfizikai összefüggéseket felhasználva egyenleteket is fel lehet írni a hőfelvételre, hőleadásra. Ezen összefüggésekkel egyenértékű átviteli függvény is felírható, ha a rendszer bemeneteire gerjesztéseket adunk és mérjük a kimeneteket.  %\cite{AFRAM2014343}
 
-A szabályozott szakaszt először szimulálom, emiatt fizikai modell felírása mellett döntöttem. A \textit{\ref{chap:helyiseg}-\ref{chap:futotest}. fejezetekben} felállítom egy helyiség és a hozzátartozó fűtőtestek modelljét. %A modellalkotást méretezési szabályok is befolyásolják. Publikációk, könyvek, adatlapok alapján validálom a felírt összefüggéseket, az ottani mérések adataiból kiindulva. 
+A szabályozott szakasz először egy szimulált hálózat\footnote{A szimulációban sokkal könnyebben megfigyelhető az egyes paraméterek hatása, így lépésről lépésre megérthető a rendszer viselkedése.}, emiatt fizikai modell felírása mellett döntöttem. A \textit{\ref{chap:helyiseg}-\ref{chap:futotest}. fejezetekben} felállítom egy helyiség és a hozzátartozó fűtőtestek modelljét. %A modellalkotást méretezési szabályok is befolyásolják. Publikációk, könyvek, adatlapok alapján validálom a felírt összefüggéseket, az ottani mérések adataiból kiindulva. 
 
 %(TOVBÁBBI fűtőtestek mérése a \cite[313, 361.~o.]{Herz})
 
 %A belső hőmérsékletet számos jellemző befolyásolhatja. 
-A szabályzás a helyiség hőveszteségét egyenlíti ki, amit az alacsonyabb külső hőmérséklet okoz. A külső falon és az ablakon hő távozik, amelyet radiátoros és padlófűtéssel egyenlíthetünk ki.
+A szabályzás a helyiség hőveszteségét egyenlíti ki, amit az alacsonyabb külső hőmérséklet ($t_e$) okoz. A külső falon és az ablakon hő távozik, amelyet radiátoros és padlófűtéssel egyenlíthetünk ki.
 
 %A szabályozás helyiségekre van bontva, a modellben is csak egy helyiség és annak fűtési rendszere szerepel. %Ezen a szinten 
-
+%
 %A 2.1 fejezetet kellene itt bevezetni.
-
-
+%
+%
 %\footnote{A referenciajelbe az időjárás-előrejelzési adatok is beleszólhatnak a energiamegtakarítás érdekében.}.
-%A központi irányítás ebben az esetben a helyi szabályzók referenciajeleit biztosíthatja,
-
-%A tényezőket Csoknyai \cite{Herz} gyűjtötte össze:
-
+%
+\input{src/tikz/simulation_layout}
+%
 \section*{A szabályozás folyamata, szabályzótervezés}
-
-A szabályzó a  modell alapján olyan szelepekkel képes beavatkozni, melyekkel a fűtőtestbe beáramló vízmennyiség korlátozható. A szelepek állását folytonosan tudom változtatni. A modell bemenetei a szelepek állásai és a külső hőmérséklet, kimenete a belső hőmérséklet.  A belső és külső hőmérsékletet mérem, ez alapján történik a szabályzás. 
-
-Az identifikáció és a tervezés lépései a \textit{\ref{chap:ident}-\ref{chap:control}. fejezetben} olvashatóak.
-
-
+A szabályzó a  modell alapján olyan szelepekkel képes beavatkozni, melyekkel a fűtőtestbe beáramló vízmennyiség korlátozható. A szelepek ($u_1, u_2$) állását folytonosan tudom változtatni. A modell bemenetei a szelepek állásai és a külső hőmérséklet, kimenete a belső hőmérséklet ($t_i$).  A belső és külső hőmérsékletet mérem, ez alapján történik a szabályzás. 
+%
+A tervezés lépései a \textit{\ref{chap:ident}-\ref{chap:control}. fejezetben} olvashatóak.
 %Az alapértelmezett paramétereket módosítom a fizikai korlátoknak megfelelően,  amelyek a beavatkozókra vagy a szakaszra vonatkoznak.
 %
 %Az MPC-nek rendkívül sok paraméterezési lehetősége van, amitől függően a szabályzás agresszívebb vagy robusztusabb lehet.   %---- (kazánok \cite[235.~o.]{Herz} szerint: kazánok hatásfoka, túlméretezése. )
 %Az MPC szabályozás gyakorlati kipróbálásához fizikai tesztrendszert állítunk fel, itt az MPC tervezési kérdésekre koncentrálok, átviteli függvény modellből.
-
-
+%
+%
 \section*{Eredmények gyakorlati kipróbálása, további lehetőségek}
-
+%
 A szabályzótervezés lépéseit egy fizikai rendszerre is elvégzem, hogy további tapasztalatokat szerezzek. Végül áttekintem, hogy a szabályzás használatának milyen gyakorlati lehetőségei vannak, mind technikai értelemben, mind piacképesség szempontjából. Végül összefoglalom az elért eredményeket.
 
 

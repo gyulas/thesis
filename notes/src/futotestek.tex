@@ -24,7 +24,7 @@ A fűtőtest hőleadása függ a környezetétől is: a szabályzott jellemzőn 
 Ezen bemenő paraméterek és a fizikai tulajdonságok alapján megadható az állandósult állapotbeli teljesítmény. Ennek levezetése a \textit{\ref{section:allandosult}. bekezdésben} található.
 
 A tranziensek a fűtőtestek fizikai kialakításától függnek. Minél nagyobb tömeget kell átmelegíteni azelőtt, hogy a fűtőtest felszínén a hőleadás megindulna, annál lassabb a beállási ideje az állandósult állapotnak. Kikapcsoláskor a fűtőtest a szelep elzárása után is ad le hőt. %Így egy adott referencia trajektória esetén figyelembe kell venni ezen rendszerek dinamikáját is.
-A hőtárolási paramétereket könyvekből, publikációkból, gyártói katalógusokból, méréssel, vagy becsléssel határoztam meg. A Simscape-ben minden blokknak olyan fizikai tartalma van, amiben ezek a jellemzők bevihetők, hatásuk megfigyelhető. Ezt a modellt a \ref{section:dinamikus}. bekezdésben láthatjuk.
+A hőtárolási paramétereket könyvekből, publikációkból, gyártói katalógusokból, méréssel, vagy becsléssel határoztam meg. A Simscape-ben minden blokknak olyan fizikai tartalma van, amiben ezek a jellemzők bevihetők, hatásuk megfigyelhető. Ezt a modellt a \textit{\ref{section:dinamikus}. bekezdésben} láthatjuk.
 %A modellhez szükség van pl. a fűtőtest felületi hőmérsékletének, vagy a visszatérő (lehűlt) víz hőmérsékletének mérésére.% A modellezéshez korlátozottan áll rendelkezésre információ, ugyanis nem 
 
 %\textbf{\textit{TIKZPICTURE A MODELLRŐL, DIMENZIÓKRÓL}}
@@ -199,14 +199,14 @@ facade: frontal - homlokzat
 
 A \textit{REHVA Guidebook} \cite{RehvaGuidebookNo7} címében is szerepel az \textit{alacsony hőmérsékletű fűtés} fogalom. Ez nem paradoxon, csupán azt jelenti, hogy a fűtőfelületek hőmérséklete az átlagosnál alacsonyabb. A levegőnél csak néhány fokkal magasabb hőmérsékletű fűtési rendszerekben pedig alacsonyabb lehet az előremenő vízhőmérséklet. Megújuló energiát használó rendszerekre ez előnyösebb, mint a régi, széntüzelésű kazánok által előállított 80--\SI{90}{\celsius}-os előremenő vízhőmérséklet.
 
-A kis hőmérsékletkülönbség azt következménye, hogy a levegőnek csak kevés hőt képes leadni a rendszer. Nagyobb részt sugárzással működnek ezek a rendszerek, melyet a fűtetlen felületek nyelnek el. Ezért sugárzó (radiatív) hőátvitel esetén szokásos a $t_{AUST}$ jelölés, ami a fűtetlen felületek hőmérsékletét jeleni\footnote{AUST: Average unheated surface temperature}.
+A kis hőmérsékletkülönbség következménye, hogy a levegőnek csak kevés hőt képes leadni a rendszer. Nagyobb részt sugárzással működnek ezek a rendszerek, melyet a fűtetlen felületek nyelnek el. Ezért sugárzó (radiatív) hőátvitel esetén szokásos a $t_{AUST}$ jelölés, ami a fűtetlen felületek hőmérsékletét jeleni\footnote{AUST: Average unheated surface temperature}.
 
 A sugárzási hőtranszfer alapegyenletét a Stefan-Boltzmann törvény adja
 
 
 \begin{equation} \label{eq_stefan_boltzmann}
 \begin{aligned}
-\dot Q_{r} &= \sigma \left(T_{surf}\right)^4
+\dot Q_{r} &= \sigma T_{surf}^4
 \end{aligned}
 \end{equation}
 
@@ -303,6 +303,19 @@ A \ref{eq_hofelvetel}. egyenlet meglehetősen általános. Ha mérjük az előre
 
 
 \section{Padlófűtés modellje}
+
+A padlófűtések felépítése az alábbi ábrán található. Egy hőszigetelő rétegre kerülnek a műanyag csövek, bizonyos elrendezésben. Erre híg betont öntenek, hogy az a csövek teljes felületét körbevegye, ne alakuljanak ki zárványok. Ha a beton nem veszi teljesen körbe a fűtéscsöveket, a padlófűtés teljesítménye lecsökken.
+
+\begin{figure}[H]
+	\centering
+	% trim={<left> <lower> <right> <upper>}
+	\includegraphics[trim=0 0 0 0, clip,width=0.25\textwidth]{figures/ISO11855typeA}
+	\caption{Padlófűtés felépítése}
+	\label{fig:futotest-padlofutes}
+\end{figure}
+
+\textit{Olesen} számításait használtam a méretezéshez.
+ 
 
 Nyilvánvalóan nehéz lenne a felírt modellt egyénileg validálni, főleg hogy sehol sem találkoztam ilyen formában felírt képlettel a szakirodalomban. Szerencsére Cholewa \cite{CHOLEWA2013599} és Koca \cite{Koca} végzett méréseket falfűtés és mennyezetfűtés esetére. Ezen mérési eredmények paramétereit helyettesítettem be a hőleadás egyenletébe ahhoz hogy eldöntsem, helytálló-e a felírt modell. Az említett publikációkban minden adat rendelkezésre áll. A következő eseteket vizsgáltam:
 

@@ -1,20 +1,37 @@
 \begin{figure}[h]
 	\centering
-	\begin{tikzpicture}[>=stealth]
+	\begin{tikzpicture}[>=stealth,
+	outer/.style={draw=gray,dashed,thick,inner sep=5pt}]
 
+	% nagy blokkok
+	\node[draw,rectangle, minimum height=1.5cm,minimum width=4cm] (plant) at (5,2.5) {\parbox{2cm}{\centering fűtési rendszer}};
+	\node[draw,rectangle, minimum height=1.5cm,minimum width=3cm] (Control) at (0,2.5) {\parbox{2.5cm}{\centering modellalapú\\szabályzó}};
 	
-	\node[draw,rectangle, minimum height=2cm,minimum width=6cm] (Heat) at (6,2.5) {\parbox{2cm}{\centering fűtési rendszer}};
-	%\node[draw,rectangle, minimum height=2cm,minimum width=5.5cm] (Simsc) at (9,2.5) {\parbox{2cm}{\centering fűtési rendszer Simscape}};
-	\node[draw,rectangle, minimum height=1.5cm,minimum width=3cm] (House) at (4.5,0) {\parbox{2cm}{\centering ház Simscape}};
-	\node[draw,rectangle, minimum height=1.5cm,minimum width=3cm] (Control) at (0,2.5) {controller};
+	% szaggatott vonal
+	\node[draw,outer,rectangle, minimum height=4cm,minimum width=12cm,
+	label={[label distance=-0.1cm, anchor=north]100:Matlab Simulink szimuláció}] (keret) at (2.5,2.5) {};
 	
-	\draw[->] (Control.350) node[left]{${u_{2}}$} --  (Heat.185) node[right]{$\alpha_{floor}$};  %node[above left]{$\alpha_{radiator}$}; 
-	\draw[->] (Control.10) node[left]{${u_{1}}$} --  (Heat.175) node[right]{$\alpha_{radiator}$} ;
+	
+	% szabályzott mennyiségek
+	\draw [->] (Control.10) node[right]{} -- +(15mm,0) node[right]{${u_{1}}$};
+	\draw [->] (Control.350) node[right]{} -- +(15mm,0) node[right]{${u_{2}}$};
+	
+	%\draw[->] (Control.350) node[left]{} --  (plant.187) node[right]{${u_{2}}$};  %node[above left]{$\alpha_{radiator}$}; 
+	%\draw[->] (Control.10) node[left]{} --  (plant.173) node[right]{${u_{1}}$} ;
 	
 	%\draw[->] (d.0) node[left]{heat [W]} ->  ++(3,0) ->  (house.180);
-	\draw [->] (Heat.0) node[left]{$Q_r, Q_c$ [W]} -| ++(1,-2)  |- (House.0) node[left]{${Q_{be}}$}; %++(1.5cm,0) -- (2cm,0pt) -- (2.5cm,10pt);
 	
-	\draw[->] (House.180)  node[right]{${T_i}$} -| ++(-5.5,2)  |- (Control.180) ;
+	
+	% szabályzó bemenetei
+	% a -| és |- máshogy fog törni, ha unconstraintelt.
+	\draw [->] (plant.0)  node[left]{$t_i$} -|++(0.8,-1.5) -| ++(-9.25,0) |-  ++(-1.1,0) |- node[left]{$t_i$} (Control.198);
+	
+	%++(1.5cm,0) -- (2cm,0pt) -- (2.5cm,10pt);
+	%\draw [->] (plant.0) node[left]{$t_i$ [\si{\celsius}]} -|++(1,0)|- -|++(-2.5,0)|- (Control.198) node[right]{}; %++(1.5cm,0) -- (2cm,0pt) -- (2.5cm,10pt);
+	\draw [<-] (Control.180) node[right]{} -- +(-10mm,0) node[left]{$t_{e}$};
+	\draw [<-] (Control.162) node[right]{} -- +(-10mm,0) node[left]{$t_{ref}$};
+	
+	%\draw[->] (House.180)  node[right]{${T_i}$} -| ++(-5.5,2)  |- (Control.180) ;
 	%\draw[->] (d.20) -| ++(1,-1) |- (y.350);
 	
 	%\path 
