@@ -16,8 +16,8 @@ Az energetikai jellemzők az épület energetikai tanúsítványából kiolvasha
 
 A gerjesztés-válasz kapcsolatot megkaphatjuk méréssel, szimulációval vagy egyenletek felírásával. Mindegyik módszernek van előnye és hátránya is:  ha a hatásmechanizmusok pontosan ismertek, használhatunk "white-box" modellt, amiben fizikai összefüggések szerepelnek. Ha a hatásmechanizmus nem ismert, fekete dobozként ("black-box") is kezelhetjük a rendszert, de az identifikációhoz nagyon sok mérésre van szükség, hogy a mérési hibákat és zavarásokat kiküszöbölhessük.%\cite{THIEBLEMONT2017485}
 
-Én a fizikai modell felírását választottam, a szabályzótervezéshez ezt identifikálva átviteli függvényt kapok. Ehhez sokkal egyszerűbb eljutni, mint mérésekkel:
-a Simulinkben megvalósított hálózatra az identifikáció sokkal egyszerűbb, mint valós rendszerre. A vizsgálójelek tetszőlegesen megválaszthatók, pl. a külső hőmérséklet hatása is pontosan meghatározható. A ház egy MISO rendszer, terepi méréseket használva csak hosszas mérésekből lehet szétválasztani a bemenetek (fűtés, külső hőmérséklet, napsütés) hatását a belső hőmérsékletre.
+Én a fizikai modell felírását választottam, a szabályzótervezéshez ennek a dinamikáját megvizsgálom. Megfelelő gerjesztő jelekkel identifikálva előáll a modell átviteli függvénye (\textit{\ref{chap:ident}. fejezet}). Ehhez sokkal egyszerűbb eljutni, mint mérésekkel:
+a Simulinkben megvalósított hálózatra az identifikáció sokkal egyszerűbb, mint valós rendszerre. A vizsgálójelek tetszőlegesen megválaszthatók, pl. a külső hőmérséklet hatása is pontosan meghatározható. A ház egy MISO (több bemenetű, egy kimenetű) rendszer, terepi méréseket használva csak hosszas mérésekből lehet szétválasztani a bemenetek (fűtés, külső hőmérséklet, napsütés) hatását a belső hőmérsékletre.
 
 %Ha később páratartalom szabályzása is szóba kerül, még bonyolultabb a helyzet.
 
@@ -46,9 +46,95 @@ a Simulinkben megvalósított hálózatra az identifikáció sokkal egyszerűbb,
 %Én összeraktam a fizikai modellt simulinkben (ez white-box) majd annak az ugrásválaszát mértem. Így nem egy állapotteres modell, hanem egy átviteli fv. "keletkezett".
 
 
-Helyiségenkénti hőmérséklet-szabályzást valósítok meg, azaz a belső hőmérsékletre egy referenciajel és egy mért hőmérséklet értelmezett. A helyiség levegőjének hőmérsékletét mindenhol ugyanakkorának (homogénnek) feltételezem. A szabályzás külső behatások ellenében történik, úgy mint alacsonyabb külső hőmérséklet (szóba jöhet a napsütés, szellőzés hatása is). Nem foglalkozok belső zavarással, ami származhat helyiségek közti hőmérséklet-különbségből\footnote{A modellezés egyszerűsítése végett több helyiség egymásra hatását nem veszem figyelembe.}, vagy emberek jelenlétéből.
+Helyiségenkénti hőmérséklet-szabályzás esetén a belső hőmérsékletre adott egy referencia és egy mért érték.
+Helyiségenként számos olyan tényező figyelembe vehető, melyek a teljes épületre különbözőek: a helyiség tájolása, az ablakok mérete, a felhasználás módja mind jobban kezelhető \textit{helyben}, mint egy központi irányítással. A helyi szabályozás referenciajeleit a lakók, dolgozók komfortérzetének megfelelően kell megadni.
+
+A helyiség levegőjének hőmérsékletét mindenhol ugyanakkorának (homogénnek) feltételezem. A szabályzás a helyiség hőveszteségét egyenlíti ki, amit az alacsonyabb külső hőmérséklet okoz. Nem foglalkozok például szellőzésből, helyiségek közti hőmérséklet-különbségből\footnote{A modellezés egyszerűsítése végett több helyiség egymásra hatását nem veszem figyelembe.}, vagy emberek jelenlétéből származó belső zavarással.
+
+A fűtést padlófűtés és radiátor biztosítja, mindkettőben szeleppel szabályozható az átfolyó vízmennyiség.
+
+\section{Termikus modell}
+
+A \textit{\ref{fig:Simscape}. ábrán} látható egy termikus mintahálózat, mellyel bemutatom a Simscape csomag elemeit, melyből a helyiség modellje is felépíthető.
+
+A források lehetnek fix hőmérsékletű elemek (feszültségforrás) illetve hőáram forrásai (áramforrás). A "vezetékek" így azonos hőmérsékletű (ekvipotenciális) pontokat kötnek össze, ezekre hőmérsékletmérőket helyezhetünk. A különböző elemekkel sorba kapcsolva helyezhetők el hőáramlást mérő blokkok.
+
+A hőáramlást a hőellenállások korlátozzák, mivel azokon hőmérsékletesés mérhető. (Az ábrán mért hőáram a hőellenálláson eső hőmérséklettel arányos, a \textit{\ref{eq_hoaram_alap}. egyenlet} szerint.) A hőtároló elemeknek tömege és fajhője megadja a hőkapacitásukat, így ezek feltöltődhetnek, energiát tárolhatnak. A mintahálózat egy RC-tagnak felel meg, erre a szabályzótervezés lépései a következők lennének:
+
+Az identifikációnál ismert a rendszer jellege, így 0 zérussal, 1 pólussal átviteli függvényt identifikálnék.
+Erre szabályzót lehetne tervezni. A szimuláció során a termikus hálózat alapjele helyére kerülne a szabályzó beavatkozó jele. A visszacsatolás a hőmérő kimenetéről történne. Ekkor, mivel a tervezés során használt modell és a  szakasz között nincs eltérés (angolul \textit{mismatch}), a szabályzás jól működik.
+
+A paraméterek módosításával a szabályzó robusztusságát lehet tesztelni. Ha ez mondjuk egy vízforraló modellje lenne, akkor a szabályzás történhetne úgy, hogy a szabályzó egy beágyazott számítógépen fut, majd a teljesítményelektronikán keresztül a kívánt teljesítményt szolgáltatja, hogy például azonos hőmérsékleten tartsa benne a teát.
+
+\begin{figure}[H]
+	\begin{subfigure}[t]{\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{figures/SimscapeGeneral}
+		\caption{Simscape termikus modell}
+		\label{fig:SimscapeGeneral}
+	\end{subfigure}%
+	\smallskip
+	\vspace*{10pt}
+	\begin{subfigure}[t]{\textwidth}
+		\centering
+		% trim={<left> <lower> <right> <upper>}
+		\includegraphics[trim=2 12 5 0, clip,width=0.49\textwidth]{figures/step_Simscape}
+		\caption{Modell ugrásválasza}
+		\label{fig:SimscapeStep}
+	\end{subfigure}
+	%	~
+	%	\begin{subfigure}[t]{0.49\textwidth}
+	%		\centering
+	%%		\includegraphics[height=1.9in]{SSy}
+	%%		\caption{Szimulált ugrásválasz}
+	%%		\label{fig:SSy}
+	%	\end{subfigure}	
+	\caption{Tranziens (instacioner) hőtranszfer modellezése}
+	\label{fig:Simscape}
+	\centering
+\end{figure}
+
 
 %Természetesen lehetett volna nagyon sok állapotú állapoteres modellt is létrehozni, ám rengeteg nem mérhető belső változója lett volna, emiatt nem biztos hogy teljesen irányítható vagy megfigyelhető rendszert kaptam volna, így pedig a szabályzótervezés nem működik.
+
+
+ 
+% \textbf{ÁBRA WHITE-BOX MODELRŐL, ÉS BLACKBOX IDENTIFIKÁCIÓRÓL. ILLETVE WHITEBOX IDENT.}
+
+
+\begin{figure}[H]
+	\centering
+	% trim={<left> <lower> <right> <upper>}
+	\includegraphics[trim=0 12 5 0, clip,width=\textwidth]{figures/SimscapeHouse}
+	\caption{Helyiség termikus modellje}
+	\label{fig:SimscapeHouse}
+\end{figure}
+
+\section{A modell}
+
+A helyiség modellje a \textit{\ref{fig:SimscapeHouse}. ábrán} látható, három bemenete van: külső hőmérséklet, radiátor hője és a padlófűtés hője.
+A külső hőmérséklet egy \say{feszültség jellegű} bemenet, hőáramot nem szab meg.
+A radiátor \say{áram jellegű} kimenetet ad, hiszen itt a képlet a leadott hőt számítja: a radiátor konduktív hőárama közvetlenül a levegőt melegíti. A padlófűtés először a padlónak adja át a hőt, utána pedig a levegőnek (konduktív hőátadás), illetve a falaknak (sugárzó, radiatív hőátadás).
+
+
+\begin{table}[H]
+	\footnotesize
+	\centering
+	\caption{Egy szoba határoló felületei és azok termikus tulajdonságai}
+	\renewcommand{\arraystretch}{2} % to increase cell height
+	\taburulecolor{gray}
+	
+	%\begin{tabular}{|p{0.8cm}|p{1cm}|p{1cm}|p{1cm}|p{1cm}|p{1cm}|p{1cm}|p{1cm}|}
+	
+	\input{src/house_surface_table}
+	
+	
+	\label{table_house_parameters}
+	
+	%\label{tab:TabularExample}
+	%\tabref{TabularExample}~táblázat
+	
+\end{table}
 
 \begin{table}[H]
 	\footnotesize
@@ -64,20 +150,6 @@ Helyiségenkénti hőmérséklet-szabályzást valósítok meg, azaz a belső h�
 	%\label{tab:TabularExample}
 	%\tabref{TabularExample}~táblázat
 \end{table}
- 
- \textbf{ÁBRA WHITE-BOX MODELRŐL, ÉS BLACKBOX IDENTIFIKÁCIÓRÓL. ILLETVE WHITEBOX IDENT.}
-
-
-\begin{figure}[H]
-	\centering
-	% trim={<left> <lower> <right> <upper>}
-	\includegraphics[trim=0 12 5 0, clip,width=\textwidth]{figures/SimscapeHouse}
-	\caption{Helyiség termikus modellje}
-	\label{fig:SimscapeHouse}
-\end{figure}
-
-
-
 \section{Épületfizikai alapösszefüggések}
  
  A fizikai modell felírásához szükség van néhány alapösszefüggésre.
@@ -149,12 +221,12 @@ U = \frac{1}{\frac{1}{\alpha_e}+\sum\limits_{i}^{}\frac{d_i}{\lambda_i}+\frac{1}
 
 \subsection*{Hőtároló képesség}
 
-\begin{equation}\label{eq_hotarolo}
-\begin{aligned}
-Q_{ki,fal} &= U_{fal}A_{fal}\Delta T = 200\si{\watt}\\[10pt]
-Q_{ki,ablak} &= U_{ablak}A_{ablak}\Delta T = 400\si{\watt}
-\end{aligned}
-\end{equation}
+%\begin{equation}\label{eq_hotarolo}
+%\begin{aligned}
+%Q_{ki,fal} &= U_{fal}A_{fal}\Delta T = 200\si{\watt}\\[10pt]
+%Q_{ki,ablak} &= U_{ablak}A_{ablak}\Delta T = 400\si{\watt}
+%\end{aligned}
+%\end{equation}
 
 % \vspace{24pt}
 
@@ -164,8 +236,8 @@ Q_{ki,ablak} &= U_{ablak}A_{ablak}\Delta T = 400\si{\watt}
 
 Figyelembe kell vennem a ház hőveszteségeit és hőtároló képességét is, a () és () egyenletek alapján, melynek paraméterei a \ref{table_house_parameters}. táblázatban találhatók.
 %Ennek paraméterei: a határoló elemek felszíne, hőátbocsátási tényezője, a hőtároló elemek fajhője.
-Az alábbi táblázat értékeinek nagy részét ki lehet tölteni a tanúsítványból.
-Az épület hőigénye numerikusan is szerepel a tanúsítványban, ám ez éves szinten adott, nem csak a fűtési rendszer paramétereit, hanem a várható napsütéses órák számát ls a használati melegvíz előállításának enegiaigényét figyelembe veszi\footnote{Még mindig suta kicsit ez a mondat}.
+Az alábbi táblázat értékeinek nagy részét ki lehet tölteni a tanúsítványból. Feltételezem, hogy ez rendelkezésre áll, hiszen ennek elkészítésére elég sok esetben szükség van (adásvétel, felújítás, stb.).
+Az épület hőigénye numerikusan is szerepel a tanúsítványban, éves időszakra. Itt a fűtési rendszer , hanem a várható napsütéses órák számát és a használati melegvíz előállításának energiaigényét figyelembe veszi\footnote{Még mindig suta kicsit ez a mondat}.
 
 A Matlab Simscape model és Lapusan\footnote{Development of a Multi-Room Building Thermodynamic Model Using Simscape Library - Ciprian Lapusan} hőátadásnál a réteges szerkezetekben számolt konvekcióval és kondukcióval is. Viszont ezek az adatok egyben is kezelhetők, a követelményeket ezekre a költségoptimalizált követelményszint\footnote{ A  költségoptimalizált követelményszintek megtalálhatók a 7/2006. rendelet \cite{TNM2006} 5. mellékletében.} adja meg. Régebbi épületek ezt a szintet nem tudják teljesíteni, ezekre jellemző értékeket adtam meg az alábbi táblázatban. 
 
@@ -197,26 +269,8 @@ A Matlab Simscape model és Lapusan\footnote{Development of a Multi-Room Buildin
 
 
 
-\begin{table}[H]
-	\footnotesize
-	\centering
-	\caption{Egy szoba határoló felületei és azok termikus tulajdonságai}
-	\renewcommand{\arraystretch}{2} % to increase cell height
-	\taburulecolor{gray}
-	
-	%\begin{tabular}{|p{0.8cm}|p{1cm}|p{1cm}|p{1cm}|p{1cm}|p{1cm}|p{1cm}|p{1cm}|}
-	
-	\input{src/house_surface_table}
-	
 
-	\label{table_house_parameters}
-	
-	%\label{tab:TabularExample}
-	%\tabref{TabularExample}~táblázat
-	
-\end{table}
-
- A példában a Schönherz Zoltán kollégium egy szobájának megfelelő méretű helyiséget vettem fel. Minden szobának van ablaka és külső fala, egy átlagos szobát 4 másik vesz körül. A belső falakon nem veszt hőt, csak az ablakon ill. a külső falon. Feltételezzük, hogy a radiátoros fűtést egy szeleppel szabályozhatjuk, amit tetszőleges mértékben nyithatunk ki.
+ A példában a Schönherz Zoltán Kollégium egy szobájának megfelelő méretű helyiséget vettem fel. Minden szobának van ablaka és külső fala, egy átlagos szobát 4 másik vesz körül. A belső falakon nem veszt hőt, csak az ablakon ill. a külső falon. Feltételezzük, hogy a radiátoros fűtést egy szeleppel szabályozhatjuk, amit tetszőleges mértékben nyithatunk ki.
  A napsütés hőnyereségét is figyelembe vehetjük.%, úgy, hogy egy hőforrás a padlót melegíti.
 
 %A modell mintavételi ideje?
@@ -261,7 +315,14 @@ Amennyiben a méretezési hőmérséklet $\Delta T=$ \SI{-2}{\celsius}, ami a t�
 
 \section{Fűtési rendszer és ház kapcsolata}
 
-Ha a szabályzást egy már meglévő épületre tervezzük, akkor csak a rendszerek adatait kell felvenni, illetve identifikálni. A szakdolgozatban tárgyalt egyszerű példa során csak egy részét ismerem a paramétereknek, tehát méretezési kérdéseket is fogok érinteni.  Szerencsére az új építésű házaknál kötelező energetikai tanúsítás\footnote{TNM 2006 rendelet alapján kötelező az energetikai tanúsítvány pl. \textit{átlagos} lakóépületekre, irodákra.} egy meglehetősen részletes lajstromot ad az épület hőtechnikai tulajdonságairól. Ez alapján lehet egy hozzávetőlegesen jó modellünk az épületről, illetve a fűtési rendszerről is találhatók adatok paraméterek. Az interneten számos tanúsító cég töltött fel minta tanúsítványokat, amiben a számítások levezetése, indoklása is megtalálható. Így az energetikai tanúsítvány lehet egy interface a szakdolgozatban bemutatott modell és a gyakorlati alkalmazások között: valódi épület tanúsítványa alapján a modellem paraméterezhető.
+\begin{formal}
+	Ha a szabályzást egy már meglévő épületre tervezzük, akkor csak a rendszerek adatait kell felvenni, illetve identifikálni. A szakdolgozatban tárgyalt egyszerű példa során csak egy részét ismerem a paramétereknek, tehát méretezési kérdéseket is fogok érinteni.  Szerencsére az új építésű házaknál kötelező energetikai tanúsítás\footnote{A rendelet \cite{TNM2006} alapján kötelező az energetikai tanúsítvány pl. \textit{átlagos} lakóépületekre, irodákra. Adás-vételkor, felújításkor, stb.} egy meglehetősen részletes lajstromot ad az épület hőtechnikai tulajdonságairól. Ez alapján lehet egy hozzávetőlegesen jó modellünk az épületről, illetve a fűtési rendszerről is találhatók adatok paraméterek.
+
+\end{formal}
+
+
+
+ Az interneten számos tanúsító cég töltött fel minta tanúsítványokat, amiben a számítások levezetése, indoklása is megtalálható. Így az energetikai tanúsítvány lehet egy interface a szakdolgozatban bemutatott modell és a gyakorlati alkalmazások között: valódi épület tanúsítványa alapján a modellem paraméterezhető.
 
 
 Amikor a fűtési rendszer viselkedését szimulálom, nekem kell megalkotni mind a szabályzott épületrész, mind a fűtési rendszer modelljét. Így tehát ez a modellezésen felül egy méretezési feladat is, amit egy kész épületnél már elvégeztek a tervezés során, és a megfelelő fűtési teljesítmény áll rendelkezésre. %illeszkedik az igényekhez és a körülményekhez.

@@ -44,24 +44,29 @@ Munkámban szeretnék megvalósítani egy helyiségenkénti hőmérséklet-szab�
 
 \section*{A modell típusa, hatóköre}
 
-A szabályzáshoz a klasszikus elképzelések szerint ismerjük a szabályzott szakasz viselkedését, ellenkező esetben identifikálnunk kell azt. Ismert hálózatokra felírható gerjesztés-válasz kapcsolat, például átviteli függvények formájában. % Viszont akkor is érdemes lehet identifikálni, ha analitikusan túl hosszadalmas volna az átviteli függvény felírása.
+A szabályozáshoz a klasszikus elképzelések szerint ismerjük a szabályzott szakasz viselkedését, ellenkező esetben identifikálnunk kell azt. Ismert hálózatokra felírható gerjesztés-válasz kapcsolat, például átviteli függvények formájában. % Viszont akkor is érdemes lehet identifikálni, ha analitikusan túl hosszadalmas volna az átviteli függvény felírása.
 %Épületfizikai összefüggéseket felhasználva egyenleteket is fel lehet írni a hőfelvételre, hőleadásra. Ezen összefüggésekkel egyenértékű átviteli függvény is felírható, ha a rendszer bemeneteire gerjesztéseket adunk és mérjük a kimeneteket.  %\cite{AFRAM2014343}
 
-A szakasz először szimulációban fut, emiatt a fizikai modell felírása mellett döntöttem: a \textit{\ref{chap:helyiseg}-\ref{chap:futotest}. fejezetekben} felállítom egy helyiség és a hozzátartozó fűtőtestek modelljét. %A modellalkotást méretezési szabályok is befolyásolják. Publikációk, könyvek, adatlapok alapján validálom a felírt összefüggéseket, az ottani mérések adataiból kiindulva. 
+A szabályozott szakaszt először szimulálom, emiatt fizikai modell felírása mellett döntöttem. A \textit{\ref{chap:helyiseg}-\ref{chap:futotest}. fejezetekben} felállítom egy helyiség és a hozzátartozó fűtőtestek modelljét. %A modellalkotást méretezési szabályok is befolyásolják. Publikációk, könyvek, adatlapok alapján validálom a felírt összefüggéseket, az ottani mérések adataiból kiindulva. 
 
 %(TOVBÁBBI fűtőtestek mérése a \cite[313, 361.~o.]{Herz})
 
-A szabályzás helyiségekre van bontva, a modellben is csak egy helyiség és annak fűtési rendszere szerepel. %Ezen a szinten 
-Ennek következtében számos olyan tényező figyelembe vehető, melyek a teljes épületre %inhomogének, nem azonosak
-különbözőek: a helyiség tájolása, az ablakok mérete, a felhasználás módja mind jobban kezelhető \textit{helyben}, mint egy központi irányítással. A helyi szabályzás referenciajeleit a lakók, dolgozók komfortjának megfelelően kell megadni.
+%A belső hőmérsékletet számos jellemző befolyásolhatja. 
+A szabályzás a helyiség hőveszteségét egyenlíti ki, amit az alacsonyabb külső hőmérséklet okoz. A külső falon és az ablakon hő távozik, amelyet radiátoros és padlófűtéssel egyenlíthetünk ki.
+
+%A szabályozás helyiségekre van bontva, a modellben is csak egy helyiség és annak fűtési rendszere szerepel. %Ezen a szinten 
+
+%A 2.1 fejezetet kellene itt bevezetni.
+
+
 %\footnote{A referenciajelbe az időjárás-előrejelzési adatok is beleszólhatnak a energiamegtakarítás érdekében.}.
 %A központi irányítás ebben az esetben a helyi szabályzók referenciajeleit biztosíthatja,
 
 %A tényezőket Csoknyai \cite{Herz} gyűjtötte össze:
 
-\section*{A szabályzás folyamata, szabályzótervezés}
+\section*{A szabályozás folyamata, szabályzótervezés}
 
-A modell alapján a szabályzó szelepekkel képes beavatkozni, ezek a fűtőtestbe beáramló vízmennyiséget tudják korlátozni. A modell bemenetei a szelepek állásai és a külső hőmérséklet, kimenete a belső hőmérséklet.  A mért mennyiségek, azaz a belső és külső hőmérséklet alapján történik a szabályzás. 
+A szabályzó a  modell alapján olyan szelepekkel képes beavatkozni, melyekkel a fűtőtestbe beáramló vízmennyiség korlátozható. A szelepek állását folytonosan tudom változtatni. A modell bemenetei a szelepek állásai és a külső hőmérséklet, kimenete a belső hőmérséklet.  A belső és külső hőmérsékletet mérem, ez alapján történik a szabályzás. 
 
 Az identifikáció és a tervezés lépései a \textit{\ref{chap:ident}-\ref{chap:control}. fejezetben} olvashatóak.
 

@@ -11,32 +11,20 @@ A hasonlóság nem véletlen a villamos hálózatokkal. Felfedezhető, hogy a h�
 Ebben a fejezetben először hőtani alapösszefüggéseket ismertetek, amelyekből előáll majd a fűtőtestek teljesítményét leíró modell. Az állandósult állapotban leadott hő megkapható a beavatkozó jelek és a környezeti jellemzők (mért hőmérsékletek) függvényében (\textit{\ref{eq_holeadas4}. egyenlet}).
 A modell által számolt teljesítményt egy Simscape-ben megvalósított termikus hálózatra vezetem\footnote{A termikus hálózatok alkotóelemei nem ellenállások és kondenzátorok, hanem hővezetési tényezők és határoló elemek.}, ami a fűtőtest tranziens viselkedését adja meg. Így szimulálható a szoba felfűtése, tranziensével együtt.
 
-
-%Hőközlés során a be- és kikapcsolási tranzienseket is figyelembe kell venni, ez az az idő, 
-
-%A tranziensek ideje az, ami alatt a hőtároló elemek hőmérsékletei beállnak az állandósult állapotbeli értékükre.
-
-%A következőkben radiátoros és padlófűtés modelljét írom fel, hogy azok hőleadását a szoba felé szimulálni lehessen.
-
 %Szimuláció során olyan bekapcsolási tranziensekkel is számolnom kell, amik egy kis időállandós fűtés (pl. légbefúvás, fan-coil) esetén elhanyagolhatók lennének.
-
-%Ehhez már a Matlab Simscape környezetét fogom használni, amely képes termikus rendszerek modellezésére.
-
-% ezek együttes hőleadása adja a szoba hőnyereségét. %Állandósult állapotban ezzel megegyezik hőveszteséget pedig a külső hőmérséklet határozza meg.
-
-
 %A modellalkotás során kétféle probléma merül fel. Egyrészt modellezni kell a fűtőtestek állandósult állapotbeli hőleadást. Másrészt, ha a fűtési rendszer időállandója nagy, akkor a tranziens lefolyása is lényeges a szabályzás szempontjából.
 \section{Állandósult állapotbeli hőleadás}\label{section:allandosult}
 
-\paragraph{Szabályzott jellemző: }Mivel vizsgált fűtési rendszerek hője melegvízből származik, a fűtővíz %kazán (hőszivattyú, stb.) által előállított melegvíz
-hőmérséklete, illetve a keringető szivattyú tömegárama lehet a hőleadást befolyásoló paraméter\footnote{A kazánok a víz hőmérsékletét képesek változtatni időjárás függvényében, így az egy külön rendszer része lehet. Nem célom kazánvezérlést írni, az egyszerűség kedvéért feltételezem, hogy a melegvíz például távhő formában rendelkezésre áll.}. Az elképzelésemmel jobban összhangban áll az utóbbi választása, hiszen ezzel elosztottan, szobánként is szabályozható az egyes fűtőtestekbe táplált hőmennyiség: a víz tömegáramát folytonosan tudom szabályozni egy szelep segítségével, a fűtőtestekbe betáplált víz hőmérséklete (úgynevezett előremenő hőmérséklet) állandó.
+\paragraph{Szabályzott jellemző:} Mivel a vizsgált fűtési rendszerek hője melegvízből származik, a fűtővíz %kazán (hőszivattyú, stb.) által előállított melegvíz
+hőmérséklete, illetve a keringető szivattyú tömegárama lehet a hőleadást befolyásoló paraméter\footnote{A kazánok a víz hőmérsékletét képesek változtatni időjárás függvényében, így az egy külön rendszer része lehet. Nem célom kazánvezérlést írni, az egyszerűség kedvéért feltételezem, hogy a melegvíz például távhő formában rendelkezésre áll.}. Az elképzelésemmel jobban összhangban áll az utóbbi választása, hiszen szelepekkel elosztottan, szobánként is szabályozható az egyes fűtőtestekbe táplált hőmennyiség: a víz tömegáramát folytonosan tudom szabályozni egy szelep segítségével\footnote{A \textit{\ref{chap:feasibility-tech}. részben} mutatom be a megvalósíthatóság technikai feltételeit, pl. azt, hogy milyen szelep használatos erre a feladatra.}, a fűtőtestekbe betáplált víz hőmérséklete (úgynevezett előremenő hőmérséklet) állandó.
 
 %\vspace{6pt}
 
-A fűtőtest hőleadása függ a környezetétől is: a szabályzott jellemzőn felül a \textbf{modell bemenetéhez tartozik} a környezet hőmérséklete, ami a levegő vagy a fűtetlen objektumok hőmérséklete. (A hőleadás típusa dönti el, hogy ezek közül melyik mérvadó, lásd a sugárzó és konvektív fejezetet.)
-Ezen bemenő paraméterek és a fizikai tulajdonságok alapján megadható az állandósult állapotbeli teljesítmény. Ennek levezetése a \ref{section:allandosult}. bekezdésben található.
+A fűtőtest hőleadása függ a környezetétől is: a szabályzott jellemzőn felül a modell bemenetéhez tartozik a környezet hőmérséklete, ami a levegő vagy a fűtetlen objektumok hőmérséklete\footnote{A hőleadás típusa dönti el, hogy ezek közül melyik mérvadó. Különböző típusú fűtőtesteknél a teljesítmény más-más arányban oszlik meg konvektív és radiatív hőátadás között.}.
+Ezen bemenő paraméterek és a fizikai tulajdonságok alapján megadható az állandósult állapotbeli teljesítmény. Ennek levezetése a \textit{\ref{section:allandosult}. bekezdésben} található.
 
-A tranziensek a fűtőtestek fizikai kialakításától függnek. Minél nagyobb tömeget kell átmelegíteni azelőtt, hogy a fűtőtest felszínén a hőleadás megindulna, annál lassabb a beállási ideje az állandósult állapotnak. Így egy adott referencia trajektória esetén figyelembe kell venni ezen rendszerek dinamikáját is. A pontos paramétereket könyvekből, publikációkból, gyártói katalógusokból, méréssel, vagy becsléssel határoztam meg. A Simscape-ben minden blokknak olyan fizikai tartalma van, amiben ezek a jellemzők bevihetők, hatásuk megfigyelhető. Ezt a modellt a \ref{section:dinamikus}. bekezdésben láthatjuk.
+A tranziensek a fűtőtestek fizikai kialakításától függnek. Minél nagyobb tömeget kell átmelegíteni azelőtt, hogy a fűtőtest felszínén a hőleadás megindulna, annál lassabb a beállási ideje az állandósult állapotnak. Kikapcsoláskor a fűtőtest a szelep elzárása után is ad le hőt. %Így egy adott referencia trajektória esetén figyelembe kell venni ezen rendszerek dinamikáját is.
+A hőtárolási paramétereket könyvekből, publikációkból, gyártói katalógusokból, méréssel, vagy becsléssel határoztam meg. A Simscape-ben minden blokknak olyan fizikai tartalma van, amiben ezek a jellemzők bevihetők, hatásuk megfigyelhető. Ezt a modellt a \ref{section:dinamikus}. bekezdésben láthatjuk.
 %A modellhez szükség van pl. a fűtőtest felületi hőmérsékletének, vagy a visszatérő (lehűlt) víz hőmérsékletének mérésére.% A modellezéshez korlátozottan áll rendelkezésre információ, ugyanis nem 
 
 %\textbf{\textit{TIKZPICTURE A MODELLRŐL, DIMENZIÓKRÓL}}
@@ -46,17 +34,21 @@ A tranziensek a fűtőtestek fizikai kialakításától függnek. Minél nagyobb
 
 
 \begin{formal}
-Mivel a Matlab szimulációban a légbefúvásos fűtés modelljének teljesítmény kimenete van, olyan modellt szerettem volna felírni, ami beilleszthető az eredeti légbefúvó rendszer helyére. A ház hőveszteségeit a Matlab számolja\footnote{Pontosításra szorul ez a modell is, mert valószínűleg csak a konvektív hővezetéssel számol (a sugárzásival pedig nem). A légbefúvás a ház levegőjét melegíti. Ám a modellben a ház hőtároló tömege nem jelenik meg, csak egy hőellenállás a veszteségek modellezéséhez.}, ebből pedig adódik a szoba levegőjének hőmérséklete. A rendszer szabályozását így visszavezettem a leadott teljesítmény szabályzására. A levezetett egyenletnek köszönhetően egy teljesítményigényhez meg tudom majd mondani hogy mennyire kell a szabályzószelepeket kinyitni.
+%A munka elkezdésekor egy Simulink példa hálózatból indultam ki. Mivel a Matlab szimulációban a légbefúvásos fűtés modelljének teljesítmény kimenete van, olyan modellt szerettem volna felírni, ami beilleszthető az eredeti légbefúvó rendszer helyére. A ház hőveszteségeit a Matlab számolja\footnote{Pontosításra szorul ez a modell is, mert valószínűleg csak a konvektív hővezetéssel számol (a sugárzásival pedig nem). A légbefúvás a ház levegőjét melegíti. Ám a modellben a ház hőtároló tömege nem jelenik meg, csak egy hőellenállás a veszteségek modellezéséhez.}, ebből pedig adódik a szoba levegőjének hőmérséklete. A rendszer szabályozását így visszavezettem a leadott teljesítmény szabályzására. A levezetett egyenletnek köszönhetően egy teljesítményigényhez meg tudom majd mondani hogy mennyire kell a szabályzószelepeket kinyitni.
 
 %Angol nyelvű szakirodalomból pl. Gouda2000 alapján számolva irreális teljesítményértékeket kaptam (150kW), tovább keresve magyar nyelvű irodalmat is áttekintettem.
 
-Az \textit{Épületgépészet a gyakorlatban}\footnote{Könyvtári könyv, Verlag. 5.11.6, 2. o.} c. könyvben szó esik fűtési rendszerek méretezéséről. Itt adatként szerepel egy épületre a szobák hőigénye\footnote{Pontosan nem tudom még, hogyan definiálják a hőigényt: mekkora kültéri hőmérsékletet vesznek pl. figyelembe, illetve hogy radiátor méretezésénél ezt nyilván felül kell becsülni.} és névleges hőmérséklete. Ehhez választanak megfelelő méretű radiátort, hogy azokban a kiszámolt sebességgel vizet keringetve a hőleadás elég legyen az adott helyiségbe.
-{\scriptsize(Ehhez figyelembe kell venni minden radiátorra a keringő víz hőmérsékletét is, különösen ha azok sorba vannak kötve és a hőmérsékletesések is jelentősek.)}
+%Az \textit{Épületgépészet a gyakorlatban}\footnote{Könyvtári könyv, Verlag. 5.11.6, 2. o.} c. könyvben szó esik fűtési rendszerek méretezéséről. Itt adatként szerepel egy épületre a szobák hőigénye\footnote{Pontosan nem tudom még, hogyan definiálják a hőigényt: mekkora kültéri hőmérsékletet vesznek pl. figyelembe, illetve hogy radiátor méretezésénél ezt nyilván felül kell becsülni.} és névleges hőmérséklete. Ehhez választanak megfelelő méretű radiátort, hogy azokban a kiszámolt sebességgel vizet keringetve a hőleadás elég legyen az adott helyiségbe.
+
+%{\scriptsize(Ehhez figyelembe kell venni minden radiátorra a keringő víz hőmérsékletét is, különösen ha azok sorba vannak kötve és a hőmérsékletesések is jelentősek.)}
+
 % Adottnak véve az előremenő és visszatérő hőmérsékletet az összes hőigényből számolható a víz kívánt áramlási sebessége. Ezután meghatározzák a radiátorok méretét, hogy azoknak a hőleadása megfeleljen az előírtaknak.
 
 %A fenti példák segítenek a modellalkotásban is, felírható a radiátorok teljesítménye változó vízhőmérséklet és víz tömegáram esetén is. Természetesen a modell egyik bemenete, ez esetben a tömegáram a szabályzott mennyiség. Felteszem, hogy ezt folytonosan tudjuk szabályozni egy szelep segítségével (vagy ha ez nem életszerű, akkor kétállású szeleppel, de nagyobb frekvenciával, mint ahogy egy kazánt tudnánk ki/be kapcsolni).
 
-Hasonlóan méretezési feladatot mutat be a \cite[4.2.7.3]{Herz} is. Ezek alapján vezettem le a leadott hő mennyiségét állandósult állapotra. Természetesen a felmelegedés és lehűlés idejét is figyelembe kell majd venni, de ezzel érthető módon a méretezésnél sem számolnak.%További egyszerűsítésként elhanyagoltam a hőleadási tényező hőmérsékletfüggését is.
+A méretezési feladatot Csoknyai vezette le. \cite[359.~o.]{Herz} is. Ezek alapján vezettem le a leadott hő mennyiségét állandósult állapotra. Természetesen a felmelegedés és lehűlés idejét is figyelembe kell majd venni, de ezzel érthető módon a méretezésnél sem számolnak.
+
+%További egyszerűsítésként elhanyagoltam a hőleadási tényező hőmérsékletfüggését is.
 %Itt a hőveszteség adott. Esetünkben ezt a házra a Matlab számolja és jól méretezett rendszert tételezünk fel. Csupán azért kell a hőleadást jól felírni, hogy a felfutás, hőkapacitás, stb. során átadott energiát is belekalkuláljuk.
 \end{formal}
 %Persze ilyenkor egyedi esetekből indulok ki, de remélhetőleg ez paraméterezhetően elvezet az általános, többféle házra alkalmazható megoldáshoz.
@@ -64,46 +56,31 @@ Hasonlóan méretezési feladatot mutat be a \cite[4.2.7.3]{Herz} is. Ezek alapj
 %\subsection*{Nomenklatúra} az elejére.
 
 \subsection{Hőleadás alapegyenletei}
-A fűtőtestek hőleadását befolyásolja a fűtőtestek közepes hőmérséklet-különbsége (\textit{lásd \ref{eq_termeszeteshk_359}. egyenlet}), a felülete és a hőleadási tényezője.
+A fűtőtestek hőleadása az alábbi alakban írható (\textit{Csoknyai} \cite[358.~o.]{Herz}):
 %(A 86. oldalon $\Delta t_k$, a 358.-on $\Delta t_m$ jelöléssel találkozunk. A \cite[359.~o.]{Herz} ismét változik ugyanannak a jelölése. (\ref{termeszeteshk_359}) Ezutóbbi angol jelölés szimpatikusabb.)
-%
-Ezek közötti kapcsolatot adja az alábbi egyenlet (\textit{Csoknyai} \cite[358.~o.]{Herz}): 
 \begin{equation} \label{eq_holeadas}
-\dot Q_{le} = h_t ~ A_e ~ \Delta t_m
+\dot Q_{le} = h_t ~ A_e ~ (t_{surf} - t_i)
 \end{equation}
-%
-%
 ahol
 \begin{itemize}[itemsep=6pt,topsep=0pt,parsep=0pt,partopsep=0pt]
 \item[] $\dot{Q}_{le}$ [\SI{}{\watt}] a leadott hő
 \item[] $h_t$ [\si[per-mode = fraction]{\watt\per\meter\squared\per\kelvin}] a teljes hőleadási tényező %- ezt hőmérsékletfüggetlennek tekintem.
 \item[] $A_e$ [\si{\metre\squared}] a radiátor felülete
-\item[] $\Delta t_m$ [\SI{}{\kelvin}] a közepes hőmérsékletkülönbség:
+\item[] $t_{surf}$ a fűtőtest felületi hőmérséklete\footnote{A felületi hőmérsékletet nem tudjuk közvetlenül mérni, ezért ki kell fejeznünk ismert jellemzőkkel.}
+%\item[] $\Delta t_m$ [\SI{}{\kelvin}] a közepes hőmérsékletkülönbség:
 \end{itemize}
-%
 \begin{equation} \label{eq_termeszeteshk_359}
 \begin{aligned}
-\Delta t_m = t_{surf} - t_i \\[10pt]
 t_{surf} = \frac{t_w+t_r}{2} -t_{drop}
 \end{aligned}
 \end{equation}
 ahol \si{\celsius}-ban szerepelnek:
-%
 \begin{itemize}[itemsep=6pt,topsep=0pt,parsep=0pt,partopsep=0pt]
-	\item[] $t_{surf}$ a fűtőtest felületi hőmérséklete
 	\item[] $t_i$ a szoba hőmérséklete
 	\item[] $t_w$ a radiátorba befolyó, $t_r$ az onnan kifolyó víz hőmérséklete, ebből $\frac{t_w+t_r}{2}$ az átlagos vízhőmérséklet
 	\item[] $t_{drop}$ hőmérsékletesés a közepes fűtővízhőmérséklethez képest\footnote{A hőleadás során a fűtőközeg és a fűtőtest felülete közötti konduktív hővezetés miatt hőmérsékletesés lép fel. A padlófűtésnél lesz ez különösen releváns, hiszen ott a felület hőmérséklete jóval alacsonyabb, mint a be- és kimenő vízhőmérsékletek átlaga: hiába fűtünk \SI{40}{\celsius}-os vízzel, a padló kb. \SI{25}{\celsius}-os lesz.}
 \end{itemize}
-
-
-
-
-
 %A hőátadási tényező is hőmérsékletfüggő, de ezzel egyelőre nem foglalkozom, állandónak tekintem.
-
-
-
 %\begin{equation} \label{k_e}
 %k_e = \frac{\dot{Q}}{A~ \Delta t_m}
 %\end{equation}
@@ -112,19 +89,17 @@ ahol \si{\celsius}-ban szerepelnek:
 %
 %
 %Nominálisan $\Delta t_m$ = \SI{60}{\celsius}-ra adott érték a közepes hőmérsékletkülönbség függvényében változik:
-
+%
 \subsection{Hőfelvétel alapegyenletei}
 A vízből felvett hő felírható:
-
 \begin{equation} \label{eq_hofelvetel}
-\dot Q_{fel} = c ~ \dot{m} ~ \Delta t
+\dot Q_{fel} = c ~ (\xi\dot{m}) ~ \Delta t
 \end{equation}
-
-ahol \ref{eq_hofelvetel}
-
+ahol
 \begin{itemize}[itemsep=6pt,topsep=0pt,parsep=0pt,partopsep=0pt]
 	\item[] $\dot{Q}_{fel}$ [\SI{}{\watt}] a vízből felvett hő, ami annak lehűléséből adódik
 	\item[] $c$ [\si[per-mode = fraction]{\joule\per\kg\per\kelvin}] a víz fajhője
+	\item[] $\xi$ a szabályzó beavatkozó jele, $ \xi \in [0,1]$ folytonosan változhat 0 és 1 között
 	\item[] $\dot{m}$ [\si[per-mode = fraction]{\kg\per\second}] a víz tömegárama
 	\item[] $\Delta t = t_w-t_r$ [\SI{}{\kelvin}] a víz lehűlésének mértéke
 \end{itemize}
@@ -133,10 +108,10 @@ ahol \ref{eq_hofelvetel}
 \textbf{Állandósult állapot} esetén a leadott hő egyenlő a felvettel, mivel akkor nem történik hőfelhalmozás, hőtárolás.
 Azaz ekkor a radiátor hőkapacitását nem kell figyelembe vennem.
 
-Beírva a (\ref{eq_termeszeteshk_359})-ba (\ref{eq_holeadas})-t:
+Beírva a (\ref{eq_holeadas})-be (\ref{eq_termeszeteshk_359})-t:
 \begin{equation} \label{eq_holeadas2}
 \begin{aligned}
-\dot Q_{le} = h_t ~ A_e ~ \left( \frac{t_w+t_r}{2}-t_i\right) = k_e ~ A_e ~ \left( \frac{t_w+(t_s-\Delta t)}{2}-t_i-t_{drop}\right)
+\dot Q_{le} = h_t ~ A_e ~ \left( \frac{t_w+t_r}{2}-t_{drop} - t_i\right) = h_t ~ A_e ~ \left( \frac{t_w+(t_s-\Delta t)}{2}-t_{drop}-t_i\right)
 \end{aligned}
 \end{equation}
 
@@ -148,10 +123,10 @@ Ahol felhasználtuk azt is, hogy $t_r = t_s-\Delta t$, majd $\Delta t$ helyére 
 Beírva (\ref{eq_holeadas2})-ba (\ref{eq_hofelvetel2})-t:
 \begin{equation} \label{holeadas3}
 \begin{aligned}
-\dot Q_{le} ~=~ & h_t ~ A_e ~ \left( t_w-t_i-\frac{\dot Q_{fel}}{2~c ~ \dot{m}}\right)  \\[18pt]
-\Delta t_m &\triangleq  t_w-t_i-\frac{\dot Q_{fel}}{2~c ~ \dot{m}}
-\\[18pt]
-\dot Q_{le} + \frac{h_t ~ A_e ~ \dot Q_{fel}}{2 ~ c ~ \dot{m}} ~ = ~ & h_t ~ A_e ~\Delta T_{s,i} \\[24pt]
+\dot Q_{le} ~=~ & h_t~ A_e\left( t_w-\frac{\dot Q_{fel}}{2~c ~ \dot{m}}-t_{drop}-t_i\right)  \\[18pt]
+%\Delta t_m &\triangleq  t_w-t_i-\frac{\dot Q_{fel}}{2~c ~ \dot{m}}
+%\\[18pt]
+\dot Q_{le} + \frac{h_t ~ A_e ~ \dot Q_{fel}}{2 ~ c ~ \dot{m}} ~ = ~ & h_t ~ A_e ~\left( t_w-t_{drop}-t_i\right) \\[24pt]
 2 ~ c ~ \dot{m} ~ \dot Q_{le} + h_t ~ A_e ~ \dot Q_{fel} ~ = ~ &  h_t ~ A_e ~ 2~ c~ \dot{m} ~\Delta T_{s,i}
 \end{aligned}
 \end{equation}
@@ -164,7 +139,7 @@ Beírva (\ref{eq_holeadas2})-ba (\ref{eq_hofelvetel2})-t:
 \begin{equation} \label{eq_holeadas4}
 \begin{aligned}
 ~~~~~~\dot Q (2 ~ c ~ \dot{m} + h_t ~ A_e) & ~=~ 2 ~ h_t ~ A_e ~ c~ \dot{m} ~(t_w-t_{drop}-t_i) \\[18pt]
-~~~~~~\dot Q &~=~ \frac{2~c~\dot{m}~h_t~A_e}{2 ~c ~ \dot{m} + h_t ~ A_e}~\Delta T_{s,i}
+~~~~~~\dot Q &~=~ \frac{2~c~\dot{m}~h_t~A_e}{2 ~c ~ \dot{m} + h_t ~ A_e}~(t_w-t_{drop}-t_i)
 \end{aligned}
 \end{equation}
 
@@ -190,39 +165,6 @@ Mivel a hőleadást, hőtárolást Simscape-ben valósítottam meg, a radiátorb
 
 \section{Hőátadás tranziensének modellje}\label{section:dinamikus}
 
-A \textit{\ref{fig:Simscape}. ábrán} látható a termikus hálózat. A források lehetnek fix hőmérsékletű elemek (feszültségforrás) illetve hőáram forrásai (áramforrás). A "vezetékek" így azonos hőmérsékletű (ekvipotenciális) pontokat kötnek össze. A különböző elemekkel sorba kapcsolva helyezhetők el hőáramlást mérő blokkok. A hőáramlást a hőellenállások korlátozzák: ezeken hőmérséklet esik, ha . A hőtároló elemeknek tömege és fajhője megadja a hőkapacitásukat, így ezek feltöltődhetnek, energiát tárolhatnak.
-
-\begin{figure}[H]
-	\begin{subfigure}[t]{\textwidth}
-		\centering
-		\includegraphics[width=\textwidth]{figures/SimscapeGeneral}
-		\caption{Simscape termikus modell}
-		\label{fig:SimscapeGeneral}
-	\end{subfigure}%
-	\smallskip
-	\vspace*{10pt}
-	\begin{subfigure}[t]{\textwidth}
-		\centering
-		% trim={<left> <lower> <right> <upper>}
-		\includegraphics[trim=2 12 5 0, clip,width=0.49\textwidth]{figures/step_Simscape}
-		\caption{Modell ugrásválasza}
-		\label{fig:SimscapeStep}
-	\end{subfigure}
-	%	~
-	%	\begin{subfigure}[t]{0.49\textwidth}
-	%		\centering
-	%%		\includegraphics[height=1.9in]{SSy}
-	%%		\caption{Szimulált ugrásválasz}
-	%%		\label{fig:SSy}
-	%	\end{subfigure}	
-	\caption{Tranziens (instacioner) hőtranszfer modellezése}
-	\label{fig:Simscape}
-	\centering
-\end{figure}
-
-
-
-A \textit{\ref{fig:Simscape}. ábra} tehát megfeleltethető egy RC-tagnak\footnote{A hőtároló elem kapacitásnak, a hőközlés blokk pedig ellenállásnak felel meg.}, így az átviteli függvény identifikációja is könnyen lehetséges.
 
 
 
@@ -255,6 +197,64 @@ facade: frontal - homlokzat
 
 \subsection{Sugárzó és konvektív teljesítmény szétválasztása}
 
+A \textit{REHVA Guidebook} \cite{RehvaGuidebookNo7} címében is szerepel az \textit{alacsony hőmérsékletű fűtés} fogalom. Ez nem paradoxon, csupán azt jelenti, hogy a fűtőfelületek hőmérséklete az átlagosnál alacsonyabb. A levegőnél csak néhány fokkal magasabb hőmérsékletű fűtési rendszerekben pedig alacsonyabb lehet az előremenő vízhőmérséklet. Megújuló energiát használó rendszerekre ez előnyösebb, mint a régi, széntüzelésű kazánok által előállított 80--\SI{90}{\celsius}-os előremenő vízhőmérséklet.
+
+A kis hőmérsékletkülönbség azt következménye, hogy a levegőnek csak kevés hőt képes leadni a rendszer. Nagyobb részt sugárzással működnek ezek a rendszerek, melyet a fűtetlen felületek nyelnek el. Ezért sugárzó (radiatív) hőátvitel esetén szokásos a $t_{AUST}$ jelölés, ami a fűtetlen felületek hőmérsékletét jeleni\footnote{AUST: Average unheated surface temperature}.
+
+A sugárzási hőtranszfer alapegyenletét a Stefan-Boltzmann törvény adja
+
+
+\begin{equation} \label{eq_stefan_boltzmann}
+\begin{aligned}
+\dot Q_{r} &= \sigma \left(T_{surf}\right)^4
+\end{aligned}
+\end{equation}
+
+ahol
+\begin{itemize}[itemsep=9pt,topsep=0pt,parsep=0pt,partopsep=0pt]
+	\item[] $\sigma$ a Stefan-Boltzmann állandó [\si{W~m^{-2}.K^{-4}}] %\si[per-mode=fraction]{W/m^2K^4}% \si[per-mode=fraction]{\watt\per\metre\squared\per\kelvin\squared\squared} %eh [\si[per-mode = fraction]{\watt\per\metre\squared\per\kelvin^4}]
+	\item[] $T_{surf}$ [\si{\kelvin}] a termodinamikai, azaz kelvinben mért felületi hőmérséklet.
+\end{itemize}
+
+
+(\textit{Kilkis} \cite{KILKIS1994} ):
+
+\begin{equation} \label{eq_radiant_kilkis}
+\begin{aligned}
+\dot Q_{r} &= U_r ~ A~ \left(t_{surf}-t_{AUST}\right)\\[8pt]
+U_r&=rF\sigma\\
+r&=4 \left(\frac{T_{surf}}{2}+\frac{T_{AUST}}{2}\right)^3
+\end{aligned}
+\end{equation}
+
+
+ahol
+\begin{itemize}[itemsep=9pt,topsep=0pt,parsep=0pt,partopsep=0pt]
+	\item[] $T_{surf}, T_{AUST}$ [\si{\kelvin}] a termodinamikai, azaz kelvinben mért hőmérséklet.
+	\item[] $c$ [\si[per-mode = fraction]{\joule\per\kg\per\kelvin}] a víz fajhője
+%	\item[] $\xi$ a szabályzó beavatkozó jele, $ \xi \in [0,1]$ folytonosan változhat 0 és 1 között
+%	\item[] $\dot{m}$ [\si[per-mode = fraction]{\kg\per\second}] a víz tömegárama
+%	\item[] $\Delta t = t_w-t_r$ [\SI{}{\kelvin}] a víz lehűlésének mértéke
+\end{itemize}
+
+A sugárzó hőleadási tényező bevezetésével viszont linearizálhatjuk a hőleadást, a hőleadás így egyszerűen lineárisan függ majd a hőmérséklet-különbségtől.
+
+\begin{equation} \label{eq_radiative_hr_linear}
+\dot Q_{r} = h_r ~ A_e ~ \left(t_{surf}-t_{AUST}\right)
+\end{equation}
+
+ahol
+\begin{itemize}[itemsep=3pt,topsep=0pt,parsep=0pt,partopsep=0pt]
+	\item[] $\dot{Q}_{r}$ [\SI{}{\watt}] a leadott sugárzó hő
+	\item[] $h_r$ [\si[per-mode = fraction]{\watt\per\meter\squared\per\kelvin}] sugárzó hőleadási tényező
+	\item[] $A_e$ [\si{\metre\squared}] a padló felülete
+	\item[] $t_{surf}$ [\SI{}{\kelvin}] padló hőmérséklete
+	\item[] $t_{AUST}$ [\SI{}{\kelvin}] fűtetlen felületek átlagos hőmérséklete - a fal hőmérsékletének veszem a Simscapeben
+\end{itemize}
+
+
+\newpage
+
 Fun facts:
 ~
 \begin{itemize}[itemsep=6pt,topsep=0pt,parsep=0pt,partopsep=0pt]
@@ -278,22 +278,6 @@ Fűtött padló, falak, mennyezet esetén jelentős szerepe van a sugárzó hől
 	\item Kilkis1994 A simplified model for radiant heating and cooling panels: itt van képlet sugárzóra
 	\item Kiegészítés: \cite[349.~o.]{Herz}
 \end{itemize}  
-
-A sugárzó hőleadási tényező bevezetésével viszont linearizálhatjuk a hőleadást, a hőleadás így egyszerűen lineárisan függ majd a hőmérséklet-különbségtől.
-
-\begin{equation} \label{eq_radi-and-convective-htotal}
-\dot Q_{r} = h_r ~ A_e ~ \left(t_{surf}-t_{AUST}\right)
-\end{equation}
-
-ahol
-\begin{itemize}[itemsep=3pt,topsep=0pt,parsep=0pt,partopsep=0pt]
-	\item[] $\dot{Q}_{r}$ [\SI{}{\watt}] a leadott sugárzó hő
-	\item[] $h_r$ [\si[per-mode = fraction]{\watt\per\meter\squared\per\kelvin}] sugárzó hőleadási tényező
-	\item[] $A_e$ [\si{\metre\squared}] a padló felülete
-	\item[] $t_{surf}$ [\SI{}{\kelvin}] padló hőmérséklete
-	\item[] $t_{AUST}$ [\SI{}{\kelvin}] fűtetlen felületek átlagos hőmérséklete - a fal hőmérsékletének veszem a Simscapeben
-\end{itemize}
-
 
 \section{Radiátor modellje}
 
