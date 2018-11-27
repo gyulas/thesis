@@ -3,13 +3,11 @@
 A fűtőtestek feladata, hogy az adott szobában teljesítményt szolgáltassanak: hőt\footnote{A hő mértékegysége \si{\joule}, a teljesítményé [\si{\watt}]~=~[\si[per-mode=fraction]{\joule\per\second}]} adjanak le. A fűtőtest teljesítményével növeli a környezet hőjét:
 %, így a levegő és az épületszerkezetek felmelegszenek. 
 a levegőnek konvektív hőátadás útján, légáramlással, a környezetnek pedig radiatív hőátadással, azaz hősugárzással.
-%a levegő 
-A levegőnek, padlónak, falaknak tömegüknél és fajhőjüknél fogva mind-mind van egy hőtároló képességük (\textit{\ref{table_house_parameters}. táblázat}), egy bizonyos idő alatt tudnak feltöltődni vagy hőenergiájukat leadni: hőmérsékletük nem változhat ugrásszerűen. %Mindezekben villamosmérnöki szemszögből felfedezhetjük az analógiát a villamos hálózatokkal.
-
-A hasonlóság nem véletlen a villamos hálózatokkal. Felfedezhető, hogy a hőáramot a hőmérséklet-különbség hozza létre, nagysága pedig fordítottan arányos a hővezetési tényezővel. 
+%a levegő
 
 Ebben a fejezetben először hőtani alapösszefüggéseket ismertetek, amelyekből előáll majd a fűtőtestek teljesítményét leíró modell. Az állandósult állapotban leadott hő megkapható a beavatkozó jelek és a környezeti jellemzők (mért hőmérsékletek) függvényében (\textit{\ref{eq_holeadas4}. egyenlet}).
-A modell által számolt teljesítményt egy Simscape-ben megvalósított termikus hálózatra vezetem\footnote{A termikus hálózatok alkotóelemei nem ellenállások és kondenzátorok, hanem hővezetési tényezők és határoló elemek.}, ami a fűtőtest tranziens viselkedését adja meg. Így szimulálható a szoba felfűtése, tranziensével együtt.
+A modell által számolt teljesítményt egy Simscape-ben megvalósított termikus hálózatra vezetem\footnote{A termikus hálózatok alkotóelemei nem ellenállások és kondenzátorok, hanem hővezetési tényezők és határoló elemek.}, ami a fűtőtest tranziens viselkedését adja meg.
+%A fűtőtestek kimenetei a helyiség modelljének bemenetére csatlakoznak.
 
 %Szimuláció során olyan bekapcsolási tranziensekkel is számolnom kell, amik egy kis időállandós fűtés (pl. légbefúvás, fan-coil) esetén elhanyagolhatók lennének.
 %A modellalkotás során kétféle probléma merül fel. Egyrészt modellezni kell a fűtőtestek állandósult állapotbeli hőleadást. Másrészt, ha a fűtési rendszer időállandója nagy, akkor a tranziens lefolyása is lényeges a szabályzás szempontjából.
@@ -29,7 +27,7 @@ A hőtárolási paramétereket könyvekből, publikációkból, gyártói katal�
 
 %\textbf{\textit{TIKZPICTURE A MODELLRŐL, DIMENZIÓKRÓL}}
 
-\input{src/tikz/controlloop}
+%\input{src/tikz/controlloop}
 
 
 
@@ -117,17 +115,17 @@ Beírva a (\ref{eq_holeadas})-be (\ref{eq_termeszeteshk_359})-t:
 
 Ahol felhasználtuk azt is, hogy $t_r = t_s-\Delta t$, majd $\Delta t$ helyére beírhatjuk a (\ref{eq_hofelvetel})  átrendezett alakját:
 \begin{equation} \label{eq_hofelvetel2}
-~~\Delta t = \frac{\dot Q_{fel}}{c ~ \dot{m}}
+~~\Delta t = \frac{\dot Q_{fel}}{c ~ \xi\dot{m}}
 \end{equation}
 
 Beírva (\ref{eq_holeadas2})-ba (\ref{eq_hofelvetel2})-t:
 \begin{equation} \label{holeadas3}
 \begin{aligned}
-\dot Q_{le} ~=~ & h_t~ A_e\left( t_w-\frac{\dot Q_{fel}}{2~c ~ \dot{m}}-t_{drop}-t_i\right)  \\[18pt]
+\dot Q_{le} ~=~ & h_t~ A_e\left( t_w-\frac{\dot Q_{fel}}{2~c ~ \xi\dot{m}}-t_{drop}-t_i\right)  \\[18pt]
 %\Delta t_m &\triangleq  t_w-t_i-\frac{\dot Q_{fel}}{2~c ~ \dot{m}}
 %\\[18pt]
-\dot Q_{le} + \frac{h_t ~ A_e ~ \dot Q_{fel}}{2 ~ c ~ \dot{m}} ~ = ~ & h_t ~ A_e ~\left( t_w-t_{drop}-t_i\right) \\[24pt]
-2 ~ c ~ \dot{m} ~ \dot Q_{le} + h_t ~ A_e ~ \dot Q_{fel} ~ = ~ &  h_t ~ A_e ~ 2~ c~ \dot{m} ~\Delta T_{s,i}
+\dot Q_{le} + \frac{h_t ~ A_e ~ \dot Q_{fel}}{2 ~ c ~ \xi\dot{m}} ~ = ~ & h_t ~ A_e ~\left( t_w-t_{drop}-t_i\right) \\[24pt]
+2 ~ c ~ \xi\dot{m} ~ \dot Q_{le} + h_t ~ A_e ~ \dot Q_{fel} ~ = ~ &  h_t ~ A_e ~ 2~ c~ \xi\dot{m} ~\left( t_w-t_{drop}-t_i\right)
 \end{aligned}
 \end{equation}
 
@@ -138,8 +136,8 @@ Beírva (\ref{eq_holeadas2})-ba (\ref{eq_hofelvetel2})-t:
 
 \begin{equation} \label{eq_holeadas4}
 \begin{aligned}
-~~~~~~\dot Q (2 ~ c ~ \dot{m} + h_t ~ A_e) & ~=~ 2 ~ h_t ~ A_e ~ c~ \dot{m} ~(t_w-t_{drop}-t_i) \\[18pt]
-~~~~~~\dot Q &~=~ \frac{2~c~\dot{m}~h_t~A_e}{2 ~c ~ \dot{m} + h_t ~ A_e}~(t_w-t_{drop}-t_i)
+~~~~~~\dot Q (2 ~ c ~ \xi\dot{m} + h_t ~ A_e) & ~=~ 2 ~ h_t ~ A_e ~ c~ \xi\dot{m} ~(t_w-t_{drop}-t_i) \\[18pt]
+~~~~~~\dot Q &~=~ \frac{2~c~\xi\dot{m}~h_t~A_e}{2 ~c ~ \xi\dot{m} + h_t ~ A_e}~(t_w-t_{drop}-t_i)
 \end{aligned}
 \end{equation}
 
@@ -186,13 +184,9 @@ Q = c_{m} ~ m_m ~ \Delta t_k + c_{w} ~ m_w ~ \Delta t_k
 \end{equation}
 
 Ahol m a material, azaz a fűtőtest anyagára utal, w pedig a víz mennyiségére. A hőmennyiség joule-ban adott.
-%\subsection{Padlófűtés modellje}
-
-Aljzat, aljzatbeton: slab
-facade: frontal - homlokzat
 
 
-\subsection{Hőleadás hőmérsékletfüggése}
+%\subsection{Hőleadás hőmérsékletfüggése}
 
 
 \subsection{Sugárzó és konvektív teljesítmény szétválasztása}
@@ -237,51 +231,62 @@ ahol
 %	\item[] $\Delta t = t_w-t_r$ [\SI{}{\kelvin}] a víz lehűlésének mértéke
 \end{itemize}
 
-A sugárzó hőleadási tényező bevezetésével viszont linearizálhatjuk a hőleadást, a hőleadás így egyszerűen lineárisan függ majd a hőmérséklet-különbségtől.
+A sugárzó hőleadási tényező bevezetésével linearizálhatjuk a hőleadást, a hőleadás így egyszerűen lineárisan függ majd a hőmérséklet-különbségtől. Gyakran összevonják a konvektív és a sugárzási hőátadási tényezőt.
+
+\textit{Cholewa} \cite{CHOLEWA2013599} a $h_r$ paramétert méréssel határozta meg. (5) egyenlet.
+
+
 
 \begin{equation} \label{eq_radiative_hr_linear}
-\dot Q_{r} = h_r ~ A_e ~ \left(t_{surf}-t_{AUST}\right)
+\dot Q_{r} = h_r ~ A ~ \left(t_{surf}-t_{AUST}\right)
 \end{equation}
 
 ahol
 \begin{itemize}[itemsep=3pt,topsep=0pt,parsep=0pt,partopsep=0pt]
 	\item[] $\dot{Q}_{r}$ [\SI{}{\watt}] a leadott sugárzó hő
 	\item[] $h_r$ [\si[per-mode = fraction]{\watt\per\meter\squared\per\kelvin}] sugárzó hőleadási tényező
-	\item[] $A_e$ [\si{\metre\squared}] a padló felülete
+	\item[] $A$ [\si{\metre\squared}] a padló felülete
 	\item[] $t_{surf}$ [\SI{}{\kelvin}] padló hőmérséklete
 	\item[] $t_{AUST}$ [\SI{}{\kelvin}] fűtetlen felületek átlagos hőmérséklete - a fal hőmérsékletének veszem a Simscapeben
 \end{itemize}
 
 
-\newpage
+%\newpage
 
-Fun facts:
-~
-\begin{itemize}[itemsep=6pt,topsep=0pt,parsep=0pt,partopsep=0pt]
-	\item A falakra az $\alpha$ = 10 \si[per-mode = fraction]{\watt\per\meter\squared\per\kelvin} érték a sugárzó és konvektív hőleadást is tartalmazza. A konvektív hőleadás függ a felületi áramlási sebességtől: falsaroknál ez az érték alacsonyabb, kb. a fele.
-	\item A sugárzó hő a Stefan-Boltzmann törvény alapján függ az emisszivitástól. (Annak a mértéke, hogy a test a feketetesthez képest mennyi hőt bocsát ki). A hőmennyiség a hőmérséklet negyedik hatványával arányos. A \textbf{sugárzott hő meghatározásához} még meg kell keresni és be kell írni a Simscape blokkba a megfelelő együtthatókat. Valami általános összefüggést kell találni, hogy a radiátor milyen arányban melegíti a külső falat, ahol van, ill. az ablakra milyen hatással van: még nem kezelem le ezeket az aszimmetriákat, hanem minden hőmérsékleteloszlást homogénnek veszek. A Stefan-Boltzmann törvény direkt alkalmazása helyett a szabványokban és irodalomban található közelítésekkel élek.
-	\item A $q_r$ [\si[per-mode = fraction]{\watt\per\meter\squared}] \textit{radiant heat flux density} a \cite{CHOLEWA2013599} T. Cholewa
-	%\footnote{On the heat transfer coefficients between heated/cooled radiant floor and room. \\ DOI: http://dx.doi.org/10.1016/j.enbuild.2013.07.065}
-	(5.) egyenlet alapján számítható de az a geometriától is nagyban függ. Helyette Kilkis1994 (4) és (6) javasolt, illetve a \cite{CHOLEWA2013599}-ból is lehet mért értékekkel számolni / a szabványok ajánlását használni.
-	\item A hőhidak a hőveszteségek meglepően nagy részéért felelősek, jelentős hibát követünk el, ha ezekkel nem számolunk. Meg kell keresni az energ. tanúsítványokban hogy hol tüntetik fel ezek mértékét.
-	\item \cite[5.188.~o.]{watson2002radiant} szerint az operatív hőmérséklet $t_{op}~=~\frac{h_rT_{mrt}~+~h_cT_{air}}{h_{tot}}$, ahol $T_{mrt}~=~\frac{\sum\limits_{k=1}^{n}A_k\epsilon_kT_k}{\sum\limits_{k=1}^{n}A_k\epsilon_k}$. Az $\epsilon$ emittancia a StefBol képletből való.
-	
-	
-\end{itemize} 
-
-Fűtött padló, falak, mennyezet esetén jelentős szerepe van a sugárzó hőleadásnak.
-
-\begin{itemize}[itemsep=0pt,topsep=0pt,parsep=0pt,partopsep=0pt]
-	\item A.Laouadi / Building and Environment 39 (2004) 421 – 431 - p424, eq. 10-11: radiant heat transfer model
-	\item TEMPERATURE CONTROL STRATEGIES FOR RADIANT FLOOR HEATING SYSTEMS, Zhi Long Zhang: 40.o.  
-	\item \cite{CHOLEWA2013599} T. Cholewa et al. / Energy and Buildings 66 (2013) 599–606 - Table 5: coefficient
-	\item Kilkis1994 A simplified model for radiant heating and cooling panels: itt van képlet sugárzóra
-	\item Kiegészítés: \cite[349.~o.]{Herz}
-\end{itemize}  
+%Fun facts:
+%~
+%\begin{itemize}[itemsep=6pt,topsep=0pt,parsep=0pt,partopsep=0pt]
+%	\item A falakra az $\alpha$ = 10 \si[per-mode = fraction]{\watt\per\meter\squared\per\kelvin} érték a sugárzó és konvektív hőleadást is tartalmazza. A konvektív hőleadás függ a felületi áramlási sebességtől: falsaroknál ez az érték alacsonyabb, kb. a fele.
+%	\item A sugárzó hő a Stefan-Boltzmann törvény alapján függ az emisszivitástól. (Annak a mértéke, hogy a test a feketetesthez képest mennyi hőt bocsát ki). A hőmennyiség a hőmérséklet negyedik hatványával arányos. A \textbf{sugárzott hő meghatározásához} még meg kell keresni és be kell írni a Simscape blokkba a megfelelő együtthatókat. Valami általános összefüggést kell találni, hogy a radiátor milyen arányban melegíti a külső falat, ahol van, ill. az ablakra milyen hatással van: még nem kezelem le ezeket az aszimmetriákat, hanem minden hőmérsékleteloszlást homogénnek veszek. A Stefan-Boltzmann törvény direkt alkalmazása helyett a szabványokban és irodalomban található közelítésekkel élek.
+%	
+%%	\item A $q_r$ [\si[per-mode = fraction]{\watt\per\meter\squared}] \textit{radiant heat flux density} a \cite{CHOLEWA2013599} T. Cholewa
+%%	%\footnote{On the heat transfer coefficients between heated/cooled radiant floor and room. \\ DOI: http://dx.doi.org/10.1016/j.enbuild.2013.07.065}
+%%	(5.) egyenlet alapján számítható de az a geometriától is nagyban függ. Helyette Kilkis1994 (4) és (6) javasolt, illetve a \cite{CHOLEWA2013599}-ból is lehet mért értékekkel számolni / a szabványok ajánlását használni.
+%
+%
+%	\item A hőhidak a hőveszteségek meglepően nagy részéért felelősek, jelentős hibát követünk el, ha ezekkel nem számolunk. Az energetikai tanúsítvány számol ezekkel, így a modellben a veszteséghez ezt is hozzá lehet adni.
+%	
+%	
+%	\item \cite[5.188.~o.]{watson2002radiant} szerint az operatív hőmérséklet $t_{op}~=~\frac{h_rT_{mrt}~+~h_cT_{air}}{h_{tot}}$, ahol $T_{mrt}~=~\frac{\sum\limits_{k=1}^{n}A_k\epsilon_kT_k}{\sum\limits_{k=1}^{n}A_k\epsilon_k}$. Az $\epsilon$ emittancia a StefBol képletből való.
+%	
+%	
+%\end{itemize} 
+%
+%Fűtött padló, falak, mennyezet esetén jelentős szerepe van a sugárzó hőleadásnak.
+%
+%\begin{itemize}[itemsep=0pt,topsep=0pt,parsep=0pt,partopsep=0pt]
+%	\item A.Laouadi / Building and Environment 39 (2004) 421 – 431 - p424, eq. 10-11: radiant heat transfer model - (11)-es egyenlet
+%	\item TEMPERATURE CONTROL STRATEGIES FOR RADIANT FLOOR HEATING SYSTEMS, Zhi Long Zhang: 40.o.  
+%%	\item \cite{CHOLEWA2013599} T. Cholewa et al. / Energy and Buildings 66 (2013) 599–606 - Table 5: coefficient
+%%	\item Kilkis1994 A simplified model for radiant heating and cooling panels: itt van képlet sugárzóra
+%	\item Kiegészítés: \cite[349.~o.]{Herz}
+%\end{itemize}  
 
 \section{Radiátor modellje}
 
 A képletben élhetünk azzal a közelítéssel, hogy $\Delta t_k=\frac{t_{ws}+t_{wr}}{2}-t_i$. Ezzel a következő alakban számolhatunk:
+
+\textit{\ref{eq_holeadas4}. egyenletben} szereplő paraméterek értéke:
 
 \subsection{Paraméterek}
 A felmelegedéskor és lehűléskor a pontos hőleadást akkor tudjuk modellezni, ha ismerjük a radiátor hőkapacitását. Ehhez tudnunk kell, hogy a radiátorban mennyi víz van, illetve hogy a radiátortest milyen nehéz.
