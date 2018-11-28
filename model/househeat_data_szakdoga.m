@@ -14,16 +14,16 @@
 %%
 
 
-%T_s=30;                     %% second
-% timeUnit_1min=60/T_s;
-% timeUnit_1hour=3600/T_s;
-% timeUnit_1day=timeUnit_1hour*24;
-% timeUnit_1week=7*timeUnit_1day;
+T_s=600;                     %% second
+timeUnit_1min=60/T_s;
+timeUnit_1hour=3600/T_s;
+timeUnit_1day=timeUnit_1hour*24;
+timeUnit_1week=7*timeUnit_1day;
 
 % TinIC = initial indoor temperature = 20 deg C
-TinIC = 0;
-TinHeatK=273+0; %[K] heating elements
-supp_water_initial_temp=0;         %   [Celsius]
+TinIC = 10;
+TinHeatK=273+10; %[K] heating elements
+supp_water_initial_temp=10;         %   [Celsius]
 
 
 
@@ -109,8 +109,8 @@ h_w_radi=150;                       % k [W/m^2K]
 % c_w=4189;                           % c [J/kgK] viz fajhoje
 
 %C22 600 mm magas:
-l_r=1.5;                            % l [m] a radiator hossza
-area_radiator=l_r*0.8;                  % A [m^2]
+l_r=2;                              % l [m] a radiator hossza
+area_radiator=l_r*0.8*3;            % A [m^2] - 3-as szorzo: lamellak, stb.
 m_r=33.4*l_r;                       % m [kg]    --     tomege
 c_metal=464;                        % c [J/kgK] acel fajhoje
 m_w_r=6.6*l_r;                      % m [kg] = rho*V a viz tomege, 1kg/l/rel szamolva
@@ -123,9 +123,9 @@ heat_transfer_const_radiator=h_c_radi;
 % -------------------------------
 % Floor heating parameters
 % -------------------------------
-area_floor=1.56^2;                    % A [m^2]
+area_floor=15;                    % A [m^2]
 heat_transfer_const_floorheat=9.5;
-supp_water_flow_f=0.05;
+supp_water_flow_f=0.035;
 
 % -------------------------------
 
