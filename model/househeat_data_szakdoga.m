@@ -4,7 +4,17 @@
 
 %   Copyright 1990-2012 The MathWorks, Inc.
 
-T_s=60;                     %% second
+%% Reference to MPC
+%not working this waz
+%ref=[20*ones(1,3600*24) 25*ones(1,3600*24) 20*ones(1,3600*24) 25*ones(1,3600*24) 20*ones(1,3600*24) 25*ones(1,3600*24) ];
+
+
+
+
+%%
+
+
+T_s=600;                     %% second
 timeUnit_1min=60/T_s;
 timeUnit_1hour=3600/T_s;
 timeUnit_1day=timeUnit_1hour*24;
@@ -84,21 +94,38 @@ water_heat_capacity=4183;           % c [J/kgK]
 supp_water_flow=0.05;               % m [kg/s]
 %heat_transfer_const
 %h_c_rad=11;                                                                % k [W/m^2K]
-%h_r_radi=0.1*5.67e-8;               % k [W/m^2K^4] q=eps*sigma*A*T^4
+%h_r_radi=0.1*5.67e-8;              % k [W/m^2K^4] q=eps*sigma*A*T^4
 h_c_radi=7;                         % k [W/m^2K]
+t_w=90;
+t_m=60;                             % közepes hõmkül
+%h_c_radi=5.29*(t_m/60)^0.25;        % k [W/m^2K] % Csoknai, 337.o. 
 h_w_radi=150;                       % k [W/m^2K]
-area_radiator=2;                    % A [m^2]
 
-% C22 600 mm magas:
-l_r=1.5;                            % l [m] a radiator hossza
+% C11 450 mm magas:
+% l_r=1;                              % l [m] a radiator hossza
+% m_r=14.4*l_r;                       % m [kg]    --     tomege
+% c_metal=464;                        % c [J/kgK] acel fajhoje
+% m_w_r=2.3*l_r;                      % m [kg] = rho*V a viz tomege, 1kg/l/rel szamolva
+% c_w=4189;                           % c [J/kgK] viz fajhoje
+
+%C22 600 mm magas:
+l_r=2;                              % l [m] a radiator hossza
+area_radiator=l_r*0.8*3;            % A [m^2] - 3-as szorzo: lamellak, stb.
 m_r=33.4*l_r;                       % m [kg]    --     tomege
-c_metal=464;                           % c [J/kgK] acel fajhoje
+c_metal=464;                        % c [J/kgK] acel fajhoje
 m_w_r=6.6*l_r;                      % m [kg] = rho*V a viz tomege, 1kg/l/rel szamolva
 c_w=4189;                           % c [J/kgK] viz fajhoje
 
 
 water_heat_capacity=c_w;
 heat_transfer_const_radiator=h_c_radi;
+
+% -------------------------------
+% Floor heating parameters
+% -------------------------------
+area_floor=15;                    % A [m^2]
+heat_transfer_const_floorheat=9.5;
+supp_water_flow_f=0.035;
 
 % -------------------------------
 

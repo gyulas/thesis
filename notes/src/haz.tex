@@ -61,7 +61,10 @@ A források lehetnek fix hőmérsékletű elemek (feszültségforrás) illetve h
 %A hasonlóság nem véletlen a villamos hálózatokkal. Felfedezhető, hogy a hőáramot a hőmérséklet-különbség hozza létre, nagysága pedig fordítottan arányos a hővezetési tényezővel. 
 A "vezetékek" így azonos hőmérsékletű (ekvipotenciális) pontokat kötnek össze, ezekre hőmérsékletmérőket helyezhetünk. A különböző elemekkel sorba kapcsolva helyezhetők el hőáramlást mérő blokkok.
 
-A hőáramlást a hőellenállások korlátozzák, mivel azokon hőmérsékletesés mérhető. (Az ábrán mért hőáram a hőellenálláson eső hőmérséklettel arányos, a \textit{\ref{eq_hoaram_alap}. egyenlet} szerint.) A hőtároló elemeknek tömege és fajhője megadja a hőkapacitásukat, így ezek feltöltődhetnek, energiát tárolhatnak. A mintahálózat egy RC-tagnak felel meg, erre a szabályzótervezés lépései a következők lennének:
+A hőáramlást a hőellenállások korlátozzák, mivel azokon hőmérsékletesés mérhető. (Az ábrán mért hőáram a hőellenálláson eső hőmérséklettel arányos, a \textit{\ref{eq_hoaram_alap}. egyenlet} szerint.) A hőtároló elemeknek tömege és fajhője megadja a hőkapacitásukat, így ezek feltöltődhetnek, energiát tárolhatnak.
+
+
+A mintahálózat egy RC-tagnak felel meg, erre a szabályzótervezés lépései a következők lennének:
 
 Az identifikációnál ismert a rendszer jellege, így 0 zérussal, 1 pólussal átviteli függvényt identifikálnék.
 Erre szabályzót lehetne tervezni. A szimuláció során a termikus hálózat alapjele helyére kerülne a szabályzó beavatkozó jele. A visszacsatolás a hőmérő kimenetéről történne. Ekkor, mivel a tervezés során használt modell és a  szakasz között nincs eltérés (angolul \textit{mismatch}), a szabályzás jól működik.
@@ -124,7 +127,7 @@ A levegőnek, padlónak, falaknak tömegüknél és fajhőjüknél fogva mind-mi
 \begin{table}[H]
 	\footnotesize
 	\centering
-	\caption{Egy szoba határoló felületei és azok termikus tulajdonságai}
+	\caption{A helyiség modelljének elemei}
 	\renewcommand{\arraystretch}{2} % to increase cell height
 	\taburulecolor{gray}
 	
