@@ -366,7 +366,7 @@ int main()
     data_receiver server(io_service);
     io_service.run();
     
-%soha nnem hivjuk
+//WTF soha nnem hivjuk
     auto sned_data = [](){
         boost::asio::io_service io;
         boost::asio::ip::tcp::socket socket{io};
