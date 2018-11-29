@@ -55,8 +55,13 @@ public:
 
         if(invalid_args)
             throw std::make_error_code(std::errc::invalid_argument);
+		/////////////////////////////////////////////////////////////
+		// construct SPI message for LED controller command
 
+		//header
         std::vector<unsigned char> message = magic;
+
+		// writing data from Simulink to 4 LED channels
         unsigned char filler;
         if(num > 0)
             filler = static_cast<unsigned char>(1);
@@ -67,8 +72,22 @@ public:
         for(size_t i = 0; i < 4; i++)
             message.push_back(static_cast<unsigned char>(num));
 
-        while(message.size() < 64)
-            message.push_back('X');
+		//further settings
+
+		while (message.size() < 36)
+		{
+			// on/off time and type of input
+			message.push_back('0');
+		}
+
+		while (message.size() < 64)
+		{
+			// don't care
+			message.push_back('X');
+		}
+		/////////////////////////////////////////////////////////////
+
+		// cute comment on terminal
 
         if(char_num_printed == 0)
             if(debug)
@@ -290,7 +309,7 @@ private:
   }
 
   void handle_receive(const boost::system::error_code& error,std::size_t size){
-    if(!out_temp){
+/*    if(!out_temp){
         remote_endpoint_.port(9089);
         std::tuple<std::string,short unsigned> ngbs_addr{"192.168.0.115",502};
 	std::cout<< "constructing thread" << std::endl;
@@ -300,7 +319,7 @@ private:
 		std::cout<< "created temp thing" << std::endl;
 		temp_thing.run();
 	});
-    }
+    }*/
 
     if (!error || error == boost::asio::error::message_size){
       buff.commit(size);
@@ -347,6 +366,7 @@ int main()
     data_receiver server(io_service);
     io_service.run();
     
+%soha nnem hivjuk
     auto sned_data = [](){
         boost::asio::io_service io;
         boost::asio::ip::tcp::socket socket{io};
