@@ -1,6 +1,6 @@
 \chapter{Fűtőtestek modellje}\label{chap:futotest}
 
-A fűtőtestek feladata, hogy az adott szobában teljesítményt szolgáltassanak: hőt\footnote{A hő mértékegysége \si{\joule}, a teljesítményé [\si{\watt}]~=~[\si[per-mode=fraction]{\joule\per\second}]} adjanak le. A fűtőtest teljesítményével növeli a környezet hőjét:
+A fűtőtestek feladata, hogy az adott szobában teljesítményt szolgáltassanak, hőt\footnote{A hő mértékegysége \si{\joule}, a teljesítményé [\si{\watt}]~=~[\si[per-mode=fraction]{\joule\per\second}]} adjanak le. A fűtőtest teljesítményével növeli a környezet hőjét:
 %, így a levegő és az épületszerkezetek felmelegszenek. 
 a levegőnek konvektív hőátadás útján, légáramlással, a környezetnek pedig radiatív hőátadással, azaz hősugárzással.
 %a levegő
@@ -14,12 +14,12 @@ A modell által számolt teljesítményt egy Simscape-ben megvalósított termik
 \section{Állandósult állapotbeli hőleadás}\label{section:allandosult}
 
 \paragraph{Szabályzott jellemző:} Mivel a vizsgált fűtési rendszerek hője melegvízből származik, a fűtővíz %kazán (hőszivattyú, stb.) által előállított melegvíz
-hőmérséklete, illetve a keringető szivattyú tömegárama lehet a hőleadást befolyásoló paraméter\footnote{A kazánok a víz hőmérsékletét képesek változtatni időjárás függvényében, így az egy külön rendszer része lehet. Nem célom kazánvezérlést írni, az egyszerűség kedvéért feltételezem, hogy a melegvíz például távhő formában rendelkezésre áll.}. Az elképzelésemmel jobban összhangban áll az utóbbi választása, hiszen szelepekkel elosztottan, szobánként is szabályozható az egyes fűtőtestekbe táplált hőmennyiség: a víz tömegáramát folytonosan tudom szabályozni egy szelep segítségével\footnote{A \textit{\ref{chap:feasibility-tech}. részben} mutatom be a megvalósíthatóság technikai feltételeit, pl. azt, hogy milyen szelep használatos erre a feladatra.}, a fűtőtestekbe betáplált víz hőmérséklete (úgynevezett előremenő hőmérséklet) állandó.
+hőmérséklete, illetve a keringető szivattyú tömegárama lehet a hőleadást befolyásoló paraméter\footnote{A kazánok a víz hőmérsékletét képesek változtatni időjárás függvényében, így az egy külön rendszer része lehet. Nem célom kazánvezérlést írni, az egyszerűség kedvéért feltételezem, hogy a melegvíz például távhő formában rendelkezésre áll.}. Az elképzelésemmel jobban összhangban áll az utóbbi választása, hiszen szelepekkel elosztottan, szobánként is szabályozható az egyes fűtőtestekbe táplált hőmennyiség: a víz tömegáramát folytonosan tudom szabályozni egy szelep segítségével\footnote{A \textit{\ref{chap:feasibility-tech}. részben} mutatom be a megvalósíthatóság technikai feltételeit, például azt, hogy milyen szelep használatos erre a feladatra.}, a fűtőtestekbe betáplált víz hőmérséklete (úgynevezett előremenő hőmérséklet) állandó.
 
 %\vspace{6pt}
 
-A fűtőtest hőleadása függ a környezetétől is: a szabályzott jellemzőn felül a modell bemenetéhez tartozik a környezet hőmérséklete, ami a levegő vagy a fűtetlen objektumok hőmérséklete\footnote{A hőleadás típusa dönti el, hogy ezek közül melyik mérvadó. Különböző típusú fűtőtesteknél a teljesítmény más-más arányban oszlik meg konvektív és radiatív hőátadás között.}.
-Ezen bemenő paraméterek és a fizikai tulajdonságok alapján megadható az állandósult állapotbeli teljesítmény. Ennek levezetése a \textit{\ref{section:allandosult}. bekezdésben} található.
+A fűtőtest hőleadása függ a környezetétől is. A szabályzott jellemzőn felül a modell bemenetéhez tartozik a környezet hőmérséklete, ami a levegő vagy a fűtetlen objektumok hőmérséklete\footnote{A hőleadás típusa dönti el, hogy ezek közül melyik mérvadó. Különböző típusú fűtőtesteknél a teljesítmény más-más arányban oszlik meg konvektív és radiatív hőátadás között.}.
+Ezen bemenő paraméterek és a fizikai tulajdonságok alapján megadható az állandósult állapotbeli teljesítmény. Ennek levezetése ebben a bekezdésben található.
 
 A tranziensek a fűtőtestek fizikai kialakításától függnek. Minél nagyobb tömeget kell átmelegíteni azelőtt, hogy a fűtőtest felszínén a hőleadás megindulna, annál lassabb a beállási ideje az állandósult állapotnak. Kikapcsoláskor a fűtőtest a szelep elzárása után is ad le hőt. %Így egy adott referencia trajektória esetén figyelembe kell venni ezen rendszerek dinamikáját is.
 A hőtárolási paramétereket könyvekből, publikációkból, gyártói katalógusokból, méréssel, vagy becsléssel határoztam meg. A Simscape-ben minden blokknak olyan fizikai tartalma van, amiben ezek a jellemzők bevihetők, hatásuk megfigyelhető. Ezt a modellt a \textit{\ref{section:dinamikus}. bekezdésben} láthatjuk.
@@ -33,18 +33,17 @@ A hőtárolási paramétereket könyvekből, publikációkból, gyártói katal�
 
 \begin{formal}
 %A munka elkezdésekor egy Simulink példa hálózatból indultam ki. Mivel a Matlab szimulációban a légbefúvásos fűtés modelljének teljesítmény kimenete van, olyan modellt szerettem volna felírni, ami beilleszthető az eredeti légbefúvó rendszer helyére. A ház hőveszteségeit a Matlab számolja\footnote{Pontosításra szorul ez a modell is, mert valószínűleg csak a konvektív hővezetéssel számol (a sugárzásival pedig nem). A légbefúvás a ház levegőjét melegíti. Ám a modellben a ház hőtároló tömege nem jelenik meg, csak egy hőellenállás a veszteségek modellezéséhez.}, ebből pedig adódik a szoba levegőjének hőmérséklete. A rendszer szabályozását így visszavezettem a leadott teljesítmény szabályzására. A levezetett egyenletnek köszönhetően egy teljesítményigényhez meg tudom majd mondani hogy mennyire kell a szabályzószelepeket kinyitni.
-
+%
 %Angol nyelvű szakirodalomból pl. Gouda2000 alapján számolva irreális teljesítményértékeket kaptam (150kW), tovább keresve magyar nyelvű irodalmat is áttekintettem.
-
+%
 %Az \textit{Épületgépészet a gyakorlatban}\footnote{Könyvtári könyv, Verlag. 5.11.6, 2. o.} c. könyvben szó esik fűtési rendszerek méretezéséről. Itt adatként szerepel egy épületre a szobák hőigénye\footnote{Pontosan nem tudom még, hogyan definiálják a hőigényt: mekkora kültéri hőmérsékletet vesznek pl. figyelembe, illetve hogy radiátor méretezésénél ezt nyilván felül kell becsülni.} és névleges hőmérséklete. Ehhez választanak megfelelő méretű radiátort, hogy azokban a kiszámolt sebességgel vizet keringetve a hőleadás elég legyen az adott helyiségbe.
-
+%
 %{\scriptsize(Ehhez figyelembe kell venni minden radiátorra a keringő víz hőmérsékletét is, különösen ha azok sorba vannak kötve és a hőmérsékletesések is jelentősek.)}
-
+%
 % Adottnak véve az előremenő és visszatérő hőmérsékletet az összes hőigényből számolható a víz kívánt áramlási sebessége. Ezután meghatározzák a radiátorok méretét, hogy azoknak a hőleadása megfeleljen az előírtaknak.
-
+%
 %A fenti példák segítenek a modellalkotásban is, felírható a radiátorok teljesítménye változó vízhőmérséklet és víz tömegáram esetén is. Természetesen a modell egyik bemenete, ez esetben a tömegáram a szabályzott mennyiség. Felteszem, hogy ezt folytonosan tudjuk szabályozni egy szelep segítségével (vagy ha ez nem életszerű, akkor kétállású szeleppel, de nagyobb frekvenciával, mint ahogy egy kazánt tudnánk ki/be kapcsolni).
-
-A méretezési feladatot Csoknyai vezette le. \cite[359.~o.]{Herz} is. Ezek alapján vezettem le a leadott hő mennyiségét állandósult állapotra. Természetesen a felmelegedés és lehűlés idejét is figyelembe kell majd venni, de ezzel érthető módon a méretezésnél sem számolnak.
+\textbf{Megjegyzés:} A méretezési feladatot \textit{Csoknyai} \cite[359.~o.]{Herz} tárgyalja. Ezek alapján vezettem le a leadott hő mennyiségét állandósult állapotra. Természetesen a felmelegedés és lehűlés idejét is figyelembe kell majd venni, de ezzel érthető módon a méretezésnél sem számolnak.
 
 %További egyszerűsítésként elhanyagoltam a hőleadási tényező hőmérsékletfüggését is.
 %Itt a hőveszteség adott. Esetünkben ezt a házra a Matlab számolja és jól méretezett rendszert tételezünk fel. Csupán azért kell a hőleadást jól felírni, hogy a felfutás, hőkapacitás, stb. során átadott energiát is belekalkuláljuk.
@@ -109,11 +108,11 @@ Azaz ekkor a radiátor hőkapacitását nem kell figyelembe vennem.
 Beírva a (\ref{eq_holeadas})-be (\ref{eq_termeszeteshk_359})-t:
 \begin{equation} \label{eq_holeadas2}
 \begin{aligned}
-\dot Q_{le} = h_t ~ A_e ~ \left( \frac{t_w+t_r}{2}-t_{drop} - t_i\right) = h_t ~ A_e ~ \left( \frac{t_w+(t_s-\Delta t)}{2}-t_{drop}-t_i\right)
+\dot Q_{le} = h_t ~ A_e ~ \left( \frac{t_w+t_r}{2}-t_{drop} - t_i\right) = h_t ~ A_e ~ \left( \frac{t_w+(t_w-\Delta t)}{2}-t_{drop}-t_i\right)
 \end{aligned}
 \end{equation}
 
-Ahol felhasználtuk azt is, hogy $t_r = t_s-\Delta t$, majd $\Delta t$ helyére beírhatjuk a (\ref{eq_hofelvetel})  átrendezett alakját:
+Ahol felhasználtuk azt is, hogy $t_r = t_w-\Delta t$, majd $\Delta t$ helyére beírhatjuk a (\ref{eq_hofelvetel})  átrendezett alakját:
 \begin{equation} \label{eq_hofelvetel2}
 ~~\Delta t = \frac{\dot Q_{fel}}{c ~ \xi\dot{m}}
 \end{equation}
@@ -142,9 +141,9 @@ Beírva (\ref{eq_holeadas2})-ba (\ref{eq_hofelvetel2})-t:
 \end{equation}
 
 Ez adja meg a fűtési rendszer által szolgáltatott teljesítményt állandósult állapotban.
-A fenti képletben a hőleadási tényezőt hőmérsékletfüggőnek is lehet venni, \cite{CHOLEWA2013599} mérései alapján.
+A fenti képletben a hőleadási tényezőt hőmérsékletfüggőnek is lehet venni, \textit{Cholewa}~\cite{CHOLEWA2013599} mérései alapján.
 
-\textbf{Állandósult állapotra a szükséges beavatkozójel adott kimenő teljesítményhez:} \ref{eq_holeadas4} egyenletet kell $\alpha~\dot{m}$-ra (ill. csak $\alpha$-ra) rendezni.
+\textbf{Állandósult állapotra a szükséges beavatkozójel adott kimenő teljesítményhez:} \ref{eq_holeadas4} egyenletet kell $\xi$-re rendezni, ami a beavatkozó jel.
 
 Mivel a hőleadást, hőtárolást Simscape-ben valósítottam meg, a radiátorba bemenő hőt kell csak kiszámítani. Erre meg kell vizsgálni, hogy az állandósult állapotbeli képlet helyes-e.
 
@@ -284,7 +283,7 @@ ahol
 
 \section{Radiátor modellje}
 
-A képletben élhetünk azzal a közelítéssel, hogy $\Delta t_k=\frac{t_{ws}+t_{wr}}{2}-t_i$. Ezzel a következő alakban számolhatunk:
+A képletben élhetünk azzal a közelítéssel, hogy $\Delta t_k=\frac{t_{w}+t_{r}}{2}-t_i$. Ezzel a következő alakban számolhatunk:
 
 \textit{\ref{eq_holeadas4}. egyenletben} szereplő paraméterek értéke:
 

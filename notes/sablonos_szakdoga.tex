@@ -52,6 +52,8 @@
 \usepackage{tabulary}
 \usepackage{multirow} % join cells
 \usepackage{makecell} % multiple row
+\usepackage{hhline}
+
 
 % TIKZPICTURES:
 \usepackage{pgf}
@@ -96,7 +98,7 @@
 \newcommand{\viktanszek}{Irányítástechnika és Informatika Tanszék}
 
 \newcommand{\vikdoktipus}{Szakdolgozat}
-
+\newcommand{\vikmunkatipusat}{szakdolgozatot} % a "hallgató nyilatkozat" részhez: szakdolgozatot vagy diplomatervet
 
 %--------------------------------------------------------------------------------------
 % Page layout setup
@@ -209,8 +211,10 @@ aboveskip=10pt}
 % Table of contents and the main text
 %--------------------------------------------------------------------------------------
 \begin{document}
+\pagenumbering{gobble}
 \singlespacing
 \input{src/titlepage}
+\input{src/declaration}
 
 
 \pagenumbering{arabic}

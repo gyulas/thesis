@@ -16,8 +16,7 @@ Az energetikai jellemzők az épület energetikai tanúsítványából kiolvasha
 
 A gerjesztés-válasz kapcsolatot megkaphatjuk méréssel, szimulációval vagy egyenletek felírásával. Mindegyik módszernek van előnye és hátránya is:  ha a hatásmechanizmusok pontosan ismertek, használhatunk "white-box" modellt, amiben fizikai összefüggések szerepelnek. Ha a hatásmechanizmus nem ismert, fekete dobozként ("black-box") is kezelhetjük a rendszert, de az identifikációhoz nagyon sok mérésre van szükség, hogy a mérési hibákat és zavarásokat kiküszöbölhessük.%\cite{THIEBLEMONT2017485}
 
-Én a fizikai modell felírását választottam, a szabályzótervezéshez ennek a dinamikáját megvizsgálom. Megfelelő gerjesztő jelekkel identifikálva előáll a modell átviteli függvénye (\textit{\ref{chap:ident}. fejezet}). Ehhez sokkal egyszerűbb eljutni, mint mérésekkel:
-a Simulinkben megvalósított hálózatra az identifikáció sokkal egyszerűbb, mint valós rendszerre. A vizsgálójelek tetszőlegesen megválaszthatók, pl. a külső hőmérséklet hatása is pontosan meghatározható. A ház egy MISO (több bemenetű, egy kimenetű) rendszer, terepi méréseket használva csak hosszas mérésekből lehet szétválasztani a bemenetek (fűtés, külső hőmérséklet, napsütés) hatását a belső hőmérsékletre.
+Én a fizikai modell felírását választottam, melynek dinamikáját megvizsgálom a szabályozótervezéshez. Megfelelő gerjesztő jelekkel identifikálva előáll a modell átviteli függvénye (\textit{\ref{chap:ident}. fejezet}). Ehhez sokkal egyszerűbb eljutni, mint mérésekkel, mivel a Simulinkben megvalósított hálózatra az identifikáció sokkal egyszerűbb, mint valós rendszerre. A vizsgálójelek tetszőlegesen megválaszthatók, például a külső hőmérséklet hatása is pontosan meghatározható. A helyiség egy MISO (több bemenetű, egy kimenetű) rendszer, terepi méréseket használva csak hosszas mérésekből lehet szétválasztani a bemenetek (fűtés, külső hőmérséklet, napsütés) hatását a belső hőmérsékletre.
 
 %Ha később páratartalom szabályzása is szóba kerül, még bonyolultabb a helyzet.
 
@@ -64,12 +63,13 @@ A "vezetékek" így azonos hőmérsékletű (ekvipotenciális) pontokat kötnek 
 A hőáramlást a hőellenállások korlátozzák, mivel azokon hőmérsékletesés mérhető. (Az ábrán mért hőáram a hőellenálláson eső hőmérséklettel arányos, a \textit{\ref{eq_hoaram_alap}. egyenlet} szerint.) A hőtároló elemeknek tömege és fajhője megadja a hőkapacitásukat, így ezek feltöltődhetnek, energiát tárolhatnak.
 
 
-A mintahálózat egy RC-tagnak felel meg, erre a szabályzótervezés lépései a következők lennének:
+A mintahálózat egy RC-tagnak felel meg, erre a szabályzótervezés lépései a következők lennének:%\footnote{Tekintsük a mintahálózatot és az itt részletezett lépéseket egy szemléletes példának, ugyanis a szakdolgozatban tárgyalt hálózatra is ezeken a lépéseken fogok végighaladni.}:
 
 Az identifikációnál ismert a rendszer jellege, így 0 zérussal, 1 pólussal átviteli függvényt identifikálnék.
 Erre szabályzót lehetne tervezni. A szimuláció során a termikus hálózat alapjele helyére kerülne a szabályzó beavatkozó jele. A visszacsatolás a hőmérő kimenetéről történne. Ekkor, mivel a tervezés során használt modell és a  szakasz között nincs eltérés (angolul \textit{mismatch}), a szabályzás jól működik.
+A paraméterek módosításával a szabályzó robusztusságát lehet tesztelni.
 
-A paraméterek módosításával a szabályzó robusztusságát lehet tesztelni. Ha ez mondjuk egy vízforraló modellje lenne, akkor a szabályzás történhetne úgy, hogy a szabályzó egy beágyazott számítógépen fut, majd a teljesítményelektronikán keresztül a kívánt teljesítményt szolgáltatja, hogy például azonos hőmérsékleten tartsa benne a teát.
+Ha ez a hálózat egy tényleges fizikai rendszer (például egy vízforraló) modellje lenne, akkor a szabályzás történhetne úgy, hogy a szabályzó egy beágyazott számítógépen fut, majd a teljesítményelektronikán keresztül a kívánt teljesítményt szolgáltatja, hogy például azonos hőmérsékleten tartsa benne a teát.
 
 \begin{figure}[H]
 	\begin{subfigure}[t]{\textwidth}
@@ -107,63 +107,26 @@ A paraméterek módosításával a szabályzó robusztusságát lehet tesztelni.
 % \textbf{ÁBRA WHITE-BOX MODELRŐL, ÉS BLACKBOX IDENTIFIKÁCIÓRÓL. ILLETVE WHITEBOX IDENT.}
 
 
-\begin{figure}[H]
-	\centering
-	% trim={<left> <lower> <right> <upper>}
-	\includegraphics[trim=0 12 5 0, clip,width=\textwidth]{figures/SimscapeHouse}
-	\caption{Helyiség termikus modellje}
-	\label{fig:SimscapeHouse}
-\end{figure}
 
-\section{A modell}
-
-A helyiség modellje a \textit{\ref{fig:SimscapeHouse}. ábrán} látható, három bemenete van: külső hőmérséklet, radiátor hője és a padlófűtés hője.
-A külső hőmérséklet egy \say{feszültség jellegű} bemenet, hőáramot nem szab meg.
-A radiátor \say{áram jellegű} kimenetet ad, hiszen itt a képlet a leadott hőt számítja: a radiátor konduktív hőárama közvetlenül a levegőt melegíti. A padlófűtés először a padlónak adja át a hőt, utána pedig a levegőnek (konduktív hőátadás), illetve a falaknak (sugárzó, radiatív hőátadás).
-
-A levegőnek, padlónak, falaknak tömegüknél és fajhőjüknél fogva mind-mind van egy hőtároló képességük (\textit{\ref{table_house_parameters}. táblázat}), egy bizonyos idő alatt tudnak feltöltődni vagy hőenergiájukat leadni: hőmérsékletük nem változhat ugrásszerűen. %Mindezekben villamosmérnöki szemszögből felfedezhetjük az analógiát a villamos hálózatokkal.
-
-
-\begin{table}[H]
-	\footnotesize
-	\centering
-	\caption{A helyiség modelljének elemei}
-	\renewcommand{\arraystretch}{2} % to increase cell height
-	\taburulecolor{gray}
-	
-	%\begin{tabular}{|p{0.8cm}|p{1cm}|p{1cm}|p{1cm}|p{1cm}|p{1cm}|p{1cm}|p{1cm}|}
-	
-	\input{src/house_surface_table}
-	
-	
-	\label{table_house_parameters}
-	
-	%\label{tab:TabularExample}
-	%\tabref{TabularExample}~táblázat
-	
-\end{table}
-
-\begin{table}[H]
-	\footnotesize
-	\centering
-	\caption{Jelölések}
-	%\renewcommand{\arraystretch}{2} % to increase cell height
-	%\taburulecolor{gray}
-	%\begin{tabular}{|p{0.8cm}|p{1cm}|p{1cm}|p{1cm}|p{1cm}|p{1cm}|p{1cm}|p{1cm}|}
-	%
-	\input{src/table/jelolesek_table}
-	\label{tab:Nomenclature}
-	%
-	%\label{tab:TabularExample}
-	%\tabref{TabularExample}~táblázat
-\end{table}
 \section{Épületfizikai alapösszefüggések}
  
  A fizikai modell felírásához szükség van néhány alapösszefüggésre.
+ %TODO ide még valami bevezető
  
- \vspace{18pt}
+ \subsubsection*{Hőátbocsátási tényező számítása}
+ %TODO mi ez és miért jó
+ A hőátadási tényező a levegő és egy felület közötti hőátadást mutatja meg,
+ a rétegrendi hőátbocsátási tényező pedig számba veszi az összes réteg hatását: fal esetén annak két oldalán található levegő hőmérséklet-különbségével arányos hőáramot adja meg. 
  
-\subsection*{Hővezetés, hőáramlás, hősugárzás}
+ \begin{equation}\label{eq_hoatbcsatas_U}
+ \begin{aligned}
+ U = \frac{1}{\frac{1}{\alpha_e}+\sum\limits_{i}^{}\frac{d_i}{\lambda_i}+\frac{1}{\alpha_i}}
+ \end{aligned}
+ \end{equation}
+ 
+\subsubsection*{Hővezetés, hőáramlás, hősugárzás}
+
+A hőátadásnak három fajtája van, ezek 
 
 \begin{equation} \label{eq_hoaram_alap}
 \begin{aligned}
@@ -192,7 +155,7 @@ Az U hőátbocsátási tényező szerepe tehát az, hogy a rétegek hatását eg
 
 
 
-\begin{table}[t]
+\begin{table}[H]
 	\footnotesize
 	\centering
 	\caption{Hőközlés fajtái}
@@ -206,50 +169,54 @@ Az U hőátbocsátási tényező szerepe tehát az, hogy a rétegek hatását eg
 	%\label{tab:TabularExample}
 	%\tabref{TabularExample}~táblázat
 \end{table}
- 
 
+\subsubsection*{Hőtároló képesség}
 
- 
- 
- 
- 
- 
+Falszerkezeteknél annak hőtároló képessége adja meg, hogy \SI{1}{\celsius}-os hőmérséklet-változás esetén mennyivel változik a szerkezet energiája. Ez az alábbi képlettel számolható:
 
-\subsection*{Hőátbocsátási tényező számítása}
-
-
-\begin{equation}\label{eq_hoatbcsatas_U}
+\begin{equation}\label{eq_hotarolo}
 \begin{aligned}
-U = \frac{1}{\frac{1}{\alpha_e}+\sum\limits_{i}^{}\frac{d_i}{\lambda_i}+\frac{1}{\alpha_i}}
+C &= cm\\[10pt]
+E &= C\Delta T
 \end{aligned}
 \end{equation}
-
-
-
-\subsection*{Hőtároló képesség}
-
-%\begin{equation}\label{eq_hotarolo}
-%\begin{aligned}
-%Q_{ki,fal} &= U_{fal}A_{fal}\Delta T = 200\si{\watt}\\[10pt]
-%Q_{ki,ablak} &= U_{ablak}A_{ablak}\Delta T = 400\si{\watt}
-%\end{aligned}
-%\end{equation}
 
 % \vspace{24pt}
 
 % Falszerkezet, ablakszerkezet
+
+\begin{table}[H]
+	\footnotesize
+	\centering
+	\caption{Jelölések}
+	%\renewcommand{\arraystretch}{2} % to increase cell height
+	%\taburulecolor{gray}
+	%\begin{tabular}{|p{0.8cm}|p{1cm}|p{1cm}|p{1cm}|p{1cm}|p{1cm}|p{1cm}|p{1cm}|}
+	%
+	\input{src/table/jelolesek_table}
+	\label{tab:Nomenclature}
+	%
+	%\label{tab:TabularExample}
+	%\tabref{TabularExample}~táblázat
+\end{table}
 
 \section{A megvalósított modell}
 
 Figyelembe kell vennem a ház hőveszteségeit és hőtároló képességét is, a () és () egyenletek alapján, melynek paraméterei a \ref{table_house_parameters}. táblázatban találhatók.
 %Ennek paraméterei: a határoló elemek felszíne, hőátbocsátási tényezője, a hőtároló elemek fajhője.
 Az alábbi táblázat értékeinek nagy részét ki lehet tölteni a tanúsítványból. Feltételezem, hogy ez rendelkezésre áll, hiszen ennek elkészítésére elég sok esetben szükség van (adásvétel, felújítás, stb.).
-Az épület hőigénye numerikusan is szerepel a tanúsítványban, éves időszakra. Itt a fűtési rendszer , hanem a várható napsütéses órák számát és a használati melegvíz előállításának energiaigényét figyelembe veszi\footnote{Még mindig suta kicsit ez a mondat}.
+Az épület éves hőigénye numerikusan is szerepel a tanúsítványban. Itt a fűtési rendszer tulajdonságain kívül a várható napsütéses órák számát és a használati melegvíz előállításának energiaigényét figyelembe veszi\footnote{A hőigény számításához törvényi előírások alapján különböző korrekciós tényezőket használnak.}.
+%TODO hol van ez a törvényben?
 
-A Matlab Simscape model és Lapusan\footnote{Development of a Multi-Room Building Thermodynamic Model Using Simscape Library - Ciprian Lapusan} hőátadásnál a réteges szerkezetekben számolt konvekcióval és kondukcióval is. Viszont ezek az adatok egyben is kezelhetők, a követelményeket ezekre a költségoptimalizált követelményszint\footnote{ A  költségoptimalizált követelményszintek megtalálhatók a 7/2006. rendelet \cite{TNM2006} 5. mellékletében.} adja meg. Régebbi épületek ezt a szintet nem tudják teljesíteni, ezekre jellemző értékeket adtam meg az alábbi táblázatban. 
+A Matlab Simscape model és \textit{Lapusan} \cite{LAPUSAN2016320}
+%\footnote{Development of a Multi-Room Building Thermodynamic Model Using Simscape Library - Ciprian Lapusan}
+ hőátadásnál a réteges szerkezetekben számolt konvekcióval és kondukcióval is. Viszont ezek az adatok egyben is kezelhetők, a követelményeket ezekre a költségoptimalizált követelményszint\footnote{ A  költségoptimalizált követelményszintek megtalálhatók a 7/2006. rendelet \cite{TNM2006} 5. mellékletében.} adja meg. Régebbi épületek ezt a szintet nem tudják teljesíteni, ezekre jellemző értékeket adtam meg az alábbi táblázatban. 
+%todo táblázat
 
+Ám nem szabad összekeverni az U értéket (rétegrendi hőátbocsátási tényező) és az $\alpha_i$ konvektív hőátadási tényezőt, amit a válaszfalakra, padlóra és mennyezetre adtam meg, hiszen ezeken a modell szerint a helyiség nem veszt hőt, csak a hőtároló elemeknek adódik át.
+%todo kell-e ez itt. A hőátadási tényező a levegő és egy felület közötti hőátadást mutatja meg, a rétegrendi hőátbocsátási tényező pedig számba veszi az összes réteg hatását: fal esetén annak két oldalán található levegő hőmérséklet-különbségével arányos hőáramot adja meg.
 
-Ám nem szabad összekeverni az U értéket (hőátbocsátási tényező) és az $\alpha_i$ konvektív hőátadási tényezőt, amit a válaszfalakra, padlóra és mennyezetre adtam meg, hiszen ezeken a modell szerint a helyiség nem veszt hőt, csak a hőtároló elemeknek adódik át. Viszont itt célszerű lenne a konvektív hőátadást is beleszámolni. 
+%TODO clarify - Viszont itt célszerű lenne a konvektív hőátadást is beleszámolni. 
 
 
 %(Baromi érdekes, hogy nálunk otthon van egy hőcserélő a használati melegvíz és a fűtési rendszer között, annak a hatásait is lehetne nézni.)
@@ -280,6 +247,44 @@ A Matlab Simscape model és Lapusan\footnote{Development of a Multi-Room Buildin
  A példában a Schönherz Zoltán Kollégium egy szobájának megfelelő méretű helyiséget vettem fel. Minden szobának van ablaka és külső fala, egy átlagos szobát 4 másik vesz körül. A belső falakon nem veszt hőt, csak az ablakon ill. a külső falon. Feltételezzük, hogy a radiátoros fűtést egy szeleppel szabályozhatjuk, amit tetszőleges mértékben nyithatunk ki.
  A napsütés hőnyereségét is figyelembe vehetjük.%, úgy, hogy egy hőforrás a padlót melegíti.
 
+\section{A modell}
+\begin{figure}[H]
+	\centering
+	% trim={<left> <lower> <right> <upper>}
+	\includegraphics[trim=0 12 5 0, clip,width=\textwidth]{figures/SimscapeHouse}
+	\caption{Helyiség termikus modellje}
+	\label{fig:SimscapeHouse}
+\end{figure}
+
+
+
+A helyiség modellje a \textit{\ref{fig:SimscapeHouse}. ábrán} látható, három bemenete van: külső hőmérséklet, radiátor hője és a padlófűtés hője.
+A külső hőmérséklet egy \say{feszültség jellegű} bemenet, hőáramot nem szab meg.
+A radiátor \say{áram jellegű} kimenetet ad, hiszen itt a képlet a leadott hőt számítja: a radiátor konduktív hőárama közvetlenül a levegőt melegíti. A padlófűtés először a padlónak adja át a hőt, utána pedig a levegőnek (konduktív hőátadás), illetve a falaknak (sugárzó, radiatív hőátadás).
+
+A levegőnek, padlónak, falaknak tömegüknél és fajhőjüknél fogva mind-mind van egy hőtároló képességük (\textit{\ref{table_house_parameters}. táblázat}), egy bizonyos idő alatt tudnak feltöltődni vagy hőenergiájukat leadni: hőmérsékletük nem változhat ugrásszerűen. %Mindezekben villamosmérnöki szemszögből felfedezhetjük az analógiát a villamos hálózatokkal.
+
+
+\begin{table}[H]
+	\footnotesize
+	\centering
+	\caption{A helyiség modelljének elemei}
+	\renewcommand{\arraystretch}{2} % to increase cell height
+	\taburulecolor{gray}
+	
+	%\begin{tabular}{|p{0.8cm}|p{1cm}|p{1cm}|p{1cm}|p{1cm}|p{1cm}|p{1cm}|p{1cm}|}
+	
+	\input{src/house_surface_table}
+	
+	
+	\label{table_house_parameters}
+	
+	%\label{tab:TabularExample}
+	%\tabref{TabularExample}~táblázat
+	
+\end{table}
+
+
 %A modell mintavételi ideje?
 %A teljesítményeket megnöveljük és semmi mást, az nem lesz ekvivalens. 
 
@@ -294,7 +299,8 @@ A külső falon
 \end{aligned}
 \end{equation}
 
-Amennyiben a méretezési hőmérséklet $\Delta T=$ \SI{-2}{\celsius}, ami a téli átlaghőmérséklet Magyarországon.\footnote{Épületfizika kurzus alapján vettem az átlaghőmérsékletet \SI{-2}{\celsius}-nak.}
+Amennyiben a méretezési hőmérséklet $\Delta T=$ \SI{-2}{\celsius}, ami a téli átlaghőmérséklet Magyarországon.
+%TODO honnan \footnote{Épületfizika kurzus alapján vettem az átlaghőmérsékletet \SI{-2}{\celsius}-nak.}
 
 
 %(Gondolatkísérlet: HA nem hatna zavarás, csak az időállandók számítanának, a pontos teljesítményveszteségek, nyereségek nem. Azaz mindegy volna hogy 1000W hő szökik ki és ehhez tartozik 1500W-nyi fűtési kapacitás, vagy hogy 5000W és 7500W ezek az értékek. Ám pl. napsütés hatásakor nem csak az arányok hanem a konkrét teljesítmények is kellenek...
@@ -323,13 +329,18 @@ Amennyiben a méretezési hőmérséklet $\Delta T=$ \SI{-2}{\celsius}, ami a t�
 \section{Fűtési rendszer és ház kapcsolata}
 
 \begin{formal}
-	Ha a szabályzást egy már meglévő épületre tervezzük, akkor csak a rendszerek adatait kell felvenni, illetve identifikálni. A szakdolgozatban tárgyalt egyszerű példa során csak egy részét ismerem a paramétereknek, tehát méretezési kérdéseket is fogok érinteni.  Szerencsére az új építésű házaknál kötelező energetikai tanúsítás\footnote{A rendelet \cite{TNM2006} alapján kötelező az energetikai tanúsítvány pl. \textit{átlagos} lakóépületekre, irodákra. Adás-vételkor, felújításkor, stb.} egy meglehetősen részletes lajstromot ad az épület hőtechnikai tulajdonságairól. Ez alapján lehet egy hozzávetőlegesen jó modellünk az épületről, illetve a fűtési rendszerről is találhatók adatok paraméterek.
+	\textbf{Megjegyzés:}
+	Ha a szabályzást egy már meglévő épületre tervezzük, akkor csak a rendszerek adatait kell felvenni, illetve identifikálni. A szakdolgozatban tárgyalt egyszerű példa során csak egy részét ismerem a paramétereknek, tehát méretezési kérdéseket is fogok érinteni.  Szerencsére az új építésű házaknál kötelező energetikai tanúsítás%\footnote{A rendelet \cite{TNM2006}
+	%TODO konkrétan
+	 %alapján kötelező az energetikai tanúsítvány pl. \textit{átlagos}
+	 %lakóépületekre, irodákra. Adás-vételkor, felújításkor, stb.}
+ egy meglehetősen részletes lajstromot ad az épület hőtechnikai tulajdonságairól. Ez alapján lehet egy hozzávetőlegesen jó modellünk az épületről, illetve a fűtési rendszerről is találhatók adatok paraméterek.
 
 \end{formal}
 
 
 
- Az interneten számos tanúsító cég töltött fel minta tanúsítványokat, amiben a számítások levezetése, indoklása is megtalálható. Így az energetikai tanúsítvány lehet egy interface a szakdolgozatban bemutatott modell és a gyakorlati alkalmazások között: valódi épület tanúsítványa alapján a modellem paraméterezhető.
+ Az interneten számos tanúsító cég töltött fel minta tanúsítványokat, amiben a számítások levezetése, indoklása is megtalálható. Így az energetikai tanúsítvány lehet egy interface a szakdolgozatban bemutatott modell és a gyakorlati alkalmazások között: a valódi épület tanúsítványa alapján a modellem paraméterezhető.
 
 
 Amikor a fűtési rendszer viselkedését szimulálom, nekem kell megalkotni mind a szabályzott épületrész, mind a fűtési rendszer modelljét. Így tehát ez a modellezésen felül egy méretezési feladat is, amit egy kész épületnél már elvégeztek a tervezés során, és a megfelelő fűtési teljesítmény áll rendelkezésre. %illeszkedik az igényekhez és a körülményekhez.
