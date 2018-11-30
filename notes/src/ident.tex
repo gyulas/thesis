@@ -15,7 +15,7 @@ A módszer az, amit a több forrást tartalmazó hálózatok esetén is alkalmaz
 
 A szuperpozíció módszere itt csak korlátozásokkal működik. A fűtőtestekben ugyanis adott hőmérsékletű víz kering, így ha a környezeti hőmérséklet megnő, azok teljesítménye lecsökken. 
 
-A Simulink modellt bemenetein gerjesztem (külső hőmérséklet \SI{40}{\celsius}, majd fűtés \SI{60}{\celsius} előremenő hőmérsékleten valve = 1 állásban.\footnote{A stratégia lehet $t_s$ előremenő hőmérséklet vagy $\alpha \cdot \dot m$ tömegáram szabályzása $\alpha$ = [0..1] beavatkozójellel. })
+A Simulink modellt bemenetein gerjesztem (külső hőmérséklet \SI{40}{\celsius}, majd fűtés \SI{60}{\celsius} előremenő hőmérsékleten valve = 1 állásban.\footnote{A stratégia lehet $t_s$ előremenő hőmérséklet vagy $\xi \cdot \dot m$ tömegáram szabályzása $\alpha$ = [0..1] beavatkozójellel. })
 
 
 
@@ -26,12 +26,22 @@ Nyilvánvalóan célszerű az identifikációnál minél nagyobb változásokat 
 
 Egy ilyen szimuláció a fenti szekvenciával kb. 50 napnyi viselkedést fog át, ez másodperces mintavételi idővel rengeteg adat, amivel meggyűlik az Ident Toolbox baja is.
 
-5 perces mintavételi időkkel már sokkal gyorsabban lefut a Simulinkben a szimuláció és a toolboxban az identifikáció, lénygében azonos eredményt adva. Az időállandók sokkal 
+5 perces mintavételi időkkel már sokkal gyorsabban lefut a Simulinkben a szimuláció és a toolboxban az identifikáció, lénygében azonos eredményt adva.
 
-Viszont a mintavételi idők megváltoztatásától azért \textit{féltem}, mert nem tudtam, hogy reagál rá a Simscape vagy az MPC.
+Viszont a mintavételi idők megváltoztatásánál, nem volt egyértelmű, hogyan reagál a Simscape vagy az MPC. A Simscape-nél kiderült, hogy a mintavételi időt manuálisan nem lehet megadni.
 
+
+\begin{figure}[H]
+	\centering
+	% trim={<left> <lower> <right> <upper>}
+	\includegraphics[trim=0 0 0 0, clip,width=\textwidth]{figures/ident-valve3}
+	\caption{Identifikáció során }
+	\label{fig:ident}
+\end{figure}
+
+Az identifikáció pontosságának javításához mindhárom bemeneti változó hatását több periódusra rögzítettem, 750 napnyi szimulációval. Ez fél órás mintavételi idő mellett szimulációban kevesebb, mint 1 perc alatt futott le\footnote{7. generációs i5 processzor, 8GB RAM, SSD használatával}. Az identifikációhoz a hőmérsékletet kelvinben rögzítem, mivel \si{\celsius} használata esetén az összefüggések nem lineárisak. (A kelvinben mért hőmérsékletet nevezik termodinamikai hőmérsékletnek.) A fenti esetben a beállási idők kb. 30 naposak az egész rendszert tekintve, ami kb. 10 napos időállandót jelent. Szakirodalom szerint a falszerkezetek időállandója kb. 5 nap, a helyiségre így reálisnak tűnik a közelítés.
 %Zérusok hatása röviden. Mit tud. Hánytárolós rendszer. Néhány kép.
-M%ISO identifikáció. 
+%MISO identifikáció. 
 %
 %
 %\section{Hagyományos szabályzás performanciája}
