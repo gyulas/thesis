@@ -2,7 +2,7 @@ function plotIdentTemp(ValveAndTemp)
 hManipulated=subplot(2,1,1);
 set(hManipulated, 'OuterPosition', [0,0.67, 1, .33]);
 
-plot(ValveAndTemp.time,[ValveAndTemp.signals(2).values])
+plot(ValveAndTemp.time,ValveAndTemp.signals(2).values(:,1),ValveAndTemp.time, ValveAndTemp.signals(2).values(:,2))
 % set limit
 lim=get(gca,'YLim');
 lim(1)=-0.1;
@@ -29,7 +29,7 @@ plot(ValveAndTemp.time,[ValveAndTemp.signals(1).values])
 
 lim=get(gca,'YLim');
 lim(1)=-25;
-lim(2)=40;
+lim(2)=50;
 set(gca,'YLim',lim);
 % lab=get(gca,'YTickLabel');
 % lab{11}='';
