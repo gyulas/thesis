@@ -51,8 +51,10 @@ shg %show it
 %% Misc
 
 function plotting_axesLabel_Days()
-set(gca,'XTick',0:7*24*3600:3600*24*7*80)
-set(gca,'XTickLabel',{'0','1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16'})
+%mintavételi idõ 1800s=1 egység=fél óra. A struct time-ban adja.
+% Simulink: 3600*24*10*75 mp, azaz 
+set(gca,'XTick',0:30*24*3600:3600*24*7*120)
+set(gca,'XTickLabel',{'0','1','2','3','4','5','6','7','8','9','10','11'});%,'13','14','15','16'})
 xlab=get(gca,'XLabel');
-xlab.String='idõ (hét)';
+xlab.String='idõ (hónap)';
 set(gca,'XLabel',xlab)
