@@ -17,11 +17,6 @@ r = ones(size(time))*273+18;
 v = ones(size(time))*273;    % measured disturbance signal
 
 for i=1:size(time)
-    
-    if tortresz(i)>3600*12
-        r(i) = r(i)+4; % 18 és 22°C közötti
-    end
-
     if or(tortresz(i)<3600*6,tortresz(i)>3600*20)  
         v(i)=v(i)-10;
     end

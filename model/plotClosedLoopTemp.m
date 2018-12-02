@@ -17,8 +17,8 @@ lim(2)=1.1;
 set(gca,'YLim',lim);
 
 lim=get(gca,'XLim');
-lim(1)=0;
-lim(2)=3600*24*10*10;
+lim(1)=3600*24*10*3.4;
+lim(2)=3600*24*10*4;
 set(gca,'XLim',lim);
 
 %set X axes label
@@ -60,8 +60,8 @@ lim(2)=40;
 set(gca,'YLim',lim);
 
 lim=get(gca,'XLim');
-lim(1)=0;
-lim(2)=3600*24*10*10;
+lim(1)=3600*24*10*3.4;
+lim(2)=3600*24*10*4;
 set(gca,'XLim',lim);
 
 % lab=get(gca,'YTickLabel');
@@ -89,8 +89,9 @@ shg %show it
 function plotting_axesLabel_Days()
 %mintavételi idõ 1800s=1 egység=fél óra. A struct time-ban adja.
 % Simulink: 3600*24*10*75 mp, azaz 
-set(gca,'XTick',0:30*24*3600:3600*24*7*120)
+set(gca,'XTick',0:24*3600:3600*24*7*120)
+%set(gca,'XTick',0:30*24*3600:3600*24*7*120)%honap
 set(gca,'XTickLabel',{'0','1','2','3','4','5','6','7','8','9','10','11'});%,'13','14','15','16'})
 xlab=get(gca,'XLabel');
-xlab.String='idõ (hónap)';
+xlab.String='idõ (nap)';
 set(gca,'XLabel',xlab)

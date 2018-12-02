@@ -1,7 +1,7 @@
 \chapter{Identifikáció}\label{chap:ident}
 
 
-A szabályzó tervezésénél használt szakaszmodell (gerjesztés-válasz kapcsolat) a Simulinkben megvalósított fizikai modell viselkedését leíró rendszer átviteli függvénye lesz. A Simulinkben vizsgálójeleket használok: a több bemenetű, egy kimenetű rendszert egyszerre csak egy bemenetén gerjesztem (\textit{\ref{fig:valve-step}. ábra}). 
+A szabályzó tervezésénél használt szakaszmodell (gerjesztés-válasz kapcsolat) a Simulinkben megvalósított fizikai modell viselkedését leíró rendszer átviteli függvénye lesz. A Simulinkben vizsgálójeleket használok: a több bemenetű, egy kimenetű rendszert egyszerre csak egy bemenetén gerjesztem. A belső hőmérséklet a rendszer kimenete. %(\textit{\ref{fig:valve-step}. ábra}). 
 % a kimeneti változást létrehozó hatás egyértelműen beazonosítható kell hogy legyen.
 
 \begin{figure}[H]
@@ -17,29 +17,44 @@ A módszer az, amit a több forrást tartalmazó hálózatok esetén is alkalmaz
 \begin{figure}[H]
 	\centering
 	% trim={<left> <lower> <right> <upper>}
-	\includegraphics[trim=0 0 0 0, clip,width=0.9\textwidth]{figures/valve-nonlinearity}
+	\includegraphics[trim=0 0 0 0, clip,width=0.9\textwidth]{figures/valve-stair}
 	\caption{Szimulációs eredmények a szelepeket lépcsős függvénnyel gerjesztve}
 	\label{fig:valve-stair}
 \end{figure}
 
+A fűtőtestekben a víz tömegáramát szelepekkel szabályozzuk. Az \textit{\ref{eq_holeadas4}. egyenlet} adja fűtőtestek által leadott hőmennyiséget, ám ez nem lineáris függvénye a tömegáramnak. A \textit{\ref{fig:valve-stair}. ábrán} látszik, hogy kétszer jobban kinyitott szeleppel $t_i$ belső hőmérséklet végértéke csak kicsivel lesz magasabb. Itt nem működik tehát a szuperpozíció elve, a bemenet a [0..1] tartományban sem lineáris\footnote{A szakasz másik nemlinearitása a szaturáció: a szelepet csak [0..1] tartományban lehet működtetni -- a szabályzótervezésnél ezt figyelembe fogom venni.}.
+
+A $t_i$ belső hőmérséklet végértéke a tömegáramon kívül a $t_e$ külső hőmérséklettől is függ: ugyanakkora belső hőmérsékletet csak nagyobb tömegárammal, vagy nagyobb $t_w$ előremenő vízhőmérséklettel lehet tartani\footnote{Bár a vízhőmérsékletet nem szabályozom, egyes kazánok rendelkeznek külső hőmérővel, így a vízhőmérsékletet megemelve a hidegben a $t_i$ végértéke "automatikusan" azonos maradhat.}. 
+
+\begin{figure}[H]
+	\centering
+	% trim={<left> <lower> <right> <upper>}
+	\includegraphics[trim=0 0 0 0, clip,width=0.9\textwidth]{figures/valve-step-hot}
+	\caption{Szimulációs eredmények a bemeneteket külön-külön gerjesztve}
+	\label{fig:valve-step-hot}
+\end{figure}
+
+Látható, hogy a különböző bemenetekre adott gerjesztések hatása a kimeneten nem számítható szuperpozícióval: \SI{20}{\celsius}-kal megemelt $t_e$ külső hőmérséklet esetén a fűtőtestek nem fognak \SI{20}{\celsius}-kal magasabb belső hőmérsékletre fűteni.
+
+%A Simulink modellt bemenetein gerjesztem (külső hőmérséklet \SI{40}{\celsius}, majd fűtés \SI{60}{\celsius} előremenő hőmérsékleten valve = 1 állásban.\footnote{A stratégia lehet $t_s$ előremenő hőmérséklet vagy $\xi \cdot \dot m$ tömegáram szabályzása $\alpha$ = [0..1] beavatkozójellel. })
 
 
-%A szuperpozíció módszere itt csak korlátozásokkal működik. A fűtőtestekben ugyanis adott hőmérsékletű víz kering, így ha a környezeti hőmérséklet megnő, azok teljesítménye lecsökken. 
-
-A Simulink modellt bemenetein gerjesztem (külső hőmérséklet \SI{40}{\celsius}, majd fűtés \SI{60}{\celsius} előremenő hőmérsékleten valve = 1 állásban.\footnote{A stratégia lehet $t_s$ előremenő hőmérséklet vagy $\xi \cdot \dot m$ tömegáram szabályzása $\alpha$ = [0..1] beavatkozójellel. })
-
+Az identifikációhoz adatfile-t hozok létre, a Simulinkben IDDATA blokk a be- és kimenetek értékét mintavételi időnként rögzíti és a \textit{Base Workspace}-be (a közös változók közé) menti. Innen a \textit{System Identification} app-ba betölthetők az adatok. %A mintavételi idő először egy másodperc volt. %A Matlab Workspace-ben megjelenik egy iddata, ezt tudom az ident toolboxba importálni.
+Az adatsorra átviteli függvényeket illesztek: a pólusok, zérusok a száma a Simscape modell alapján meghatározható, RC-hálózatok analógiájával. Ekkor pl. a radiátorok felmelegedési idejét is leköveti a modell. A teljes helyiség időállandójához képest viszont pl. a radiátor felmelegedése elhanyagolható. Fél órás mintavételi idő esetén a fűtőtestek egytárolós taggal helyettesíthetők. 
 
 
-Az identifikációhoz adatfile-t hozok létre, a Simulinkben IDDATA blokk a be- és kimenetek értékét mintavételi időnként rögzíti és a \textit{Base Workspace}-be menti. Innen a \textit{System Identification} app-ba betölthetők az adatok. %A mintavételi idő először egy másodperc volt. %A Matlab Workspace-ben megjelenik egy iddata, ezt tudom az ident toolboxba importálni.
-Erre átviteli függvényeket illesztek. Az átviteli függvények pólusainak, zérusainak a száma a Simscape modell alapján meghatározható, RC-hálózatok analógiájával.
 
-Nyilvánvalóan célszerű az identifikációnál minél nagyobb változásokat mérni. Nem tartottam "értelmét" 1\si{\celsius}-os step jelre identifikálni. Így beállítottam nulla kezdeti értéket a ház összes paraméterére. (Falak, fűtési rendszer, stb. Nyilvánvaló, hogy ilyenkor nem a realizmus a cél, hiszen a nagy változásokra jön elő a rendszer dinamikája.) Nulla kezdeti értékből a környezeti hőmérsékletet 0-ról 40\si{\celsius}-ra emeltem, ennek a beállási ideje több nap volt, majd visszaállítva 0\si{\celsius}-ra megvártam a lecsengést, ezután pedig a beavatkozó szelepeket teljesen kinyitottam. 
 
-Egy ilyen szimuláció a fenti szekvenciával kb. 50 napnyi viselkedést fog át, ez másodperces mintavételi idővel rengeteg adat, amivel meggyűlik az Ident Toolbox baja is.
+Célszerű az identifikációnál minél nagyobb változásokat mérni - így a rendszer teljes dinamikáját, hőtároló képességét mértem. A beállási idők kb. 30 naposak voltak és több periódusnyi mérésre volt szükség. 
 
-5 perces mintavételi időkkel már sokkal gyorsabban lefut a Simulinkben a szimuláció és a toolboxban az identifikáció, lénygében azonos eredményt adva.
 
-Viszont a mintavételi idők megváltoztatásánál, nem volt egyértelmű, hogyan reagál a Simscape vagy az MPC. A Simscape-nél kiderült, hogy a mintavételi időt manuálisan nem lehet megadni.
+%Nem tartottam "értelmét" 1\si{\celsius}-os step jelre identifikálni. Így beállítottam nulla kezdeti értéket a ház összes paraméterére. (Falak, fűtési rendszer, stb. Nyilvánvaló, hogy ilyenkor nem a realizmus a cél, hiszen a nagy változásokra jön elő a rendszer dinamikája.) Nulla kezdeti értékből a környezeti hőmérsékletet 0-ról 40\si{\celsius}-ra emeltem, ennek a beállási ideje több nap volt, majd visszaállítva 0\si{\celsius}-ra megvártam a lecsengést, ezután pedig a beavatkozó szelepeket teljesen kinyitottam. 
+
+%Egy ilyen szimuláció a fenti szekvenciával kb. 50 napnyi viselkedést fog át, ez másodperces mintavételi idővel rengeteg adat, amivel meggyűlik az Ident Toolbox baja is.
+
+%5 perces mintavételi időkkel már sokkal gyorsabban lefut a Simulinkben a szimuláció és a toolboxban az identifikáció, lénygében azonos eredményt adva.
+
+%Viszont a mintavételi idők megváltoztatásánál, nem volt egyértelmű, hogyan reagál a Simscape vagy az MPC. A Simscape-nél kiderült, hogy a mintavételi időt manuálisan nem lehet megadni.
 
 
 \begin{figure}[H]
@@ -51,6 +66,18 @@ Viszont a mintavételi idők megváltoztatásánál, nem volt egyértelmű, hogy
 \end{figure}
 
 Az identifikáció pontosságának javításához mindhárom bemeneti változó hatását több periódusra rögzítettem, 750 napnyi szimulációval. Ez fél órás mintavételi idő mellett szimulációban kevesebb, mint 1 perc alatt futott le\footnote{7. generációs i5 processzor, 8GB RAM, SSD használatával}. Az identifikációhoz a hőmérsékletet kelvinben rögzítem, mivel \si{\celsius} használata esetén az összefüggések nem lineárisak. (A kelvinben mért hőmérsékletet nevezik termodinamikai hőmérsékletnek.) A fenti esetben a beállási idők kb. 30 naposak az egész rendszert tekintve, ami kb. 10 napos időállandót jelent. Szakirodalom szerint a falszerkezetek időállandója kb. 5 nap, a helyiségre így reálisnak tűnik a közelítés.
+
+Átviteli függvény identifikációjához a fenti nemlinearitásokat okozó gerjesztéseket nem vettem figyelembe. Így az átviteli függvény a rendszer jellegét követte, és a \textit{\ref{fig:valve-step-hot}. ábrán} látható külső hőmérsékletre és teljesen kinyitott szelepekre a végértékek pontosan illeszkednek.
+
+
+\begin{figure}[H]
+	\centering
+	% trim={<left> <lower> <right> <upper>}
+	\includegraphics[trim=0 0 0 0, clip,width=0.9\textwidth]{figures/identModelOutputMatch}
+	\caption{Identifikált modell pontatlansága}
+	\label{fig:ident-model-mismatch}
+\end{figure}
+
 %Zérusok hatása röviden. Mit tud. Hánytárolós rendszer. Néhány kép.
 %MISO identifikáció. 
 %

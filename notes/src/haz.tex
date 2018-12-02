@@ -172,18 +172,22 @@ Az U hőátbocsátási tényező szerepe tehát az, hogy a rétegek hatását eg
 
 \subsubsection*{Hőtároló képesség}
 
-Falszerkezeteknél annak hőtároló képessége adja meg, hogy \SI{1}{\celsius}-os hőmérséklet-változás esetén mennyivel változik a szerkezet energiája. Ez az alábbi képlettel számolható:
 
-\begin{equation}\label{eq_hotarolo}
+Falszerkezeteknél annak hőtároló képessége adja meg, hogy \SI{1}{\celsius}-os hőmérséklet-változás esetén mennyivel változik a szerkezet energiája.
+
+Az \textit{EN ISO 13790} szerint az épület hőtároló tömege az épület belső levegőjével közvetlen kapcsolatban lévő határolószerkezetek hőtároló tömegének összege.
+
+\begin{equation}\label{eq_hotarolo-tomeg}
 \begin{aligned}
-C &= cm\\[10pt]
-E &= C\Delta T
+M= \rho d A\\[10pt]
+\Delta Q= cM\Delta t
 \end{aligned}
 \end{equation}
 
-% \vspace{24pt}
+Ebben az esetben eltérek a szabványban használt módszerektől. Az \textit{MSZ 24140} megadja, hogy egyes anyagoknál mekkora réteget kell figyelembe venni egy napos ciklusidejű hőtárolásra. Ez azért nem pontos, mert több napos átmelegedési időkkel nem számol. Az energetikai tanúsítványok azonban tartalmazzák a teljes tömeget és a szabvány szerinti hőtároló tömeget is. A modellben a teljes tömeg szerepel.
 
-% Falszerkezet, ablakszerkezet
+
+
 
 \begin{table}[H]
 	\footnotesize
@@ -256,8 +260,6 @@ A Matlab Simscape model és \textit{Lapusan} \cite{LAPUSAN2016320}
 	\label{fig:SimscapeHouse}
 \end{figure}
 
-
-
 A helyiség modellje a \textit{\ref{fig:SimscapeHouse}. ábrán} látható, három bemenete van: külső hőmérséklet, radiátor hője és a padlófűtés hője.
 A külső hőmérséklet egy \say{feszültség jellegű} bemenet, hőáramot nem szab meg.
 A radiátor \say{áram jellegű} kimenetet ad, hiszen itt a képlet a leadott hőt számítja: a radiátor konduktív hőárama közvetlenül a levegőt melegíti. A padlófűtés először a padlónak adja át a hőt, utána pedig a levegőnek (konduktív hőátadás), illetve a falaknak (sugárzó, radiatív hőátadás).
@@ -268,20 +270,27 @@ A levegőnek, padlónak, falaknak tömegüknél és fajhőjüknél fogva mind-mi
 \begin{table}[H]
 	\footnotesize
 	\centering
-	\caption{A helyiség modelljének elemei}
-	\renewcommand{\arraystretch}{2} % to increase cell height
+	\caption{A helyiség hőveszteséget okozó elemei}
+	\renewcommand{\arraystretch}{1.3} % to increase cell height
 	\taburulecolor{gray}
-	
 	%\begin{tabular}{|p{0.8cm}|p{1cm}|p{1cm}|p{1cm}|p{1cm}|p{1cm}|p{1cm}|p{1cm}|}
-	
-	\input{src/house_surface_table}
-	
-	
+	\input{src/table/house_surface_tableA}
+%	\begin{subtable}
+%		\input{src/table/house_surface_tableB}
+%	\end{subtable}
 	\label{table_house_parameters}
-	
 	%\label{tab:TabularExample}
 	%\tabref{TabularExample}~táblázat
-	
+\end{table}
+
+\begin{table}[H]
+	\footnotesize
+	\centering
+	\caption{A helyiség veszteségmentes elemei}
+	\renewcommand{\arraystretch}{1.3} % to increase cell height
+	\taburulecolor{gray}
+	\input{src/table/house_surface_tableB}
+	\label{table_house_parametersB}
 \end{table}
 
 
@@ -340,7 +349,7 @@ Amennyiben a méretezési hőmérséklet $\Delta T=$ \SI{-2}{\celsius}, ami a t�
 
 
 
- Az interneten számos tanúsító cég töltött fel minta tanúsítványokat, amiben a számítások levezetése, indoklása is megtalálható. Így az energetikai tanúsítvány lehet egy interface a szakdolgozatban bemutatott modell és a gyakorlati alkalmazások között: a valódi épület tanúsítványa alapján a modellem paraméterezhető.
+ Az internetre számos tanúsító cég töltött fel minta tanúsítványokat, amiben a számítások levezetése, indoklása is megtalálható. Így az energetikai tanúsítvány lehet egy interface a szakdolgozatban bemutatott modell és a gyakorlati alkalmazások között: a valódi épület tanúsítványa alapján a modellem paraméterezhető.
 
 
 Amikor a fűtési rendszer viselkedését szimulálom, nekem kell megalkotni mind a szabályzott épületrész, mind a fűtési rendszer modelljét. Így tehát ez a modellezésen felül egy méretezési feladat is, amit egy kész épületnél már elvégeztek a tervezés során, és a megfelelő fűtési teljesítmény áll rendelkezésre. %illeszkedik az igényekhez és a körülményekhez.
