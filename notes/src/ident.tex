@@ -1,19 +1,30 @@
 \chapter{Identifikáció}\label{chap:ident}
 
 
-A szabályzáshoz használt szakaszmodell (gerjesztés-válasz kapcsolat) a Simulinkben megvalósított fizikai modell viselkedését leíró rendszer átviteli függvénye. A Simulinkben vizsgálójeleket használok: az identifikációhoz a több bemenetű, egy kimenetű rendszerre a kimeneti változást létrehozó hatás egyértelműen beazonosítható kell hogy legyen.
+A szabályzó tervezésénél használt szakaszmodell (gerjesztés-válasz kapcsolat) a Simulinkben megvalósított fizikai modell viselkedését leíró rendszer átviteli függvénye lesz. A Simulinkben vizsgálójeleket használok: a több bemenetű, egy kimenetű rendszert egyszerre csak egy bemenetén gerjesztem (\textit{\ref{fig:valve-step}. ábra}). 
+% a kimeneti változást létrehozó hatás egyértelműen beazonosítható kell hogy legyen.
 
 \begin{figure}[H]
 	\centering
 	% trim={<left> <lower> <right> <upper>}
-	\includegraphics[trim=0 0 0 0, clip,width=0.7\textwidth]{figures/ident-valve2}
-	\caption{Identifikáció során }
-	\label{fig:ident}
+	\includegraphics[trim=0 0 0 0, clip,width=0.9\textwidth]{figures/valve-step}
+	\caption{Szimulációs eredmények a bemeneteket külön-külön gerjesztve}
+	\label{fig:valve-step}
 \end{figure}
 
-A módszer az, amit a több forrást tartalmazó hálózatok esetén is alkalmazunk: a válasz számításakor mindig egy forrás hatását vizsgáltuk, a többit dezaktivizáltuk: azaz a több bemenetű Simulink hálózatnak egyszerre csak egy bemenetét gerjesztem. Ez látható a felső ábrán. A kimeneten a válasz ekkor szuperpozícióval adódik. 
+A módszer az, amit a több forrást tartalmazó hálózatok esetén is alkalmazunk: a válasz számításakor mindig egy forrás hatását vizsgáltuk, a többit dezaktivizáltuk: azaz a több bemenetű Simulink hálózatnak egyszerre csak egy bemenetét gerjesztem. Lineáris hálózat vizsgálatakor a kimeneten a válasz szuperpozícióval adódik. 
 
-A szuperpozíció módszere itt csak korlátozásokkal működik. A fűtőtestekben ugyanis adott hőmérsékletű víz kering, így ha a környezeti hőmérséklet megnő, azok teljesítménye lecsökken. 
+\begin{figure}[H]
+	\centering
+	% trim={<left> <lower> <right> <upper>}
+	\includegraphics[trim=0 0 0 0, clip,width=0.9\textwidth]{figures/valve-nonlinearity}
+	\caption{Szimulációs eredmények a szelepeket lépcsős függvénnyel gerjesztve}
+	\label{fig:valve-stair}
+\end{figure}
+
+
+
+%A szuperpozíció módszere itt csak korlátozásokkal működik. A fűtőtestekben ugyanis adott hőmérsékletű víz kering, így ha a környezeti hőmérséklet megnő, azok teljesítménye lecsökken. 
 
 A Simulink modellt bemenetein gerjesztem (külső hőmérséklet \SI{40}{\celsius}, majd fűtés \SI{60}{\celsius} előremenő hőmérsékleten valve = 1 állásban.\footnote{A stratégia lehet $t_s$ előremenő hőmérséklet vagy $\xi \cdot \dot m$ tömegáram szabályzása $\alpha$ = [0..1] beavatkozójellel. })
 

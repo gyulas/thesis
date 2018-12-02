@@ -14,7 +14,7 @@
 %%
 
 
-T_s=600;                     %% second
+T_s=1800;                     %% second
 timeUnit_1min=60/T_s;
 timeUnit_1hour=3600/T_s;
 timeUnit_1day=timeUnit_1hour*24;
@@ -109,7 +109,7 @@ h_w_radi=150;                       % k [W/m^2K]
 % c_w=4189;                           % c [J/kgK] viz fajhoje
 
 %C22 600 mm magas:
-l_r=2;                              % l [m] a radiator hossza
+l_r=1.8;                              % l [m] a radiator hossza
 area_radiator=l_r*0.8*3;            % A [m^2] - 3-as szorzo: lamellak, stb.
 m_r=33.4*l_r;                       % m [kg]    --     tomege
 c_metal=464;                        % c [J/kgK] acel fajhoje
