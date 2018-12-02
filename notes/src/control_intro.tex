@@ -70,6 +70,10 @@ Az MPC szintézis folyamata:% be kellene tabolni
 
 A \verb|"setmpcsignals()"| függvény használatával egy új átviteli függvényt hozunk létre, amit az MPC függvénynek odaadhatunk. Ez annyival több az identifikált tf-nél, hogy benne vannak a be-és kimenetek típusai is, aszerint, hogy az említett jelek milyen típusúak. A szakasz átviteli függvényének be- és kimeneteit meg kell nevezni, a típusokat a \ref{nomencl_mpcsignals} listából választhatjuk ki. Ezután az \verb|"mpc(tf, Ts)"| függvénnyel létrehozhatjuk az MPC szabályzót a megadott szakaszmodellre.
 
+Ezzel még nem kaptunk használható szabályzót, mert az alapértelmezett súlyok és a normalizálatlan bemenetek miatt a legkisebb költségű beavatkozás az, ha egyszerűen nem csinálunk semmit.
+
+A költségfüggvény akkor működik jól, ha a modellbemeneteket 1-re normáljuk. Be kell állítani tehát az MPC mért változó tulajdonságánál a modell kimenetének 1-re skálázását. 
+
 Alapértelmezés szerint a költségfüggvény súlyai az alábbiak. A zárt szabályzási körben ezek a súlyok a hibajelet büntették a legjobban, ezért nagyon jó referenciakövetést sikerült elérni.
 
 

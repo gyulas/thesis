@@ -29,9 +29,10 @@ set(hMeasured, 'OuterPosition', [0,0, 1, .6]);
 %plot(ValveAndTemp.time,[ValveAndTemp.signals(1).values(:,1:1:2) ValveAndTemp.signals(1).values(:,3)-273])
 
 plot(ValveAndTemp.time, ValveAndTemp.signals(1).values(:,1),'k-',...
-     ValveAndTemp.time, ValveAndTemp.signals(1).values(:,2),'r-',...
-     ValveAndTemp.time, ValveAndTemp.signals(1).values(:,3)-273,'g-',...
-     ValveAndTemp.time, ValveAndTemp.signals(1).values(:,4)-273,'c-')
+     ValveAndTemp.time, ValveAndTemp.signals(1).values(:,2),'r-')
+%  ,...
+%      ValveAndTemp.time, ValveAndTemp.signals(1).values(:,3)-273,'g-',...
+%      ValveAndTemp.time, ValveAndTemp.signals(1).values(:,4)-273,'c-')
 
 lim=get(gca,'YLim');
 lim(1)=-25;
@@ -46,7 +47,8 @@ set(gca,'YLim',lim);
 
 %set X axes label
 plotting_axesLabel_Days()
-legend('Külsõ hõmérséklet t_e','Helyiség hõmérséklete t_i','Nemlineáris modell t_i','Linearizált modell t_i')
+legend('Külsõ hõmérséklet t_e','Helyiség hõmérséklete t_i')
+%,'Nemlineáris modell t_i','Linearizált modell t_i')
 leg=get(gca, 'Legend');
 leg.Position =[0.6200    0.58    0.2927    0.0822];
 subtitle=get(hMeasured,'Title');
