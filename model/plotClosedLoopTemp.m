@@ -1,4 +1,4 @@
-function plotIdentTemp(ValveAndTemp)
+function plotClosedLoopTemp(ValveAndTemp)
 
 hManipulated=subplot(2,1,1);
 set(hManipulated, 'OuterPosition', [0,0.60, 1, .34]);
@@ -18,7 +18,7 @@ set(gca,'YLim',lim);
 
 lim=get(gca,'XLim');
 lim(1)=0;
-lim(2)=65000000;
+lim(2)=3600*24*10*10;
 set(gca,'XLim',lim);
 
 %set X axes label
@@ -56,12 +56,12 @@ plot(ValveAndTemp.time, ValveAndTemp.signals(1).values(:,1)-273,'k-',...
 
 lim=get(gca,'YLim');
 lim(1)=-15;
-lim(2)=35;
+lim(2)=40;
 set(gca,'YLim',lim);
 
 lim=get(gca,'XLim');
 lim(1)=0;
-lim(2)=65000000;
+lim(2)=3600*24*10*10;
 set(gca,'XLim',lim);
 
 % lab=get(gca,'YTickLabel');
