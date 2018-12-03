@@ -7,9 +7,9 @@
  *
  * Code generation for model "tuske_sldrtex_packetio".
  *
- * Model version              : 1.118
- * Simulink Coder version : 8.11 (R2016b) 25-Aug-2016
- * C source code generated on : Sat Nov 10 00:15:16 2018
+ * Model version              : 1.122
+ * Simulink Coder version : 9.0 (R2018b) 24-May-2018
+ * C source code generated on : Mon Dec  3 22:18:44 2018
  *
  * Target selection: sldrt.tlc
  * Note: GRT includes extra infrastructure and instrumentation for prototyping
@@ -24,7 +24,7 @@
 #include "multiword_types.h"
 #include "zero_crossing_types.h"
 
-/* Parameters (auto storage) */
+/* Parameters (default storage) */
 typedef struct P_tuske_sldrtex_packetio_T_ P_tuske_sldrtex_packetio_T;
 
 /* Forward declaration for rtModel */

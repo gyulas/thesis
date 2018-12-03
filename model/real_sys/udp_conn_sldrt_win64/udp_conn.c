@@ -9,7 +9,7 @@
  *
  * Model version              : 1.140
  * Simulink Coder version : 9.0 (R2018b) 24-May-2018
- * C source code generated on : Mon Dec  3 21:17:32 2018
+ * C source code generated on : Mon Dec  3 22:28:47 2018
  *
  * Target selection: sldrt.tlc
  * Note: GRT includes extra infrastructure and instrumentation for prototyping
@@ -27,12 +27,12 @@ static double SLDRTBoardOptions0[] = {
   0.0,
   9090.0,
   49.0,
-  54.0,
-  56.0,
-  46.0,
-  49.0,
   57.0,
   50.0,
+  46.0,
+  49.0,
+  54.0,
+  56.0,
   46.0,
   48.0,
   46.0,
@@ -285,7 +285,7 @@ static double SLDRTBoardOptions0[] = {
 /* list of Simulink Desktop Real-Time timers */
 const int SLDRTTimerCount = 1;
 const double SLDRTTimers[2] = {
-  10.0, 0.0,
+  2.0, 0.0,
 };
 
 /* list of Simulink Desktop Real-Time boards */
@@ -310,56 +310,54 @@ void udp_conn_output(void)
   real_T v;
   real_T lastSin_tmp;
 
-  /* S-Function (sldrtpi): '<Root>/Packet Input' */
-  /* S-Function Block: <Root>/Packet Input */
+  /* S-Function (sldrtpi): '<Root>/Packet Input1' */
+  /* S-Function Block: <Root>/Packet Input1 */
   {
-    uint8_T indata[8U];
-    int status = RTBIO_DriverIO(0, STREAMINPUT, IOREAD, 8U,
-      &udp_conn_P.PacketInput_PacketID, (double*) indata, NULL);
-    udp_conn_B.PacketInput_o5 = 0;     /* Missed Ticks value is always zero */
-    udp_conn_B.PacketInput_o4 = (status>>1) & 0x1;/* Data Error port */
-    udp_conn_B.PacketInput_o3 = status & 0x1;/* Data Ready port */
+    uint8_T indata[4U];
+    int status = RTBIO_DriverIO(0, STREAMINPUT, IOREAD, 4U,
+      &udp_conn_P.PacketInput1_PacketID, (double*) indata, NULL);
+    udp_conn_B.PacketInput1_o5 = 0;    /* Missed Ticks value is always zero */
     if (status & 0x1) {
       RTWin_ANYTYPEPTR indp;
       indp.p_uint8_T = indata;
-
-      {
-        /* uint32_T, big endian */
-        uint8_T* blkoutptr = ((uint8_T *) &udp_conn_B.PacketInput_o1) + 4;
-        *--blkoutptr = *indp.p_uint8_T++;
-        *--blkoutptr = *indp.p_uint8_T++;
-        *--blkoutptr = *indp.p_uint8_T++;
-        *--blkoutptr = *indp.p_uint8_T++;
-      }
-
-      {
-        /* uint32_T, big endian */
-        uint8_T* blkoutptr = ((uint8_T *) &udp_conn_B.PacketInput_o2) + 4;
-        *--blkoutptr = *indp.p_uint8_T++;
-        *--blkoutptr = *indp.p_uint8_T++;
-        *--blkoutptr = *indp.p_uint8_T++;
-        *--blkoutptr = *indp.p_uint8_T++;
-      }
+      udp_conn_B.PacketInput1_o1 = *indp.p_uint8_T++;
+      udp_conn_B.PacketInput1_o2 = *indp.p_uint8_T++;
+      udp_conn_B.PacketInput1_o3 = *indp.p_uint8_T++;
+      udp_conn_B.PacketInput1_o4 = *indp.p_uint8_T++;
     }
   }
 
+  /* Sum: '<Root>/Sum3' incorporates:
+   *  Gain: '<Root>/Gain3'
+   */
+  udp_conn_B.Sum3 = (uint16_T)((uint32_T)udp_conn_P.Gain3_Gain *
+    udp_conn_B.PacketInput1_o3 + udp_conn_B.PacketInput1_o4);
+
+  /* Sum: '<Root>/Sum2' incorporates:
+   *  Gain: '<Root>/Gain2'
+   */
+  udp_conn_B.Sum2 = (uint16_T)((uint32_T)udp_conn_P.Gain2_Gain *
+    udp_conn_B.PacketInput1_o1 + udp_conn_B.PacketInput1_o2);
+
+  /* Gain: '<Root>/Gain' incorporates:
+   *  DataTypeConversion: '<Root>/Data Type Conversion2'
+   */
+  udp_conn_B.Gain = udp_conn_P.Gain_Gain * (real_T)udp_conn_B.Sum2;
+
   /* Sum: '<Root>/Sum' incorporates:
    *  Constant: '<Root>/Constant1'
-   *  DataTypeConversion: '<Root>/Data Type Conversion2'
-   *  Gain: '<Root>/Gain'
    */
-  udp_conn_B.Sum = udp_conn_P.Gain_Gain * (real_T)udp_conn_B.PacketInput_o1 +
-    udp_conn_P.Constant1_Value;
+  udp_conn_B.Sum = udp_conn_B.Gain + udp_conn_P.Constant1_Value;
 
-  /* DataTypeConversion: '<Root>/Data Type Conversion3' */
-  udp_conn_B.DataTypeConversion3 = udp_conn_B.PacketInput_o2;
+  /* Gain: '<Root>/Gain1' incorporates:
+   *  DataTypeConversion: '<Root>/Data Type Conversion3'
+   */
+  udp_conn_B.Gain1 = udp_conn_P.Gain1_Gain * (real_T)udp_conn_B.Sum3;
 
   /* Sum: '<Root>/Sum1' incorporates:
    *  Constant: '<Root>/Constant1'
-   *  Gain: '<Root>/Gain1'
    */
-  udp_conn_B.Sum1 = udp_conn_P.Gain1_Gain * udp_conn_B.DataTypeConversion3 +
-    udp_conn_P.Constant1_Value;
+  udp_conn_B.Sum1 = udp_conn_B.Gain1 + udp_conn_P.Constant1_Value;
 
   /* Constant: '<Root>/Constant' */
   udp_conn_B.Constant = udp_conn_P.Constant_Value;
@@ -538,7 +536,7 @@ RT_MODEL_udp_conn_T *udp_conn(void)
     udp_conn_M->Timing.offsetTimes = (&udp_conn_M->Timing.offsetTimesArray[0]);
 
     /* task periods */
-    udp_conn_M->Timing.sampleTimes[0] = (10.0);
+    udp_conn_M->Timing.sampleTimes[0] = (2.0);
 
     /* task offsets */
     udp_conn_M->Timing.offsetTimes[0] = (0.0);
@@ -553,13 +551,13 @@ RT_MODEL_udp_conn_T *udp_conn(void)
   }
 
   rtmSetTFinal(udp_conn_M, 300.0);
-  udp_conn_M->Timing.stepSize0 = 10.0;
+  udp_conn_M->Timing.stepSize0 = 2.0;
 
   /* External mode info */
-  udp_conn_M->Sizes.checksums[0] = (2036719368U);
-  udp_conn_M->Sizes.checksums[1] = (4097652674U);
-  udp_conn_M->Sizes.checksums[2] = (1580226221U);
-  udp_conn_M->Sizes.checksums[3] = (4276653142U);
+  udp_conn_M->Sizes.checksums[0] = (2212433608U);
+  udp_conn_M->Sizes.checksums[1] = (3736862535U);
+  udp_conn_M->Sizes.checksums[2] = (660422239U);
+  udp_conn_M->Sizes.checksums[3] = (2725521184U);
 
   {
     static const sysRanDType rtAlwaysEnabled = SUBSYS_RAN_BC_ENABLE;
@@ -575,8 +573,8 @@ RT_MODEL_udp_conn_T *udp_conn(void)
   }
 
   udp_conn_M->solverInfoPtr = (&udp_conn_M->solverInfo);
-  udp_conn_M->Timing.stepSize = (10.0);
-  rtsiSetFixedStepSize(&udp_conn_M->solverInfo, 10.0);
+  udp_conn_M->Timing.stepSize = (2.0);
+  rtsiSetFixedStepSize(&udp_conn_M->solverInfo, 2.0);
   rtsiSetSolverMode(&udp_conn_M->solverInfo, SOLVER_MODE_SINGLETASKING);
 
   /* block I/O */
@@ -585,8 +583,9 @@ RT_MODEL_udp_conn_T *udp_conn(void)
                 sizeof(B_udp_conn_T));
 
   {
+    udp_conn_B.Gain = 0.0;
     udp_conn_B.Sum = 0.0;
-    udp_conn_B.DataTypeConversion3 = 0.0;
+    udp_conn_B.Gain1 = 0.0;
     udp_conn_B.Sum1 = 0.0;
     udp_conn_B.Constant = 0.0;
   }
@@ -624,9 +623,9 @@ RT_MODEL_udp_conn_T *udp_conn(void)
   udp_conn_M->Sizes.numU = (0);        /* Number of model inputs */
   udp_conn_M->Sizes.sysDirFeedThru = (0);/* The model is not direct feedthrough */
   udp_conn_M->Sizes.numSampTimes = (1);/* Number of sample times */
-  udp_conn_M->Sizes.numBlocks = (19);  /* Number of blocks */
-  udp_conn_M->Sizes.numBlockIO = (11); /* Number of block outputs */
-  udp_conn_M->Sizes.numBlockPrms = (17);/* Sum of parameter "widths" */
+  udp_conn_M->Sizes.numBlocks = (23);  /* Number of blocks */
+  udp_conn_M->Sizes.numBlockIO = (14); /* Number of block outputs */
+  udp_conn_M->Sizes.numBlockPrms = (19);/* Sum of parameter "widths" */
   return udp_conn_M;
 }
 

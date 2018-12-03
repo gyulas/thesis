@@ -9,7 +9,7 @@
  *
  * Model version              : 1.140
  * Simulink Coder version : 9.0 (R2018b) 24-May-2018
- * C source code generated on : Mon Dec  3 21:17:32 2018
+ * C source code generated on : Mon Dec  3 22:28:47 2018
  *
  * Target selection: sldrt.tlc
  * Note: GRT includes extra infrastructure and instrumentation for prototyping
@@ -844,24 +844,27 @@
 
 /* Block signals (default storage) */
 typedef struct {
+  real_T Gain;                         /* '<Root>/Gain' */
   real_T Sum;                          /* '<Root>/Sum' */
-  real_T DataTypeConversion3;          /* '<Root>/Data Type Conversion3' */
+  real_T Gain1;                        /* '<Root>/Gain1' */
   real_T Sum1;                         /* '<Root>/Sum1' */
   real_T Constant;                     /* '<Root>/Constant' */
-  uint32_T PacketInput_o1;             /* '<Root>/Packet Input' */
-  uint32_T PacketInput_o2;             /* '<Root>/Packet Input' */
-  int32_T PacketInput_o5;              /* '<Root>/Packet Input' */
+  int32_T PacketInput1_o5;             /* '<Root>/Packet Input1' */
   int32_T PacketOutput;                /* '<Root>/Packet Output' */
+  uint16_T Sum3;                       /* '<Root>/Sum3' */
+  uint16_T Sum2;                       /* '<Root>/Sum2' */
+  uint8_T PacketInput1_o1;             /* '<Root>/Packet Input1' */
+  uint8_T PacketInput1_o2;             /* '<Root>/Packet Input1' */
+  uint8_T PacketInput1_o3;             /* '<Root>/Packet Input1' */
+  uint8_T PacketInput1_o4;             /* '<Root>/Packet Input1' */
   uint8_T DataTypeConversion;          /* '<Root>/Data Type Conversion' */
-  boolean_T PacketInput_o3;            /* '<Root>/Packet Input' */
-  boolean_T PacketInput_o4;            /* '<Root>/Packet Input' */
 } B_udp_conn_T;
 
 /* Block states (default storage) for system '<Root>' */
 typedef struct {
   real_T lastSin;                      /* '<Root>/Sine Wave (double) 0.5Hz' */
   real_T lastCos;                      /* '<Root>/Sine Wave (double) 0.5Hz' */
-  void *PacketInput_PWORK;             /* '<Root>/Packet Input' */
+  void *PacketInput1_PWORK;            /* '<Root>/Packet Input1' */
   void *PacketOutput_PWORK[2];         /* '<Root>/Packet Output' */
   int32_T systemEnable;                /* '<Root>/Sine Wave (double) 0.5Hz' */
 } DW_udp_conn_T;
@@ -876,20 +879,20 @@ typedef struct {
 
 /* Parameters (default storage) */
 struct P_udp_conn_T_ {
-  real_T PacketInput_MaxMissedTicks;   /* Mask Parameter: PacketInput_MaxMissedTicks
-                                        * Referenced by: '<Root>/Packet Input'
+  real_T PacketInput1_MaxMissedTicks;  /* Mask Parameter: PacketInput1_MaxMissedTicks
+                                        * Referenced by: '<Root>/Packet Input1'
                                         */
   real_T PacketOutput_MaxMissedTicks;  /* Mask Parameter: PacketOutput_MaxMissedTicks
                                         * Referenced by: '<Root>/Packet Output'
                                         */
-  real_T PacketInput_YieldWhenWaiting; /* Mask Parameter: PacketInput_YieldWhenWaiting
-                                        * Referenced by: '<Root>/Packet Input'
+  real_T PacketInput1_YieldWhenWaiting;/* Mask Parameter: PacketInput1_YieldWhenWaiting
+                                        * Referenced by: '<Root>/Packet Input1'
                                         */
   real_T PacketOutput_YieldWhenWaiting;/* Mask Parameter: PacketOutput_YieldWhenWaiting
                                         * Referenced by: '<Root>/Packet Output'
                                         */
-  int32_T PacketInput_PacketID;        /* Mask Parameter: PacketInput_PacketID
-                                        * Referenced by: '<Root>/Packet Input'
+  int32_T PacketInput1_PacketID;       /* Mask Parameter: PacketInput1_PacketID
+                                        * Referenced by: '<Root>/Packet Input1'
                                         */
   int32_T PacketOutput_PacketID;       /* Mask Parameter: PacketOutput_PacketID
                                         * Referenced by: '<Root>/Packet Output'
@@ -926,6 +929,12 @@ struct P_udp_conn_T_ {
                                         */
   real_T SineWavedouble05Hz_PCos;      /* Computed Parameter: SineWavedouble05Hz_PCos
                                         * Referenced by: '<Root>/Sine Wave (double) 0.5Hz'
+                                        */
+  uint8_T Gain3_Gain;                  /* Computed Parameter: Gain3_Gain
+                                        * Referenced by: '<Root>/Gain3'
+                                        */
+  uint8_T Gain2_Gain;                  /* Computed Parameter: Gain2_Gain
+                                        * Referenced by: '<Root>/Gain2'
                                         */
 };
 
@@ -1074,24 +1083,6 @@ extern RT_MODEL_udp_conn_T *const udp_conn_M;
  * '<S1>'   : 'udp_conn/Iddata Sink'
  * '<S2>'   : 'udp_conn/MPC Controller'
  * '<S3>'   : 'udp_conn/MPC Controller/MPC'
- * '<S4>'   : 'udp_conn/MPC Controller/MPC/MPC Matrix Signal Check'
- * '<S5>'   : 'udp_conn/MPC Controller/MPC/MPC Matrix Signal Check1'
- * '<S6>'   : 'udp_conn/MPC Controller/MPC/MPC Matrix Signal Check2'
- * '<S7>'   : 'udp_conn/MPC Controller/MPC/MPC Preview Signal Check'
- * '<S8>'   : 'udp_conn/MPC Controller/MPC/MPC Preview Signal Check1'
- * '<S9>'   : 'udp_conn/MPC Controller/MPC/MPC Preview Signal Check2'
- * '<S10>'  : 'udp_conn/MPC Controller/MPC/MPC Preview Signal Check3'
- * '<S11>'  : 'udp_conn/MPC Controller/MPC/MPC Preview Signal Check4'
- * '<S12>'  : 'udp_conn/MPC Controller/MPC/MPC Scalar Signal Check'
- * '<S13>'  : 'udp_conn/MPC Controller/MPC/MPC Scalar Signal Check1'
- * '<S14>'  : 'udp_conn/MPC Controller/MPC/MPC Vector Signal Check'
- * '<S15>'  : 'udp_conn/MPC Controller/MPC/MPC Vector Signal Check1'
- * '<S16>'  : 'udp_conn/MPC Controller/MPC/MPC Vector Signal Check11'
- * '<S17>'  : 'udp_conn/MPC Controller/MPC/MPC Vector Signal Check2'
- * '<S18>'  : 'udp_conn/MPC Controller/MPC/MPC Vector Signal Check3'
- * '<S19>'  : 'udp_conn/MPC Controller/MPC/MPC Vector Signal Check4'
- * '<S20>'  : 'udp_conn/MPC Controller/MPC/MPC Vector Signal Check5'
- * '<S21>'  : 'udp_conn/MPC Controller/MPC/MPC Vector Signal Check6'
- * '<S22>'  : 'udp_conn/MPC Controller/MPC/optimizer'
+ * '<S4>'   : 'udp_conn/MPC Controller/MPC/optimizer'
  */
 #endif                                 /* RTW_HEADER_udp_conn_h_ */

@@ -9,7 +9,7 @@
  *
  * Model version              : 1.140
  * Simulink Coder version : 9.0 (R2018b) 24-May-2018
- * C source code generated on : Mon Dec  3 21:17:32 2018
+ * C source code generated on : Mon Dec  3 22:28:47 2018
  *
  * Target selection: sldrt.tlc
  * Note: GRT includes extra infrastructure and instrumentation for prototyping
@@ -58,42 +58,42 @@ static const char_T * rtDataTypeNames[] = {
 
 /* data type transitions for block I/O structure */
 static DataTypeTransition rtBTransitions[] = {
-  { (char_T *)(&udp_conn_B.Sum), 0, 0, 4 },
+  { (char_T *)(&udp_conn_B.Gain), 0, 0, 5 },
 
-  { (char_T *)(&udp_conn_B.PacketInput_o1), 7, 0, 2 },
+  { (char_T *)(&udp_conn_B.PacketInput1_o5), 6, 0, 2 },
 
-  { (char_T *)(&udp_conn_B.PacketInput_o5), 6, 0, 2 },
+  { (char_T *)(&udp_conn_B.Sum3), 5, 0, 2 },
 
-  { (char_T *)(&udp_conn_B.DataTypeConversion), 3, 0, 1 },
-
-  { (char_T *)(&udp_conn_B.PacketInput_o3), 8, 0, 2 }
+  { (char_T *)(&udp_conn_B.PacketInput1_o1), 3, 0, 5 }
   ,
 
   { (char_T *)(&udp_conn_DW.lastSin), 0, 0, 2 },
 
-  { (char_T *)(&udp_conn_DW.PacketInput_PWORK), 11, 0, 3 },
+  { (char_T *)(&udp_conn_DW.PacketInput1_PWORK), 11, 0, 3 },
 
   { (char_T *)(&udp_conn_DW.systemEnable), 6, 0, 1 }
 };
 
 /* data type transition table for block I/O structure */
 static DataTypeTransitionTable rtBTransTable = {
-  8U,
+  7U,
   rtBTransitions
 };
 
 /* data type transitions for Parameters structure */
 static DataTypeTransition rtPTransitions[] = {
-  { (char_T *)(&udp_conn_P.PacketInput_MaxMissedTicks), 0, 0, 4 },
+  { (char_T *)(&udp_conn_P.PacketInput1_MaxMissedTicks), 0, 0, 4 },
 
-  { (char_T *)(&udp_conn_P.PacketInput_PacketID), 6, 0, 2 },
+  { (char_T *)(&udp_conn_P.PacketInput1_PacketID), 6, 0, 2 },
 
-  { (char_T *)(&udp_conn_P.Gain_Gain), 0, 0, 11 }
+  { (char_T *)(&udp_conn_P.Gain_Gain), 0, 0, 11 },
+
+  { (char_T *)(&udp_conn_P.Gain3_Gain), 3, 0, 2 }
 };
 
 /* data type transition table for Parameters structure */
 static DataTypeTransitionTable rtPTransTable = {
-  3U,
+  4U,
   rtPTransitions
 };
 

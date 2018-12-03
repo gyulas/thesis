@@ -7,9 +7,9 @@
  *
  * Code generation for model "tuske_sldrtex_packetio".
  *
- * Model version              : 1.118
- * Simulink Coder version : 8.11 (R2016b) 25-Aug-2016
- * C source code generated on : Sat Nov 10 00:15:16 2018
+ * Model version              : 1.122
+ * Simulink Coder version : 9.0 (R2018b) 24-May-2018
+ * C source code generated on : Mon Dec  3 22:18:44 2018
  *
  * Target selection: sldrt.tlc
  * Note: GRT includes extra infrastructure and instrumentation for prototyping
@@ -58,17 +58,19 @@ static const char_T * rtDataTypeNames[] = {
 
 /* data type transitions for block I/O structure */
 static DataTypeTransition rtBTransitions[] = {
-  { (char_T *)(&tuske_sldrtex_packetio_B.PacketInput), 5, 0, 2 },
+  { (char_T *)(&tuske_sldrtex_packetio_B.DataTypeConversion1), 0, 0, 1 },
 
-  { (char_T *)(&tuske_sldrtex_packetio_B.DataTypeConversion), 3, 0, 1 }
+  { (char_T *)(&tuske_sldrtex_packetio_B.PacketInput_o3), 6, 0, 1 },
+
+  { (char_T *)(&tuske_sldrtex_packetio_B.DataTypeConversion), 3, 0, 3 }
   ,
 
-  { (char_T *)(&tuske_sldrtex_packetio_DW.PacketOutput_PWORK[0]), 11, 0, 4 }
+  { (char_T *)(&tuske_sldrtex_packetio_DW.PacketOutput_PWORK[0]), 11, 0, 5 }
 };
 
 /* data type transition table for block I/O structure */
 static DataTypeTransitionTable rtBTransTable = {
-  3U,
+  4U,
   rtBTransitions
 };
 

@@ -27,7 +27,7 @@
 #       file that contains 'rtwgensettings.ProjectDirSuffix', see grt.tlc .
 #
 # !!! THIS FILE IS AUTO-GENERATED !!!
-# Copyright 1994-2016 The MathWorks, Inc.
+# Copyright 1994-2017 The MathWorks, Inc.
 
 
 
@@ -42,7 +42,7 @@
 #  SYS_TARGET_FILE - Name of system target file.
 #
 
-MAKECMD         = "C:/PROGRA~1/MATLAB/R2016b/bin/win64/gmake"
+MAKECMD         = "C:/PROGRA~1/MATLAB/R2018b/bin/win64/gmake"
 HOST            = ANY
 BUILD           = yes
 SYS_TARGET_FILE = sldrt.tlc
@@ -78,18 +78,18 @@ MAKEFILE_FILESEP = /
 #  REBUILD_ALL         - yes (1) or no (0): Rebuild all files
 
 MODEL                := tuske_sldrtex_packetio
-MODULES              := rtGetInf.c rtGetNaN.c rt_nonfinite.c tuske_sldrtex_packetio_data.c tuske_sldrtex_packetio_tgtconn.c 
+MODULES              := rtGetInf.c rtGetNaN.c rt_nonfinite.c tuske_sldrtex_packetio_data.c tuske_sldrtex_packetio_tgtconn.c
 MAKEFILE             := tuske_sldrtex_packetio.mk
-MATLAB_ROOT          := C:/PROGRA~1/MATLAB/R2016b
-MATLAB_BIN           := C:/PROGRA~1/MATLAB/R2016b/bin
+MATLAB_ROOT          := C:/PROGRA~1/MATLAB/R2018b
+MATLAB_BIN           := C:/PROGRA~1/MATLAB/R2018b/bin
 S_FUNCTIONS          := 
 S_FUNCTIONS_LIB      := 
 SOLVER               := 
-NUMST                := 3
+NUMST                := 2
 TID01EQ              := 1
 NCSTATES             := 0
-BUILDARGS            :=  EXTMODE_STATIC_ALLOC=0 EXTMODE_STATIC_ALLOC_SIZE=1000000 TMW_EXTMODE_TESTING=0 ISPROTECTINGMODEL=NOTPROTECTING OPTS="-DTGTCONN -DON_TARGET_WAIT_FOR_START=1"
-MULTITASKING         := 1
+BUILDARGS            :=  EXTMODE_STATIC_ALLOC=0 EXTMODE_STATIC_ALLOC_SIZE=1000000 TMW_EXTMODE_TESTING=0 COMBINE_OUTPUT_UPDATE_FCNS=0 INCLUDE_MDL_TERMINATE_FCN=1 MULTI_INSTANCE_CODE=0 ISPROTECTINGMODEL=NOTPROTECTING OPTS="-DTGTCONN -DEXT_MODE -DON_TARGET_WAIT_FOR_START=1"
+MULTITASKING         := 0
 EXT_MODE             := 1
 EXTMODE_TRANSPORT    := 0
 
@@ -104,7 +104,7 @@ ADDITIONAL_LDFLAGS   :=
 DEFINES_CUSTOM       := 
 
 # Simulink Desktop Real-Time specific parameters
-SLDRTDIR             := C:/PROGRA~1/MATLAB/R2016b/toolbox/sldrt
+SLDRTDIR             := C:/PROGRA~1/MATLAB/R2018b/toolbox/sldrt
 TARGETARCH           := win64
 CC_LISTING           := 0
 REBUILD_ALL          := 0
@@ -164,7 +164,7 @@ REQ_INCLUDES := $(MATLAB_ROOT)/simulink/include;$(MATLAB_ROOT)/extern/include;$(
 REQ_INCLUDES += ;$(MATLAB_ROOT)/toolbox/shared/can/src/scanutil;$(SLDRTDIR)/src
 
 # additional includes
-REQ_INCLUDES += ;C:/Users/gylaszlo.SCH/Documents/szakdoga/thesis/model/tuske_sldrtex_packetio_sldrt_win64;C:/Users/gylaszlo.SCH/Documents/szakdoga/thesis/model;C:/Users/gylaszlo.SCH/DOCUME~1/szakdoga/SESSIO~1;$(MATLAB_ROOT)/rtw/c/src/ext_mode/common
+REQ_INCLUDES += ;C:/Users/gylaszlo.SCH/Documents/szakdoga/thesis/model;C:/Users/gylaszlo.SCH/Documents/szakdoga/thesis/model/tuske_sldrtex_packetio_sldrt_win64;C:/Users/gylaszlo.SCH/DOCUME~1/szakdoga/SESSIO~1;$(MATLAB_ROOT)/extern/include;$(MATLAB_ROOT)/simulink/include;$(MATLAB_ROOT)/rtw/c/src;$(MATLAB_ROOT)/rtw/c/src/ext_mode/common
 
 # shared includes
 ifneq ($(SHARED_SRC_DIR),)
@@ -268,6 +268,12 @@ $(PRODUCT) : $(OBJS) $(SHARED_LIB)
 	$(info ### Created static library $@)
 endif
 
+# path to additional sources
+CPPSRCDIRS := $(RELATIVE_PATH_TO_ANCHOR) $(MATLAB_ROOT)/simulink/src $(MATLAB_ROOT)/rtw/c/src $(MATLAB_ROOT)/simulink/src $(MATLAB_ROOT)/rtw/c/src/ext_mode/common 
+CSRCDIRS := $(SLDRTDIR)/src $(MATLAB_ROOT)/rtw/c/src/ext_mode/common $(CPPSRCDIRS)
+vpath %.c $(CSRCDIRS)
+vpath %.cpp $(CPPSRCDIRS)
+
 # object build macros
 CC_CPP := $(if $(filter cpp,$(TARGET_LANG_EXT)),$(CPP),$(CC))
 define BUILDOBJ
@@ -280,59 +286,12 @@ endef
 sldrt_main.obj : $(SLDRTDIR)/src/sldrt_main.c $(MAKEFILE)
 	$(call BUILDOBJ, $(CC_CPP))
 
-%.obj : $(SLDRTDIR)/src/%.c
-	$(call BUILDOBJ, $(CC))
-
-%.obj : $(MATLAB_ROOT)/rtw/c/src/ext_mode/common/%.c
-	$(call BUILDOBJ, $(CC))
-
-%.obj : $(RELATIVE_PATH_TO_ANCHOR)/%.c
-	$(call BUILDOBJ, $(CC))
-
-%.obj : $(RELATIVE_PATH_TO_ANCHOR)/%.cpp
-	$(call BUILDOBJ, $(CPP))
-
 %.obj : %.c
 	$(call BUILDOBJ, $(CC))
 
 %.obj : %.cpp
 	$(call BUILDOBJ, $(CPP))
 
-# additional sources
-%.obj : $(MATLAB_ROOT)/rtw/c/src/%.c $(MAKEFILE)
-	$(call BUILDOBJ, $(CC))
-
-%.obj : $(MATLAB_ROOT)/simulink/src/%.c $(MAKEFILE)
-	$(call BUILDOBJ, $(CC))
-
-%.obj : $(MATLAB_ROOT)/rtw/c/src/ext_mode/common/%.c $(MAKEFILE)
-	$(call BUILDOBJ, $(CC))
-
-%.obj : ../%.c $(MAKEFILE)
-	$(call BUILDOBJ, $(CC))
-
-
-
-%.obj : $(MATLAB_ROOT)/rtw/c/src/%.cpp $(MAKEFILE)
-	$(call BUILDOBJ, $(CPP))
-
-%.obj : $(MATLAB_ROOT)/simulink/src/%.cpp $(MAKEFILE)
-	$(call BUILDOBJ, $(CPP))
-
-%.obj : $(MATLAB_ROOT)/rtw/c/src/ext_mode/common/%.cpp $(MAKEFILE)
-	$(call BUILDOBJ, $(CPP))
-
-%.obj : ../%.cpp $(MAKEFILE)
-	$(call BUILDOBJ, $(CPP))
-
-
-
-# simulink/src helper files
-%.obj : $(MATLAB_ROOT)/simulink/src/%.c
-	$(call BUILDOBJ, $(CC))
-
-%.obj : $(MATLAB_ROOT)/simulink/src/%.cpp
-	$(call BUILDOBJ, $(CPP))
 
 # model-referencing shared objects
 $(SHARED_BIN_DIR)/%.obj : $(SHARED_SRC_DIR)/%.c 
@@ -340,7 +299,6 @@ $(SHARED_BIN_DIR)/%.obj : $(SHARED_SRC_DIR)/%.c
 
 $(SHARED_BIN_DIR)/%.obj : $(SHARED_SRC_DIR)/%.cpp 
 	$(call BUILDOBJ, $(CPP))
-
 
 # model-referencing shared library
 $(SHARED_LIB) : $(SHARED_OBJS)
@@ -352,6 +310,12 @@ $(SHARED_LIB) : $(SHARED_OBJS)
 # rules for building libraries
 
 
+
+# batch compiler command to build objects for precompiled libraries
+define CCBATCH
+  $(CC) $(wordlist 1, 50, $1)
+  $(if $(wordlist 51, 2147483647, $1), $(call CCBATCH, $(wordlist 51, 2147483647, $1)))
+endef
 
 # rules for precompiled libraries
 

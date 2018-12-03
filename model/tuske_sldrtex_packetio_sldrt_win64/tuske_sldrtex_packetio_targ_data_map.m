@@ -107,7 +107,7 @@
   ;%**************************
       
     nTotData      = 0; %add to this count as we go
-    nTotSects     = 2;
+    nTotSects     = 3;
     sectIdxOffset = 0;
     
     ;%
@@ -130,16 +130,12 @@
     ;%
     ;% Auto data (tuske_sldrtex_packetio_B)
     ;%
-      section.nData     = 2;
-      section.data(2)  = dumData; %prealloc
+      section.nData     = 1;
+      section.data(1)  = dumData; %prealloc
       
-	  ;% tuske_sldrtex_packetio_B.PacketInput
+	  ;% tuske_sldrtex_packetio_B.DataTypeConversion1
 	  section.data(1).logicalSrcIdx = 0;
 	  section.data(1).dtTransOffset = 0;
-	
-	  ;% tuske_sldrtex_packetio_B.DataTypeConversion1
-	  section.data(2).logicalSrcIdx = 1;
-	  section.data(2).dtTransOffset = 1;
 	
       nTotData = nTotData + section.nData;
       sigMap.sections(1) = section;
@@ -148,12 +144,31 @@
       section.nData     = 1;
       section.data(1)  = dumData; %prealloc
       
-	  ;% tuske_sldrtex_packetio_B.DataTypeConversion
-	  section.data(1).logicalSrcIdx = 2;
+	  ;% tuske_sldrtex_packetio_B.PacketInput_o3
+	  section.data(1).logicalSrcIdx = 1;
 	  section.data(1).dtTransOffset = 0;
 	
       nTotData = nTotData + section.nData;
       sigMap.sections(2) = section;
+      clear section
+      
+      section.nData     = 3;
+      section.data(3)  = dumData; %prealloc
+      
+	  ;% tuske_sldrtex_packetio_B.DataTypeConversion
+	  section.data(1).logicalSrcIdx = 2;
+	  section.data(1).dtTransOffset = 0;
+	
+	  ;% tuske_sldrtex_packetio_B.PacketInput_o1
+	  section.data(2).logicalSrcIdx = 3;
+	  section.data(2).dtTransOffset = 1;
+	
+	  ;% tuske_sldrtex_packetio_B.PacketInput_o2
+	  section.data(3).logicalSrcIdx = 4;
+	  section.data(3).dtTransOffset = 2;
+	
+      nTotData = nTotData + section.nData;
+      sigMap.sections(3) = section;
       clear section
       
     
@@ -175,7 +190,7 @@
       
     nTotData      = 0; %add to this count as we go
     nTotSects     = 1;
-    sectIdxOffset = 2;
+    sectIdxOffset = 3;
     
     ;%
     ;% Define dummy sections & preallocate arrays
@@ -197,8 +212,8 @@
     ;%
     ;% Auto data (tuske_sldrtex_packetio_DW)
     ;%
-      section.nData     = 3;
-      section.data(3)  = dumData; %prealloc
+      section.nData     = 4;
+      section.data(4)  = dumData; %prealloc
       
 	  ;% tuske_sldrtex_packetio_DW.PacketOutput_PWORK
 	  section.data(1).logicalSrcIdx = 0;
@@ -208,9 +223,13 @@
 	  section.data(2).logicalSrcIdx = 1;
 	  section.data(2).dtTransOffset = 2;
 	
-	  ;% tuske_sldrtex_packetio_DW.uint8_PWORK.LoggedData
+	  ;% tuske_sldrtex_packetio_DW.Scope_PWORK.LoggedData
 	  section.data(3).logicalSrcIdx = 2;
 	  section.data(3).dtTransOffset = 3;
+	
+	  ;% tuske_sldrtex_packetio_DW.uint8_PWORK.LoggedData
+	  section.data(4).logicalSrcIdx = 3;
+	  section.data(4).dtTransOffset = 4;
 	
       nTotData = nTotData + section.nData;
       dworkMap.sections(1) = section;
@@ -242,8 +261,8 @@
   ;%
 
 
-  targMap.checksum0 = 2195414601;
-  targMap.checksum1 = 3186103712;
-  targMap.checksum2 = 1674858207;
-  targMap.checksum3 = 850357812;
+  targMap.checksum0 = 3254308139;
+  targMap.checksum1 = 3177027965;
+  targMap.checksum2 = 3071472576;
+  targMap.checksum3 = 1435787599;
 

@@ -5,7 +5,7 @@
   ;%***********************
       
     nTotData      = 0; %add to this count as we go
-    nTotSects     = 3;
+    nTotSects     = 4;
     sectIdxOffset = 0;
     
     ;%
@@ -31,7 +31,7 @@
       section.nData     = 4;
       section.data(4)  = dumData; %prealloc
       
-	  ;% udp_conn_P.PacketInput_MaxMissedTicks
+	  ;% udp_conn_P.PacketInput1_MaxMissedTicks
 	  section.data(1).logicalSrcIdx = 2;
 	  section.data(1).dtTransOffset = 0;
 	
@@ -39,7 +39,7 @@
 	  section.data(2).logicalSrcIdx = 3;
 	  section.data(2).dtTransOffset = 1;
 	
-	  ;% udp_conn_P.PacketInput_YieldWhenWaiting
+	  ;% udp_conn_P.PacketInput1_YieldWhenWaiting
 	  section.data(3).logicalSrcIdx = 4;
 	  section.data(3).dtTransOffset = 2;
 	
@@ -54,7 +54,7 @@
       section.nData     = 2;
       section.data(2)  = dumData; %prealloc
       
-	  ;% udp_conn_P.PacketInput_PacketID
+	  ;% udp_conn_P.PacketInput1_PacketID
 	  section.data(1).logicalSrcIdx = 6;
 	  section.data(1).dtTransOffset = 0;
 	
@@ -117,6 +117,21 @@
       paramMap.sections(3) = section;
       clear section
       
+      section.nData     = 2;
+      section.data(2)  = dumData; %prealloc
+      
+	  ;% udp_conn_P.Gain3_Gain
+	  section.data(1).logicalSrcIdx = 19;
+	  section.data(1).dtTransOffset = 0;
+	
+	  ;% udp_conn_P.Gain2_Gain
+	  section.data(2).logicalSrcIdx = 20;
+	  section.data(2).dtTransOffset = 1;
+	
+      nTotData = nTotData + section.nData;
+      paramMap.sections(4) = section;
+      clear section
+      
     
       ;%
       ;% Non-auto Data (parameter)
@@ -135,7 +150,7 @@
   ;%**************************
       
     nTotData      = 0; %add to this count as we go
-    nTotSects     = 5;
+    nTotSects     = 4;
     sectIdxOffset = 0;
     
     ;%
@@ -158,24 +173,28 @@
     ;%
     ;% Auto data (udp_conn_B)
     ;%
-      section.nData     = 4;
-      section.data(4)  = dumData; %prealloc
+      section.nData     = 5;
+      section.data(5)  = dumData; %prealloc
       
-	  ;% udp_conn_B.Sum
+	  ;% udp_conn_B.Gain
 	  section.data(1).logicalSrcIdx = 0;
 	  section.data(1).dtTransOffset = 0;
 	
-	  ;% udp_conn_B.DataTypeConversion3
+	  ;% udp_conn_B.Sum
 	  section.data(2).logicalSrcIdx = 1;
 	  section.data(2).dtTransOffset = 1;
 	
-	  ;% udp_conn_B.Sum1
+	  ;% udp_conn_B.Gain1
 	  section.data(3).logicalSrcIdx = 2;
 	  section.data(3).dtTransOffset = 2;
 	
-	  ;% udp_conn_B.Constant
+	  ;% udp_conn_B.Sum1
 	  section.data(4).logicalSrcIdx = 3;
 	  section.data(4).dtTransOffset = 3;
+	
+	  ;% udp_conn_B.Constant
+	  section.data(5).logicalSrcIdx = 4;
+	  section.data(5).dtTransOffset = 4;
 	
       nTotData = nTotData + section.nData;
       sigMap.sections(1) = section;
@@ -184,12 +203,12 @@
       section.nData     = 2;
       section.data(2)  = dumData; %prealloc
       
-	  ;% udp_conn_B.PacketInput_o1
-	  section.data(1).logicalSrcIdx = 4;
+	  ;% udp_conn_B.PacketInput1_o5
+	  section.data(1).logicalSrcIdx = 5;
 	  section.data(1).dtTransOffset = 0;
 	
-	  ;% udp_conn_B.PacketInput_o2
-	  section.data(2).logicalSrcIdx = 5;
+	  ;% udp_conn_B.PacketOutput
+	  section.data(2).logicalSrcIdx = 6;
 	  section.data(2).dtTransOffset = 1;
 	
       nTotData = nTotData + section.nData;
@@ -199,42 +218,43 @@
       section.nData     = 2;
       section.data(2)  = dumData; %prealloc
       
-	  ;% udp_conn_B.PacketInput_o5
-	  section.data(1).logicalSrcIdx = 6;
+	  ;% udp_conn_B.Sum3
+	  section.data(1).logicalSrcIdx = 7;
 	  section.data(1).dtTransOffset = 0;
 	
-	  ;% udp_conn_B.PacketOutput
-	  section.data(2).logicalSrcIdx = 7;
+	  ;% udp_conn_B.Sum2
+	  section.data(2).logicalSrcIdx = 8;
 	  section.data(2).dtTransOffset = 1;
 	
       nTotData = nTotData + section.nData;
       sigMap.sections(3) = section;
       clear section
       
-      section.nData     = 1;
-      section.data(1)  = dumData; %prealloc
+      section.nData     = 5;
+      section.data(5)  = dumData; %prealloc
       
-	  ;% udp_conn_B.DataTypeConversion
-	  section.data(1).logicalSrcIdx = 8;
-	  section.data(1).dtTransOffset = 0;
-	
-      nTotData = nTotData + section.nData;
-      sigMap.sections(4) = section;
-      clear section
-      
-      section.nData     = 2;
-      section.data(2)  = dumData; %prealloc
-      
-	  ;% udp_conn_B.PacketInput_o3
+	  ;% udp_conn_B.PacketInput1_o1
 	  section.data(1).logicalSrcIdx = 9;
 	  section.data(1).dtTransOffset = 0;
 	
-	  ;% udp_conn_B.PacketInput_o4
+	  ;% udp_conn_B.PacketInput1_o2
 	  section.data(2).logicalSrcIdx = 10;
 	  section.data(2).dtTransOffset = 1;
 	
+	  ;% udp_conn_B.PacketInput1_o3
+	  section.data(3).logicalSrcIdx = 11;
+	  section.data(3).dtTransOffset = 2;
+	
+	  ;% udp_conn_B.PacketInput1_o4
+	  section.data(4).logicalSrcIdx = 12;
+	  section.data(4).dtTransOffset = 3;
+	
+	  ;% udp_conn_B.DataTypeConversion
+	  section.data(5).logicalSrcIdx = 13;
+	  section.data(5).dtTransOffset = 4;
+	
       nTotData = nTotData + section.nData;
-      sigMap.sections(5) = section;
+      sigMap.sections(4) = section;
       clear section
       
     
@@ -256,7 +276,7 @@
       
     nTotData      = 0; %add to this count as we go
     nTotSects     = 3;
-    sectIdxOffset = 5;
+    sectIdxOffset = 4;
     
     ;%
     ;% Define dummy sections & preallocate arrays
@@ -296,7 +316,7 @@
       section.nData     = 2;
       section.data(2)  = dumData; %prealloc
       
-	  ;% udp_conn_DW.PacketInput_PWORK
+	  ;% udp_conn_DW.PacketInput1_PWORK
 	  section.data(1).logicalSrcIdx = 2;
 	  section.data(1).dtTransOffset = 0;
 	
@@ -345,8 +365,8 @@
   ;%
 
 
-  targMap.checksum0 = 2036719368;
-  targMap.checksum1 = 4097652674;
-  targMap.checksum2 = 1580226221;
-  targMap.checksum3 = 4276653142;
+  targMap.checksum0 = 2212433608;
+  targMap.checksum1 = 3736862535;
+  targMap.checksum2 = 660422239;
+  targMap.checksum3 = 2725521184;
 

@@ -7,9 +7,9 @@
  *
  * Code generation for model "tuske_sldrtex_packetio".
  *
- * Model version              : 1.118
- * Simulink Coder version : 8.11 (R2016b) 25-Aug-2016
- * C source code generated on : Sat Nov 10 00:15:16 2018
+ * Model version              : 1.122
+ * Simulink Coder version : 9.0 (R2018b) 24-May-2018
+ * C source code generated on : Mon Dec  3 22:18:44 2018
  *
  * Target selection: sldrt.tlc
  * Note: GRT includes extra infrastructure and instrumentation for prototyping
@@ -41,14 +41,6 @@
 #include "rt_nonfinite.h"
 
 /* Macros for accessing real-time model data structure */
-#ifndef rtmGetBlkStateChangeFlag
-# define rtmGetBlkStateChangeFlag(rtm) ((rtm)->blkStateChange)
-#endif
-
-#ifndef rtmSetBlkStateChangeFlag
-# define rtmSetBlkStateChangeFlag(rtm, val) ((rtm)->blkStateChange = (val))
-#endif
-
 #ifndef rtmGetBlockIO
 # define rtmGetBlockIO(rtm)            ((rtm)->blockIO)
 #endif
@@ -87,6 +79,38 @@
 
 #ifndef rtmSetContStates
 # define rtmSetContStates(rtm, val)    ((rtm)->contStates = (val))
+#endif
+
+#ifndef rtmGetContTimeOutputInconsistentWithStateAtMajorStepFlag
+# define rtmGetContTimeOutputInconsistentWithStateAtMajorStepFlag(rtm) ((rtm)->CTOutputIncnstWithState)
+#endif
+
+#ifndef rtmSetContTimeOutputInconsistentWithStateAtMajorStepFlag
+# define rtmSetContTimeOutputInconsistentWithStateAtMajorStepFlag(rtm, val) ((rtm)->CTOutputIncnstWithState = (val))
+#endif
+
+#ifndef rtmGetCtrlRateMdlRefTiming
+# define rtmGetCtrlRateMdlRefTiming(rtm) ()
+#endif
+
+#ifndef rtmSetCtrlRateMdlRefTiming
+# define rtmSetCtrlRateMdlRefTiming(rtm, val) ()
+#endif
+
+#ifndef rtmGetCtrlRateMdlRefTimingPtr
+# define rtmGetCtrlRateMdlRefTimingPtr(rtm) ()
+#endif
+
+#ifndef rtmSetCtrlRateMdlRefTimingPtr
+# define rtmSetCtrlRateMdlRefTimingPtr(rtm, val) ()
+#endif
+
+#ifndef rtmGetCtrlRateNumTicksToNextHit
+# define rtmGetCtrlRateNumTicksToNextHit(rtm) ()
+#endif
+
+#ifndef rtmSetCtrlRateNumTicksToNextHit
+# define rtmSetCtrlRateNumTicksToNextHit(rtm, val) ()
 #endif
 
 #ifndef rtmGetDataMapInfo
@@ -586,11 +610,11 @@
 #endif
 
 #ifndef rtmGetTaskCounters
-# define rtmGetTaskCounters(rtm)       ((rtm)->Timing.TaskCounters)
+# define rtmGetTaskCounters(rtm)       ()
 #endif
 
 #ifndef rtmSetTaskCounters
-# define rtmSetTaskCounters(rtm, val)  ((rtm)->Timing.TaskCounters = (val))
+# define rtmSetTaskCounters(rtm, val)  ()
 #endif
 
 #ifndef rtmGetTaskTimeArray
@@ -673,6 +697,14 @@
 # define rtmSetdX(rtm, val)            ((rtm)->derivs = (val))
 #endif
 
+#ifndef rtmGettimingBridge
+# define rtmGettimingBridge(rtm)       ()
+#endif
+
+#ifndef rtmSettimingBridge
+# define rtmSettimingBridge(rtm, val)  ()
+#endif
+
 #ifndef rtmGetChecksumVal
 # define rtmGetChecksumVal(rtm, idx)   ((rtm)->Sizes.checksums[idx])
 #endif
@@ -730,7 +762,7 @@
 #endif
 
 #ifndef rtmIsContinuousTask
-# define rtmIsContinuousTask(rtm, tid) ((tid) <= 1)
+# define rtmIsContinuousTask(rtm, tid) ((tid) == 0)
 #endif
 
 #ifndef rtmGetErrorStatus
@@ -750,11 +782,7 @@
 #endif
 
 #ifndef rtmIsSampleHit
-# define rtmIsSampleHit(rtm, sti, tid) (((rtm)->Timing.sampleTimeTaskIDPtr[sti] == (tid)))
-#endif
-
-#ifndef rtmStepTask
-# define rtmStepTask(rtm, idx)         ((rtm)->Timing.TaskCounters.TID[(idx)] == 0)
+# define rtmIsSampleHit(rtm, sti, tid) ((rtmIsMajorTimeStep((rtm)) && (rtm)->Timing.sampleHits[(rtm)->Timing.sampleTimeTaskIDPtr[sti]]))
 #endif
 
 #ifndef rtmGetStopRequested
@@ -801,10 +829,6 @@
 # define rtmSetTStart(rtm, val)        ((rtm)->Timing.tStart = (val))
 #endif
 
-#ifndef rtmTaskCounter
-# define rtmTaskCounter(rtm, idx)      ((rtm)->Timing.TaskCounters.TID[(idx)])
-#endif
-
 #ifndef rtmGetTaskTime
 # define rtmGetTaskTime(rtm, sti)      (rtmGetTPtr((rtm))[(rtm)->Timing.sampleTimeTaskIDPtr[sti]])
 #endif
@@ -826,17 +850,23 @@
 /* Definition for use in the target main file */
 #define tuske_sldrtex_packetio_rtModel RT_MODEL_tuske_sldrtex_packetio_T
 
-/* Block signals (auto storage) */
+/* Block signals (default storage) */
 typedef struct {
-  uint16_T PacketInput;                /* '<Root>/Packet Input' */
-  uint16_T DataTypeConversion1;        /* '<Root>/Data Type Conversion1' */
+  real_T DataTypeConversion1;          /* '<Root>/Data Type Conversion1' */
+  int32_T PacketInput_o3;              /* '<Root>/Packet Input' */
   uint8_T DataTypeConversion;          /* '<Root>/Data Type Conversion' */
+  uint8_T PacketInput_o1;              /* '<Root>/Packet Input' */
+  uint8_T PacketInput_o2;              /* '<Root>/Packet Input' */
 } B_tuske_sldrtex_packetio_T;
 
-/* Block states (auto storage) for system '<Root>' */
+/* Block states (default storage) for system '<Root>' */
 typedef struct {
   void *PacketOutput_PWORK[2];         /* '<Root>/Packet Output' */
   void *PacketInput_PWORK;             /* '<Root>/Packet Input' */
+  struct {
+    void *LoggedData;
+  } Scope_PWORK;                       /* '<Root>/Scope' */
+
   struct {
     void *LoggedData;
   } uint8_PWORK;                       /* '<Root>/uint8' */
@@ -850,7 +880,7 @@ typedef struct {
 #define rtDWork                        tuske_sldrtex_packetio_DW
 #define D_Work                         DW_tuske_sldrtex_packetio_T
 
-/* Parameters (auto storage) */
+/* Parameters (default storage) */
 struct P_tuske_sldrtex_packetio_T_ {
   real_T PacketOutput_MaxMissedTicks;  /* Mask Parameter: PacketOutput_MaxMissedTicks
                                         * Referenced by: '<Root>/Packet Output'
@@ -909,7 +939,7 @@ struct tag_RTM_tuske_sldrtex_packetio_T {
   boolean_T *contStateDisabled;
   boolean_T zCCacheNeedsReset;
   boolean_T derivCacheNeedsReset;
-  boolean_T blkStateChange;
+  boolean_T CTOutputIncnstWithState;
   void *dwork;
 
   /*
@@ -962,13 +992,6 @@ struct tag_RTM_tuske_sldrtex_packetio_T {
     uint32_T clockTick1;
     uint32_T clockTickH1;
     time_T stepSize1;
-    uint32_T clockTick2;
-    uint32_T clockTickH2;
-    time_T stepSize2;
-    struct {
-      uint8_T TID[3];
-    } TaskCounters;
-
     time_T tStart;
     time_T tFinal;
     time_T timeOfLastOutput;
@@ -982,34 +1005,28 @@ struct tag_RTM_tuske_sldrtex_packetio_T {
     int_T *sampleHits;
     int_T *perTaskSampleHits;
     time_T *t;
-    time_T sampleTimesArray[3];
-    time_T offsetTimesArray[3];
-    int_T sampleTimeTaskIDArray[3];
-    int_T sampleHitArray[3];
-    int_T perTaskSampleHitsArray[9];
-    time_T tArray[3];
+    time_T sampleTimesArray[2];
+    time_T offsetTimesArray[2];
+    int_T sampleTimeTaskIDArray[2];
+    int_T sampleHitArray[2];
+    int_T perTaskSampleHitsArray[4];
+    time_T tArray[2];
   } Timing;
 };
 
-/* Block parameters (auto storage) */
+/* Block parameters (default storage) */
 extern P_tuske_sldrtex_packetio_T tuske_sldrtex_packetio_P;
 
-/* Block signals (auto storage) */
+/* Block signals (default storage) */
 extern B_tuske_sldrtex_packetio_T tuske_sldrtex_packetio_B;
 
-/* Block states (auto storage) */
+/* Block states (default storage) */
 extern DW_tuske_sldrtex_packetio_T tuske_sldrtex_packetio_DW;
-
-/* External function called from main */
-extern time_T rt_SimUpdateDiscreteEvents(
-  int_T rtmNumSampTimes, void *rtmTimingData, int_T *rtmSampleHitPtr, int_T
-  *rtmPerTaskSampleHits )
-  ;
 
 /* Model entry point functions */
 extern void tuske_sldrtex_packetio_initialize(void);
-extern void tuske_sldrtex_packetio_output(int_T tid);
-extern void tuske_sldrtex_packetio_update(int_T tid);
+extern void tuske_sldrtex_packetio_output(void);
+extern void tuske_sldrtex_packetio_update(void);
 extern void tuske_sldrtex_packetio_terminate(void);
 
 /*====================*

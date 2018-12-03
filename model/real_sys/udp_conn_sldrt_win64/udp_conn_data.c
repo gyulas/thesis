@@ -9,7 +9,7 @@
  *
  * Model version              : 1.140
  * Simulink Coder version : 9.0 (R2018b) 24-May-2018
- * C source code generated on : Mon Dec  3 21:17:32 2018
+ * C source code generated on : Mon Dec  3 22:28:47 2018
  *
  * Target selection: sldrt.tlc
  * Note: GRT includes extra infrastructure and instrumentation for prototyping
@@ -23,8 +23,8 @@
 
 /* Block parameters (default storage) */
 P_udp_conn_T udp_conn_P = {
-  /* Mask Parameter: PacketInput_MaxMissedTicks
-   * Referenced by: '<Root>/Packet Input'
+  /* Mask Parameter: PacketInput1_MaxMissedTicks
+   * Referenced by: '<Root>/Packet Input1'
    */
   50.0,
 
@@ -33,8 +33,8 @@ P_udp_conn_T udp_conn_P = {
    */
   50.0,
 
-  /* Mask Parameter: PacketInput_YieldWhenWaiting
-   * Referenced by: '<Root>/Packet Input'
+  /* Mask Parameter: PacketInput1_YieldWhenWaiting
+   * Referenced by: '<Root>/Packet Input1'
    */
   0.0,
 
@@ -43,8 +43,8 @@ P_udp_conn_T udp_conn_P = {
    */
   0.0,
 
-  /* Mask Parameter: PacketInput_PacketID
-   * Referenced by: '<Root>/Packet Input'
+  /* Mask Parameter: PacketInput1_PacketID
+   * Referenced by: '<Root>/Packet Input1'
    */
   1,
 
@@ -91,20 +91,30 @@ P_udp_conn_T udp_conn_P = {
   /* Computed Parameter: SineWavedouble05Hz_Hsin
    * Referenced by: '<Root>/Sine Wave (double) 0.5Hz'
    */
-  0.041580662433290491,
+  0.58103516053730508,
 
   /* Computed Parameter: SineWavedouble05Hz_HCos
    * Referenced by: '<Root>/Sine Wave (double) 0.5Hz'
    */
-  -0.99913515027327948,
+  0.81387845666253389,
 
   /* Computed Parameter: SineWavedouble05Hz_PSin
    * Referenced by: '<Root>/Sine Wave (double) 0.5Hz'
    */
-  -0.041580662433290491,
+  -0.58103516053730508,
 
   /* Computed Parameter: SineWavedouble05Hz_PCos
    * Referenced by: '<Root>/Sine Wave (double) 0.5Hz'
    */
-  -0.99913515027327948
+  0.81387845666253389,
+
+  /* Computed Parameter: Gain3_Gain
+   * Referenced by: '<Root>/Gain3'
+   */
+  255U,
+
+  /* Computed Parameter: Gain2_Gain
+   * Referenced by: '<Root>/Gain2'
+   */
+  255U
 };
