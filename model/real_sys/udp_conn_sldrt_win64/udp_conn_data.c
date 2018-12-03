@@ -7,9 +7,9 @@
  *
  * Code generation for model "udp_conn".
  *
- * Model version              : 1.137
+ * Model version              : 1.140
  * Simulink Coder version : 9.0 (R2018b) 24-May-2018
- * C source code generated on : Mon Dec  3 20:56:32 2018
+ * C source code generated on : Mon Dec  3 21:17:32 2018
  *
  * Target selection: sldrt.tlc
  * Note: GRT includes extra infrastructure and instrumentation for prototyping
@@ -23,85 +23,88 @@
 
 /* Block parameters (default storage) */
 P_udp_conn_T udp_conn_P = {
+  /* Mask Parameter: PacketInput_MaxMissedTicks
+   * Referenced by: '<Root>/Packet Input'
+   */
   50.0,
+
+  /* Mask Parameter: PacketOutput_MaxMissedTicks
+   * Referenced by: '<Root>/Packet Output'
+   */
   50.0,
-  50.0,
+
+  /* Mask Parameter: PacketInput_YieldWhenWaiting
+   * Referenced by: '<Root>/Packet Input'
+   */
   0.0,
+
+  /* Mask Parameter: PacketOutput_YieldWhenWaiting
+   * Referenced by: '<Root>/Packet Output'
+   */
   0.0,
-  0.0,
+
+  /* Mask Parameter: PacketInput_PacketID
+   * Referenced by: '<Root>/Packet Input'
+   */
   1,
+
+  /* Mask Parameter: PacketOutput_PacketID
+   * Referenced by: '<Root>/Packet Output'
+   */
   1,
-  1,
+
+  /* Expression: 0.1
+   * Referenced by: '<Root>/Gain'
+   */
   0.1,
+
+  /* Expression: 273
+   * Referenced by: '<Root>/Constant1'
+   */
   273.0,
+
+  /* Expression: 0.1
+   * Referenced by: '<Root>/Gain1'
+   */
   0.1,
+
+  /* Expression: 1
+   * Referenced by: '<Root>/Constant'
+   */
   1.0,
-  293.0,
 
-  { 0.0, 0.0 },
-  0.0,
-  0.0,
-  0.0,
-
-  { 0.0, 0.0 },
-
-  { 0.0, 0.0 },
-
-  { 0.0, 0.0 },
-
-  { 1.0, 1.0 },
-
-  { 0.0, 0.0 },
-
-  { 1.0, 1.0 },
-
-  { 0.0, 0.0 },
-
-  { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
-    0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
-    0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
-    0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
-    0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
-    0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
-    0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
-    0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
-    0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
-    0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
-    0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
-    0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
-    0.0, 0.0, 0.0, 0.0, 0.0 },
-
-  { 0.0, 0.0 },
-
-  { 1.0, 1.0 },
-
-  { 0.0, 0.0 },
-
-  { 1.0, 1.0 },
-  0.0,
-  0.2,
-  0.0,
-  0.2,
-
-  { 1.0, 1.0 },
-  5.0,
-  0.0,
-  5.0,
-  0.0,
-  0.0,
-
-  { 1.0, 1.0 },
+  /* Expression: 50
+   * Referenced by: '<Root>/Sine Wave (double) 0.5Hz'
+   */
   50.0,
+
+  /* Expression: 50
+   * Referenced by: '<Root>/Sine Wave (double) 0.5Hz'
+   */
   50.0,
+
+  /* Expression: 0.62*0.5
+   * Referenced by: '<Root>/Sine Wave (double) 0.5Hz'
+   */
   0.31,
+
+  /* Computed Parameter: SineWavedouble05Hz_Hsin
+   * Referenced by: '<Root>/Sine Wave (double) 0.5Hz'
+   */
   0.041580662433290491,
-  -0.99913515027327948,
-  -0.041580662433290491,
+
+  /* Computed Parameter: SineWavedouble05Hz_HCos
+   * Referenced by: '<Root>/Sine Wave (double) 0.5Hz'
+   */
   -0.99913515027327948,
 
-  { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0 }
+  /* Computed Parameter: SineWavedouble05Hz_PSin
+   * Referenced by: '<Root>/Sine Wave (double) 0.5Hz'
+   */
+  -0.041580662433290491,
+
+  /* Computed Parameter: SineWavedouble05Hz_PCos
+   * Referenced by: '<Root>/Sine Wave (double) 0.5Hz'
+   */
+  -0.99913515027327948
 };

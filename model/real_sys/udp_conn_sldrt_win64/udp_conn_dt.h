@@ -7,9 +7,9 @@
  *
  * Code generation for model "udp_conn".
  *
- * Model version              : 1.137
+ * Model version              : 1.140
  * Simulink Coder version : 9.0 (R2018b) 24-May-2018
- * C source code generated on : Mon Dec  3 20:56:32 2018
+ * C source code generated on : Mon Dec  3 21:17:32 2018
  *
  * Target selection: sldrt.tlc
  * Note: GRT includes extra infrastructure and instrumentation for prototyping
@@ -58,22 +58,22 @@ static const char_T * rtDataTypeNames[] = {
 
 /* data type transitions for block I/O structure */
 static DataTypeTransition rtBTransitions[] = {
-  { (char_T *)(&udp_conn_B.Sum), 0, 0, 193 },
+  { (char_T *)(&udp_conn_B.Sum), 0, 0, 4 },
 
   { (char_T *)(&udp_conn_B.PacketInput_o1), 7, 0, 2 },
 
+  { (char_T *)(&udp_conn_B.PacketInput_o5), 6, 0, 2 },
+
   { (char_T *)(&udp_conn_B.DataTypeConversion), 3, 0, 1 },
 
-  { (char_T *)(&udp_conn_B.iAout[0]), 8, 0, 108 }
+  { (char_T *)(&udp_conn_B.PacketInput_o3), 8, 0, 2 }
   ,
 
-  { (char_T *)(&udp_conn_DW.last_mv_DSTATE[0]), 0, 0, 189 },
+  { (char_T *)(&udp_conn_DW.lastSin), 0, 0, 2 },
 
-  { (char_T *)(&udp_conn_DW.PacketInput_PWORK), 11, 0, 5 },
+  { (char_T *)(&udp_conn_DW.PacketInput_PWORK), 11, 0, 3 },
 
-  { (char_T *)(&udp_conn_DW.systemEnable), 6, 0, 1 },
-
-  { (char_T *)(&udp_conn_DW.Memory_PreviousInput[0]), 8, 0, 108 }
+  { (char_T *)(&udp_conn_DW.systemEnable), 6, 0, 1 }
 };
 
 /* data type transition table for block I/O structure */
@@ -84,18 +84,16 @@ static DataTypeTransitionTable rtBTransTable = {
 
 /* data type transitions for Parameters structure */
 static DataTypeTransition rtPTransitions[] = {
-  { (char_T *)(&udp_conn_P.PacketInput_MaxMissedTicks), 0, 0, 6 },
+  { (char_T *)(&udp_conn_P.PacketInput_MaxMissedTicks), 0, 0, 4 },
 
-  { (char_T *)(&udp_conn_P.PacketInput_PacketID), 6, 0, 3 },
+  { (char_T *)(&udp_conn_P.PacketInput_PacketID), 6, 0, 2 },
 
-  { (char_T *)(&udp_conn_P.Gain_Gain), 0, 0, 237 },
-
-  { (char_T *)(&udp_conn_P.Memory_InitialCondition[0]), 8, 0, 108 }
+  { (char_T *)(&udp_conn_P.Gain_Gain), 0, 0, 11 }
 };
 
 /* data type transition table for Parameters structure */
 static DataTypeTransitionTable rtPTransTable = {
-  4U,
+  3U,
   rtPTransitions
 };
 

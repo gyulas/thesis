@@ -7,9 +7,9 @@
  *
  * Code generation for model "udp_conn".
  *
- * Model version              : 1.137
+ * Model version              : 1.140
  * Simulink Coder version : 9.0 (R2018b) 24-May-2018
- * C source code generated on : Mon Dec  3 20:56:32 2018
+ * C source code generated on : Mon Dec  3 21:17:32 2018
  *
  * Target selection: sldrt.tlc
  * Note: GRT includes extra infrastructure and instrumentation for prototyping
@@ -37,8 +37,8 @@
 
 /* Shared type includes */
 #include "multiword_types.h"
-#include "rt_nonfinite.h"
 #include "rt_defines.h"
+#include "rt_nonfinite.h"
 
 /* Macros for accessing real-time model data structure */
 #ifndef rtmGetBlockIO
@@ -848,26 +848,22 @@ typedef struct {
   real_T DataTypeConversion3;          /* '<Root>/Data Type Conversion3' */
   real_T Sum1;                         /* '<Root>/Sum1' */
   real_T Constant;                     /* '<Root>/Constant' */
-  real_T umin_scale1[2];               /* '<S3>/umin_scale1' */
-  real_T xk1[185];                     /* '<S3>/optimizer' */
-  real_T u[2];                         /* '<S3>/optimizer' */
   uint32_T PacketInput_o1;             /* '<Root>/Packet Input' */
   uint32_T PacketInput_o2;             /* '<Root>/Packet Input' */
+  int32_T PacketInput_o5;              /* '<Root>/Packet Input' */
+  int32_T PacketOutput;                /* '<Root>/Packet Output' */
   uint8_T DataTypeConversion;          /* '<Root>/Data Type Conversion' */
-  boolean_T iAout[108];                /* '<S3>/optimizer' */
+  boolean_T PacketInput_o3;            /* '<Root>/Packet Input' */
+  boolean_T PacketInput_o4;            /* '<Root>/Packet Input' */
 } B_udp_conn_T;
 
 /* Block states (default storage) for system '<Root>' */
 typedef struct {
-  real_T last_mv_DSTATE[2];            /* '<S3>/last_mv' */
-  real_T last_x_PreviousInput[185];    /* '<S3>/last_x' */
   real_T lastSin;                      /* '<Root>/Sine Wave (double) 0.5Hz' */
   real_T lastCos;                      /* '<Root>/Sine Wave (double) 0.5Hz' */
   void *PacketInput_PWORK;             /* '<Root>/Packet Input' */
-  void *PacketOutput1_PWORK[2];        /* '<Root>/Packet Output1' */
   void *PacketOutput_PWORK[2];         /* '<Root>/Packet Output' */
   int32_T systemEnable;                /* '<Root>/Sine Wave (double) 0.5Hz' */
-  boolean_T Memory_PreviousInput[108]; /* '<S3>/Memory' */
 } DW_udp_conn_T;
 
 /* Backward compatible GRT Identifiers */
@@ -883,26 +879,17 @@ struct P_udp_conn_T_ {
   real_T PacketInput_MaxMissedTicks;   /* Mask Parameter: PacketInput_MaxMissedTicks
                                         * Referenced by: '<Root>/Packet Input'
                                         */
-  real_T PacketOutput1_MaxMissedTicks; /* Mask Parameter: PacketOutput1_MaxMissedTicks
-                                        * Referenced by: '<Root>/Packet Output1'
-                                        */
   real_T PacketOutput_MaxMissedTicks;  /* Mask Parameter: PacketOutput_MaxMissedTicks
                                         * Referenced by: '<Root>/Packet Output'
                                         */
   real_T PacketInput_YieldWhenWaiting; /* Mask Parameter: PacketInput_YieldWhenWaiting
                                         * Referenced by: '<Root>/Packet Input'
                                         */
-  real_T PacketOutput1_YieldWhenWaiting;/* Mask Parameter: PacketOutput1_YieldWhenWaiting
-                                         * Referenced by: '<Root>/Packet Output1'
-                                         */
   real_T PacketOutput_YieldWhenWaiting;/* Mask Parameter: PacketOutput_YieldWhenWaiting
                                         * Referenced by: '<Root>/Packet Output'
                                         */
   int32_T PacketInput_PacketID;        /* Mask Parameter: PacketInput_PacketID
                                         * Referenced by: '<Root>/Packet Input'
-                                        */
-  int32_T PacketOutput1_PacketID;      /* Mask Parameter: PacketOutput1_PacketID
-                                        * Referenced by: '<Root>/Packet Output1'
                                         */
   int32_T PacketOutput_PacketID;       /* Mask Parameter: PacketOutput_PacketID
                                         * Referenced by: '<Root>/Packet Output'
@@ -918,90 +905,6 @@ struct P_udp_conn_T_ {
                                         */
   real_T Constant_Value;               /* Expression: 1
                                         * Referenced by: '<Root>/Constant'
-                                        */
-  real_T Constant2_Value;              /* Expression: 293
-                                        * Referenced by: '<Root>/Constant2'
-                                        */
-  real_T E_zero_Value[2];              /* Expression: zeros(1,2)
-                                        * Referenced by: '<S2>/E_zero'
-                                        */
-  real_T F_zero_Value;                 /* Expression: zeros(1,1)
-                                        * Referenced by: '<S2>/F_zero'
-                                        */
-  real_T G_zero_Value;                 /* Expression: zeros(1,1)
-                                        * Referenced by: '<S2>/G_zero'
-                                        */
-  real_T ywt_zero_Value;               /* Expression: zeros(1,1)
-                                        * Referenced by: '<S2>/y.wt_zero'
-                                        */
-  real_T uwt_zero_Value[2];            /* Expression: zeros(2,1)
-                                        * Referenced by: '<S2>/u.wt_zero'
-                                        */
-  real_T duwt_zero_Value[2];           /* Expression: zeros(2,1)
-                                        * Referenced by: '<S2>/du.wt_zero'
-                                        */
-  real_T extmv_zero_Value[2];          /* Expression: zeros(2,1)
-                                        * Referenced by: '<S2>/ext.mv_zero'
-                                        */
-  real_T extmv_scale_Gain[2];          /* Expression: RMVscale
-                                        * Referenced by: '<S3>/ext.mv_scale'
-                                        */
-  real_T mvtarget_zero_Value[2];       /* Expression: zeros(2,1)
-                                        * Referenced by: '<S2>/mv.target_zero'
-                                        */
-  real_T extmv_scale1_Gain[2];         /* Expression: RMVscale
-                                        * Referenced by: '<S3>/ext.mv_scale1'
-                                        */
-  real_T last_mv_InitialCondition[2];  /* Expression: lastu+uoff
-                                        * Referenced by: '<S3>/last_mv'
-                                        */
-  real_T last_x_InitialCondition[185]; /* Expression: lastx+xoff
-                                        * Referenced by: '<S3>/last_x'
-                                        */
-  real_T umin_zero_Value[2];           /* Expression: zeros(2,1)
-                                        * Referenced by: '<S2>/umin_zero'
-                                        */
-  real_T umin_scale_Gain[2];           /* Expression: RMVscale
-                                        * Referenced by: '<S3>/umin_scale'
-                                        */
-  real_T umax_zero_Value[2];           /* Expression: zeros(2,1)
-                                        * Referenced by: '<S2>/umax_zero'
-                                        */
-  real_T umax_scale_Gain[2];           /* Expression: RMVscale
-                                        * Referenced by: '<S3>/umax_scale'
-                                        */
-  real_T ymin_zero_Value;              /* Expression: zeros(1,1)
-                                        * Referenced by: '<S2>/ymin_zero'
-                                        */
-  real_T ymin_scale_Gain;              /* Expression: RYscale
-                                        * Referenced by: '<S3>/ymin_scale'
-                                        */
-  real_T ymax_zero_Value;              /* Expression: zeros(1,1)
-                                        * Referenced by: '<S2>/ymax_zero'
-                                        */
-  real_T ymax_scale_Gain;              /* Expression: RYscale
-                                        * Referenced by: '<S3>/ymax_scale'
-                                        */
-  real_T umin_scale4_Gain[2];          /* Expression: MVscale(:,ones(1,max(nCC,1)))'
-                                        * Referenced by: '<S3>/umin_scale4'
-                                        */
-  real_T ymin_scale1_Gain;             /* Expression: Yscale(:,ones(1,max(nCC,1)))'
-                                        * Referenced by: '<S3>/ymin_scale1'
-                                        */
-  real_T S_zero_Value;                 /* Expression: zeros(1,1)
-                                        * Referenced by: '<S2>/S_zero'
-                                        */
-  real_T ymin_scale2_Gain;             /* Expression: MDscale(:,ones(1,max(nCC,1)))'
-                                        * Referenced by: '<S3>/ymin_scale2'
-                                        */
-  real_T switch_zero_Value;            /* Expression: zeros(1,1)
-                                        * Referenced by: '<S2>/switch_zero'
-                                        */
-  real_T ecrwt_zero_Value;             /* Expression: zeros(1,1)
-                                        * Referenced by: '<S2>/ecr.wt_zero'
-                                        */
-  real_T umin_scale1_Gain[2];          /* Expression: MVscale
-                                        * Referenced by: '<S3>/umin_scale1'
                                         */
   real_T SineWavedouble05Hz_Amp;       /* Expression: 50
                                         * Referenced by: '<Root>/Sine Wave (double) 0.5Hz'
@@ -1024,9 +927,6 @@ struct P_udp_conn_T_ {
   real_T SineWavedouble05Hz_PCos;      /* Computed Parameter: SineWavedouble05Hz_PCos
                                         * Referenced by: '<Root>/Sine Wave (double) 0.5Hz'
                                         */
-  boolean_T Memory_InitialCondition[108];/* Expression: iA
-                                          * Referenced by: '<S3>/Memory'
-                                          */
 };
 
 /* Real-time Model Data Structure */
