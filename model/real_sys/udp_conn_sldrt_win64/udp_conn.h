@@ -7,9 +7,9 @@
  *
  * Code generation for model "udp_conn".
  *
- * Model version              : 1.140
+ * Model version              : 1.141
  * Simulink Coder version : 9.0 (R2018b) 24-May-2018
- * C source code generated on : Mon Dec  3 22:28:47 2018
+ * C source code generated on : Mon Dec  3 23:38:43 2018
  *
  * Target selection: sldrt.tlc
  * Note: GRT includes extra infrastructure and instrumentation for prototyping
@@ -610,11 +610,11 @@
 #endif
 
 #ifndef rtmGetTaskCounters
-# define rtmGetTaskCounters(rtm)       ()
+# define rtmGetTaskCounters(rtm)       ((rtm)->Timing.TaskCounters)
 #endif
 
 #ifndef rtmSetTaskCounters
-# define rtmSetTaskCounters(rtm, val)  ()
+# define rtmSetTaskCounters(rtm, val)  ((rtm)->Timing.TaskCounters = (val))
 #endif
 
 #ifndef rtmGetTaskTimeArray
@@ -774,7 +774,11 @@
 #endif
 
 #ifndef rtmIsSampleHit
-# define rtmIsSampleHit(rtm, sti, tid) ((rtm)->Timing.sampleHits[(rtm)->Timing.sampleTimeTaskIDPtr[sti]])
+# define rtmIsSampleHit(rtm, sti, tid) (((rtm)->Timing.sampleTimeTaskIDPtr[sti] == (tid)))
+#endif
+
+#ifndef rtmStepTask
+# define rtmStepTask(rtm, idx)         ((rtm)->Timing.TaskCounters.TID[(idx)] == 0)
 #endif
 
 #ifndef rtmGetStopRequested
@@ -821,6 +825,10 @@
 # define rtmSetTStart(rtm, val)        ((rtm)->Timing.tStart = (val))
 #endif
 
+#ifndef rtmTaskCounter
+# define rtmTaskCounter(rtm, idx)      ((rtm)->Timing.TaskCounters.TID[(idx)])
+#endif
+
 #ifndef rtmGetTaskTime
 # define rtmGetTaskTime(rtm, sti)      (rtmGetTPtr((rtm))[(rtm)->Timing.sampleTimeTaskIDPtr[sti]])
 #endif
@@ -846,9 +854,10 @@
 typedef struct {
   real_T Gain;                         /* '<Root>/Gain' */
   real_T Sum;                          /* '<Root>/Sum' */
+  real_T Timestamp;                    /* '<Root>/Timestamp' */
   real_T Gain1;                        /* '<Root>/Gain1' */
   real_T Sum1;                         /* '<Root>/Sum1' */
-  real_T Constant;                     /* '<Root>/Constant' */
+  real_T DigitalClock;                 /* '<Root>/Digital Clock' */
   int32_T PacketInput1_o5;             /* '<Root>/Packet Input1' */
   int32_T PacketOutput;                /* '<Root>/Packet Output' */
   uint16_T Sum3;                       /* '<Root>/Sum3' */
@@ -865,6 +874,10 @@ typedef struct {
   real_T lastSin;                      /* '<Root>/Sine Wave (double) 0.5Hz' */
   real_T lastCos;                      /* '<Root>/Sine Wave (double) 0.5Hz' */
   void *PacketInput1_PWORK;            /* '<Root>/Packet Input1' */
+  struct {
+    void *LoggedData[3];
+  } Scope_PWORK;                       /* '<Root>/Scope' */
+
   void *PacketOutput_PWORK[2];         /* '<Root>/Packet Output' */
   int32_T systemEnable;                /* '<Root>/Sine Wave (double) 0.5Hz' */
 } DW_udp_conn_T;
@@ -897,6 +910,9 @@ struct P_udp_conn_T_ {
   int32_T PacketOutput_PacketID;       /* Mask Parameter: PacketOutput_PacketID
                                         * Referenced by: '<Root>/Packet Output'
                                         */
+  real_T Constant_Value;               /* Expression: 1
+                                        * Referenced by: '<Root>/Constant'
+                                        */
   real_T Gain_Gain;                    /* Expression: 0.1
                                         * Referenced by: '<Root>/Gain'
                                         */
@@ -905,9 +921,6 @@ struct P_udp_conn_T_ {
                                         */
   real_T Gain1_Gain;                   /* Expression: 0.1
                                         * Referenced by: '<Root>/Gain1'
-                                        */
-  real_T Constant_Value;               /* Expression: 1
-                                        * Referenced by: '<Root>/Constant'
                                         */
   real_T SineWavedouble05Hz_Amp;       /* Expression: 50
                                         * Referenced by: '<Root>/Sine Wave (double) 0.5Hz'
@@ -1013,6 +1026,13 @@ struct tag_RTM_udp_conn_T {
     uint32_T clockTick0;
     uint32_T clockTickH0;
     time_T stepSize0;
+    uint32_T clockTick1;
+    uint32_T clockTickH1;
+    time_T stepSize1;
+    struct {
+      uint8_T TID[2];
+    } TaskCounters;
+
     time_T tStart;
     time_T tFinal;
     time_T timeOfLastOutput;
@@ -1026,12 +1046,12 @@ struct tag_RTM_udp_conn_T {
     int_T *sampleHits;
     int_T *perTaskSampleHits;
     time_T *t;
-    time_T sampleTimesArray[1];
-    time_T offsetTimesArray[1];
-    int_T sampleTimeTaskIDArray[1];
-    int_T sampleHitArray[1];
-    int_T perTaskSampleHitsArray[1];
-    time_T tArray[1];
+    time_T sampleTimesArray[2];
+    time_T offsetTimesArray[2];
+    int_T sampleTimeTaskIDArray[2];
+    int_T sampleHitArray[2];
+    int_T perTaskSampleHitsArray[4];
+    time_T tArray[2];
   } Timing;
 };
 
@@ -1044,10 +1064,16 @@ extern B_udp_conn_T udp_conn_B;
 /* Block states (default storage) */
 extern DW_udp_conn_T udp_conn_DW;
 
+/* External function called from main */
+extern time_T rt_SimUpdateDiscreteEvents(
+  int_T rtmNumSampTimes, void *rtmTimingData, int_T *rtmSampleHitPtr, int_T
+  *rtmPerTaskSampleHits )
+  ;
+
 /* Model entry point functions */
 extern void udp_conn_initialize(void);
-extern void udp_conn_output(void);
-extern void udp_conn_update(void);
+extern void udp_conn_output(int_T tid);
+extern void udp_conn_update(int_T tid);
 extern void udp_conn_terminate(void);
 
 /*====================*

@@ -7,9 +7,9 @@
  *
  * Code generation for model "udp_conn".
  *
- * Model version              : 1.140
+ * Model version              : 1.141
  * Simulink Coder version : 9.0 (R2018b) 24-May-2018
- * C source code generated on : Mon Dec  3 22:28:47 2018
+ * C source code generated on : Mon Dec  3 23:38:43 2018
  *
  * Target selection: sldrt.tlc
  * Note: GRT includes extra infrastructure and instrumentation for prototyping
@@ -26,7 +26,7 @@ P_udp_conn_T udp_conn_P = {
   /* Mask Parameter: PacketInput1_MaxMissedTicks
    * Referenced by: '<Root>/Packet Input1'
    */
-  50.0,
+  1000.0,
 
   /* Mask Parameter: PacketOutput_MaxMissedTicks
    * Referenced by: '<Root>/Packet Output'
@@ -36,7 +36,7 @@ P_udp_conn_T udp_conn_P = {
   /* Mask Parameter: PacketInput1_YieldWhenWaiting
    * Referenced by: '<Root>/Packet Input1'
    */
-  0.0,
+  1.0,
 
   /* Mask Parameter: PacketOutput_YieldWhenWaiting
    * Referenced by: '<Root>/Packet Output'
@@ -53,6 +53,11 @@ P_udp_conn_T udp_conn_P = {
    */
   1,
 
+  /* Expression: 1
+   * Referenced by: '<Root>/Constant'
+   */
+  1.0,
+
   /* Expression: 0.1
    * Referenced by: '<Root>/Gain'
    */
@@ -67,11 +72,6 @@ P_udp_conn_T udp_conn_P = {
    * Referenced by: '<Root>/Gain1'
    */
   0.1,
-
-  /* Expression: 1
-   * Referenced by: '<Root>/Constant'
-   */
-  1.0,
 
   /* Expression: 50
    * Referenced by: '<Root>/Sine Wave (double) 0.5Hz'
