@@ -1,7 +1,7 @@
 \chapter{Identifikáció}\label{chap:ident}
 
 
-A szabályzó tervezésénél használt szakaszmodell (gerjesztés-válasz kapcsolat) a Simulinkben megvalósított fizikai modell viselkedését leíró rendszer átviteli függvénye lesz. A szabályzótervezéshez lineáris modellt használok.
+A szabályzó tervezésénél használt szakaszmodell a Simulinkben megvalósított fizikai modell viselkedését leíró lineáris rendszer. Ebben a fejezetben a korábbiakban ismertetett hálózatot identifikálom.
 
 \input{src/tikz/ident_layout}
 
@@ -12,6 +12,8 @@ A Simulinkben vizsgálójeleket használok: a több bemenetű, egy kimenetű ren
 
 \section{A szakasz ugrásválasza}
 
+Lineáris hálózatoknál gyakori vizsgálójel az egységugrás, illetve az impulzusgerjesztés. Az identifikációhoz ugrásválaszt vizsgáltam, de mivel a rendszernek 3 bemenete 
+
 \begin{figure}[H]
 	\centering
 	% trim={<left> <lower> <right> <upper>}
@@ -20,7 +22,7 @@ A Simulinkben vizsgálójeleket használok: a több bemenetű, egy kimenetű ren
 	\label{fig:valve-step}
 \end{figure}
 
-A módszer az, amit a több forrást tartalmazó hálózatok esetén is alkalmazunk: a válasz számításakor mindig egy forrás hatását vizsgáltuk, a többit dezaktivizáltuk: azaz a több bemenetű Simulink hálózatnak egyszerre csak egy bemenetét gerjesztem. Lineáris hálózat vizsgálatakor a kimeneten a válasz szuperpozícióval adódik. 
+A módszer az, amit a több forrást tartalmazó hálózatok esetén is alkalmazunk: a válasz számításakor mindig egy forrás hatását vizsgáltuk,  hálózatnak egyszerre csak egy bemenetét gerjesztem. Lineáris hálózat vizsgálatakor a kimeneten a válasz szuperpozícióval adódik. 
 
 \begin{figure}[H]
 	\centering
