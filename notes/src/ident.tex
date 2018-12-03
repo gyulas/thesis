@@ -1,8 +1,16 @@
 \chapter{Identifikáció}\label{chap:ident}
 
 
-A szabályzó tervezésénél használt szakaszmodell (gerjesztés-válasz kapcsolat) a Simulinkben megvalósított fizikai modell viselkedését leíró rendszer átviteli függvénye lesz. A Simulinkben vizsgálójeleket használok: a több bemenetű, egy kimenetű rendszert egyszerre csak egy bemenetén gerjesztem. A belső hőmérséklet a rendszer kimenete. %(\textit{\ref{fig:valve-step}. ábra}). 
+A szabályzó tervezésénél használt szakaszmodell (gerjesztés-válasz kapcsolat) a Simulinkben megvalósított fizikai modell viselkedését leíró rendszer átviteli függvénye lesz. A szabályzótervezéshez lineáris modellt használok.
+
+\input{src/tikz/ident_layout}
+
+A Simulinkben vizsgálójeleket használok: a több bemenetű, egy kimenetű rendszert egyszerre csak egy bemenetén gerjesztem. A tömegáramot szabályzó szelepek nyitott és csukott állapot között folytonosan állíthatók, 0 és 1 közötti beavatkozó jellel. A külső hőmérsékletet a modell kelvinben kapja, kimenete a belső hőmérséklet. 
+
+ %(\textit{\ref{fig:valve-step}. ábra}). 
 % a kimeneti változást létrehozó hatás egyértelműen beazonosítható kell hogy legyen.
+
+\section{A szakasz ugrásválasza}
 
 \begin{figure}[H]
 	\centering
