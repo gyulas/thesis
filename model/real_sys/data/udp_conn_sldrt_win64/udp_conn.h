@@ -7,9 +7,9 @@
  *
  * Code generation for model "udp_conn".
  *
- * Model version              : 1.152
+ * Model version              : 1.155
  * Simulink Coder version : 9.0 (R2018b) 24-May-2018
- * C source code generated on : Tue Dec  4 03:09:35 2018
+ * C source code generated on : Tue Dec  4 19:15:46 2018
  *
  * Target selection: sldrt.tlc
  * Note: GRT includes extra infrastructure and instrumentation for prototyping
@@ -20,7 +20,6 @@
 
 #ifndef RTW_HEADER_udp_conn_h_
 #define RTW_HEADER_udp_conn_h_
-#include <math.h>
 #include <string.h>
 #ifndef udp_conn_COMMON_INCLUDES_
 # define udp_conn_COMMON_INCLUDES_
@@ -850,10 +849,11 @@ typedef struct {
   real_T Gain1;                        /* '<Root>/Gain1' */
   real_T Sum1;                         /* '<Root>/Sum1' */
   real_T time_UTC1[4];                 /* '<Root>/Data Type Conversion1' */
-  int32_T PacketInput1_o13;            /* '<Root>/Packet Input1' */
-  int32_T PacketOutput;                /* '<Root>/Packet Output' */
-  uint16_T Sum3;                       /* '<Root>/Sum3' */
+  int32_T PacketInput1_o15;            /* '<Root>/Packet Input1' */
   uint16_T Sum2;                       /* '<Root>/Sum2' */
+  uint16_T Sum3;                       /* '<Root>/Sum3' */
+  uint16_T Switch;                     /* '<Root>/Switch' */
+  uint16_T Switch1;                    /* '<Root>/Switch1' */
   uint8_T PacketInput1_o1;             /* '<Root>/Packet Input1' */
   uint8_T PacketInput1_o2;             /* '<Root>/Packet Input1' */
   uint8_T PacketInput1_o3;             /* '<Root>/Packet Input1' */
@@ -866,20 +866,18 @@ typedef struct {
   uint8_T PacketInput1_o10;            /* '<Root>/Packet Input1' */
   uint8_T PacketInput1_o11;            /* '<Root>/Packet Input1' */
   uint8_T PacketInput1_o12;            /* '<Root>/Packet Input1' */
-  uint8_T DataTypeConversion;          /* '<Root>/Data Type Conversion' */
+  uint8_T PacketInput1_o13;            /* '<Root>/Packet Input1' */
+  uint8_T PacketInput1_o14;            /* '<Root>/Packet Input1' */
+  uint8_T Compare;                     /* '<S2>/Compare' */
 } B_udp_conn_T;
 
 /* Block states (default storage) for system '<Root>' */
 typedef struct {
-  real_T lastSin;                      /* '<Root>/Sine Wave (double) 0.5Hz' */
-  real_T lastCos;                      /* '<Root>/Sine Wave (double) 0.5Hz' */
   void *PacketInput1_PWORK;            /* '<Root>/Packet Input1' */
+  void *PacketOutput_PWORK[2];         /* '<Root>/Packet Output' */
   struct {
     void *LoggedData[3];
   } Scope_PWORK;                       /* '<Root>/Scope' */
-
-  void *PacketOutput_PWORK[2];         /* '<Root>/Packet Output' */
-  int32_T systemEnable;                /* '<Root>/Sine Wave (double) 0.5Hz' */
 } DW_udp_conn_T;
 
 /* Backward compatible GRT Identifiers */
@@ -913,7 +911,13 @@ struct P_udp_conn_T_ {
   int32_T PacketOutput_PacketID;       /* Mask Parameter: PacketOutput_PacketID
                                         * Referenced by: '<Root>/Packet Output'
                                         */
-  real_T Constant_Value;               /* Expression: 0
+  uint8_T CompareToConstant_const;     /* Mask Parameter: CompareToConstant_const
+                                        * Referenced by: '<S1>/Constant'
+                                        */
+  uint8_T CompareToConstant1_const;    /* Mask Parameter: CompareToConstant1_const
+                                        * Referenced by: '<S2>/Constant'
+                                        */
+  real_T Constant_Value;               /* Expression: 1
                                         * Referenced by: '<Root>/Constant'
                                         */
   real_T Gain_Gain;                    /* Expression: 0.1
@@ -925,32 +929,17 @@ struct P_udp_conn_T_ {
   real_T Gain1_Gain;                   /* Expression: 0.1
                                         * Referenced by: '<Root>/Gain1'
                                         */
-  real_T SineWavedouble05Hz_Amp;       /* Expression: 50
-                                        * Referenced by: '<Root>/Sine Wave (double) 0.5Hz'
-                                        */
-  real_T SineWavedouble05Hz_Bias;      /* Expression: 50
-                                        * Referenced by: '<Root>/Sine Wave (double) 0.5Hz'
-                                        */
-  real_T SineWavedouble05Hz_Freq;      /* Expression: 0.62*0.5
-                                        * Referenced by: '<Root>/Sine Wave (double) 0.5Hz'
-                                        */
-  real_T SineWavedouble05Hz_Hsin;      /* Computed Parameter: SineWavedouble05Hz_Hsin
-                                        * Referenced by: '<Root>/Sine Wave (double) 0.5Hz'
-                                        */
-  real_T SineWavedouble05Hz_HCos;      /* Computed Parameter: SineWavedouble05Hz_HCos
-                                        * Referenced by: '<Root>/Sine Wave (double) 0.5Hz'
-                                        */
-  real_T SineWavedouble05Hz_PSin;      /* Computed Parameter: SineWavedouble05Hz_PSin
-                                        * Referenced by: '<Root>/Sine Wave (double) 0.5Hz'
-                                        */
-  real_T SineWavedouble05Hz_PCos;      /* Computed Parameter: SineWavedouble05Hz_PCos
-                                        * Referenced by: '<Root>/Sine Wave (double) 0.5Hz'
+  uint8_T Gain2_Gain;                  /* Computed Parameter: Gain2_Gain
+                                        * Referenced by: '<Root>/Gain2'
                                         */
   uint8_T Gain3_Gain;                  /* Computed Parameter: Gain3_Gain
                                         * Referenced by: '<Root>/Gain3'
                                         */
-  uint8_T Gain2_Gain;                  /* Computed Parameter: Gain2_Gain
-                                        * Referenced by: '<Root>/Gain2'
+  uint8_T Switch_Threshold;            /* Computed Parameter: Switch_Threshold
+                                        * Referenced by: '<Root>/Switch'
+                                        */
+  uint8_T Switch1_Threshold;           /* Computed Parameter: Switch1_Threshold
+                                        * Referenced by: '<Root>/Switch1'
                                         */
 };
 
@@ -1096,9 +1085,11 @@ extern RT_MODEL_udp_conn_T *const udp_conn_M;
  * Here is the system hierarchy for this model
  *
  * '<Root>' : 'udp_conn'
- * '<S1>'   : 'udp_conn/Iddata Sink'
- * '<S2>'   : 'udp_conn/MPC Controller'
- * '<S3>'   : 'udp_conn/MPC Controller/MPC'
- * '<S4>'   : 'udp_conn/MPC Controller/MPC/optimizer'
+ * '<S1>'   : 'udp_conn/Compare To Constant'
+ * '<S2>'   : 'udp_conn/Compare To Constant1'
+ * '<S3>'   : 'udp_conn/Iddata Sink'
+ * '<S4>'   : 'udp_conn/MPC Controller'
+ * '<S5>'   : 'udp_conn/MPC Controller/MPC'
+ * '<S6>'   : 'udp_conn/MPC Controller/MPC/optimizer'
  */
 #endif                                 /* RTW_HEADER_udp_conn_h_ */

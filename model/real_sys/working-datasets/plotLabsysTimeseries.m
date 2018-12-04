@@ -1,10 +1,11 @@
-function plotClosedLoopTemp(labsys)
+function plotLabsysTimeseries(labsys)
 % from a signal plots values
 
 hManipulated=subplot(2,1,1);
 set(hManipulated, 'OuterPosition', [0,0.60, 1, .34]);
 
-plot(labsys.time,labsys.signals(1).values(:,1)*100) %,...
+time=1:length(labsys.Data(:,1)');
+plot(time,labsys.Data(:,1)*100) %,...
  %    labsys.time, labsys.signals(2).values(:,2))
     %cpy.time,cpy.signals(2).values(:,1),'--',...
     %cpy.time,cpy.signals(2).values(:,2),'--',...
@@ -19,18 +20,24 @@ set(gca,'YLim',lim);
 
 lim=get(gca,'XLim');
 lim(1)=0;
-lim(2)=1000;
+lim(2)=labsys.Time(end);
 set(gca,'XLim',lim);
 
+
+ylab=get(gca,'YLabel');
+ylab.String='PWM [%]';
+set(gca,'YLabel',ylab)
+
 %set X axes label
+
 plotting_axesLabel_Days()
 
-legend('Radiátor szelep')
+legend('Halogén izzók hõje')
 leg=get(gca, 'Legend');
 leg.Position =[0.705    0.91    0.2193    0.0739];
 
 subtitle=get(hManipulated,'Title');
-subtitle.String='Beavatkozó jelek';
+subtitle.String='Beavatkozó jel';
 subtitle.FontSize=11;
 shg %show it
 
@@ -44,8 +51,10 @@ set(hMeasured, 'OuterPosition', [0,0, 1, .55]);
 
 %plot(ValveAndTemp.time,[ValveAndTemp.signals(1).values(:,1:1:2) ValveAndTemp.signals(1).values(:,3)-273])
 
-plot(labsys.time, labsys.signals(1).values(:,1)-273,'k-',...
-     labsys.time, labsys.signals(1).values(:,2)-273,'r-')
+time=1:length(labsys.Data(:,2)');
+
+plot(time, labsys.Data(:,2)-273,'k-',...
+     time, labsys.Data(:,3)-273,'r-')
      %cpy.time,cpy.signals(1).values(:,1)-273,'-.',...
      %cpy.time,cpy.signals(1).values(:,2)-273,'-.',...
  
@@ -56,19 +65,19 @@ plot(labsys.time, labsys.signals(1).values(:,1)-273,'k-',...
 %grid on
 
 lim=get(gca,'YLim');
-lim(1)=-15;
-lim(2)=40;
+lim(1)=10;
+lim(2)=55;
 set(gca,'YLim',lim);
 
 
 ylab=get(gca,'YLabel');
-ylab.String='PWM %';
+ylab.String='t [°C]';
 set(gca,'YLabel',ylab)
 
 
 lim=get(gca,'XLim');
-lim(1)=3600*24*10*3.4;
-lim(2)=3600*24*10*4;
+lim(1)=0;
+lim(2)=labsys.Time(end);
 set(gca,'XLim',lim);
 
 
@@ -80,7 +89,9 @@ set(gca,'XLim',lim);
 
 
 %set X axes label
+
 plotting_axesLabel_Days()
+
 legend('Külsõ hõmérséklet t_e','Helyiség hõmérséklete t_i')
 %,'Nemlineáris modell t_i','Linearizált modell t_i')
 leg=get(gca, 'Legend');
@@ -97,9 +108,9 @@ shg %show it
 function plotting_axesLabel_Days()
 %mintavételi idõ 1800s=1 egység=fél óra. A struct time-ban adja.
 % Simulink: 3600*24*10*75 mp, azaz 
-set(gca,'XTick',0:24*3600:3600*24*7*120)
+set(gca,'XTick',0:3600:36000)
 %set(gca,'XTick',0:30*24*3600:3600*24*7*120)%honap
 set(gca,'XTickLabel',{'0','1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16'});
 xlab=get(gca,'XLabel');
-xlab.String='idõ (perc)';
+xlab.String='idõ (óra)';
 set(gca,'XLabel',xlab)

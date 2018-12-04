@@ -7,9 +7,9 @@
  *
  * Code generation for model "udp_conn".
  *
- * Model version              : 1.152
+ * Model version              : 1.155
  * Simulink Coder version : 9.0 (R2018b) 24-May-2018
- * C source code generated on : Tue Dec  4 03:09:35 2018
+ * C source code generated on : Tue Dec  4 19:15:46 2018
  *
  * Target selection: sldrt.tlc
  * Note: GRT includes extra infrastructure and instrumentation for prototyping
@@ -36,7 +36,7 @@ P_udp_conn_T udp_conn_P = {
   /* Mask Parameter: PacketOutput_MaxMissedTicks
    * Referenced by: '<Root>/Packet Output'
    */
-  1.0E+7,
+  50.0,
 
   /* Mask Parameter: PacketInput1_YieldWhenWaiting
    * Referenced by: '<Root>/Packet Input1'
@@ -58,10 +58,20 @@ P_udp_conn_T udp_conn_P = {
    */
   1,
 
-  /* Expression: 0
+  /* Mask Parameter: CompareToConstant_const
+   * Referenced by: '<S1>/Constant'
+   */
+  25U,
+
+  /* Mask Parameter: CompareToConstant1_const
+   * Referenced by: '<S2>/Constant'
+   */
+  26U,
+
+  /* Expression: 1
    * Referenced by: '<Root>/Constant'
    */
-  0.0,
+  1.0,
 
   /* Expression: 0.1
    * Referenced by: '<Root>/Gain'
@@ -78,48 +88,23 @@ P_udp_conn_T udp_conn_P = {
    */
   0.1,
 
-  /* Expression: 50
-   * Referenced by: '<Root>/Sine Wave (double) 0.5Hz'
+  /* Computed Parameter: Gain2_Gain
+   * Referenced by: '<Root>/Gain2'
    */
-  50.0,
-
-  /* Expression: 50
-   * Referenced by: '<Root>/Sine Wave (double) 0.5Hz'
-   */
-  50.0,
-
-  /* Expression: 0.62*0.5
-   * Referenced by: '<Root>/Sine Wave (double) 0.5Hz'
-   */
-  0.31,
-
-  /* Computed Parameter: SineWavedouble05Hz_Hsin
-   * Referenced by: '<Root>/Sine Wave (double) 0.5Hz'
-   */
-  0.3050586364434435,
-
-  /* Computed Parameter: SineWavedouble05Hz_HCos
-   * Referenced by: '<Root>/Sine Wave (double) 0.5Hz'
-   */
-  0.95233356988571338,
-
-  /* Computed Parameter: SineWavedouble05Hz_PSin
-   * Referenced by: '<Root>/Sine Wave (double) 0.5Hz'
-   */
-  -0.3050586364434435,
-
-  /* Computed Parameter: SineWavedouble05Hz_PCos
-   * Referenced by: '<Root>/Sine Wave (double) 0.5Hz'
-   */
-  0.95233356988571338,
+  255U,
 
   /* Computed Parameter: Gain3_Gain
    * Referenced by: '<Root>/Gain3'
    */
   255U,
 
-  /* Computed Parameter: Gain2_Gain
-   * Referenced by: '<Root>/Gain2'
+  /* Computed Parameter: Switch_Threshold
+   * Referenced by: '<Root>/Switch'
    */
-  255U
+  0U,
+
+  /* Computed Parameter: Switch1_Threshold
+   * Referenced by: '<Root>/Switch1'
+   */
+  0U
 };

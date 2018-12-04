@@ -4,7 +4,8 @@ function plotLabsysTemp(labsys)
 hManipulated=subplot(2,1,1);
 set(hManipulated, 'OuterPosition', [0,0.60, 1, .34]);
 
-plot(labsys.time,labsys.signals(1).values(:,1)*100) %,...
+time=1:length(labsys.signals(1).values(:,1)');
+plot(time,labsys.signals(1).values(:,1)*100) %,...
  %    labsys.time, labsys.signals(2).values(:,2))
     %cpy.time,cpy.signals(2).values(:,1),'--',...
     %cpy.time,cpy.signals(2).values(:,2),'--',...
@@ -17,12 +18,13 @@ lim(1)=-5;
 lim(2)=105;
 set(gca,'YLim',lim);
 
-lim=get(gca,'XLim');
-lim(1)=0;
-lim(2)=1000;
-set(gca,'XLim',lim);
+% lim=get(gca,'XLim');
+% lim(1)=0;
+% lim(2)=1000;
+% set(gca,'XLim',lim);
 
 %set X axes label
+
 plotting_axesLabel_Days()
 
 legend('Halogén izzók fényessége')
@@ -44,8 +46,10 @@ set(hMeasured, 'OuterPosition', [0,0, 1, .55]);
 
 %plot(ValveAndTemp.time,[ValveAndTemp.signals(1).values(:,1:1:2) ValveAndTemp.signals(1).values(:,3)-273])
 
-plot(labsys.time, labsys.signals(1).values(:,2)-273,'k-',...
-     labsys.time, labsys.signals(2).values(:,1)-273,'r-')
+time=1:length(labsys.signals(1).values(:,2)');
+
+plot(time, labsys.signals(1).values(:,2)-273,'k-',...
+     time, labsys.signals(2).values(:,1)-273,'r-')
      %cpy.time,cpy.signals(1).values(:,1)-273,'-.',...
      %cpy.time,cpy.signals(1).values(:,2)-273,'-.',...
  
@@ -56,8 +60,8 @@ plot(labsys.time, labsys.signals(1).values(:,2)-273,'k-',...
 %grid on
 
 lim=get(gca,'YLim');
-lim(1)=-15;
-lim(2)=40;
+lim(1)=20;
+lim(2)=55;
 set(gca,'YLim',lim);
 
 
@@ -66,10 +70,10 @@ ylab.String='t [°C]';
 set(gca,'YLabel',ylab)
 
 
-lim=get(gca,'XLim');
-lim(1)=0;
-lim(2)=1000;
-set(gca,'XLim',lim);
+% lim=get(gca,'XLim');
+% lim(1)=0;
+% lim(2)=1000;
+% set(gca,'XLim',lim);
 
 
 % lab=get(gca,'YTickLabel');
@@ -80,7 +84,9 @@ set(gca,'XLim',lim);
 
 
 %set X axes label
+
 plotting_axesLabel_Days()
+
 legend('Külsõ hõmérséklet t_e','Helyiség hõmérséklete t_i')
 %,'Nemlineáris modell t_i','Linearizált modell t_i')
 leg=get(gca, 'Legend');
@@ -97,9 +103,9 @@ shg %show it
 function plotting_axesLabel_Days()
 %mintavételi idõ 1800s=1 egység=fél óra. A struct time-ban adja.
 % Simulink: 3600*24*10*75 mp, azaz 
-set(gca,'XTick',0:60:1020)
+set(gca,'XTick',0:3600:36000)
 %set(gca,'XTick',0:30*24*3600:3600*24*7*120)%honap
 set(gca,'XTickLabel',{'0','1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16'});
 xlab=get(gca,'XLabel');
-xlab.String='idõ (perc)';
+xlab.String='idõ (óra)';
 set(gca,'XLabel',xlab)
