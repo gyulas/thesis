@@ -7,9 +7,9 @@
  *
  * Code generation for model "udp_conn".
  *
- * Model version              : 1.141
+ * Model version              : 1.148
  * Simulink Coder version : 9.0 (R2018b) 24-May-2018
- * C source code generated on : Mon Dec  3 23:38:43 2018
+ * C source code generated on : Mon Dec  3 23:53:48 2018
  *
  * Target selection: sldrt.tlc
  * Note: GRT includes extra infrastructure and instrumentation for prototyping
@@ -366,6 +366,15 @@ void udp_conn_output0(void)            /* Sample time: [1.0s, 0.0s] */
   udp_conn_B.Sum3 = (uint16_T)((uint32_T)udp_conn_P.Gain3_Gain *
     udp_conn_B.PacketInput1_o3 + udp_conn_B.PacketInput1_o4);
 
+  /* Sum: '<Root>/Sum2' incorporates:
+   *  Gain: '<Root>/Gain2'
+   */
+  udp_conn_B.Sum2 = (uint16_T)((uint32_T)udp_conn_P.Gain2_Gain *
+    udp_conn_B.PacketInput1_o1 + udp_conn_B.PacketInput1_o2);
+
+  /* Constant: '<Root>/Constant' */
+  udp_conn_B.Constant = udp_conn_P.Constant_Value;
+
   /* Gain: '<Root>/Gain' incorporates:
    *  DataTypeConversion: '<Root>/Data Type Conversion2'
    */
@@ -376,20 +385,6 @@ void udp_conn_output0(void)            /* Sample time: [1.0s, 0.0s] */
    */
   udp_conn_B.Sum = udp_conn_B.Gain + udp_conn_P.Constant1_Value;
 
-  /* S-Function (sldrttstamp): '<Root>/Timestamp' incorporates:
-   *  Constant: '<Root>/Constant'
-   */
-  /* S-Function Block: <Root>/Timestamp */
-  {
-    udp_conn_B.Timestamp = sldrt_read_timestamp();
-  }
-
-  /* Sum: '<Root>/Sum2' incorporates:
-   *  Gain: '<Root>/Gain2'
-   */
-  udp_conn_B.Sum2 = (uint16_T)((uint32_T)udp_conn_P.Gain2_Gain *
-    udp_conn_B.PacketInput1_o1 + udp_conn_B.PacketInput1_o2);
-
   /* Gain: '<Root>/Gain1' incorporates:
    *  DataTypeConversion: '<Root>/Data Type Conversion3'
    */
@@ -399,9 +394,6 @@ void udp_conn_output0(void)            /* Sample time: [1.0s, 0.0s] */
    *  Constant: '<Root>/Constant1'
    */
   udp_conn_B.Sum1 = udp_conn_B.Gain1 + udp_conn_P.Constant1_Value;
-
-  /* DigitalClock: '<Root>/Digital Clock' */
-  udp_conn_B.DigitalClock = udp_conn_M->Timing.t[0];
 }
 
 /* Model update function for TID0 */
@@ -661,10 +653,10 @@ RT_MODEL_udp_conn_T *udp_conn(void)
   udp_conn_M->Timing.stepSize1 = 2.0;
 
   /* External mode info */
-  udp_conn_M->Sizes.checksums[0] = (4294252924U);
-  udp_conn_M->Sizes.checksums[1] = (1867861348U);
-  udp_conn_M->Sizes.checksums[2] = (2949610988U);
-  udp_conn_M->Sizes.checksums[3] = (83608129U);
+  udp_conn_M->Sizes.checksums[0] = (4119029626U);
+  udp_conn_M->Sizes.checksums[1] = (159494569U);
+  udp_conn_M->Sizes.checksums[2] = (922190806U);
+  udp_conn_M->Sizes.checksums[3] = (135099040U);
 
   {
     static const sysRanDType rtAlwaysEnabled = SUBSYS_RAN_BC_ENABLE;
@@ -690,12 +682,11 @@ RT_MODEL_udp_conn_T *udp_conn(void)
                 sizeof(B_udp_conn_T));
 
   {
+    udp_conn_B.Constant = 0.0;
     udp_conn_B.Gain = 0.0;
     udp_conn_B.Sum = 0.0;
-    udp_conn_B.Timestamp = 0.0;
     udp_conn_B.Gain1 = 0.0;
     udp_conn_B.Sum1 = 0.0;
-    udp_conn_B.DigitalClock = 0.0;
   }
 
   /* parameters */
@@ -731,8 +722,8 @@ RT_MODEL_udp_conn_T *udp_conn(void)
   udp_conn_M->Sizes.numU = (0);        /* Number of model inputs */
   udp_conn_M->Sizes.sysDirFeedThru = (0);/* The model is not direct feedthrough */
   udp_conn_M->Sizes.numSampTimes = (2);/* Number of sample times */
-  udp_conn_M->Sizes.numBlocks = (27);  /* Number of blocks */
-  udp_conn_M->Sizes.numBlockIO = (15); /* Number of block outputs */
+  udp_conn_M->Sizes.numBlocks = (25);  /* Number of blocks */
+  udp_conn_M->Sizes.numBlockIO = (14); /* Number of block outputs */
   udp_conn_M->Sizes.numBlockPrms = (19);/* Sum of parameter "widths" */
   return udp_conn_M;
 }

@@ -7,9 +7,9 @@
  *
  * Code generation for model "udp_conn".
  *
- * Model version              : 1.141
+ * Model version              : 1.148
  * Simulink Coder version : 9.0 (R2018b) 24-May-2018
- * C source code generated on : Mon Dec  3 23:38:43 2018
+ * C source code generated on : Mon Dec  3 23:53:48 2018
  *
  * Target selection: sldrt.tlc
  * Note: GRT includes extra infrastructure and instrumentation for prototyping
@@ -852,12 +852,11 @@
 
 /* Block signals (default storage) */
 typedef struct {
+  real_T Constant;                     /* '<Root>/Constant' */
   real_T Gain;                         /* '<Root>/Gain' */
   real_T Sum;                          /* '<Root>/Sum' */
-  real_T Timestamp;                    /* '<Root>/Timestamp' */
   real_T Gain1;                        /* '<Root>/Gain1' */
   real_T Sum1;                         /* '<Root>/Sum1' */
-  real_T DigitalClock;                 /* '<Root>/Digital Clock' */
   int32_T PacketInput1_o5;             /* '<Root>/Packet Input1' */
   int32_T PacketOutput;                /* '<Root>/Packet Output' */
   uint16_T Sum3;                       /* '<Root>/Sum3' */
@@ -875,7 +874,7 @@ typedef struct {
   real_T lastCos;                      /* '<Root>/Sine Wave (double) 0.5Hz' */
   void *PacketInput1_PWORK;            /* '<Root>/Packet Input1' */
   struct {
-    void *LoggedData[3];
+    void *LoggedData[2];
   } Scope_PWORK;                       /* '<Root>/Scope' */
 
   void *PacketOutput_PWORK[2];         /* '<Root>/Packet Output' */
