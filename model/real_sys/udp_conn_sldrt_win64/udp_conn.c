@@ -7,9 +7,9 @@
  *
  * Code generation for model "udp_conn".
  *
- * Model version              : 1.148
+ * Model version              : 1.154
  * Simulink Coder version : 9.0 (R2018b) 24-May-2018
- * C source code generated on : Mon Dec  3 23:53:48 2018
+ * C source code generated on : Tue Dec  4 15:36:23 2018
  *
  * Target selection: sldrt.tlc
  * Note: GRT includes extra infrastructure and instrumentation for prototyping
@@ -283,10 +283,9 @@ static double SLDRTBoardOptions0[] = {
 };
 
 /* list of Simulink Desktop Real-Time timers */
-const int SLDRTTimerCount = 2;
-const double SLDRTTimers[4] = {
+const int SLDRTTimerCount = 1;
+const double SLDRTTimers[2] = {
   1.0, 0.0,
-  2.0, 0.0,
 };
 
 /* list of Simulink Desktop Real-Time boards */
@@ -304,52 +303,17 @@ DW_udp_conn_T udp_conn_DW;
 /* Real-time model */
 RT_MODEL_udp_conn_T udp_conn_M_;
 RT_MODEL_udp_conn_T *const udp_conn_M = &udp_conn_M_;
-static void rate_monotonic_scheduler(void);
-time_T rt_SimUpdateDiscreteEvents(
-  int_T rtmNumSampTimes, void *rtmTimingData, int_T *rtmSampleHitPtr, int_T
-  *rtmPerTaskSampleHits )
-{
-  rtmSampleHitPtr[1] = rtmStepTask(udp_conn_M, 1);
-  UNUSED_PARAMETER(rtmNumSampTimes);
-  UNUSED_PARAMETER(rtmTimingData);
-  UNUSED_PARAMETER(rtmPerTaskSampleHits);
-  return(-1);
-}
 
-/*
- *   This function updates active task flag for each subrate
- * and rate transition flags for tasks that exchange data.
- * The function assumes rate-monotonic multitasking scheduler.
- * The function must be called at model base rate so that
- * the generated code self-manages all its subrates and rate
- * transition flags.
- */
-static void rate_monotonic_scheduler(void)
+/* Model output function */
+void udp_conn_output(void)
 {
-  /* Compute which subrates run during the next base time step.  Subrates
-   * are an integer multiple of the base rate counter.  Therefore, the subtask
-   * counter is reset when it reaches its limit (zero means run).
-   */
-  (udp_conn_M->Timing.TaskCounters.TID[1])++;
-  if ((udp_conn_M->Timing.TaskCounters.TID[1]) > 1) {/* Sample time: [2.0s, 0.0s] */
-    udp_conn_M->Timing.TaskCounters.TID[1] = 0;
-  }
-}
-
-/* Model output function for TID0 */
-void udp_conn_output0(void)            /* Sample time: [1.0s, 0.0s] */
-{
-  {                                    /* Sample time: [1.0s, 0.0s] */
-    rate_monotonic_scheduler();
-  }
-
   /* S-Function (sldrtpi): '<Root>/Packet Input1' */
   /* S-Function Block: <Root>/Packet Input1 */
   {
-    uint8_T indata[4U];
-    int status = RTBIO_DriverIO(0, STREAMINPUT, IOREAD, 4U,
+    uint8_T indata[14U];
+    int status = RTBIO_DriverIO(0, STREAMINPUT, IOREAD, 14U,
       &udp_conn_P.PacketInput1_PacketID, (double*) indata, NULL);
-    udp_conn_B.PacketInput1_o5 = 0;    /* Missed Ticks value is always zero */
+    udp_conn_B.PacketInput1_o15 = 0;   /* Missed Ticks value is always zero */
     if (status & 0x1) {
       RTWin_ANYTYPEPTR indp;
       indp.p_uint8_T = indata;
@@ -357,20 +321,63 @@ void udp_conn_output0(void)            /* Sample time: [1.0s, 0.0s] */
       udp_conn_B.PacketInput1_o2 = *indp.p_uint8_T++;
       udp_conn_B.PacketInput1_o3 = *indp.p_uint8_T++;
       udp_conn_B.PacketInput1_o4 = *indp.p_uint8_T++;
+      udp_conn_B.PacketInput1_o5 = *indp.p_uint8_T++;
+      udp_conn_B.PacketInput1_o6 = *indp.p_uint8_T++;
+      udp_conn_B.PacketInput1_o7 = *indp.p_uint8_T++;
+      udp_conn_B.PacketInput1_o8 = *indp.p_uint8_T++;
+      udp_conn_B.PacketInput1_o9 = *indp.p_uint8_T++;
+      udp_conn_B.PacketInput1_o10 = *indp.p_uint8_T++;
+      udp_conn_B.PacketInput1_o11 = *indp.p_uint8_T++;
+      udp_conn_B.PacketInput1_o12 = *indp.p_uint8_T++;
+      udp_conn_B.PacketInput1_o13 = *indp.p_uint8_T++;
+      udp_conn_B.PacketInput1_o14 = *indp.p_uint8_T++;
     }
   }
-
-  /* Sum: '<Root>/Sum3' incorporates:
-   *  Gain: '<Root>/Gain3'
-   */
-  udp_conn_B.Sum3 = (uint16_T)((uint32_T)udp_conn_P.Gain3_Gain *
-    udp_conn_B.PacketInput1_o3 + udp_conn_B.PacketInput1_o4);
 
   /* Sum: '<Root>/Sum2' incorporates:
    *  Gain: '<Root>/Gain2'
    */
   udp_conn_B.Sum2 = (uint16_T)((uint32_T)udp_conn_P.Gain2_Gain *
-    udp_conn_B.PacketInput1_o1 + udp_conn_B.PacketInput1_o2);
+    udp_conn_B.PacketInput1_o6 + udp_conn_B.PacketInput1_o7);
+
+  /* Sum: '<Root>/Sum3' incorporates:
+   *  Gain: '<Root>/Gain3'
+   */
+  udp_conn_B.Sum3 = (uint16_T)((uint32_T)udp_conn_P.Gain3_Gain *
+    udp_conn_B.PacketInput1_o13 + udp_conn_B.PacketInput1_o14);
+
+  /* Switch: '<Root>/Switch' incorporates:
+   *  Constant: '<S1>/Constant'
+   *  RelationalOperator: '<S1>/Compare'
+   */
+  if ((udp_conn_B.PacketInput1_o1 == udp_conn_P.CompareToConstant_const) >
+      udp_conn_P.Switch_Threshold) {
+    udp_conn_B.Switch = udp_conn_B.Sum2;
+  } else {
+    udp_conn_B.Switch = udp_conn_B.Sum3;
+  }
+
+  /* End of Switch: '<Root>/Switch' */
+
+  /* RelationalOperator: '<S2>/Compare' incorporates:
+   *  Constant: '<S2>/Constant'
+   */
+  udp_conn_B.Compare = (uint8_T)(udp_conn_B.PacketInput1_o8 ==
+    udp_conn_P.CompareToConstant1_const);
+
+  /* Switch: '<Root>/Switch1' */
+  if (udp_conn_B.Compare >= udp_conn_P.Switch1_Threshold) {
+    udp_conn_B.Switch1 = udp_conn_B.Sum3;
+  } else {
+    udp_conn_B.Switch1 = udp_conn_B.Sum2;
+  }
+
+  /* End of Switch: '<Root>/Switch1' */
+
+  /* S-Function (sldrtpo): '<Root>/Packet Output' */
+  /* S-Function Block: <Root>/Packet Output */
+
+  /* no code required */
 
   /* Constant: '<Root>/Constant' */
   udp_conn_B.Constant = udp_conn_P.Constant_Value;
@@ -378,7 +385,7 @@ void udp_conn_output0(void)            /* Sample time: [1.0s, 0.0s] */
   /* Gain: '<Root>/Gain' incorporates:
    *  DataTypeConversion: '<Root>/Data Type Conversion2'
    */
-  udp_conn_B.Gain = udp_conn_P.Gain_Gain * (real_T)udp_conn_B.Sum3;
+  udp_conn_B.Gain = udp_conn_P.Gain_Gain * (real_T)udp_conn_B.Switch1;
 
   /* Sum: '<Root>/Sum' incorporates:
    *  Constant: '<Root>/Constant1'
@@ -388,18 +395,41 @@ void udp_conn_output0(void)            /* Sample time: [1.0s, 0.0s] */
   /* Gain: '<Root>/Gain1' incorporates:
    *  DataTypeConversion: '<Root>/Data Type Conversion3'
    */
-  udp_conn_B.Gain1 = udp_conn_P.Gain1_Gain * (real_T)udp_conn_B.Sum2;
+  udp_conn_B.Gain1 = udp_conn_P.Gain1_Gain * (real_T)udp_conn_B.Switch;
 
   /* Sum: '<Root>/Sum1' incorporates:
    *  Constant: '<Root>/Constant1'
    */
   udp_conn_B.Sum1 = udp_conn_B.Gain1 + udp_conn_P.Constant1_Value;
+
+  /* DataTypeConversion: '<Root>/Data Type Conversion1' */
+  udp_conn_B.time_UTC1[0] = udp_conn_B.PacketInput1_o2;
+  udp_conn_B.time_UTC1[1] = udp_conn_B.PacketInput1_o3;
+  udp_conn_B.time_UTC1[2] = udp_conn_B.PacketInput1_o4;
+  udp_conn_B.time_UTC1[3] = udp_conn_B.PacketInput1_o5;
 }
 
-/* Model update function for TID0 */
-void udp_conn_update0(void)            /* Sample time: [1.0s, 0.0s] */
+/* Model update function */
+void udp_conn_update(void)
 {
-  /* Update absolute time */
+  /* Update for S-Function (sldrtpo): '<Root>/Packet Output' */
+
+  /* S-Function Block: <Root>/Packet Output */
+  {
+    uint8_T outdata[1U];
+    RTWin_ANYTYPEPTR outdp;
+    outdp.p_uint8_T = outdata;
+
+    {
+      uint8_T pktout = udp_conn_B.PacketInput1_o5;
+      *outdp.p_uint8_T++ = pktout;
+    }
+
+    RTBIO_DriverIO(0, STREAMOUTPUT, IOWRITE, 1U,
+                   &udp_conn_P.PacketOutput_PacketID, (double*) outdata, NULL);
+  }
+
+  /* Update absolute time for base rate */
   /* The "clockTick0" counts the number of times the code of this task has
    * been executed. The absolute time is the multiplication of "clockTick0"
    * and "Timing.stepSize0". Size of "clockTick0" ensures timer will not
@@ -417,151 +447,28 @@ void udp_conn_update0(void)            /* Sample time: [1.0s, 0.0s] */
     udp_conn_M->Timing.stepSize0 * 4294967296.0;
 }
 
-/* Model output function for TID1 */
-void udp_conn_output1(void)            /* Sample time: [2.0s, 0.0s] */
-{
-  real_T v;
-  real_T lastSin_tmp;
-
-  /* Sin: '<Root>/Sine Wave (double) 0.5Hz' */
-  if (udp_conn_DW.systemEnable != 0) {
-    lastSin_tmp = udp_conn_P.SineWavedouble05Hz_Freq * udp_conn_M->Timing.t[1];
-    udp_conn_DW.lastSin = sin(lastSin_tmp);
-    udp_conn_DW.lastCos = cos(lastSin_tmp);
-    udp_conn_DW.systemEnable = 0;
-  }
-
-  lastSin_tmp = ((udp_conn_DW.lastSin * udp_conn_P.SineWavedouble05Hz_PCos +
-                  udp_conn_DW.lastCos * udp_conn_P.SineWavedouble05Hz_PSin) *
-                 udp_conn_P.SineWavedouble05Hz_HCos + (udp_conn_DW.lastCos *
-    udp_conn_P.SineWavedouble05Hz_PCos - udp_conn_DW.lastSin *
-    udp_conn_P.SineWavedouble05Hz_PSin) * udp_conn_P.SineWavedouble05Hz_Hsin) *
-    udp_conn_P.SineWavedouble05Hz_Amp + udp_conn_P.SineWavedouble05Hz_Bias;
-
-  /* End of Sin: '<Root>/Sine Wave (double) 0.5Hz' */
-
-  /* DataTypeConversion: '<Root>/Data Type Conversion' */
-  v = fabs(lastSin_tmp);
-  if (v < 4.503599627370496E+15) {
-    if (v >= 0.5) {
-      lastSin_tmp = floor(lastSin_tmp + 0.5);
-    } else {
-      lastSin_tmp *= 0.0;
-    }
-  }
-
-  if (lastSin_tmp < 256.0) {
-    if (lastSin_tmp >= 0.0) {
-      udp_conn_B.DataTypeConversion = (uint8_T)lastSin_tmp;
-    } else {
-      udp_conn_B.DataTypeConversion = 0U;
-    }
-  } else if (lastSin_tmp >= 256.0) {
-    udp_conn_B.DataTypeConversion = MAX_uint8_T;
-  } else {
-    udp_conn_B.DataTypeConversion = 0U;
-  }
-
-  /* End of DataTypeConversion: '<Root>/Data Type Conversion' */
-
-  /* S-Function (sldrtpo): '<Root>/Packet Output' */
-  /* S-Function Block: <Root>/Packet Output */
-  udp_conn_B.PacketOutput = 0;         /* Missed Ticks value is always zero */
-
-  /* no code required */
-}
-
-/* Model update function for TID1 */
-void udp_conn_update1(void)            /* Sample time: [2.0s, 0.0s] */
-{
-  real_T HoldSine;
-
-  /* Update for Sin: '<Root>/Sine Wave (double) 0.5Hz' */
-  HoldSine = udp_conn_DW.lastSin;
-  udp_conn_DW.lastSin = udp_conn_DW.lastSin * udp_conn_P.SineWavedouble05Hz_HCos
-    + udp_conn_DW.lastCos * udp_conn_P.SineWavedouble05Hz_Hsin;
-  udp_conn_DW.lastCos = udp_conn_DW.lastCos * udp_conn_P.SineWavedouble05Hz_HCos
-    - HoldSine * udp_conn_P.SineWavedouble05Hz_Hsin;
-
-  /* Update for S-Function (sldrtpo): '<Root>/Packet Output' */
-
-  /* S-Function Block: <Root>/Packet Output */
-  {
-    uint8_T outdata[1U];
-    RTWin_ANYTYPEPTR outdp;
-    outdp.p_uint8_T = outdata;
-
-    {
-      uint8_T pktout = udp_conn_B.DataTypeConversion;
-      *outdp.p_uint8_T++ = pktout;
-    }
-
-    RTBIO_DriverIO(0, STREAMOUTPUT, IOWRITE, 1U,
-                   &udp_conn_P.PacketOutput_PacketID, (double*) outdata, NULL);
-  }
-
-  /* Update absolute time */
-  /* The "clockTick1" counts the number of times the code of this task has
-   * been executed. The absolute time is the multiplication of "clockTick1"
-   * and "Timing.stepSize1". Size of "clockTick1" ensures timer will not
-   * overflow during the application lifespan selected.
-   * Timer of this task consists of two 32 bit unsigned integers.
-   * The two integers represent the low bits Timing.clockTick1 and the high bits
-   * Timing.clockTickH1. When the low bit overflows to 0, the high bits increment.
-   */
-  if (!(++udp_conn_M->Timing.clockTick1)) {
-    ++udp_conn_M->Timing.clockTickH1;
-  }
-
-  udp_conn_M->Timing.t[1] = udp_conn_M->Timing.clockTick1 *
-    udp_conn_M->Timing.stepSize1 + udp_conn_M->Timing.clockTickH1 *
-    udp_conn_M->Timing.stepSize1 * 4294967296.0;
-}
-
-/* Model output wrapper function for compatibility with a static main program */
-void udp_conn_output(int_T tid)
-{
-  switch (tid) {
-   case 0 :
-    udp_conn_output0();
-    break;
-
-   case 1 :
-    udp_conn_output1();
-    break;
-
-   default :
-    break;
-  }
-}
-
-/* Model update wrapper function for compatibility with a static main program */
-void udp_conn_update(int_T tid)
-{
-  switch (tid) {
-   case 0 :
-    udp_conn_update0();
-    break;
-
-   case 1 :
-    udp_conn_update1();
-    break;
-
-   default :
-    break;
-  }
-}
-
 /* Model initialize function */
 void udp_conn_initialize(void)
 {
   /* Start for S-Function (sldrtpo): '<Root>/Packet Output' */
 
   /* S-Function Block: <Root>/Packet Output */
-  /* no initial value should be set */
+  {
+    const double* parm = &udp_conn_P.PacketOutput_InitialValue;
+    char outdata[1U];
+    RTWin_ANYTYPEPTR outdp;
+    outdp.p_uint8_T = outdata;
 
-  /* Enable for Sin: '<Root>/Sine Wave (double) 0.5Hz' */
-  udp_conn_DW.systemEnable = 1;
+    {
+      real_T pktin = *parm++;
+      uint8_T pktout = pktin>=MAX_uint8_T ? MAX_uint8_T : (pktin<=0U ? 0U :
+        (uint8_T) pktin);
+      *outdp.p_uint8_T++ = pktout;
+    }
+
+    RTBIO_DriverIO(0, STREAMOUTPUT, IOWRITE, 1U,
+                   &udp_conn_P.PacketOutput_PacketID, (double*) outdata, NULL);
+  }
 }
 
 /* Model terminate function */
@@ -578,12 +485,14 @@ void udp_conn_terminate(void)
  *========================================================================*/
 void MdlOutputs(int_T tid)
 {
-  udp_conn_output(tid);
+  udp_conn_output();
+  UNUSED_PARAMETER(tid);
 }
 
 void MdlUpdate(int_T tid)
 {
-  udp_conn_update(tid);
+  udp_conn_update();
+  UNUSED_PARAMETER(tid);
 }
 
 void MdlInitializeSizes(void)
@@ -624,39 +533,33 @@ RT_MODEL_udp_conn_T *udp_conn(void)
   {
     int_T *mdlTsMap = udp_conn_M->Timing.sampleTimeTaskIDArray;
     mdlTsMap[0] = 0;
-    mdlTsMap[1] = 1;
     udp_conn_M->Timing.sampleTimeTaskIDPtr = (&mdlTsMap[0]);
     udp_conn_M->Timing.sampleTimes = (&udp_conn_M->Timing.sampleTimesArray[0]);
     udp_conn_M->Timing.offsetTimes = (&udp_conn_M->Timing.offsetTimesArray[0]);
 
     /* task periods */
     udp_conn_M->Timing.sampleTimes[0] = (1.0);
-    udp_conn_M->Timing.sampleTimes[1] = (2.0);
 
     /* task offsets */
     udp_conn_M->Timing.offsetTimes[0] = (0.0);
-    udp_conn_M->Timing.offsetTimes[1] = (0.0);
   }
 
   rtmSetTPtr(udp_conn_M, &udp_conn_M->Timing.tArray[0]);
 
   {
     int_T *mdlSampleHits = udp_conn_M->Timing.sampleHitArray;
-    int_T *mdlPerTaskSampleHits = udp_conn_M->Timing.perTaskSampleHitsArray;
-    udp_conn_M->Timing.perTaskSampleHits = (&mdlPerTaskSampleHits[0]);
     mdlSampleHits[0] = 1;
     udp_conn_M->Timing.sampleHits = (&mdlSampleHits[0]);
   }
 
-  rtmSetTFinal(udp_conn_M, 1800.0);
+  rtmSetTFinal(udp_conn_M, 7200.0);
   udp_conn_M->Timing.stepSize0 = 1.0;
-  udp_conn_M->Timing.stepSize1 = 2.0;
 
   /* External mode info */
-  udp_conn_M->Sizes.checksums[0] = (4119029626U);
-  udp_conn_M->Sizes.checksums[1] = (159494569U);
-  udp_conn_M->Sizes.checksums[2] = (922190806U);
-  udp_conn_M->Sizes.checksums[3] = (135099040U);
+  udp_conn_M->Sizes.checksums[0] = (2760927852U);
+  udp_conn_M->Sizes.checksums[1] = (2778074263U);
+  udp_conn_M->Sizes.checksums[2] = (3275980863U);
+  udp_conn_M->Sizes.checksums[3] = (2398885302U);
 
   {
     static const sysRanDType rtAlwaysEnabled = SUBSYS_RAN_BC_ENABLE;
@@ -674,7 +577,7 @@ RT_MODEL_udp_conn_T *udp_conn(void)
   udp_conn_M->solverInfoPtr = (&udp_conn_M->solverInfo);
   udp_conn_M->Timing.stepSize = (1.0);
   rtsiSetFixedStepSize(&udp_conn_M->solverInfo, 1.0);
-  rtsiSetSolverMode(&udp_conn_M->solverInfo, SOLVER_MODE_MULTITASKING);
+  rtsiSetSolverMode(&udp_conn_M->solverInfo, SOLVER_MODE_SINGLETASKING);
 
   /* block I/O */
   udp_conn_M->blockIO = ((void *) &udp_conn_B);
@@ -687,6 +590,10 @@ RT_MODEL_udp_conn_T *udp_conn(void)
     udp_conn_B.Sum = 0.0;
     udp_conn_B.Gain1 = 0.0;
     udp_conn_B.Sum1 = 0.0;
+    udp_conn_B.time_UTC1[0] = 0.0;
+    udp_conn_B.time_UTC1[1] = 0.0;
+    udp_conn_B.time_UTC1[2] = 0.0;
+    udp_conn_B.time_UTC1[3] = 0.0;
   }
 
   /* parameters */
@@ -696,8 +603,6 @@ RT_MODEL_udp_conn_T *udp_conn(void)
   udp_conn_M->dwork = ((void *) &udp_conn_DW);
   (void) memset((void *)&udp_conn_DW, 0,
                 sizeof(DW_udp_conn_T));
-  udp_conn_DW.lastSin = 0.0;
-  udp_conn_DW.lastCos = 0.0;
 
   /* data type transition information */
   {
@@ -721,10 +626,10 @@ RT_MODEL_udp_conn_T *udp_conn(void)
   udp_conn_M->Sizes.numY = (0);        /* Number of model outputs */
   udp_conn_M->Sizes.numU = (0);        /* Number of model inputs */
   udp_conn_M->Sizes.sysDirFeedThru = (0);/* The model is not direct feedthrough */
-  udp_conn_M->Sizes.numSampTimes = (2);/* Number of sample times */
-  udp_conn_M->Sizes.numBlocks = (25);  /* Number of blocks */
-  udp_conn_M->Sizes.numBlockIO = (14); /* Number of block outputs */
-  udp_conn_M->Sizes.numBlockPrms = (19);/* Sum of parameter "widths" */
+  udp_conn_M->Sizes.numSampTimes = (1);/* Number of sample times */
+  udp_conn_M->Sizes.numBlocks = (38);  /* Number of blocks */
+  udp_conn_M->Sizes.numBlockIO = (26); /* Number of block outputs */
+  udp_conn_M->Sizes.numBlockPrms = (17);/* Sum of parameter "widths" */
   return udp_conn_M;
 }
 

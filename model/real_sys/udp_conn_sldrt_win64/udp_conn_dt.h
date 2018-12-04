@@ -7,9 +7,9 @@
  *
  * Code generation for model "udp_conn".
  *
- * Model version              : 1.148
+ * Model version              : 1.154
  * Simulink Coder version : 9.0 (R2018b) 24-May-2018
- * C source code generated on : Mon Dec  3 23:53:48 2018
+ * C source code generated on : Tue Dec  4 15:36:23 2018
  *
  * Target selection: sldrt.tlc
  * Note: GRT includes extra infrastructure and instrumentation for prototyping
@@ -58,42 +58,40 @@ static const char_T * rtDataTypeNames[] = {
 
 /* data type transitions for block I/O structure */
 static DataTypeTransition rtBTransitions[] = {
-  { (char_T *)(&udp_conn_B.Constant), 0, 0, 5 },
+  { (char_T *)(&udp_conn_B.Constant), 0, 0, 9 },
 
-  { (char_T *)(&udp_conn_B.PacketInput1_o5), 6, 0, 2 },
+  { (char_T *)(&udp_conn_B.PacketInput1_o15), 6, 0, 1 },
 
-  { (char_T *)(&udp_conn_B.Sum3), 5, 0, 2 },
+  { (char_T *)(&udp_conn_B.Sum2), 5, 0, 4 },
 
-  { (char_T *)(&udp_conn_B.PacketInput1_o1), 3, 0, 5 }
+  { (char_T *)(&udp_conn_B.PacketInput1_o1), 3, 0, 15 }
   ,
 
-  { (char_T *)(&udp_conn_DW.lastSin), 0, 0, 2 },
-
-  { (char_T *)(&udp_conn_DW.PacketInput1_PWORK), 11, 0, 5 },
-
-  { (char_T *)(&udp_conn_DW.systemEnable), 6, 0, 1 }
+  { (char_T *)(&udp_conn_DW.PacketInput1_PWORK), 11, 0, 6 }
 };
 
 /* data type transition table for block I/O structure */
 static DataTypeTransitionTable rtBTransTable = {
-  7U,
+  5U,
   rtBTransitions
 };
 
 /* data type transitions for Parameters structure */
 static DataTypeTransition rtPTransitions[] = {
-  { (char_T *)(&udp_conn_P.PacketInput1_MaxMissedTicks), 0, 0, 4 },
+  { (char_T *)(&udp_conn_P.PacketOutput_InitialValue), 0, 0, 5 },
 
   { (char_T *)(&udp_conn_P.PacketInput1_PacketID), 6, 0, 2 },
 
-  { (char_T *)(&udp_conn_P.Constant_Value), 0, 0, 11 },
+  { (char_T *)(&udp_conn_P.CompareToConstant_const), 3, 0, 2 },
 
-  { (char_T *)(&udp_conn_P.Gain3_Gain), 3, 0, 2 }
+  { (char_T *)(&udp_conn_P.Constant_Value), 0, 0, 4 },
+
+  { (char_T *)(&udp_conn_P.Gain2_Gain), 3, 0, 4 }
 };
 
 /* data type transition table for Parameters structure */
 static DataTypeTransitionTable rtPTransTable = {
-  4U,
+  5U,
   rtPTransitions
 };
 
