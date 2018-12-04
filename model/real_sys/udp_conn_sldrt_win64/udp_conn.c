@@ -7,9 +7,9 @@
  *
  * Code generation for model "udp_conn".
  *
- * Model version              : 1.154
+ * Model version              : 1.155
  * Simulink Coder version : 9.0 (R2018b) 24-May-2018
- * C source code generated on : Tue Dec  4 15:36:23 2018
+ * C source code generated on : Tue Dec  4 17:17:01 2018
  *
  * Target selection: sldrt.tlc
  * Note: GRT includes extra infrastructure and instrumentation for prototyping
@@ -366,7 +366,7 @@ void udp_conn_output(void)
     udp_conn_P.CompareToConstant1_const);
 
   /* Switch: '<Root>/Switch1' */
-  if (udp_conn_B.Compare >= udp_conn_P.Switch1_Threshold) {
+  if (udp_conn_B.Compare > udp_conn_P.Switch1_Threshold) {
     udp_conn_B.Switch1 = udp_conn_B.Sum3;
   } else {
     udp_conn_B.Switch1 = udp_conn_B.Sum2;
@@ -556,10 +556,10 @@ RT_MODEL_udp_conn_T *udp_conn(void)
   udp_conn_M->Timing.stepSize0 = 1.0;
 
   /* External mode info */
-  udp_conn_M->Sizes.checksums[0] = (2760927852U);
-  udp_conn_M->Sizes.checksums[1] = (2778074263U);
-  udp_conn_M->Sizes.checksums[2] = (3275980863U);
-  udp_conn_M->Sizes.checksums[3] = (2398885302U);
+  udp_conn_M->Sizes.checksums[0] = (326961273U);
+  udp_conn_M->Sizes.checksums[1] = (2467410258U);
+  udp_conn_M->Sizes.checksums[2] = (863828043U);
+  udp_conn_M->Sizes.checksums[3] = (1351564059U);
 
   {
     static const sysRanDType rtAlwaysEnabled = SUBSYS_RAN_BC_ENABLE;

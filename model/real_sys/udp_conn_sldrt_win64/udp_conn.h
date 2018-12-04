@@ -7,9 +7,9 @@
  *
  * Code generation for model "udp_conn".
  *
- * Model version              : 1.154
+ * Model version              : 1.155
  * Simulink Coder version : 9.0 (R2018b) 24-May-2018
- * C source code generated on : Tue Dec  4 15:36:23 2018
+ * C source code generated on : Tue Dec  4 17:17:01 2018
  *
  * Target selection: sldrt.tlc
  * Note: GRT includes extra infrastructure and instrumentation for prototyping
@@ -917,7 +917,7 @@ struct P_udp_conn_T_ {
   uint8_T CompareToConstant1_const;    /* Mask Parameter: CompareToConstant1_const
                                         * Referenced by: '<S2>/Constant'
                                         */
-  real_T Constant_Value;               /* Expression: 1
+  real_T Constant_Value;               /* Expression: 0
                                         * Referenced by: '<Root>/Constant'
                                         */
   real_T Gain_Gain;                    /* Expression: 0.1
