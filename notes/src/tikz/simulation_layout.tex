@@ -4,7 +4,7 @@
 	outer/.style={draw=gray,dashed,thick,inner sep=5pt}]
 	
 	% nagy blokkok
-	\node[draw,rectangle, minimum height=1.5cm,minimum width=4cm] (plant) at (5,2.5) {\parbox{2cm}{\centering fűtési rendszer}};
+	\node[draw,rectangle, minimum height=1.5cm,minimum width=4cm] (plant) at (5,2.5) {\parbox{2cm}{\centering fűtési\\rendszer}};
 	\node[draw,rectangle, minimum height=1.5cm,minimum width=3cm] (Control) at (0,2.5) {\parbox{2.5cm}{\centering modellalapú\\szabályzó}};
 	
 	% szaggatott vonal
@@ -13,9 +13,11 @@
 	
 	
 	% plant bemenetei
-	\draw [->] (Control.10) node[right]{} -- +(15mm,0) node[right]{${u_{1}}$};
-	\draw [->] (Control.350) node[right]{} -- +(15mm,0) node[right]{${u_{2}}$};
-	\draw [<-] (plant.90) node[right]{} -- +(0,3mm) node[right]{$t_{e}$};
+	\draw [->] (Control.0) node[right]{} -- +(15mm,0) node[right]{${u_{1}}$};
+	\draw [->] (Control.345) node[right]{} -- +(15mm,0) node[right]{${u_{2}}$};
+	\draw [<-] (plant.165) node[right]{} -- +(-5mm,0) node[left]{${t_{e}}$};
+	%\draw [<-] (plant.90) node[right]{} -- +(0,3mm) node[right]{$t_{e}$};
+	%\draw [<-] (plant.162) node[right]{} -- +(-10mm,0) node[left]{$t_{ref}$};
 	
 	% szabályzó bemenetei
 	% a -| és |- máshogy fog törni, ha unconstraintelt.
@@ -25,5 +27,5 @@
 	\draw [<-] (Control.162) node[right]{} -- +(-10mm,0) node[left]{$t_{ref}$};
 	\end{tikzpicture}
 	\caption{A szimuláció felépítése}
-	\label{tikz:simulation}
+	\label{tikz:simulation-basic}
 \end{figure}

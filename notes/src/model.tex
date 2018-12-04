@@ -10,6 +10,18 @@ Végighaladok az MPC tervezés lépésein, a tervezést és a validálást is sz
 
 A tervezési lépéseket ezután valós, fizikai modellen is elvégzem, így látható lesz, hogy egy kész házra, vagy annak egy részére mennyi munkával jár a szabályzó beállítása. Ha a modellezésre, hangolásra fordított idő megtérül, azaz komfortnövekedéssel, illetve az üzemeltetési költségek csökkenésével jár, akkor az iContrALL intelligens otthon rendszerbe is beilleszthetők lesznek az új funkciók.
 
+\chapter*{Abstract}
+
+In my Bachelor's Thesis I inspect the possibilities of MPC control design and validation in Matlab Simulink. I am going step-by-step through the MPC design procedure with simulated plant model. The plant model consists of a room and its heating system with proportional valves to control the water mass flow, thus providing heat for the room. Losses at the facade was taken int consideration (outer walls and window), I assume no heat loss to the neighboring rooms.
+
+The steady-state heat input for the room model is calculated by formula and then fed to a Simscape thermal network. This network gives the transient response of the room by simulating the charging of the heat capacities, such as air and the mass of the building / room itself. %TODO fajhő
+I design an MPC controller for the identified model of the plant. In the design procedure I study the impact of different control parameters to the control performance, such as the sampling time of the controller, the prediction and control horizon or the weights of the cost function.
+
+Then, for a real phisical system, an MPC controller is also designed. A paper box with some wood and some brick with reasonable heat capacity is studied. The heating mechanism is substituted by car headlights. 
+Designing an MPC controller for this system shows the challenges we facing in real applications, such as computing times, effect of measurement uncertainities and disturbances.
+
+If the time spent for modeling and designing of the controller increases the comfort and/or reduces operating costs, the method can be feasible for real applications and integrated to an intelligent building system
+
 
 \chapter{Bevezetés}
 Az Európai Unió energiafogyasztásának 40\%-át az épületek adják, a szén-dioxid-kibocsátás 36\%-áért felelősek. Az energiahatékonyság növelése kiemelten fontos: a korszerűbb közintézmények, munkahelyek, lakóingatlanok olcsóbban fenntarthatók és alacsonyabb károsanyag-kibocsátás mellett az emberek életminőségét is javítják.
@@ -42,12 +54,20 @@ Munkámban szeretnék megvalósítani egy helyiségenkénti hőmérséklet-szab�
 
 % a szabályzót ezután egy fizikai rendszerre is megtervezem, hogy azt laborkörülmények közt kipróbáljam. A szabályzás beavatkozó jelei a szelepek, amellyel a fűtési teljesítmény befolyásolható, a visszacsatolás belső hőmérséklet mérésével adódik.
 
-\section*{A modell típusa, hatóköre}
+\section{A modell típusa, hatóköre}
 
 A szabályozáshoz a klasszikus elképzelések szerint ismerjük a szabályzott szakasz viselkedését, ellenkező esetben identifikálnunk kell azt. Ismert hálózatokra felírható gerjesztés-válasz kapcsolat, például átviteli függvények formájában. % Viszont akkor is érdemes lehet identifikálni, ha analitikusan túl hosszadalmas volna az átviteli függvény felírása.
 %Épületfizikai összefüggéseket felhasználva egyenleteket is fel lehet írni a hőfelvételre, hőleadásra. Ezen összefüggésekkel egyenértékű átviteli függvény is felírható, ha a rendszer bemeneteire gerjesztéseket adunk és mérjük a kimeneteket.  %\cite{AFRAM2014343}
 
-A szabályozott szakasz első lépésben egy szimulált hálózat\footnote{A szimulációban sokkal könnyebben megfigyelhető az egyes paraméterek hatása, így lépésről lépésre megérthető a rendszer viselkedése.}, emiatt fizikai modell felírása mellett döntöttem. A \textit{\ref{chap:helyiseg}-\ref{chap:futotest}. fejezetekben} felállítom egy helyiség és a hozzátartozó fűtőtestek modelljét, ami a \ref{tikz:simulation}. ábrán látható módon, a Matlab-ban fut. %A modellalkotást méretezési szabályok is befolyásolják. Publikációk, könyvek, adatlapok alapján validálom a felírt összefüggéseket, az ottani mérések adataiból kiindulva. 
+A szabályozott szakasz a fűtési rendszer: ezalatt a helyiséget és az ott elhelyezett, vagy beépített fűtőtestet értem. A fűtési rendszer modellje több helyen és több formában is megjelenik: fizikai rendszerként a \textit{\ref{chap:helyiseg}-\ref{chap:futotest}. fejezetekben}, az identifikációkor és szabályzótervezéskor pedig lineáris rendszerrel közelítve. A szabályzó ez alapján a modell alapján fogja a beavatkozó jelet meghatározni.
+
+%A fizikai modell a hálózat felépítését követi, elemei beazonosíthatók, ezzel szimulációkat lehet futtatni, paraméterek hatásait vizsgálni.
+%A fizikai hálózatnak gerjesztés-válasz kapcsolata alapján helyettesíthető egy nemlineáris rendszerrel - ám a szabályzótervezéskor kénytelen vagyok lineáris rendszerrel közelíteni..
+
+
+%Első lépésben egy szimulált hálózat\footnote{A szimulációban sokkal könnyebben megfigyelhető az egyes paraméterek hatása, így lépésről lépésre megérthető a rendszer viselkedése.}, emiatt fizikai modell felírása mellett döntöttem.
+ 
+%A \textit{\ref{chap:helyiseg}-\ref{chap:futotest}. fejezetekben} felállítom egy helyiség és a hozzátartozó fűtőtestek modelljét, ami a \ref{tikz:simulation-basic}. ábrán látható módon, a Matlab-ban fut. %A modellalkotást méretezési szabályok is befolyásolják. Publikációk, könyvek, adatlapok alapján validálom a felírt összefüggéseket, az ottani mérések adataiból kiindulva. 
 
 %(TOVBÁBBI fűtőtestek mérése a \cite[313, 361.~o.]{Herz})
 
@@ -63,8 +83,8 @@ A szabályzás a helyiség hőveszteségét egyenlíti ki, amit az alacsonyabb k
 %
 \input{src/tikz/simulation_layout}
 %
-\section*{A szabályozás folyamata, szabályzótervezés}
-A szabályzó a  modell alapján olyan szelepekkel képes beavatkozni, melyekkel a fűtőtestbe beáramló vízmennyiség korlátozható. A szelepek ($u_1, u_2$) állását folytonosan tudom változtatni. A modell bemenetei a szelepek állásai és a külső hőmérséklet, kimenete a belső hőmérséklet ($t_i$).  A belső és külső hőmérsékletet mérem, ez alapján történik a szabályzás. 
+\section{A szabályozás folyamata, szabályzótervezés}
+A szabályzó a  modell alapján olyan szelepekkel képes beavatkozni, melyekkel a fűtőtestbe beáramló vízmennyiség  korlátozható. A szelepek ($u_1, u_2$) állását folytonosan tudom változtatni. A modell bemenetei a szelepek állásai és a külső hőmérséklet, kimenete a belső hőmérséklet ($t_i$).  A belső és külső hőmérsékletet mérem, a szabályzott jellemző a belső hőmérséklet.
 %
 A tervezés lépései a \textit{\ref{chap:ident}-\ref{chap:control}. fejezetben} olvashatóak.
 %Az alapértelmezett paramétereket módosítom a fizikai korlátoknak megfelelően,  amelyek a beavatkozókra vagy a szakaszra vonatkoznak.
@@ -73,7 +93,7 @@ A tervezés lépései a \textit{\ref{chap:ident}-\ref{chap:control}. fejezetben}
 %Az MPC szabályozás gyakorlati kipróbálásához fizikai tesztrendszert állítunk fel, itt az MPC tervezési kérdésekre koncentrálok, átviteli függvény modellből.
 %
 %
-\section*{Eredmények gyakorlati kipróbálása, további lehetőségek}
+\section{Eredmények gyakorlati kipróbálása, további lehetőségek}
 %
 A szabályzótervezés lépéseit egy fizikai rendszerre is elvégzem, hogy további tapasztalatokat szerezzek. Végül áttekintem, hogy a szabályzás használatának milyen gyakorlati lehetőségei vannak, mind technikai értelemben, mind piacképesség szempontjából. Végül összefoglalom az elért eredményeket.
 

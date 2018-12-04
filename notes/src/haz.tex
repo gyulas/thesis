@@ -2,9 +2,19 @@
 
 % Kiindulás ssc_house_heating_system
 
-A szabályzótervezéshez rendelkezésre kell, hogy álljon a szabályzott szakasz modellje. Ezt két részre bontottam: először az épületszerkezet, azaz a helyiség modelljét írom fel, a fűtőtestekkel a \textit{\ref{chap:futotest}. fejezetben} foglalkozom. Egy könnyen módosítható, koncentrált paraméterű hálózatot vettem fel, ahol minden elemhez lehet fizikai tartalmat rendelni. A szabályzótervezéshez a teljes modell gerjesztés-válasz kapcsolatára lesz majd szükségem.
+A szabályzótervezéshez rendelkezésre kell, hogy álljon a szabályzott szakasz modellje. Ezt két részre bontottam: először az épületszerkezet, azaz a helyiség modelljét írom fel, a fűtőtestekkel a \textit{\ref{chap:futotest}. fejezetben} foglalkozom. A \textit{\ref{fig:Simulink-minimalist}.~ábrán} látható a részekre bontott modell\footnote{A képen nyílt hurkú modell szerepel, a \textit{Vizsgálójelek} blokk jeleivel a fűtési rendszer tranziensei megfigyelhetők a \textit{Scope} ablakban.}, melyből a helyiség alrendszert tárgyalom ebben a fejezetben. Egy könnyen módosítható, koncentrált paraméterű hálózatot vettem fel, ahol minden elemhez lehet fizikai tartalmat rendelni. A szabályzótervezéshez a teljes modell gerjesztés-válasz kapcsolatára lesz majd szükségem.
+%todo footnote
 
 Az energetikai jellemzők az épület energetikai tanúsítványából kiolvashatók, így a modell paraméterezhető. A tervezési lépéseket a névleges modellre elvégezve a szabályzás rögtön működőképes, nincs szükség hosszas kalibrációs időszakra beüzemelésnél. A modellbeli eltéréseket később kompenzálni lehet, mérési adatok felhasználásával.% (historikus adatok felhasználásával). %A modellben a bizonytalanságok hatása adaptív szabályozással kezelhető (lesz).
+
+\begin{figure}[H]
+	\centering
+	% trim={<left> <lower> <right> <upper>}
+	%\includegraphics[trim=0 0 0 0, clip,width=\textwidth]{figures/simulink-network-minimalist-layout2}
+	\includegraphics[trim=0 0 0 0, clip,width=\textwidth]{figures/simulink-network-minimalist-layout3}
+	\caption{Fűtési rendszer modellje - fűtőtest és helyiség}
+	\label{fig:Simulink-minimalist}
+\end{figure}
 
 \section{A modellalkotás folyamata}
 %
@@ -18,14 +28,7 @@ A gerjesztés-válasz kapcsolatot megkaphatjuk méréssel, szimulációval vagy 
 
 Én a fizikai modell felírását választottam, melynek dinamikáját megvizsgálom a szabályozótervezéshez. Megfelelő gerjesztő jelekkel identifikálva előáll a modell átviteli függvénye (\textit{\ref{chap:ident}. fejezet}). Ehhez sokkal egyszerűbb eljutni, mint mérésekkel, mivel a Simulinkben megvalósított hálózatra az identifikáció sokkal egyszerűbb, mint valós rendszerre. A vizsgálójelek tetszőlegesen megválaszthatók, például a külső hőmérséklet hatása is pontosan meghatározható a \textit{\ref{fig:Simulink-minimalist}. ábrán} látható elrendezésben\footnote{Az átláthatóság kedvéért csak a kimenetet kötöttem rá a scope-ra, de a szimuláció közben az összes bemenetet, illetve belső változók állapotát is nyomon követhetjük}. A helyiség egy MISO (több bemenetű, egy kimenetű) rendszer, terepi méréseket használva csak hosszas mérésekből lehet szétválasztani a bemenetek (fűtés, külső hőmérséklet, napsütés) hatását a belső hőmérsékletre.
 
-\begin{figure}[H]
-	\centering
-	% trim={<left> <lower> <right> <upper>}
-	%\includegraphics[trim=0 0 0 0, clip,width=\textwidth]{figures/simulink-network-minimalist-layout2}
-	\includegraphics[trim=0 0 0 0, clip,width=\textwidth]{figures/simulink-network-minimalist-layout3}
-	\caption{Fűtési rendszer és helyiség modellje}
-	\label{fig:Simulink-minimalist}
-\end{figure}
+
 
 %Ha később páratartalom szabályzása is szóba kerül, még bonyolultabb a helyzet.
 
@@ -55,13 +58,13 @@ A gerjesztés-válasz kapcsolatot megkaphatjuk méréssel, szimulációval vagy 
 
 
 Helyiségenkénti hőmérséklet-szabályzás esetén a belső hőmérsékletre adott egy referencia és egy mért érték.
-Helyiségenként számos olyan tényező figyelembe vehető, melyek a teljes épületre különbözőek: a helyiség tájolása, az ablakok mérete, a felhasználás módja mind jobban kezelhető \textit{helyben}, mint egy központi irányítással. A helyi szabályozás referenciajeleit a lakók, dolgozók komfortérzetének megfelelően kell megadni.
+Helyiségenként számos olyan tényező figyelembe vehető, melyek a teljes épületre különbözőek: a helyiség tájolása, az ablakok mérete, a felhasználás módja mind jobban kezelhető helyben, mint egy központi irányítással. Ezek mind-mind zavarásnak számítanak, ha pedig egy-egy helyiség hőmérsékletét mérjük, a zavarások ellenében ott tudunk beavatkozni, ahol azok hatnak. A helyi szabályozás referenciajeleit a lakók, dolgozók komfortérzetének megfelelően kell megadni.
 
 A helyiség levegőjének hőmérsékletét mindenhol ugyanakkorának (homogénnek) feltételezem. A szabályzás a helyiség hőveszteségét egyenlíti ki, amit az alacsonyabb külső hőmérséklet okoz. Nem foglalkozok például szellőzésből, helyiségek közti hőmérséklet-különbségből\footnote{A modellezés egyszerűsítése végett több helyiség egymásra hatását nem veszem figyelembe.}, vagy emberek jelenlétéből származó belső zavarással.
 
 A fűtést padlófűtés és radiátor biztosítja, mindkettőben szeleppel szabályozható az átfolyó vízmennyiség.
 
-\section{Termikus modell}
+\section{A Simscape termikus elemei}
 
 A \textit{\ref{fig:Simscape}. ábrán} látható egy termikus mintahálózat, mellyel bemutatom a Simscape csomag elemeit, melyből a helyiség modellje is felépíthető.
 
