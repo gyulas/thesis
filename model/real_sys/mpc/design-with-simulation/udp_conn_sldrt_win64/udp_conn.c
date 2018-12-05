@@ -7,9 +7,9 @@
  *
  * Code generation for model "udp_conn".
  *
- * Model version              : 1.164
+ * Model version              : 1.171
  * Simulink Coder version : 9.0 (R2018b) 24-May-2018
- * C source code generated on : Wed Dec  5 21:57:55 2018
+ * C source code generated on : Wed Dec  5 22:42:17 2018
  *
  * Target selection: sldrt.tlc
  * Note: GRT includes extra infrastructure and instrumentation for prototyping
@@ -23,7 +23,7 @@
 #include "udp_conn_dt.h"
 
 /* Named constants for MATLAB Function: '<S5>/optimizer' */
-#define udp_conn_Ku1                   (2.7519330429776341)
+#define udp_conn_Ku1                   (0.052820632010358248)
 #define udp_conn_RMDscale              (0.033333333333333333)
 #define udp_conn_RYscale               (0.033333333333333333)
 #define udp_conn_nv                    (2.0)
@@ -291,8 +291,8 @@ static double SLDRTBoardOptions0[] = {
 /* list of Simulink Desktop Real-Time timers */
 const int SLDRTTimerCount = 2;
 const double SLDRTTimers[4] = {
-  10.0, 0.0,
-  300.0, 0.0,
+  1.0, 0.0,
+  20.0, 0.0,
 };
 
 /* list of Simulink Desktop Real-Time boards */
@@ -359,7 +359,7 @@ static void rate_monotonic_scheduler(void)
    * counter is reset when it reaches its limit (zero means run).
    */
   (udp_conn_M->Timing.TaskCounters.TID[1])++;
-  if ((udp_conn_M->Timing.TaskCounters.TID[1]) > 29) {/* Sample time: [300.0s, 0.0s] */
+  if ((udp_conn_M->Timing.TaskCounters.TID[1]) > 19) {/* Sample time: [20.0s, 0.0s] */
     udp_conn_M->Timing.TaskCounters.TID[1] = 0;
   }
 }
@@ -1411,9 +1411,9 @@ static void udp_conn_qpkwik(const real_T b_Linv[4], const real_T b_Hinv[4],
 }
 
 /* Model output function for TID0 */
-void udp_conn_output0(void)            /* Sample time: [10.0s, 0.0s] */
+void udp_conn_output0(void)            /* Sample time: [1.0s, 0.0s] */
 {
-  {                                    /* Sample time: [10.0s, 0.0s] */
+  {                                    /* Sample time: [1.0s, 0.0s] */
     rate_monotonic_scheduler();
   }
 
@@ -1512,7 +1512,7 @@ void udp_conn_output0(void)            /* Sample time: [10.0s, 0.0s] */
 }
 
 /* Model update function for TID0 */
-void udp_conn_update0(void)            /* Sample time: [10.0s, 0.0s] */
+void udp_conn_update0(void)            /* Sample time: [1.0s, 0.0s] */
 {
   /* Update absolute time */
   /* The "clockTick0" counts the number of times the code of this task has
@@ -1533,7 +1533,7 @@ void udp_conn_update0(void)            /* Sample time: [10.0s, 0.0s] */
 }
 
 /* Model output function for TID1 */
-void udp_conn_output1(void)            /* Sample time: [300.0s, 0.0s] */
+void udp_conn_output1(void)            /* Sample time: [20.0s, 0.0s] */
 {
   real_T y_innov;
   real_T rseq[13];
@@ -1542,39 +1542,40 @@ void udp_conn_output1(void)            /* Sample time: [300.0s, 0.0s] */
   real_T zopt[2];
   real_T unusedU0[2];
   int16_T iAnew[2];
-  static const real_T b_Linv[4] = { 0.601718587113655, 0.0, 0.0,
+  static const real_T b_Linv[4] = { 3.9897790847306878, 0.0, 0.0,
     0.003162277660168379 };
 
-  static const real_T b_Hinv[4] = { 0.36206525807805323, 0.0, 0.0,
+  static const real_T b_Hinv[4] = { 15.918337144954444, 0.0, 0.0,
     9.9999999999999974E-6 };
 
   static const real_T b_Ac[4] = { -1.0, 1.0, 0.0, 0.0 };
 
-  static const real_T c_a[13] = { -0.11662695838004186, -0.21204844980363383,
-    -0.290157525726371, -0.35409519480366969, -0.406432589386111,
-    -0.44927435874067628, -0.48434330353766353, -0.51304965501899147,
-    -0.53654778477852549, -0.555782625630908, -0.57152767029627627,
-    -0.584416075946055, -0.594966125420263 };
+  static const real_T c_a[13] = { -0.0085741394076400777, -0.016979488052154559,
+    -0.025273399970785017, -0.033457352573261961, -0.0415328036820614,
+    -0.049501191792089408, -0.057363936326923874, -0.06512243789165903,
+    -0.072778078522397774, -0.080332221932436346, -0.087786213755185027,
+    -0.0951413817838683, -0.10239903620804712 };
 
-  static const real_T d_a[28] = { 0.307231227446498, 0.0, 0.35757641675262131,
-    0.0, 0.39529616357886693, 0.0, 0.42174857532396415, 0.0, 0.437796210298565,
-    0.0, 0.443829480496605, 0.0, 0.43976799681755679, 0.0, 0.42503914755479816,
-    0.0, 0.39853202449157094, 0.0, 0.35852354600385261, 0.0, 0.30257216184981162,
-    0.0, 0.22737278140578812, 0.0, 0.12856445116442267, 0.0,
-    0.000479701909138492, 0.0 };
+  static const real_T d_a[28] = { 0.01040200188698159, 0.0, 0.010435090261432675,
+    0.0, 0.010331898379401353, 0.0, 0.010092117158238937, 0.0,
+    0.0097153628078809756, 0.0, 0.0092012217130253461, 0.0,
+    0.0085492502731363065, 0.0, 0.0077589747357340927, 0.0,
+    0.0068298910229184495, 0.0, 0.00576146455107304, 0.0, 0.0045531300436960666,
+    0.0, 0.0032042913373008493, 0.0, 0.0017143211803285212, 0.0,
+    8.256102501338951E-5, 0.0 };
 
-  static const real_T f_a[16] = { 0.71190415947471508, 0.35618969481762436, 0.0,
-    0.0, 0.21318739150213364, 0.10666485215389082, 0.0, 0.0, 0.0, 0.0,
-    0.78919139600587651, 0.0, 0.0, 0.0, 0.0, 1.0 };
+  static const real_T f_a[16] = { 0.85816326000163956, 0.42936806256227267, 0.0,
+    0.0, 0.25698625924268775, 0.12857890494630125, 0.0, 0.0, 0.0, 0.0,
+    0.98434080652075606, 0.0, 0.0, 0.0, 0.0, 1.0 };
 
-  static const real_T g_a[4] = { 29.580336473947611, 14.745644525121602, 0.0,
+  static const real_T g_a[4] = { 2.1746766971840179, 1.0336673407717247, 0.0,
     0.0 };
 
-  static const real_T h_a[8] = { 0.0, 0.0, 250.53523787244524, 0.0, 0.0, 0.0,
+  static const real_T h_a[8] = { 0.0, 0.0, 18.610150102423628, 0.0, 0.0, 0.0,
     0.0, 0.0 };
 
-  static const real_T i_a[4] = { 1.7239778273565418E-5, 8.6256433260843677E-6,
-    0.00026482342033875016, 0.999988520108343 };
+  static const real_T i_a[4] = { 2.2797600855688276E-5, 1.140640967367466E-5,
+    0.00036874480798892068, 0.99751204108632574 };
 
   int32_T i;
   real_T tmp[2];
@@ -1637,13 +1638,13 @@ void udp_conn_output1(void)            /* Sample time: [300.0s, 0.0s] */
      + (0.000806267598511844 * vseq[0] + 0.0 * vseq[1]));
 
   /* '<S24>:1:82' */
-  rtb_xest_idx_0 = 2.1079231387586096E-5 * y_innov +
+  rtb_xest_idx_0 = 2.3406075557134831E-5 * y_innov +
     udp_conn_DW.last_x_PreviousInput[0];
-  rtb_xest_idx_1 = 1.047616256513253E-5 * y_innov +
+  rtb_xest_idx_1 = 1.0550629281592237E-5 * y_innov +
     udp_conn_DW.last_x_PreviousInput[1];
-  rtb_xest_idx_2 = 0.00033271909201863385 * y_innov +
+  rtb_xest_idx_2 = 0.000336691649034801 * y_innov +
     udp_conn_DW.last_x_PreviousInput[2];
-  rtb_xest_idx_3 = 0.999988520108343 * y_innov +
+  rtb_xest_idx_3 = 0.99751204108632574 * y_innov +
     udp_conn_DW.last_x_PreviousInput[3];
 
   /* '<S24>:1:137' */
@@ -1658,9 +1659,9 @@ void udp_conn_output1(void)            /* Sample time: [300.0s, 0.0s] */
     d_a_0 += d_a[i_0] * vseq[i_0];
   }
 
-  f[0] = (((((0.0047547946399505974 * rtb_xest_idx_0 + 0.0014238746226280438 *
-              rtb_xest_idx_1) + 0.00096778498443618661 * rtb_xest_idx_2) +
-            5.6692683174691858 * rtb_xest_idx_3) + c_a_0) + udp_conn_Ku1 *
+  f[0] = (((((0.0022428664656002975 * rtb_xest_idx_0 + 0.00067165059358797042 *
+              rtb_xest_idx_1) + 0.00055018980881451512 * rtb_xest_idx_2) +
+            0.73624168189851 * rtb_xest_idx_3) + c_a_0) + udp_conn_Ku1 *
           udp_conn_DW.last_mv_DSTATE) + d_a_0;
   for (i = 0; i < 2; i++) {
     iAnew[i] = udp_conn_DW.Memory_PreviousInput[i];
@@ -1713,7 +1714,7 @@ void udp_conn_output1(void)            /* Sample time: [300.0s, 0.0s] */
 }
 
 /* Model update function for TID1 */
-void udp_conn_update1(void)            /* Sample time: [300.0s, 0.0s] */
+void udp_conn_update1(void)            /* Sample time: [20.0s, 0.0s] */
 {
   /* Update for Memory: '<S5>/last_x' */
   udp_conn_DW.last_x_PreviousInput[0] = udp_conn_B.xk1[0];
@@ -1860,8 +1861,8 @@ RT_MODEL_udp_conn_T *udp_conn(void)
     udp_conn_M->Timing.offsetTimes = (&udp_conn_M->Timing.offsetTimesArray[0]);
 
     /* task periods */
-    udp_conn_M->Timing.sampleTimes[0] = (10.0);
-    udp_conn_M->Timing.sampleTimes[1] = (300.0);
+    udp_conn_M->Timing.sampleTimes[0] = (1.0);
+    udp_conn_M->Timing.sampleTimes[1] = (20.0);
 
     /* task offsets */
     udp_conn_M->Timing.offsetTimes[0] = (0.0);
@@ -1879,14 +1880,14 @@ RT_MODEL_udp_conn_T *udp_conn(void)
   }
 
   rtmSetTFinal(udp_conn_M, 7200.0);
-  udp_conn_M->Timing.stepSize0 = 10.0;
-  udp_conn_M->Timing.stepSize1 = 300.0;
+  udp_conn_M->Timing.stepSize0 = 1.0;
+  udp_conn_M->Timing.stepSize1 = 20.0;
 
   /* External mode info */
-  udp_conn_M->Sizes.checksums[0] = (3192941392U);
-  udp_conn_M->Sizes.checksums[1] = (1285094667U);
-  udp_conn_M->Sizes.checksums[2] = (587650664U);
-  udp_conn_M->Sizes.checksums[3] = (1962364091U);
+  udp_conn_M->Sizes.checksums[0] = (453894650U);
+  udp_conn_M->Sizes.checksums[1] = (2477419343U);
+  udp_conn_M->Sizes.checksums[2] = (956823983U);
+  udp_conn_M->Sizes.checksums[3] = (192642033U);
 
   {
     static const sysRanDType rtAlwaysEnabled = SUBSYS_RAN_BC_ENABLE;
@@ -1903,8 +1904,8 @@ RT_MODEL_udp_conn_T *udp_conn(void)
   }
 
   udp_conn_M->solverInfoPtr = (&udp_conn_M->solverInfo);
-  udp_conn_M->Timing.stepSize = (10.0);
-  rtsiSetFixedStepSize(&udp_conn_M->solverInfo, 10.0);
+  udp_conn_M->Timing.stepSize = (1.0);
+  rtsiSetFixedStepSize(&udp_conn_M->solverInfo, 1.0);
   rtsiSetSolverMode(&udp_conn_M->solverInfo, SOLVER_MODE_MULTITASKING);
 
   /* block I/O */
