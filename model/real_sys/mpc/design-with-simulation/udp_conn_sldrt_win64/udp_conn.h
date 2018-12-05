@@ -7,9 +7,9 @@
  *
  * Code generation for model "udp_conn".
  *
- * Model version              : 1.171
+ * Model version              : 1.177
  * Simulink Coder version : 9.0 (R2018b) 24-May-2018
- * C source code generated on : Wed Dec  5 22:42:17 2018
+ * C source code generated on : Thu Dec  6 00:27:55 2018
  *
  * Target selection: sldrt.tlc
  * Note: GRT includes extra infrastructure and instrumentation for prototyping
@@ -855,14 +855,27 @@ typedef struct {
   real_T Gain;                         /* '<Root>/Gain' */
   real_T Sum;                          /* '<Root>/Sum' */
   real_T RateTransition1;              /* '<Root>/Rate Transition1' */
+  real_T Constant2;                    /* '<Root>/Constant2' */
   real_T Gain1;                        /* '<Root>/Gain1' */
   real_T Sum1;                         /* '<Root>/Sum1' */
   real_T RateTransition2;              /* '<Root>/Rate Transition2' */
-  real_T umin_scale1;                  /* '<S5>/umin_scale1' */
+  real_T umin_scale1;                  /* '<S8>/umin_scale1' */
   real_T time_UTC1[4];                 /* '<Root>/Data Type Conversion1' */
   real_T time_UTC1_a[4];               /* '<Root>/Rate Transition3' */
-  real_T xk1[4];                       /* '<S5>/optimizer' */
-  real_T u;                            /* '<S5>/optimizer' */
+  real_T umin_scale1_g;                /* '<S48>/umin_scale1' */
+  real_T umin_scale1_gc;               /* '<S28>/umin_scale1' */
+  real_T time_UTC1_i[4];               /* '<Root>/Rate Transition5' */
+  real_T RateTransition4;              /* '<Root>/Rate Transition4' */
+  real_T RateTransition6;              /* '<Root>/Rate Transition6' */
+  real_T umin_scale1_o;                /* '<S68>/umin_scale1' */
+  real_T xk1[4];                       /* '<S68>/optimizer' */
+  real_T u;                            /* '<S68>/optimizer' */
+  real_T xk1_k[4];                     /* '<S48>/optimizer' */
+  real_T u_n;                          /* '<S48>/optimizer' */
+  real_T xk1_p[4];                     /* '<S28>/optimizer' */
+  real_T u_j;                          /* '<S28>/optimizer' */
+  real_T xk1_c[4];                     /* '<S8>/optimizer' */
+  real_T u_c;                          /* '<S8>/optimizer' */
   int32_T PacketInput1_o15;            /* '<Root>/Packet Input1' */
   uint16_T Sum2;                       /* '<Root>/Sum2' */
   uint16_T Sum3;                       /* '<Root>/Sum3' */
@@ -883,19 +896,35 @@ typedef struct {
   uint8_T PacketInput1_o13;            /* '<Root>/Packet Input1' */
   uint8_T PacketInput1_o14;            /* '<Root>/Packet Input1' */
   uint8_T Compare;                     /* '<S2>/Compare' */
-  boolean_T iAout[2];                  /* '<S5>/optimizer' */
+  boolean_T iAout[2];                  /* '<S68>/optimizer' */
+  boolean_T iAout_f[2];                /* '<S48>/optimizer' */
+  boolean_T iAout_a[2];                /* '<S28>/optimizer' */
+  boolean_T iAout_l[2];                /* '<S8>/optimizer' */
 } B_udp_conn_T;
 
 /* Block states (default storage) for system '<Root>' */
 typedef struct {
-  real_T last_mv_DSTATE;               /* '<S5>/last_mv' */
-  real_T last_x_PreviousInput[4];      /* '<S5>/last_x' */
+  real_T last_mv_DSTATE;               /* '<S8>/last_mv' */
+  real_T last_mv_DSTATE_c;             /* '<S48>/last_mv' */
+  real_T last_mv_DSTATE_m;             /* '<S28>/last_mv' */
+  real_T last_mv_DSTATE_cl;            /* '<S68>/last_mv' */
+  real_T last_x_PreviousInput[4];      /* '<S8>/last_x' */
+  real_T last_x_PreviousInput_a[4];    /* '<S48>/last_x' */
+  real_T last_x_PreviousInput_g[4];    /* '<S28>/last_x' */
+  real_T last_x_PreviousInput_b[4];    /* '<S68>/last_x' */
   void *PacketInput1_PWORK;            /* '<Root>/Packet Input1' */
   struct {
     void *LoggedData[3];
   } Scope_PWORK;                       /* '<Root>/Scope' */
 
-  boolean_T Memory_PreviousInput[2];   /* '<S5>/Memory' */
+  struct {
+    void *LoggedData[2];
+  } Scope1_PWORK;                      /* '<Root>/Scope1' */
+
+  boolean_T Memory_PreviousInput[2];   /* '<S8>/Memory' */
+  boolean_T Memory_PreviousInput_o[2]; /* '<S48>/Memory' */
+  boolean_T Memory_PreviousInput_g[2]; /* '<S28>/Memory' */
+  boolean_T Memory_PreviousInput_p[2]; /* '<S68>/Memory' */
 } DW_udp_conn_T;
 
 /* Backward compatible GRT Identifiers */
@@ -924,10 +953,10 @@ struct P_udp_conn_T_ {
                                         * Referenced by: '<S2>/Constant'
                                         */
   real_T last_x_InitialCondition[4];   /* Expression: lastx+xoff
-                                        * Referenced by: '<S5>/last_x'
+                                        * Referenced by: '<S8>/last_x'
                                         */
   real_T last_mv_InitialCondition;     /* Expression: lastu+uoff
-                                        * Referenced by: '<S5>/last_mv'
+                                        * Referenced by: '<S8>/last_mv'
                                         */
   real_T Gain_Gain;                    /* Expression: 0.1
                                         * Referenced by: '<Root>/Gain'
@@ -935,7 +964,7 @@ struct P_udp_conn_T_ {
   real_T Constant1_Value;              /* Expression: 273
                                         * Referenced by: '<Root>/Constant1'
                                         */
-  real_T Constant2_Value;              /* Expression: 353
+  real_T Constant2_Value;              /* Expression: 315
                                         * Referenced by: '<Root>/Constant2'
                                         */
   real_T Gain1_Gain;                   /* Expression: 0.1
@@ -945,37 +974,37 @@ struct P_udp_conn_T_ {
                                         * Referenced by: '<S4>/umin_zero'
                                         */
   real_T umin_scale_Gain;              /* Expression: RMVscale
-                                        * Referenced by: '<S5>/umin_scale'
+                                        * Referenced by: '<S8>/umin_scale'
                                         */
   real_T umax_zero_Value;              /* Expression: zeros(1,1)
                                         * Referenced by: '<S4>/umax_zero'
                                         */
   real_T umax_scale_Gain;              /* Expression: RMVscale
-                                        * Referenced by: '<S5>/umax_scale'
+                                        * Referenced by: '<S8>/umax_scale'
                                         */
   real_T ymin_zero_Value;              /* Expression: zeros(1,1)
                                         * Referenced by: '<S4>/ymin_zero'
                                         */
   real_T ymin_scale_Gain;              /* Expression: RYscale
-                                        * Referenced by: '<S5>/ymin_scale'
+                                        * Referenced by: '<S8>/ymin_scale'
                                         */
   real_T ymax_zero_Value;              /* Expression: zeros(1,1)
                                         * Referenced by: '<S4>/ymax_zero'
                                         */
   real_T ymax_scale_Gain;              /* Expression: RYscale
-                                        * Referenced by: '<S5>/ymax_scale'
+                                        * Referenced by: '<S8>/ymax_scale'
                                         */
   real_T E_zero_Value;                 /* Expression: zeros(1,1)
                                         * Referenced by: '<S4>/E_zero'
                                         */
   real_T umin_scale4_Gain;             /* Expression: MVscale(:,ones(1,max(nCC,1)))'
-                                        * Referenced by: '<S5>/umin_scale4'
+                                        * Referenced by: '<S8>/umin_scale4'
                                         */
   real_T F_zero_Value;                 /* Expression: zeros(1,1)
                                         * Referenced by: '<S4>/F_zero'
                                         */
   real_T ymin_scale1_Gain;             /* Expression: Yscale(:,ones(1,max(nCC,1)))'
-                                        * Referenced by: '<S5>/ymin_scale1'
+                                        * Referenced by: '<S8>/ymin_scale1'
                                         */
   real_T G_zero_Value;                 /* Expression: zeros(1,1)
                                         * Referenced by: '<S4>/G_zero'
@@ -984,7 +1013,7 @@ struct P_udp_conn_T_ {
                                         * Referenced by: '<S4>/S_zero'
                                         */
   real_T ymin_scale2_Gain;             /* Expression: MDscale(:,ones(1,max(nCC,1)))'
-                                        * Referenced by: '<S5>/ymin_scale2'
+                                        * Referenced by: '<S8>/ymin_scale2'
                                         */
   real_T switch_zero_Value;            /* Expression: zeros(1,1)
                                         * Referenced by: '<S4>/switch_zero'
@@ -993,13 +1022,13 @@ struct P_udp_conn_T_ {
                                         * Referenced by: '<S4>/ext.mv_zero'
                                         */
   real_T extmv_scale_Gain;             /* Expression: RMVscale
-                                        * Referenced by: '<S5>/ext.mv_scale'
+                                        * Referenced by: '<S8>/ext.mv_scale'
                                         */
   real_T mvtarget_zero_Value;          /* Expression: zeros(1,1)
                                         * Referenced by: '<S4>/mv.target_zero'
                                         */
   real_T extmv_scale1_Gain;            /* Expression: RMVscale
-                                        * Referenced by: '<S5>/ext.mv_scale1'
+                                        * Referenced by: '<S8>/ext.mv_scale1'
                                         */
   real_T ywt_zero_Value;               /* Expression: zeros(1,1)
                                         * Referenced by: '<S4>/y.wt_zero'
@@ -1014,11 +1043,272 @@ struct P_udp_conn_T_ {
                                         * Referenced by: '<S4>/ecr.wt_zero'
                                         */
   real_T umin_scale1_Gain;             /* Expression: MVscale
-                                        * Referenced by: '<S5>/umin_scale1'
+                                        * Referenced by: '<S8>/umin_scale1'
+                                        */
+  real_T last_x_InitialCondition_c[4]; /* Expression: lastx+xoff
+                                        * Referenced by: '<S48>/last_x'
+                                        */
+  real_T last_mv_InitialCondition_k;   /* Expression: lastu+uoff
+                                        * Referenced by: '<S48>/last_mv'
+                                        */
+  real_T Constant4_Value;              /* Expression: 315
+                                        * Referenced by: '<Root>/Constant4'
+                                        */
+  real_T umin_zero_Value_p;            /* Expression: zeros(1,1)
+                                        * Referenced by: '<S6>/umin_zero'
+                                        */
+  real_T umin_scale_Gain_g;            /* Expression: RMVscale
+                                        * Referenced by: '<S48>/umin_scale'
+                                        */
+  real_T umax_zero_Value_d;            /* Expression: zeros(1,1)
+                                        * Referenced by: '<S6>/umax_zero'
+                                        */
+  real_T umax_scale_Gain_h;            /* Expression: RMVscale
+                                        * Referenced by: '<S48>/umax_scale'
+                                        */
+  real_T ymin_zero_Value_d;            /* Expression: zeros(1,1)
+                                        * Referenced by: '<S6>/ymin_zero'
+                                        */
+  real_T ymin_scale_Gain_m;            /* Expression: RYscale
+                                        * Referenced by: '<S48>/ymin_scale'
+                                        */
+  real_T ymax_zero_Value_d;            /* Expression: zeros(1,1)
+                                        * Referenced by: '<S6>/ymax_zero'
+                                        */
+  real_T ymax_scale_Gain_j;            /* Expression: RYscale
+                                        * Referenced by: '<S48>/ymax_scale'
+                                        */
+  real_T E_zero_Value_f;               /* Expression: zeros(1,1)
+                                        * Referenced by: '<S6>/E_zero'
+                                        */
+  real_T umin_scale4_Gain_a;           /* Expression: MVscale(:,ones(1,max(nCC,1)))'
+                                        * Referenced by: '<S48>/umin_scale4'
+                                        */
+  real_T F_zero_Value_j;               /* Expression: zeros(1,1)
+                                        * Referenced by: '<S6>/F_zero'
+                                        */
+  real_T ymin_scale1_Gain_f;           /* Expression: Yscale(:,ones(1,max(nCC,1)))'
+                                        * Referenced by: '<S48>/ymin_scale1'
+                                        */
+  real_T G_zero_Value_k;               /* Expression: zeros(1,1)
+                                        * Referenced by: '<S6>/G_zero'
+                                        */
+  real_T S_zero_Value_d;               /* Expression: zeros(1,1)
+                                        * Referenced by: '<S6>/S_zero'
+                                        */
+  real_T ymin_scale2_Gain_n;           /* Expression: MDscale(:,ones(1,max(nCC,1)))'
+                                        * Referenced by: '<S48>/ymin_scale2'
+                                        */
+  real_T switch_zero_Value_k;          /* Expression: zeros(1,1)
+                                        * Referenced by: '<S6>/switch_zero'
+                                        */
+  real_T extmv_zero_Value_k;           /* Expression: zeros(1,1)
+                                        * Referenced by: '<S6>/ext.mv_zero'
+                                        */
+  real_T extmv_scale_Gain_i;           /* Expression: RMVscale
+                                        * Referenced by: '<S48>/ext.mv_scale'
+                                        */
+  real_T mvtarget_zero_Value_i;        /* Expression: zeros(1,1)
+                                        * Referenced by: '<S6>/mv.target_zero'
+                                        */
+  real_T extmv_scale1_Gain_d;          /* Expression: RMVscale
+                                        * Referenced by: '<S48>/ext.mv_scale1'
+                                        */
+  real_T ywt_zero_Value_a;             /* Expression: zeros(1,1)
+                                        * Referenced by: '<S6>/y.wt_zero'
+                                        */
+  real_T uwt_zero_Value_b;             /* Expression: zeros(1,1)
+                                        * Referenced by: '<S6>/u.wt_zero'
+                                        */
+  real_T duwt_zero_Value_e;            /* Expression: zeros(1,1)
+                                        * Referenced by: '<S6>/du.wt_zero'
+                                        */
+  real_T ecrwt_zero_Value_k;           /* Expression: zeros(1,1)
+                                        * Referenced by: '<S6>/ecr.wt_zero'
+                                        */
+  real_T umin_scale1_Gain_n;           /* Expression: MVscale
+                                        * Referenced by: '<S48>/umin_scale1'
+                                        */
+  real_T last_x_InitialCondition_ck[4];/* Expression: lastx+xoff
+                                        * Referenced by: '<S28>/last_x'
+                                        */
+  real_T last_mv_InitialCondition_b;   /* Expression: lastu+uoff
+                                        * Referenced by: '<S28>/last_mv'
+                                        */
+  real_T Constant5_Value;              /* Expression: 315
+                                        * Referenced by: '<Root>/Constant5'
+                                        */
+  real_T umin_zero_Value_pz;           /* Expression: zeros(1,1)
+                                        * Referenced by: '<S5>/umin_zero'
+                                        */
+  real_T umin_scale_Gain_j;            /* Expression: RMVscale
+                                        * Referenced by: '<S28>/umin_scale'
+                                        */
+  real_T umax_zero_Value_a;            /* Expression: zeros(1,1)
+                                        * Referenced by: '<S5>/umax_zero'
+                                        */
+  real_T umax_scale_Gain_p;            /* Expression: RMVscale
+                                        * Referenced by: '<S28>/umax_scale'
+                                        */
+  real_T ymin_zero_Value_h;            /* Expression: zeros(1,1)
+                                        * Referenced by: '<S5>/ymin_zero'
+                                        */
+  real_T ymin_scale_Gain_p;            /* Expression: RYscale
+                                        * Referenced by: '<S28>/ymin_scale'
+                                        */
+  real_T ymax_zero_Value_n;            /* Expression: zeros(1,1)
+                                        * Referenced by: '<S5>/ymax_zero'
+                                        */
+  real_T ymax_scale_Gain_o;            /* Expression: RYscale
+                                        * Referenced by: '<S28>/ymax_scale'
+                                        */
+  real_T E_zero_Value_fv;              /* Expression: zeros(1,1)
+                                        * Referenced by: '<S5>/E_zero'
+                                        */
+  real_T umin_scale4_Gain_o;           /* Expression: MVscale(:,ones(1,max(nCC,1)))'
+                                        * Referenced by: '<S28>/umin_scale4'
+                                        */
+  real_T F_zero_Value_m;               /* Expression: zeros(1,1)
+                                        * Referenced by: '<S5>/F_zero'
+                                        */
+  real_T ymin_scale1_Gain_m;           /* Expression: Yscale(:,ones(1,max(nCC,1)))'
+                                        * Referenced by: '<S28>/ymin_scale1'
+                                        */
+  real_T G_zero_Value_a;               /* Expression: zeros(1,1)
+                                        * Referenced by: '<S5>/G_zero'
+                                        */
+  real_T S_zero_Value_h;               /* Expression: zeros(1,1)
+                                        * Referenced by: '<S5>/S_zero'
+                                        */
+  real_T ymin_scale2_Gain_i;           /* Expression: MDscale(:,ones(1,max(nCC,1)))'
+                                        * Referenced by: '<S28>/ymin_scale2'
+                                        */
+  real_T switch_zero_Value_o;          /* Expression: zeros(1,1)
+                                        * Referenced by: '<S5>/switch_zero'
+                                        */
+  real_T extmv_zero_Value_e;           /* Expression: zeros(1,1)
+                                        * Referenced by: '<S5>/ext.mv_zero'
+                                        */
+  real_T extmv_scale_Gain_m;           /* Expression: RMVscale
+                                        * Referenced by: '<S28>/ext.mv_scale'
+                                        */
+  real_T mvtarget_zero_Value_g;        /* Expression: zeros(1,1)
+                                        * Referenced by: '<S5>/mv.target_zero'
+                                        */
+  real_T extmv_scale1_Gain_e;          /* Expression: RMVscale
+                                        * Referenced by: '<S28>/ext.mv_scale1'
+                                        */
+  real_T ywt_zero_Value_c;             /* Expression: zeros(1,1)
+                                        * Referenced by: '<S5>/y.wt_zero'
+                                        */
+  real_T uwt_zero_Value_k;             /* Expression: zeros(1,1)
+                                        * Referenced by: '<S5>/u.wt_zero'
+                                        */
+  real_T duwt_zero_Value_l;            /* Expression: zeros(1,1)
+                                        * Referenced by: '<S5>/du.wt_zero'
+                                        */
+  real_T ecrwt_zero_Value_e;           /* Expression: zeros(1,1)
+                                        * Referenced by: '<S5>/ecr.wt_zero'
+                                        */
+  real_T umin_scale1_Gain_g;           /* Expression: MVscale
+                                        * Referenced by: '<S28>/umin_scale1'
+                                        */
+  real_T last_x_InitialCondition_n[4]; /* Expression: lastx+xoff
+                                        * Referenced by: '<S68>/last_x'
+                                        */
+  real_T last_mv_InitialCondition_a;   /* Expression: lastu+uoff
+                                        * Referenced by: '<S68>/last_mv'
+                                        */
+  real_T Constant3_Value;              /* Expression: 315
+                                        * Referenced by: '<Root>/Constant3'
+                                        */
+  real_T umin_zero_Value_g;            /* Expression: zeros(1,1)
+                                        * Referenced by: '<S7>/umin_zero'
+                                        */
+  real_T umin_scale_Gain_o;            /* Expression: RMVscale
+                                        * Referenced by: '<S68>/umin_scale'
+                                        */
+  real_T umax_zero_Value_dj;           /* Expression: zeros(1,1)
+                                        * Referenced by: '<S7>/umax_zero'
+                                        */
+  real_T umax_scale_Gain_n;            /* Expression: RMVscale
+                                        * Referenced by: '<S68>/umax_scale'
+                                        */
+  real_T ymin_zero_Value_n;            /* Expression: zeros(1,1)
+                                        * Referenced by: '<S7>/ymin_zero'
+                                        */
+  real_T ymin_scale_Gain_g;            /* Expression: RYscale
+                                        * Referenced by: '<S68>/ymin_scale'
+                                        */
+  real_T ymax_zero_Value_l;            /* Expression: zeros(1,1)
+                                        * Referenced by: '<S7>/ymax_zero'
+                                        */
+  real_T ymax_scale_Gain_b;            /* Expression: RYscale
+                                        * Referenced by: '<S68>/ymax_scale'
+                                        */
+  real_T E_zero_Value_i;               /* Expression: zeros(1,1)
+                                        * Referenced by: '<S7>/E_zero'
+                                        */
+  real_T umin_scale4_Gain_a5;          /* Expression: MVscale(:,ones(1,max(nCC,1)))'
+                                        * Referenced by: '<S68>/umin_scale4'
+                                        */
+  real_T F_zero_Value_g;               /* Expression: zeros(1,1)
+                                        * Referenced by: '<S7>/F_zero'
+                                        */
+  real_T ymin_scale1_Gain_b;           /* Expression: Yscale(:,ones(1,max(nCC,1)))'
+                                        * Referenced by: '<S68>/ymin_scale1'
+                                        */
+  real_T G_zero_Value_e;               /* Expression: zeros(1,1)
+                                        * Referenced by: '<S7>/G_zero'
+                                        */
+  real_T S_zero_Value_e;               /* Expression: zeros(1,1)
+                                        * Referenced by: '<S7>/S_zero'
+                                        */
+  real_T ymin_scale2_Gain_b;           /* Expression: MDscale(:,ones(1,max(nCC,1)))'
+                                        * Referenced by: '<S68>/ymin_scale2'
+                                        */
+  real_T switch_zero_Value_n;          /* Expression: zeros(1,1)
+                                        * Referenced by: '<S7>/switch_zero'
+                                        */
+  real_T extmv_zero_Value_j;           /* Expression: zeros(1,1)
+                                        * Referenced by: '<S7>/ext.mv_zero'
+                                        */
+  real_T extmv_scale_Gain_f;           /* Expression: RMVscale
+                                        * Referenced by: '<S68>/ext.mv_scale'
+                                        */
+  real_T mvtarget_zero_Value_b;        /* Expression: zeros(1,1)
+                                        * Referenced by: '<S7>/mv.target_zero'
+                                        */
+  real_T extmv_scale1_Gain_dp;         /* Expression: RMVscale
+                                        * Referenced by: '<S68>/ext.mv_scale1'
+                                        */
+  real_T ywt_zero_Value_f;             /* Expression: zeros(1,1)
+                                        * Referenced by: '<S7>/y.wt_zero'
+                                        */
+  real_T uwt_zero_Value_j;             /* Expression: zeros(1,1)
+                                        * Referenced by: '<S7>/u.wt_zero'
+                                        */
+  real_T duwt_zero_Value_k;            /* Expression: zeros(1,1)
+                                        * Referenced by: '<S7>/du.wt_zero'
+                                        */
+  real_T ecrwt_zero_Value_h;           /* Expression: zeros(1,1)
+                                        * Referenced by: '<S7>/ecr.wt_zero'
+                                        */
+  real_T umin_scale1_Gain_b;           /* Expression: MVscale
+                                        * Referenced by: '<S68>/umin_scale1'
                                         */
   boolean_T Memory_InitialCondition[2];/* Expression: iA
-                                        * Referenced by: '<S5>/Memory'
+                                        * Referenced by: '<S8>/Memory'
                                         */
+  boolean_T Memory_InitialCondition_n[2];/* Expression: iA
+                                          * Referenced by: '<S48>/Memory'
+                                          */
+  boolean_T Memory_InitialCondition_g[2];/* Expression: iA
+                                          * Referenced by: '<S28>/Memory'
+                                          */
+  boolean_T Memory_InitialCondition_l[2];/* Expression: iA
+                                          * Referenced by: '<S68>/Memory'
+                                          */
   uint8_T Gain2_Gain;                  /* Computed Parameter: Gain2_Gain
                                         * Referenced by: '<Root>/Gain2'
                                         */
@@ -1111,8 +1401,11 @@ struct tag_RTM_udp_conn_T {
     uint32_T clockTick1;
     uint32_T clockTickH1;
     time_T stepSize1;
+    uint32_T clockTick2;
+    uint32_T clockTickH2;
+    time_T stepSize2;
     struct {
-      uint8_T TID[2];
+      uint8_T TID[3];
     } TaskCounters;
 
     time_T tStart;
@@ -1128,12 +1421,12 @@ struct tag_RTM_udp_conn_T {
     int_T *sampleHits;
     int_T *perTaskSampleHits;
     time_T *t;
-    time_T sampleTimesArray[2];
-    time_T offsetTimesArray[2];
-    int_T sampleTimeTaskIDArray[2];
-    int_T sampleHitArray[2];
-    int_T perTaskSampleHitsArray[4];
-    time_T tArray[2];
+    time_T sampleTimesArray[3];
+    time_T offsetTimesArray[3];
+    int_T sampleTimeTaskIDArray[3];
+    int_T sampleHitArray[3];
+    int_T perTaskSampleHitsArray[9];
+    time_T tArray[3];
   } Timing;
 };
 
@@ -1192,25 +1485,88 @@ extern RT_MODEL_udp_conn_T *const udp_conn_M;
  * '<S2>'   : 'udp_conn/Compare To Constant1'
  * '<S3>'   : 'udp_conn/Iddata Sink'
  * '<S4>'   : 'udp_conn/MPC Controller'
- * '<S5>'   : 'udp_conn/MPC Controller/MPC'
- * '<S6>'   : 'udp_conn/MPC Controller/MPC/MPC Matrix Signal Check'
- * '<S7>'   : 'udp_conn/MPC Controller/MPC/MPC Matrix Signal Check1'
- * '<S8>'   : 'udp_conn/MPC Controller/MPC/MPC Matrix Signal Check2'
- * '<S9>'   : 'udp_conn/MPC Controller/MPC/MPC Preview Signal Check'
- * '<S10>'  : 'udp_conn/MPC Controller/MPC/MPC Preview Signal Check1'
- * '<S11>'  : 'udp_conn/MPC Controller/MPC/MPC Preview Signal Check2'
- * '<S12>'  : 'udp_conn/MPC Controller/MPC/MPC Preview Signal Check3'
- * '<S13>'  : 'udp_conn/MPC Controller/MPC/MPC Preview Signal Check4'
- * '<S14>'  : 'udp_conn/MPC Controller/MPC/MPC Scalar Signal Check'
- * '<S15>'  : 'udp_conn/MPC Controller/MPC/MPC Scalar Signal Check1'
- * '<S16>'  : 'udp_conn/MPC Controller/MPC/MPC Vector Signal Check'
- * '<S17>'  : 'udp_conn/MPC Controller/MPC/MPC Vector Signal Check1'
- * '<S18>'  : 'udp_conn/MPC Controller/MPC/MPC Vector Signal Check11'
- * '<S19>'  : 'udp_conn/MPC Controller/MPC/MPC Vector Signal Check2'
- * '<S20>'  : 'udp_conn/MPC Controller/MPC/MPC Vector Signal Check3'
- * '<S21>'  : 'udp_conn/MPC Controller/MPC/MPC Vector Signal Check4'
- * '<S22>'  : 'udp_conn/MPC Controller/MPC/MPC Vector Signal Check5'
- * '<S23>'  : 'udp_conn/MPC Controller/MPC/MPC Vector Signal Check6'
- * '<S24>'  : 'udp_conn/MPC Controller/MPC/optimizer'
+ * '<S5>'   : 'udp_conn/MPC Controller1'
+ * '<S6>'   : 'udp_conn/MPC Controller2'
+ * '<S7>'   : 'udp_conn/MPC Controller3'
+ * '<S8>'   : 'udp_conn/MPC Controller/MPC'
+ * '<S9>'   : 'udp_conn/MPC Controller/MPC/MPC Matrix Signal Check'
+ * '<S10>'  : 'udp_conn/MPC Controller/MPC/MPC Matrix Signal Check1'
+ * '<S11>'  : 'udp_conn/MPC Controller/MPC/MPC Matrix Signal Check2'
+ * '<S12>'  : 'udp_conn/MPC Controller/MPC/MPC Preview Signal Check'
+ * '<S13>'  : 'udp_conn/MPC Controller/MPC/MPC Preview Signal Check1'
+ * '<S14>'  : 'udp_conn/MPC Controller/MPC/MPC Preview Signal Check2'
+ * '<S15>'  : 'udp_conn/MPC Controller/MPC/MPC Preview Signal Check3'
+ * '<S16>'  : 'udp_conn/MPC Controller/MPC/MPC Preview Signal Check4'
+ * '<S17>'  : 'udp_conn/MPC Controller/MPC/MPC Scalar Signal Check'
+ * '<S18>'  : 'udp_conn/MPC Controller/MPC/MPC Scalar Signal Check1'
+ * '<S19>'  : 'udp_conn/MPC Controller/MPC/MPC Vector Signal Check'
+ * '<S20>'  : 'udp_conn/MPC Controller/MPC/MPC Vector Signal Check1'
+ * '<S21>'  : 'udp_conn/MPC Controller/MPC/MPC Vector Signal Check11'
+ * '<S22>'  : 'udp_conn/MPC Controller/MPC/MPC Vector Signal Check2'
+ * '<S23>'  : 'udp_conn/MPC Controller/MPC/MPC Vector Signal Check3'
+ * '<S24>'  : 'udp_conn/MPC Controller/MPC/MPC Vector Signal Check4'
+ * '<S25>'  : 'udp_conn/MPC Controller/MPC/MPC Vector Signal Check5'
+ * '<S26>'  : 'udp_conn/MPC Controller/MPC/MPC Vector Signal Check6'
+ * '<S27>'  : 'udp_conn/MPC Controller/MPC/optimizer'
+ * '<S28>'  : 'udp_conn/MPC Controller1/MPC'
+ * '<S29>'  : 'udp_conn/MPC Controller1/MPC/MPC Matrix Signal Check'
+ * '<S30>'  : 'udp_conn/MPC Controller1/MPC/MPC Matrix Signal Check1'
+ * '<S31>'  : 'udp_conn/MPC Controller1/MPC/MPC Matrix Signal Check2'
+ * '<S32>'  : 'udp_conn/MPC Controller1/MPC/MPC Preview Signal Check'
+ * '<S33>'  : 'udp_conn/MPC Controller1/MPC/MPC Preview Signal Check1'
+ * '<S34>'  : 'udp_conn/MPC Controller1/MPC/MPC Preview Signal Check2'
+ * '<S35>'  : 'udp_conn/MPC Controller1/MPC/MPC Preview Signal Check3'
+ * '<S36>'  : 'udp_conn/MPC Controller1/MPC/MPC Preview Signal Check4'
+ * '<S37>'  : 'udp_conn/MPC Controller1/MPC/MPC Scalar Signal Check'
+ * '<S38>'  : 'udp_conn/MPC Controller1/MPC/MPC Scalar Signal Check1'
+ * '<S39>'  : 'udp_conn/MPC Controller1/MPC/MPC Vector Signal Check'
+ * '<S40>'  : 'udp_conn/MPC Controller1/MPC/MPC Vector Signal Check1'
+ * '<S41>'  : 'udp_conn/MPC Controller1/MPC/MPC Vector Signal Check11'
+ * '<S42>'  : 'udp_conn/MPC Controller1/MPC/MPC Vector Signal Check2'
+ * '<S43>'  : 'udp_conn/MPC Controller1/MPC/MPC Vector Signal Check3'
+ * '<S44>'  : 'udp_conn/MPC Controller1/MPC/MPC Vector Signal Check4'
+ * '<S45>'  : 'udp_conn/MPC Controller1/MPC/MPC Vector Signal Check5'
+ * '<S46>'  : 'udp_conn/MPC Controller1/MPC/MPC Vector Signal Check6'
+ * '<S47>'  : 'udp_conn/MPC Controller1/MPC/optimizer'
+ * '<S48>'  : 'udp_conn/MPC Controller2/MPC'
+ * '<S49>'  : 'udp_conn/MPC Controller2/MPC/MPC Matrix Signal Check'
+ * '<S50>'  : 'udp_conn/MPC Controller2/MPC/MPC Matrix Signal Check1'
+ * '<S51>'  : 'udp_conn/MPC Controller2/MPC/MPC Matrix Signal Check2'
+ * '<S52>'  : 'udp_conn/MPC Controller2/MPC/MPC Preview Signal Check'
+ * '<S53>'  : 'udp_conn/MPC Controller2/MPC/MPC Preview Signal Check1'
+ * '<S54>'  : 'udp_conn/MPC Controller2/MPC/MPC Preview Signal Check2'
+ * '<S55>'  : 'udp_conn/MPC Controller2/MPC/MPC Preview Signal Check3'
+ * '<S56>'  : 'udp_conn/MPC Controller2/MPC/MPC Preview Signal Check4'
+ * '<S57>'  : 'udp_conn/MPC Controller2/MPC/MPC Scalar Signal Check'
+ * '<S58>'  : 'udp_conn/MPC Controller2/MPC/MPC Scalar Signal Check1'
+ * '<S59>'  : 'udp_conn/MPC Controller2/MPC/MPC Vector Signal Check'
+ * '<S60>'  : 'udp_conn/MPC Controller2/MPC/MPC Vector Signal Check1'
+ * '<S61>'  : 'udp_conn/MPC Controller2/MPC/MPC Vector Signal Check11'
+ * '<S62>'  : 'udp_conn/MPC Controller2/MPC/MPC Vector Signal Check2'
+ * '<S63>'  : 'udp_conn/MPC Controller2/MPC/MPC Vector Signal Check3'
+ * '<S64>'  : 'udp_conn/MPC Controller2/MPC/MPC Vector Signal Check4'
+ * '<S65>'  : 'udp_conn/MPC Controller2/MPC/MPC Vector Signal Check5'
+ * '<S66>'  : 'udp_conn/MPC Controller2/MPC/MPC Vector Signal Check6'
+ * '<S67>'  : 'udp_conn/MPC Controller2/MPC/optimizer'
+ * '<S68>'  : 'udp_conn/MPC Controller3/MPC'
+ * '<S69>'  : 'udp_conn/MPC Controller3/MPC/MPC Matrix Signal Check'
+ * '<S70>'  : 'udp_conn/MPC Controller3/MPC/MPC Matrix Signal Check1'
+ * '<S71>'  : 'udp_conn/MPC Controller3/MPC/MPC Matrix Signal Check2'
+ * '<S72>'  : 'udp_conn/MPC Controller3/MPC/MPC Preview Signal Check'
+ * '<S73>'  : 'udp_conn/MPC Controller3/MPC/MPC Preview Signal Check1'
+ * '<S74>'  : 'udp_conn/MPC Controller3/MPC/MPC Preview Signal Check2'
+ * '<S75>'  : 'udp_conn/MPC Controller3/MPC/MPC Preview Signal Check3'
+ * '<S76>'  : 'udp_conn/MPC Controller3/MPC/MPC Preview Signal Check4'
+ * '<S77>'  : 'udp_conn/MPC Controller3/MPC/MPC Scalar Signal Check'
+ * '<S78>'  : 'udp_conn/MPC Controller3/MPC/MPC Scalar Signal Check1'
+ * '<S79>'  : 'udp_conn/MPC Controller3/MPC/MPC Vector Signal Check'
+ * '<S80>'  : 'udp_conn/MPC Controller3/MPC/MPC Vector Signal Check1'
+ * '<S81>'  : 'udp_conn/MPC Controller3/MPC/MPC Vector Signal Check11'
+ * '<S82>'  : 'udp_conn/MPC Controller3/MPC/MPC Vector Signal Check2'
+ * '<S83>'  : 'udp_conn/MPC Controller3/MPC/MPC Vector Signal Check3'
+ * '<S84>'  : 'udp_conn/MPC Controller3/MPC/MPC Vector Signal Check4'
+ * '<S85>'  : 'udp_conn/MPC Controller3/MPC/MPC Vector Signal Check5'
+ * '<S86>'  : 'udp_conn/MPC Controller3/MPC/MPC Vector Signal Check6'
+ * '<S87>'  : 'udp_conn/MPC Controller3/MPC/optimizer'
  */
 #endif                                 /* RTW_HEADER_udp_conn_h_ */

@@ -7,9 +7,9 @@
  *
  * Code generation for model "udp_conn".
  *
- * Model version              : 1.171
+ * Model version              : 1.177
  * Simulink Coder version : 9.0 (R2018b) 24-May-2018
- * C source code generated on : Wed Dec  5 22:42:17 2018
+ * C source code generated on : Thu Dec  6 00:27:55 2018
  *
  * Target selection: sldrt.tlc
  * Note: GRT includes extra infrastructure and instrumentation for prototyping
@@ -30,5 +30,7 @@ void udp_conn_output0(void);
 void udp_conn_update0(void);
 void udp_conn_output1(void);
 void udp_conn_update1(void);
+void udp_conn_output2(void);
+void udp_conn_update2(void);
 
 #endif                                 /* RTW_HEADER_udp_conn_private_h_ */

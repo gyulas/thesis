@@ -7,9 +7,9 @@
  *
  * Code generation for model "udp_conn".
  *
- * Model version              : 1.171
+ * Model version              : 1.177
  * Simulink Coder version : 9.0 (R2018b) 24-May-2018
- * C source code generated on : Wed Dec  5 22:42:17 2018
+ * C source code generated on : Thu Dec  6 00:27:55 2018
  *
  * Target selection: sldrt.tlc
  * Note: GRT includes extra infrastructure and instrumentation for prototyping
@@ -58,7 +58,7 @@ static const char_T * rtDataTypeNames[] = {
 
 /* data type transitions for block I/O structure */
 static DataTypeTransition rtBTransitions[] = {
-  { (char_T *)(&udp_conn_B.Gain), 0, 0, 20 },
+  { (char_T *)(&udp_conn_B.Gain), 0, 0, 45 },
 
   { (char_T *)(&udp_conn_B.PacketInput1_o15), 6, 0, 1 },
 
@@ -66,14 +66,14 @@ static DataTypeTransition rtBTransitions[] = {
 
   { (char_T *)(&udp_conn_B.PacketInput1_o1), 3, 0, 15 },
 
-  { (char_T *)(&udp_conn_B.iAout[0]), 8, 0, 2 }
+  { (char_T *)(&udp_conn_B.iAout[0]), 8, 0, 8 }
   ,
 
-  { (char_T *)(&udp_conn_DW.last_mv_DSTATE), 0, 0, 5 },
+  { (char_T *)(&udp_conn_DW.last_mv_DSTATE), 0, 0, 20 },
 
-  { (char_T *)(&udp_conn_DW.PacketInput1_PWORK), 11, 0, 4 },
+  { (char_T *)(&udp_conn_DW.PacketInput1_PWORK), 11, 0, 6 },
 
-  { (char_T *)(&udp_conn_DW.Memory_PreviousInput[0]), 8, 0, 2 }
+  { (char_T *)(&udp_conn_DW.Memory_PreviousInput[0]), 8, 0, 8 }
 };
 
 /* data type transition table for block I/O structure */
@@ -90,9 +90,9 @@ static DataTypeTransition rtPTransitions[] = {
 
   { (char_T *)(&udp_conn_P.CompareToConstant_const), 3, 0, 2 },
 
-  { (char_T *)(&udp_conn_P.last_x_InitialCondition[0]), 0, 0, 34 },
+  { (char_T *)(&udp_conn_P.last_x_InitialCondition[0]), 0, 0, 127 },
 
-  { (char_T *)(&udp_conn_P.Memory_InitialCondition[0]), 8, 0, 2 },
+  { (char_T *)(&udp_conn_P.Memory_InitialCondition[0]), 8, 0, 8 },
 
   { (char_T *)(&udp_conn_P.Gain2_Gain), 3, 0, 4 }
 };
