@@ -6,14 +6,24 @@ a levegőnek konvektív hőátadás útján, légáramlással, a környezetnek p
 %a levegő
 
 Ebben a fejezetben először hőtani alapösszefüggéseket ismertetek, amelyekből előáll majd a fűtőtestek teljesítményét leíró modell. Az állandósult állapotban leadott hő megkapható a beavatkozó jelek és a környezeti jellemzők (mért hőmérsékletek) függvényében (\textit{\ref{eq_holeadas4}. egyenlet}).
-A modell által számolt teljesítményt egy Simscape-ben megvalósított termikus hálózatra vezetem\footnote{A termikus hálózatok alkotóelemei nem ellenállások és kondenzátorok, hanem hővezetési tényezők és határoló elemek.}, ami a fűtőtest tranziens viselkedését adja meg.
+A modell által számolt teljesítményt egy Simscape-ben megvalósított termikus hálózatra vezetem\footnote{A termikus hálózatok alkotóelemeiben a hővezetési tényezők és határoló elemek megfeleltethetők ellenállásoknak és kondenzátoroknak.}, ami a fűtőtest tranziens viselkedését adja meg. Az alábbi ábrán látható ezen rendszerek kapcsolata. 
 %A fűtőtestek kimenetei a helyiség modelljének bemenetére csatlakoznak.
+
+\begin{figure}[H]
+	\centering
+	% trim={<left> <lower> <right> <upper>}
+	\includegraphics[trim=0 0 0 0, clip,width=0.9\textwidth]{figures/simscape/heatsys}
+	\caption{Fűtőtestek modellje}
+	\label{fig:SimscapeHeatSys}
+\end{figure}
+
+
 
 %Szimuláció során olyan bekapcsolási tranziensekkel is számolnom kell, amik egy kis időállandós fűtés (pl. légbefúvás, fan-coil) esetén elhanyagolhatók lennének.
 %A modellalkotás során kétféle probléma merül fel. Egyrészt modellezni kell a fűtőtestek állandósult állapotbeli hőleadást. Másrészt, ha a fűtési rendszer időállandója nagy, akkor a tranziens lefolyása is lényeges a szabályzás szempontjából.
-\section{Állandósult állapotbeli hőleadás}\label{section:allandosult}
+\section{Állandósult állapotbeli hőleadás numerikus modellje}\label{section:allandosult}
 
-\paragraph{Szabályzott jellemző:} Mivel a vizsgált fűtési rendszerek hője melegvízből származik, a fűtővíz %kazán (hőszivattyú, stb.) által előállított melegvíz
+Mivel a vizsgált fűtési rendszerek hője melegvízből származik, a fűtővíz %kazán (hőszivattyú, stb.) által előállított melegvíz
 hőmérséklete, illetve a keringető szivattyú tömegárama lehet a hőleadást befolyásoló paraméter\footnote{A kazánok a víz hőmérsékletét képesek változtatni időjárás függvényében, így az egy külön rendszer része lehet. Nem célom kazánvezérlést írni, az egyszerűség kedvéért feltételezem, hogy a melegvíz például távhő formában rendelkezésre áll.}. Az elképzelésemmel jobban összhangban áll az utóbbi választása, hiszen szelepekkel elosztottan, szobánként is szabályozható az egyes fűtőtestekbe táplált hőmennyiség: a víz tömegáramát folytonosan tudom szabályozni egy szelep segítségével\footnote{A \textit{\ref{chap:feasibility-tech}. részben} mutatom be a megvalósíthatóság technikai feltételeit, például azt, hogy milyen szelep használatos erre a feladatra.}, a fűtőtestekbe betáplált víz hőmérséklete (úgynevezett előremenő hőmérséklet) állandó.
 
 %\vspace{6pt}
@@ -232,7 +242,7 @@ ahol
 
 A sugárzó hőleadási tényező bevezetésével linearizálhatjuk a hőleadást, a hőleadás így egyszerűen lineárisan függ majd a hőmérséklet-különbségtől. Gyakran összevonják a konvektív és a sugárzási hőátadási tényezőt.
 
-\textit{Cholewa} \cite{CHOLEWA2013599} a $h_r$ paramétert méréssel határozta meg. (5) egyenlet.
+\textit{Cholewa} \cite{CHOLEWA2013599} a $h_r$ paramétert méréssel határozta meg, amivel ezután az alábbi formában számolható a sugárzó hő mennyisége:
 
 
 
@@ -283,27 +293,83 @@ ahol
 
 \section{Radiátor modellje}
 
-A képletben élhetünk azzal a közelítéssel, hogy $\Delta t_k=\frac{t_{w}+t_{r}}{2}-t_i$. Ezzel a következő alakban számolhatunk:
+\textit{\ref{eq_holeadas4}. egyenletben} szereplő paraméterek értéke az állandósult állapotbeli hőleadáshoz:
 
-\textit{\ref{eq_holeadas4}. egyenletben} szereplő paraméterek értéke:
+\begin{table}[H]
+	\footnotesize
+	\centering
+	\caption{Radiátor adatai}
+	%\renewcommand{\arraystretch}{2} % to increase cell height
+	%\taburulecolor{gray}
+	%\begin{tabular}{|p{0.8cm}|p{1cm}|p{1cm}|p{1cm}|p{1cm}|p{1cm}|p{1cm}|p{1cm}|}
+	%
+	%\begin{tabulary}{\linewidth}{LLc}
+	\begin{tabu}{@{}lll@{}}
+		\hline
+		$\dot{m}$ 	& maximális tömegáram 	& 0.05 \si[per-mode=symbol]{\kilogram\per\second}
+		\\
+		$h_t $		& hőátadási tényező		& 7 \si[per-mode=symbol]{\watt\per\metre\squared\per\kelvin}
+		\\
+		$A $		& felszín				& 4 \si[per-mode=symbol]{\metre\squared}
+		\\
+		$t_{drop}$ 	& hőmérsékletesés 		& 0 \si[per-mode=symbol]{\celsius}
+		\\ \hline
+	\end{tabu}
+	\label{tab:RadiatorDetail}
+	%
+	%\label{tab:TabularExample}
+	%\tabref{TabularExample}~táblázat
+\end{table}
 
-\subsection{Paraméterek}
+Ahol a $t_{drop}$=0 közelítés azért megengedhető, mert a fémtesten kicsi a hőmérsékletesés, így az átlagos felületi hőmérséklet közel azonos az átlagos vízhőmérséklettel. A tranziensben a két hőtároló tömeg a pontosabb szimuláció miatt szerepel külön.
+
+
+\subsection{A tranziens viselkedés}
+\begin{figure}[H]
+	\centering
+	% trim={<left> <lower> <right> <upper>}
+	\includegraphics[trim=0 0 0 0, clip,width=\textwidth]{figures/simscape/radiator}
+	\caption{Radiátor Simscape modellje}
+	\label{fig:SimscapeRadiator}
+\end{figure}
+
 A felmelegedéskor és lehűléskor a pontos hőleadást akkor tudjuk modellezni, ha ismerjük a radiátor hőkapacitását. Ehhez tudnunk kell, hogy a radiátorban mennyi víz van, illetve hogy a radiátortest milyen nehéz.
-A radiátorokat mindig az adott helyiséghez méretezik, ezért az adatokat leolvasással / katalógusból kapjuk normál esetben. A modellezéshez választanom kellett egy típust. Itt még csak paraméteresen kellene megadni az értékeket, vagy előbb a ház modelljét, hőszükségletét felírni, hiszen a házhoz tervezzük a fűtést és nem fordítva.
+A radiátorokat mindig az adott helyiséghez méretezik, ezért az adatokat leolvasással vagy katalógusból kapjuk normál esetben. A modellezéshez választanom kellett egy típust. Itt még csak paraméteresen kellene megadni az értékeket, vagy előbb a ház modelljét, hőszükségletét felírni, hiszen a házhoz tervezzük a fűtést és nem fordítva.
 
 Radiátor katalógusokból\footnote{Purmo Ventil Compact - purmo.com/hu/termekek/lapradiatorok/purmo-ventil-compact.htm} azt találtam, hogy az egyes radiátor típusokra ezek a paraméterek milyen értékűek.
 
-% Lapradiátor használatát feltételeztem, erről kell egy kép.
+A termikus modell paraméterei egy 90 cm magas, 1,8 m hosszú C22 típusú radiátorra:
 
-\input{src/heater_parameters}
+\begin{table}[H]
+	\footnotesize
+	\centering
+	\caption{Radiátor adatai}
+	%\renewcommand{\arraystretch}{2} % to increase cell height
+	%\taburulecolor{gray}
+	%\begin{tabular}{|p{0.8cm}|p{1cm}|p{1cm}|p{1cm}|p{1cm}|p{1cm}|p{1cm}|p{1cm}|}
+	%
+	%\begin{tabulary}{\linewidth}{LLc}
+	\begin{tabu}{@{}ll@{}}
+		\hline
+		fémtest tömege 	& 90 \si[per-mode=symbol]{\kilogram}
+		\\
+		fémtest fajhője	& 464 \si[per-mode=symbol]{\joule\per\kilogram\per\kelvin}
+		\\
+		fűtővíz tömege	& 16 \si[per-mode=symbol]{\kilogram}
+		\\
+		víz fajhője		& 4189 \si[per-mode=symbol]{\joule\per\kilogram\per\kelvin}
+		\\ \hline
+	\end{tabu}
+	\label{tab:RadiatorHeatCap}
+	%
+	%\label{tab:TabularExample}
+	%\tabref{TabularExample}~táblázat
+\end{table}
 
-Ismert a radiátor hossza, magassága, konstrukciója. Ezalapján a
-tömege, illetve az acél hőkapacitása alapján a radiátortest hőkapacitása katalógusadatként szerepel.
-A szimulációban a  Simscape termikus hőtároló elem blokk a víz térfogata%, a víz fajhője még egy hőtároló elem.
+% \input{src/heater_parameters} helzett
 
-\subsection{A modell validálása}
-
-A \ref{eq_hofelvetel}. egyenlet meglehetősen általános. Ha mérjük az előre- és visszamenő víz hőmérséklet-különbségét, a tömegáram függvényében meghatározható a felvett hő.
+A radiátor hossza, magassága, konstrukciója alapján a tömegek kiszámíthatók, illetve az acél hőkapacitása katalógusadatként szerepel.
+A szimulációban a  Simscape termikus hőtároló elem blokkjaiba a fenti adatokat írtam.%, a víz fajhője még egy hőtároló elem.
 
 
 \section{Padlófűtés modellje}

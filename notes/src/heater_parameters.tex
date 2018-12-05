@@ -9,9 +9,9 @@
 	\newcolumntype{C}[1]{>{\centering\arraybackslash}p{#1}}
 	\newcolumntype{R}[1]{>{\raggedleft\arraybackslash}p{#1}}
 	
-	\begin{tabu}{p{3cm}p{3cm}p{3cm}p{2.8cm}c}
+	\begin{tabu}{p{2.5cm}p{3cm}p{3cm}p{2.8cm}c}
 		%\cline{2-5}
-		\multicolumn{1}{l}{} 	& Komponens & Hőleadás módja & Hőtároló tömeg & Fajhő \\ %\cline{2-5}
+		\multicolumn{1}{l}{} 	& Komponens & Hőleadás & Hőtároló tömeg & Fajhő \\ %\cline{2-5}
 %		\multicolumn{5}{c}{}\\ %\hline
 		% header
 %		\multirow{2}{*}
@@ -20,15 +20,14 @@
 
 		\hline
 		\multirow{2}{*}
-					{Radiátor, h=900\si{\milli\metre}} 	 & Víz 		& 	& 8.9l/m 	&	\\ % \cline{2-5}
-								 & Fémtest 	& 	& 50.1 \si[per-mode=fraction]{\kilogram\per\metre}	& 	\\  %\hline
+					{Radiátor} 	 & víz 		& a fémtestnek	& 8.9 \si[per-mode=symbol]{\kilogram\per\metre} 	& 4189 \si[per-mode=symbol]{\joule\per\kilogram\per\kelvin}	\\ % \cline{2-5}
+								 & fémtest 	& a levegőnek	& 50.1 \si[per-mode=symbol]{\kilogram\per\metre}	& 464 \si[per-mode=symbol]{\joule\per\kilogram\per\kelvin}	\\  %\hline
 								 
-		\multicolumn{5}{c}{}\\ \hline
+		\hline
 		
 		\multirow{3}{*}
-					{Padlófűtés} & Víz 		&	&  	&	\\  %\cline{2-5}
-								 & Födém 	&	& 840  \si[per-mode=fraction]{\kilogram\per\metre\squared}	&	\\  %\cline{2-5}
-								 & Padló burkolat 	& $h_c, h_r$ 	&	& 	\\  \hline
+					{Padlófűtés} & Padló betonja 	& hővezetés	& 840  \si[per-mode=fraction]{\kilogram\per\metre\squared}	&	\\  %\cline{2-5}
+								 & Padló burkolat 	& hővezetés 	&	& 	\\  \hline
 	\end{tabu}						
 		% entries - event names aligned left with multicolumn
 %		\multicolumn{1}{|l|}{flightHAT turned on} 	& & \\ \hline
