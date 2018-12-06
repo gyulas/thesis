@@ -7,9 +7,9 @@
  *
  * Code generation for model "udp_conn".
  *
- * Model version              : 1.186
+ * Model version              : 1.192
  * Simulink Coder version : 9.0 (R2018b) 24-May-2018
- * C source code generated on : Thu Dec  6 02:21:06 2018
+ * C source code generated on : Thu Dec  6 23:34:08 2018
  *
  * Target selection: sldrt.tlc
  * Note: GRT includes extra infrastructure and instrumentation for prototyping
@@ -25,8 +25,8 @@
 #include "zero_crossing_types.h"
 #include "udp_conn.h"
 
-extern real_T rt_hypotd_snf(real_T u0, real_T u1);
 extern real_T rt_powd_snf(real_T u0, real_T u1);
+extern real_T rt_hypotd_snf(real_T u0, real_T u1);
 void udp_conn_output0(void);
 void udp_conn_update0(void);
 void udp_conn_output1(void);

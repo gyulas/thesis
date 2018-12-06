@@ -7,9 +7,9 @@
  *
  * Code generation for model "udp_conn".
  *
- * Model version              : 1.186
+ * Model version              : 1.192
  * Simulink Coder version : 9.0 (R2018b) 24-May-2018
- * C source code generated on : Thu Dec  6 02:21:06 2018
+ * C source code generated on : Thu Dec  6 23:34:08 2018
  *
  * Target selection: sldrt.tlc
  * Note: GRT includes extra infrastructure and instrumentation for prototyping
@@ -35,11 +35,7 @@ static uint_T rtDataTypeSizes[] = {
   sizeof(int_T),
   sizeof(pointer_T),
   sizeof(action_T),
-  2*sizeof(uint32_T),
-  sizeof(struct_NCeeZsuPm8jbYmu9ZorjKG),
-  sizeof(struct_TABMGEHwDWar3kmUBAX3OF),
-  sizeof(struct_fVwrsCDwRLBa0lKYF6x91E),
-  sizeof(struct_TZ167RnX7fMz9vn71w8eL)
+  2*sizeof(uint32_T)
 };
 
 /* data type name table */
@@ -57,16 +53,12 @@ static const char_T * rtDataTypeNames[] = {
   "int_T",
   "pointer_T",
   "action_T",
-  "timer_uint32_pair_T",
-  "struct_NCeeZsuPm8jbYmu9ZorjKG",
-  "struct_TABMGEHwDWar3kmUBAX3OF",
-  "struct_fVwrsCDwRLBa0lKYF6x91E",
-  "struct_TZ167RnX7fMz9vn71w8eL"
+  "timer_uint32_pair_T"
 };
 
 /* data type transitions for block I/O structure */
 static DataTypeTransition rtBTransitions[] = {
-  { (char_T *)(&udp_conn_B.Gain), 0, 0, 55 },
+  { (char_T *)(&udp_conn_B.Gain1), 0, 0, 34 },
 
   { (char_T *)(&udp_conn_B.PacketInput1_o15), 6, 0, 1 },
 
@@ -74,14 +66,14 @@ static DataTypeTransition rtBTransitions[] = {
 
   { (char_T *)(&udp_conn_B.PacketInput1_o1), 3, 0, 15 },
 
-  { (char_T *)(&udp_conn_B.iAout[0]), 8, 0, 8 }
+  { (char_T *)(&udp_conn_B.iAout[0]), 8, 0, 2 }
   ,
 
-  { (char_T *)(&udp_conn_DW.last_mv_DSTATE), 0, 0, 22 },
+  { (char_T *)(&udp_conn_DW.last_mv_DSTATE), 0, 0, 5 },
 
-  { (char_T *)(&udp_conn_DW.PacketInput1_PWORK), 11, 0, 8 },
+  { (char_T *)(&udp_conn_DW.PacketInput1_PWORK), 11, 0, 6 },
 
-  { (char_T *)(&udp_conn_DW.Memory_PreviousInput[0]), 8, 0, 8 }
+  { (char_T *)(&udp_conn_DW.Memory_PreviousInput[0]), 8, 0, 2 }
 };
 
 /* data type transition table for block I/O structure */
@@ -98,9 +90,9 @@ static DataTypeTransition rtPTransitions[] = {
 
   { (char_T *)(&udp_conn_P.CompareToConstant_const), 3, 0, 2 },
 
-  { (char_T *)(&udp_conn_P.last_x_InitialCondition[0]), 0, 0, 127 },
+  { (char_T *)(&udp_conn_P.Gain1_Gain), 0, 0, 34 },
 
-  { (char_T *)(&udp_conn_P.Memory_InitialCondition[0]), 8, 0, 8 },
+  { (char_T *)(&udp_conn_P.Memory_InitialCondition[0]), 8, 0, 2 },
 
   { (char_T *)(&udp_conn_P.Gain2_Gain), 3, 0, 4 }
 };

@@ -7,9 +7,9 @@
  *
  * Code generation for model "udp_conn".
  *
- * Model version              : 1.186
+ * Model version              : 1.192
  * Simulink Coder version : 9.0 (R2018b) 24-May-2018
- * C source code generated on : Thu Dec  6 02:21:06 2018
+ * C source code generated on : Thu Dec  6 23:34:08 2018
  *
  * Target selection: sldrt.tlc
  * Note: GRT includes extra infrastructure and instrumentation for prototyping
@@ -23,45 +23,8 @@
 #include "rtwtypes.h"
 #include "multiword_types.h"
 #include "zero_crossing_types.h"
-#ifndef DEFINED_TYPEDEF_FOR_struct_NCeeZsuPm8jbYmu9ZorjKG_
-#define DEFINED_TYPEDEF_FOR_struct_NCeeZsuPm8jbYmu9ZorjKG_
 
-typedef struct {
-  real_T values[411];
-} struct_NCeeZsuPm8jbYmu9ZorjKG;
-
-#endif
-
-#ifndef DEFINED_TYPEDEF_FOR_struct_TABMGEHwDWar3kmUBAX3OF_
-#define DEFINED_TYPEDEF_FOR_struct_TABMGEHwDWar3kmUBAX3OF_
-
-typedef struct {
-  real_T time[411];
-  struct_NCeeZsuPm8jbYmu9ZorjKG signals;
-} struct_TABMGEHwDWar3kmUBAX3OF;
-
-#endif
-
-#ifndef DEFINED_TYPEDEF_FOR_struct_fVwrsCDwRLBa0lKYF6x91E_
-#define DEFINED_TYPEDEF_FOR_struct_fVwrsCDwRLBa0lKYF6x91E_
-
-typedef struct {
-  real_T values[35];
-} struct_fVwrsCDwRLBa0lKYF6x91E;
-
-#endif
-
-#ifndef DEFINED_TYPEDEF_FOR_struct_TZ167RnX7fMz9vn71w8eL_
-#define DEFINED_TYPEDEF_FOR_struct_TZ167RnX7fMz9vn71w8eL_
-
-typedef struct {
-  real_T time[35];
-  struct_fVwrsCDwRLBa0lKYF6x91E signals;
-} struct_TZ167RnX7fMz9vn71w8eL;
-
-#endif
-
-/* Custom Type definition for MATLAB Function: '<S50>/optimizer' */
+/* Custom Type definition for MATLAB Function: '<S9>/optimizer' */
 #ifndef struct_tag_sjVaXfrJc3wv5faWU7kmQtG
 #define struct_tag_sjVaXfrJc3wv5faWU7kmQtG
 
