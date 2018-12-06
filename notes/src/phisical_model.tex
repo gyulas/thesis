@@ -29,3 +29,31 @@ Az MPC paraméterezésére \textit{Agachi \cite{romanMPC_Agachi}} könyvében ta
 A fentiek mellett viszont a szabályzó nem adott ki beavatkozójelet egészen egy predikciós horizontnyi ideig, azaz majdnem 1 órán keresztül\footnote{Ha 30 másodperces mintavételi időt használtam és 100 mintányi predikciós horizontot, ugyanez volt a helyzet. Ez idő alatt az MPC valószínűleg az állapotbecslőjét inicializálja.}. Az MPC képes a költségfüggvényben figyelembe venni a predikciós horizonton belül a referenciajel jövőbeli változásait (ez a \textit{Signal Previewing}), ezt kipróbáltam annak érdekében, hogy ezt a \say{holtidőt} csökkentsem, ám ellentétes hatást értem el.
 
 A Simulink blokk viszont támogatja az MPC-nek kezdeti érték megadását. A kezdeti érték nélküli MPC-t szimulációban futtattam, majd leolvastam annak belső állapotát.
+
+
+
+\section{Szabályozótervezés az identifikált modellre}
+
+
+\begin{figure}[H]
+	\begin{subfigure}[t]{0.32\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{figures/realsys/mpc-wy-1}
+		\caption{$y=1$ súly}
+		\label{fig:mpc-wy-1}
+	\end{subfigure}
+	~
+	\begin{subfigure}[t]{0.32\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{figures/realsys/mpc-wy-2}
+		\caption{$y=2$ súly}
+		\label{fig:mpc-wy-2}
+	\end{subfigure}
+	~
+	\begin{subfigure}[t]{0.32\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{figures/realsys/mpc-wy-5}
+		\caption{$y=5$ súly}
+		\label{fig:mpc-wy-5}
+	\end{subfigure}	
+\end{figure}

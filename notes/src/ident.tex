@@ -2,8 +2,12 @@
 
 
 A szabályzó tervezésénél használt szakaszmodell a Simulinkben megvalósított fizikai modell viselkedését leíró lineáris rendszer. Ebben a fejezetben a korábbiakban ismertetett hálózatot identifikálom.
-
-\input{src/tikz/ident_layout}
+\begin{figure}[h]
+	\centering
+	\input{src/tikz/ident_layout}
+	\caption{A szabályzott szakasz összevont modellje}
+	\label{tikz:simulation}
+\end{figure}
 
 A Simulinkben vizsgálójeleket használok: a több bemenetű, egy kimenetű rendszert egyszerre csak egy bemenetén gerjesztem. A tömegáramot szabályzó szelepek nyitott és csukott állapot között folytonosan állíthatók, 0 és 1 közötti beavatkozó jellel. A külső hőmérsékletet a modell kelvinben kapja, kimenete a belső hőmérséklet.
 
