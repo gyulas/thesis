@@ -196,15 +196,15 @@
 	  section.data(31).logicalSrcIdx = 35;
 	  section.data(31).dtTransOffset = 33;
 	
-	  ;% udp_conn_P.last_x_InitialCondition_c
+	  ;% udp_conn_P.Memory1_InitialCondition
 	  section.data(32).logicalSrcIdx = 36;
 	  section.data(32).dtTransOffset = 34;
 	
-	  ;% udp_conn_P.last_mv_InitialCondition_k
+	  ;% udp_conn_P.last_x_InitialCondition_c
 	  section.data(33).logicalSrcIdx = 37;
-	  section.data(33).dtTransOffset = 38;
+	  section.data(33).dtTransOffset = 35;
 	
-	  ;% udp_conn_P.Constant4_Value
+	  ;% udp_conn_P.last_mv_InitialCondition_k
 	  section.data(34).logicalSrcIdx = 38;
 	  section.data(34).dtTransOffset = 39;
 	
@@ -288,15 +288,15 @@
 	  section.data(54).logicalSrcIdx = 58;
 	  section.data(54).dtTransOffset = 59;
 	
-	  ;% udp_conn_P.ywt_zero_Value_a
+	  ;% udp_conn_P.Constant7_Value
 	  section.data(55).logicalSrcIdx = 59;
 	  section.data(55).dtTransOffset = 60;
 	
-	  ;% udp_conn_P.uwt_zero_Value_b
+	  ;% udp_conn_P.Constant11_Value
 	  section.data(56).logicalSrcIdx = 60;
 	  section.data(56).dtTransOffset = 61;
 	
-	  ;% udp_conn_P.duwt_zero_Value_e
+	  ;% udp_conn_P.Constant10_Value
 	  section.data(57).logicalSrcIdx = 61;
 	  section.data(57).dtTransOffset = 62;
 	
@@ -308,15 +308,15 @@
 	  section.data(59).logicalSrcIdx = 63;
 	  section.data(59).dtTransOffset = 64;
 	
-	  ;% udp_conn_P.last_x_InitialCondition_ck
+	  ;% udp_conn_P.Memory1_InitialCondition_g
 	  section.data(60).logicalSrcIdx = 64;
 	  section.data(60).dtTransOffset = 65;
 	
-	  ;% udp_conn_P.last_mv_InitialCondition_b
+	  ;% udp_conn_P.last_x_InitialCondition_ck
 	  section.data(61).logicalSrcIdx = 65;
-	  section.data(61).dtTransOffset = 69;
+	  section.data(61).dtTransOffset = 66;
 	
-	  ;% udp_conn_P.Constant5_Value
+	  ;% udp_conn_P.last_mv_InitialCondition_b
 	  section.data(62).logicalSrcIdx = 66;
 	  section.data(62).dtTransOffset = 70;
 	
@@ -512,11 +512,11 @@
 	  section.data(110).logicalSrcIdx = 114;
 	  section.data(110).dtTransOffset = 121;
 	
-	  ;% udp_conn_P.ywt_zero_Value_f
+	  ;% udp_conn_P.Constant8_Value
 	  section.data(111).logicalSrcIdx = 115;
 	  section.data(111).dtTransOffset = 122;
 	
-	  ;% udp_conn_P.uwt_zero_Value_j
+	  ;% udp_conn_P.Constant9_Value
 	  section.data(112).logicalSrcIdx = 116;
 	  section.data(112).dtTransOffset = 123;
 	
@@ -623,8 +623,8 @@
     ;%
     ;% Auto data (udp_conn_B)
     ;%
-      section.nData     = 24;
-      section.data(24)  = dumData; %prealloc
+      section.nData     = 31;
+      section.data(31)  = dumData; %prealloc
       
 	  ;% udp_conn_B.Gain
 	  section.data(1).logicalSrcIdx = 0;
@@ -670,57 +670,85 @@
 	  section.data(11).logicalSrcIdx = 10;
 	  section.data(11).dtTransOffset = 16;
 	
-	  ;% udp_conn_B.umin_scale1_gc
+	  ;% udp_conn_B.time_UTC1_i
 	  section.data(12).logicalSrcIdx = 11;
 	  section.data(12).dtTransOffset = 17;
 	
-	  ;% udp_conn_B.time_UTC1_i
+	  ;% udp_conn_B.umin_scale1_gc
 	  section.data(13).logicalSrcIdx = 12;
-	  section.data(13).dtTransOffset = 18;
+	  section.data(13).dtTransOffset = 21;
 	
-	  ;% udp_conn_B.RateTransition4
+	  ;% udp_conn_B.time_UTC1_c
 	  section.data(14).logicalSrcIdx = 13;
 	  section.data(14).dtTransOffset = 22;
 	
-	  ;% udp_conn_B.RateTransition6
+	  ;% udp_conn_B.RateTransition4
 	  section.data(15).logicalSrcIdx = 14;
-	  section.data(15).dtTransOffset = 23;
+	  section.data(15).dtTransOffset = 26;
+	
+	  ;% udp_conn_B.RateTransition6
+	  section.data(16).logicalSrcIdx = 15;
+	  section.data(16).dtTransOffset = 27;
 	
 	  ;% udp_conn_B.umin_scale1_o
-	  section.data(16).logicalSrcIdx = 15;
-	  section.data(16).dtTransOffset = 24;
-	
-	  ;% udp_conn_B.xk1
 	  section.data(17).logicalSrcIdx = 16;
-	  section.data(17).dtTransOffset = 25;
+	  section.data(17).dtTransOffset = 28;
 	
-	  ;% udp_conn_B.u
+	  ;% udp_conn_B.first
 	  section.data(18).logicalSrcIdx = 17;
 	  section.data(18).dtTransOffset = 29;
 	
-	  ;% udp_conn_B.xk1_k
+	  ;% udp_conn_B.next_t
 	  section.data(19).logicalSrcIdx = 18;
 	  section.data(19).dtTransOffset = 30;
 	
-	  ;% udp_conn_B.u_n
+	  ;% udp_conn_B.first_n
 	  section.data(20).logicalSrcIdx = 19;
-	  section.data(20).dtTransOffset = 34;
+	  section.data(20).dtTransOffset = 31;
 	
-	  ;% udp_conn_B.xk1_p
+	  ;% udp_conn_B.next_t_b
 	  section.data(21).logicalSrcIdx = 20;
-	  section.data(21).dtTransOffset = 35;
+	  section.data(21).dtTransOffset = 32;
 	
-	  ;% udp_conn_B.u_j
+	  ;% udp_conn_B.xk1
 	  section.data(22).logicalSrcIdx = 21;
-	  section.data(22).dtTransOffset = 39;
+	  section.data(22).dtTransOffset = 33;
+	
+	  ;% udp_conn_B.u
+	  section.data(23).logicalSrcIdx = 22;
+	  section.data(23).dtTransOffset = 37;
+	
+	  ;% udp_conn_B.cost
+	  section.data(24).logicalSrcIdx = 23;
+	  section.data(24).dtTransOffset = 38;
+	
+	  ;% udp_conn_B.xk1_j
+	  section.data(25).logicalSrcIdx = 24;
+	  section.data(25).dtTransOffset = 39;
+	
+	  ;% udp_conn_B.u_h
+	  section.data(26).logicalSrcIdx = 25;
+	  section.data(26).dtTransOffset = 43;
+	
+	  ;% udp_conn_B.xk1_k
+	  section.data(27).logicalSrcIdx = 26;
+	  section.data(27).dtTransOffset = 44;
+	
+	  ;% udp_conn_B.u_n
+	  section.data(28).logicalSrcIdx = 27;
+	  section.data(28).dtTransOffset = 48;
+	
+	  ;% udp_conn_B.cost_b
+	  section.data(29).logicalSrcIdx = 28;
+	  section.data(29).dtTransOffset = 49;
 	
 	  ;% udp_conn_B.xk1_c
-	  section.data(23).logicalSrcIdx = 22;
-	  section.data(23).dtTransOffset = 40;
+	  section.data(30).logicalSrcIdx = 29;
+	  section.data(30).dtTransOffset = 50;
 	
 	  ;% udp_conn_B.u_c
-	  section.data(24).logicalSrcIdx = 23;
-	  section.data(24).dtTransOffset = 44;
+	  section.data(31).logicalSrcIdx = 30;
+	  section.data(31).dtTransOffset = 54;
 	
       nTotData = nTotData + section.nData;
       sigMap.sections(1) = section;
@@ -730,7 +758,7 @@
       section.data(1)  = dumData; %prealloc
       
 	  ;% udp_conn_B.PacketInput1_o15
-	  section.data(1).logicalSrcIdx = 24;
+	  section.data(1).logicalSrcIdx = 31;
 	  section.data(1).dtTransOffset = 0;
 	
       nTotData = nTotData + section.nData;
@@ -741,19 +769,19 @@
       section.data(4)  = dumData; %prealloc
       
 	  ;% udp_conn_B.Sum2
-	  section.data(1).logicalSrcIdx = 25;
+	  section.data(1).logicalSrcIdx = 32;
 	  section.data(1).dtTransOffset = 0;
 	
 	  ;% udp_conn_B.Sum3
-	  section.data(2).logicalSrcIdx = 26;
+	  section.data(2).logicalSrcIdx = 33;
 	  section.data(2).dtTransOffset = 1;
 	
 	  ;% udp_conn_B.Switch
-	  section.data(3).logicalSrcIdx = 27;
+	  section.data(3).logicalSrcIdx = 34;
 	  section.data(3).dtTransOffset = 2;
 	
 	  ;% udp_conn_B.Switch1
-	  section.data(4).logicalSrcIdx = 28;
+	  section.data(4).logicalSrcIdx = 35;
 	  section.data(4).dtTransOffset = 3;
 	
       nTotData = nTotData + section.nData;
@@ -764,63 +792,63 @@
       section.data(15)  = dumData; %prealloc
       
 	  ;% udp_conn_B.PacketInput1_o1
-	  section.data(1).logicalSrcIdx = 29;
+	  section.data(1).logicalSrcIdx = 36;
 	  section.data(1).dtTransOffset = 0;
 	
 	  ;% udp_conn_B.PacketInput1_o2
-	  section.data(2).logicalSrcIdx = 30;
+	  section.data(2).logicalSrcIdx = 37;
 	  section.data(2).dtTransOffset = 1;
 	
 	  ;% udp_conn_B.PacketInput1_o3
-	  section.data(3).logicalSrcIdx = 31;
+	  section.data(3).logicalSrcIdx = 38;
 	  section.data(3).dtTransOffset = 2;
 	
 	  ;% udp_conn_B.PacketInput1_o4
-	  section.data(4).logicalSrcIdx = 32;
+	  section.data(4).logicalSrcIdx = 39;
 	  section.data(4).dtTransOffset = 3;
 	
 	  ;% udp_conn_B.PacketInput1_o5
-	  section.data(5).logicalSrcIdx = 33;
+	  section.data(5).logicalSrcIdx = 40;
 	  section.data(5).dtTransOffset = 4;
 	
 	  ;% udp_conn_B.PacketInput1_o6
-	  section.data(6).logicalSrcIdx = 34;
+	  section.data(6).logicalSrcIdx = 41;
 	  section.data(6).dtTransOffset = 5;
 	
 	  ;% udp_conn_B.PacketInput1_o7
-	  section.data(7).logicalSrcIdx = 35;
+	  section.data(7).logicalSrcIdx = 42;
 	  section.data(7).dtTransOffset = 6;
 	
 	  ;% udp_conn_B.PacketInput1_o8
-	  section.data(8).logicalSrcIdx = 36;
+	  section.data(8).logicalSrcIdx = 43;
 	  section.data(8).dtTransOffset = 7;
 	
 	  ;% udp_conn_B.PacketInput1_o9
-	  section.data(9).logicalSrcIdx = 37;
+	  section.data(9).logicalSrcIdx = 44;
 	  section.data(9).dtTransOffset = 8;
 	
 	  ;% udp_conn_B.PacketInput1_o10
-	  section.data(10).logicalSrcIdx = 38;
+	  section.data(10).logicalSrcIdx = 45;
 	  section.data(10).dtTransOffset = 9;
 	
 	  ;% udp_conn_B.PacketInput1_o11
-	  section.data(11).logicalSrcIdx = 39;
+	  section.data(11).logicalSrcIdx = 46;
 	  section.data(11).dtTransOffset = 10;
 	
 	  ;% udp_conn_B.PacketInput1_o12
-	  section.data(12).logicalSrcIdx = 40;
+	  section.data(12).logicalSrcIdx = 47;
 	  section.data(12).dtTransOffset = 11;
 	
 	  ;% udp_conn_B.PacketInput1_o13
-	  section.data(13).logicalSrcIdx = 41;
+	  section.data(13).logicalSrcIdx = 48;
 	  section.data(13).dtTransOffset = 12;
 	
 	  ;% udp_conn_B.PacketInput1_o14
-	  section.data(14).logicalSrcIdx = 42;
+	  section.data(14).logicalSrcIdx = 49;
 	  section.data(14).dtTransOffset = 13;
 	
 	  ;% udp_conn_B.Compare
-	  section.data(15).logicalSrcIdx = 43;
+	  section.data(15).logicalSrcIdx = 50;
 	  section.data(15).dtTransOffset = 14;
 	
       nTotData = nTotData + section.nData;
@@ -831,19 +859,19 @@
       section.data(4)  = dumData; %prealloc
       
 	  ;% udp_conn_B.iAout
-	  section.data(1).logicalSrcIdx = 44;
+	  section.data(1).logicalSrcIdx = 51;
 	  section.data(1).dtTransOffset = 0;
 	
-	  ;% udp_conn_B.iAout_f
-	  section.data(2).logicalSrcIdx = 45;
+	  ;% udp_conn_B.iAout_c
+	  section.data(2).logicalSrcIdx = 52;
 	  section.data(2).dtTransOffset = 2;
 	
-	  ;% udp_conn_B.iAout_a
-	  section.data(3).logicalSrcIdx = 46;
+	  ;% udp_conn_B.iAout_f
+	  section.data(3).logicalSrcIdx = 53;
 	  section.data(3).dtTransOffset = 4;
 	
 	  ;% udp_conn_B.iAout_l
-	  section.data(4).logicalSrcIdx = 47;
+	  section.data(4).logicalSrcIdx = 54;
 	  section.data(4).dtTransOffset = 6;
 	
       nTotData = nTotData + section.nData;
@@ -891,8 +919,8 @@
     ;%
     ;% Auto data (udp_conn_DW)
     ;%
-      section.nData     = 8;
-      section.data(8)  = dumData; %prealloc
+      section.nData     = 10;
+      section.data(10)  = dumData; %prealloc
       
 	  ;% udp_conn_DW.last_mv_DSTATE
 	  section.data(1).logicalSrcIdx = 0;
@@ -914,36 +942,48 @@
 	  section.data(5).logicalSrcIdx = 4;
 	  section.data(5).dtTransOffset = 4;
 	
-	  ;% udp_conn_DW.last_x_PreviousInput_a
+	  ;% udp_conn_DW.Memory1_PreviousInput
 	  section.data(6).logicalSrcIdx = 5;
 	  section.data(6).dtTransOffset = 8;
 	
-	  ;% udp_conn_DW.last_x_PreviousInput_g
+	  ;% udp_conn_DW.last_x_PreviousInput_a
 	  section.data(7).logicalSrcIdx = 6;
-	  section.data(7).dtTransOffset = 12;
+	  section.data(7).dtTransOffset = 9;
+	
+	  ;% udp_conn_DW.Memory1_PreviousInput_p
+	  section.data(8).logicalSrcIdx = 7;
+	  section.data(8).dtTransOffset = 13;
+	
+	  ;% udp_conn_DW.last_x_PreviousInput_g
+	  section.data(9).logicalSrcIdx = 8;
+	  section.data(9).dtTransOffset = 14;
 	
 	  ;% udp_conn_DW.last_x_PreviousInput_b
-	  section.data(8).logicalSrcIdx = 7;
-	  section.data(8).dtTransOffset = 16;
+	  section.data(10).logicalSrcIdx = 9;
+	  section.data(10).dtTransOffset = 18;
 	
       nTotData = nTotData + section.nData;
       dworkMap.sections(1) = section;
       clear section
       
-      section.nData     = 3;
-      section.data(3)  = dumData; %prealloc
+      section.nData     = 4;
+      section.data(4)  = dumData; %prealloc
       
 	  ;% udp_conn_DW.PacketInput1_PWORK
-	  section.data(1).logicalSrcIdx = 8;
+	  section.data(1).logicalSrcIdx = 10;
 	  section.data(1).dtTransOffset = 0;
 	
 	  ;% udp_conn_DW.Scope_PWORK.LoggedData
-	  section.data(2).logicalSrcIdx = 9;
+	  section.data(2).logicalSrcIdx = 11;
 	  section.data(2).dtTransOffset = 1;
 	
 	  ;% udp_conn_DW.Scope1_PWORK.LoggedData
-	  section.data(3).logicalSrcIdx = 10;
+	  section.data(3).logicalSrcIdx = 12;
 	  section.data(3).dtTransOffset = 4;
+	
+	  ;% udp_conn_DW.Scope2_PWORK.LoggedData
+	  section.data(4).logicalSrcIdx = 13;
+	  section.data(4).dtTransOffset = 6;
 	
       nTotData = nTotData + section.nData;
       dworkMap.sections(2) = section;
@@ -953,19 +993,19 @@
       section.data(4)  = dumData; %prealloc
       
 	  ;% udp_conn_DW.Memory_PreviousInput
-	  section.data(1).logicalSrcIdx = 11;
+	  section.data(1).logicalSrcIdx = 14;
 	  section.data(1).dtTransOffset = 0;
 	
 	  ;% udp_conn_DW.Memory_PreviousInput_o
-	  section.data(2).logicalSrcIdx = 12;
+	  section.data(2).logicalSrcIdx = 15;
 	  section.data(2).dtTransOffset = 2;
 	
 	  ;% udp_conn_DW.Memory_PreviousInput_g
-	  section.data(3).logicalSrcIdx = 13;
+	  section.data(3).logicalSrcIdx = 16;
 	  section.data(3).dtTransOffset = 4;
 	
 	  ;% udp_conn_DW.Memory_PreviousInput_p
-	  section.data(4).logicalSrcIdx = 14;
+	  section.data(4).logicalSrcIdx = 17;
 	  section.data(4).dtTransOffset = 6;
 	
       nTotData = nTotData + section.nData;
@@ -998,8 +1038,8 @@
   ;%
 
 
-  targMap.checksum0 = 152260148;
-  targMap.checksum1 = 856364839;
-  targMap.checksum2 = 48648007;
-  targMap.checksum3 = 953207832;
+  targMap.checksum0 = 3588728435;
+  targMap.checksum1 = 3027314288;
+  targMap.checksum2 = 2060851960;
+  targMap.checksum3 = 2634263730;
 
