@@ -7,9 +7,9 @@
  *
  * Code generation for model "udp_conn".
  *
- * Model version              : 1.155
+ * Model version              : 1.192
  * Simulink Coder version : 9.0 (R2018b) 24-May-2018
- * C source code generated on : Tue Dec  4 19:15:46 2018
+ * C source code generated on : Fri Dec  7 00:04:49 2018
  *
  * Target selection: sldrt.tlc
  * Note: GRT includes extra infrastructure and instrumentation for prototyping
@@ -58,40 +58,48 @@ static const char_T * rtDataTypeNames[] = {
 
 /* data type transitions for block I/O structure */
 static DataTypeTransition rtBTransitions[] = {
-  { (char_T *)(&udp_conn_B.Constant), 0, 0, 9 },
+  { (char_T *)(&udp_conn_B.Gain1), 0, 0, 34 },
 
   { (char_T *)(&udp_conn_B.PacketInput1_o15), 6, 0, 1 },
 
   { (char_T *)(&udp_conn_B.Sum2), 5, 0, 4 },
 
-  { (char_T *)(&udp_conn_B.PacketInput1_o1), 3, 0, 15 }
+  { (char_T *)(&udp_conn_B.PacketInput1_o1), 3, 0, 15 },
+
+  { (char_T *)(&udp_conn_B.iAout[0]), 8, 0, 2 }
   ,
 
-  { (char_T *)(&udp_conn_DW.PacketInput1_PWORK), 11, 0, 6 }
+  { (char_T *)(&udp_conn_DW.last_mv_DSTATE), 0, 0, 5 },
+
+  { (char_T *)(&udp_conn_DW.PacketInput1_PWORK), 11, 0, 6 },
+
+  { (char_T *)(&udp_conn_DW.Memory_PreviousInput[0]), 8, 0, 2 }
 };
 
 /* data type transition table for block I/O structure */
 static DataTypeTransitionTable rtBTransTable = {
-  5U,
+  8U,
   rtBTransitions
 };
 
 /* data type transitions for Parameters structure */
 static DataTypeTransition rtPTransitions[] = {
-  { (char_T *)(&udp_conn_P.PacketOutput_InitialValue), 0, 0, 5 },
+  { (char_T *)(&udp_conn_P.PacketInput1_MaxMissedTicks), 0, 0, 2 },
 
-  { (char_T *)(&udp_conn_P.PacketInput1_PacketID), 6, 0, 2 },
+  { (char_T *)(&udp_conn_P.PacketInput1_PacketID), 6, 0, 1 },
 
   { (char_T *)(&udp_conn_P.CompareToConstant_const), 3, 0, 2 },
 
-  { (char_T *)(&udp_conn_P.Constant_Value), 0, 0, 4 },
+  { (char_T *)(&udp_conn_P.Gain1_Gain), 0, 0, 34 },
+
+  { (char_T *)(&udp_conn_P.Memory_InitialCondition[0]), 8, 0, 2 },
 
   { (char_T *)(&udp_conn_P.Gain2_Gain), 3, 0, 4 }
 };
 
 /* data type transition table for Parameters structure */
 static DataTypeTransitionTable rtPTransTable = {
-  5U,
+  6U,
   rtPTransitions
 };
 
