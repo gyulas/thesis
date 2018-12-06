@@ -4,16 +4,17 @@ if ~mpcchecktoolboxinstalled('simulink')
 end
 
 
-p = 15;                         % prediction horizon
+% p_50 = 15;                         % prediction horizon
+p = 100;                         % prediction horizon
 m = 1;                          % control horizon
 
-Ts=1800;
-Tstop=3600*24*10*10;            % 100 day
+Ts=30;
+Tstop=3600*2;            % 100 day
 time = double(0:Ts:(Tstop+p*Ts))';    % time vector - túlnyúlik a stop idõn a pediction horizont-nyival
 tortresz=rem(time,3600*24);     % half a day
 
 
-r = ones(size(time))*273+18;
+ref = ones(size(time))*273+18;
 v = ones(size(time))*273;    % measured disturbance signal
 
 for i=1:size(time)
@@ -23,9 +24,12 @@ for i=1:size(time)
     
 end
 
+
+
 % Define the reference signal in structure
-ref.time = time;
-ref.signals.values = r;
+refA=timeseries();
+refA.time = time;
+refA.signals.values = ref;
 % Define the measured disturbance
 md.time = time;
 md.signals.values = v;

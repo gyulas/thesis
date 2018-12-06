@@ -1,5 +1,6 @@
 \chapter*{Kivonat}
 
+%szabályozástechnika, hőszabályozás, modell prediktív szabályozás, hőátadás, épületgépészet, intelligens épület, szimuláció, 
 A szakdolgozatban fűtési rendszerek modell-prediktív szabályzásának lehetőségeit vizsgálom Matlab Simulinkben.
 Végighaladok az MPC tervezés lépésein, a tervezést és a validálást is szimulált szakaszmodellen végzem. A szakaszmodellt egy helyiség és annak fűtési rendszere alkotja, a fűtés hője a helyiségből külső homlokzaton távozik a környezet felé. Az állandósult állapotban szükséges fűtési teljesítményt képlettel számítom, ebből kapható a beavatkozó jel egy adott teljesítményigényhez. A hőkapacitásokat és hőátadási, hővezetési tényezőket Simscape modell tartalmazza%(\ref{table_heater_parameters}. és \ref{table_house_parameters}. táblázat)
 , meghatározva a szakasz dinamikáját. Megvizsgálom az MPC predikciós horizontjának, költségfüggvényének illetve mintavételi idejének hatását a zárt szabályzási kör viselkedésére. 
@@ -12,6 +13,7 @@ A tervezési lépéseket ezután valós, fizikai modellen is elvégzem, így lá
 
 \chapter*{Abstract}
 
+%control theory, Model Predictive Control (MPC), Building Automation, building control, heat transfer, simulations, intelligent building, 
 In my Bachelor's Thesis I inspect the possibilities of MPC control design and validation in Matlab Simulink. I am going step-by-step through the MPC design procedure with simulated plant model. The plant model consists of a room and its heating system with proportional valves to control the water mass flow, thus providing heat for the room. Losses at the facade was taken int consideration (outer walls and window), I assume no heat loss to the neighboring rooms.
 
 The steady-state heat input for the room model is calculated by formula and then fed to a Simscape thermal network. This network gives the transient response of the room by simulating the charging of the heat capacities, such as air and the mass of the building / room itself. %TODO fajhő
