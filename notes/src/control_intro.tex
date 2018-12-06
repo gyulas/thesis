@@ -264,7 +264,7 @@ A mintavételi időt megnöveltem. A ház identifikációját és az MPC tervez�
 \subsubsection{Módosítások az MPC-ben}
 
 A súlyozást módosítva adhatunk költséget a beavatkozásnak, csökkentve így pl. annak a frekvenciáját. Ez a referenciakövetést rontja, de esetünkben nem cél a tized \si{\celsius}-os pontosság, hanem az energiamegtakarítás.
-Pontosan fel kellene ezért írni a forintosított költségét a beavatkozásnak, és ezt minimalizálni\footnote{\textit{Model predictive control of radiant slab systems with evaporative cooling sources}, Fang is szelepet használt, de nem értem az ottani optimalizációs algoritmust.}
+Pontosan fel kellene ezért írni a forintosított költségét a beavatkozásnak, és ezt minimalizálni\footnote{\textit{Feng \cite{FENG2015199}} is szelepet használt, de az ott felírt költségfüggvényt nem pontosan értem.}
 
 Egyensúlyt kell találni a referenciakövetés és a beavatkozás között. Külön érdekesség, hogy ha nem távfűtést használunk, akkor a kis beavatkozásnak is nagy költsége van. Erre a súlyozásnál egy LUTot lehetne használni. Btw. a hőszivattyúk kis terhelésen is nagy hatásfokkal működnek. Online weight tune elképzelhető, pl. a beavatkozó jeltől függően.
 
@@ -274,15 +274,14 @@ Az MPC diszkrét idejű szabályzó. Lépésszámokban gondolkodik. Alapvetése,
 
 A szabályzó a predikciós horizonton belül minden lehetséges beavatkozójel-sorozatra kiszámolja annak (várható, modell szerinti) költségét. Azt a beavatkozójel-sorozatot választja, ami a legkisebb költséggel jár. Eztán a szabályzási horizontnak megfelelő számú beavatkozást végez, nem adja ki a teljes sorozatot. (Azaz pred.hor>control hor.)
 
-A legbutább szabályzó control és prediction horizonja is 1. Azaz egy lépéssel lát előre és a legkedvezőbb esethez (J költség minimális) tartozó beavatkozó jelet végrehajtja\footnote{Ezt formalizálni kellene egyenletben is.}. $J=w_u u + w_e e$, ahol a hibát a szabályzóban lévő szakaszmodell alapján számítjuk. %(Gyakorlatilag egy állapotvisszacsatolás?)
+A legbutább szabályzó control és prediction horizonja is 1. Azaz egy lépéssel lát előre és a legkedvezőbb esethez (J költség minimális) tartozó beavatkozó jelet végrehajtja\footnote{Ezt formalizálni kellene egyenletben is.}. $J=w_u u + w_e e$, ahol a hibát a szabályzóban lévő szakaszmodell alapján számítjuk. \textit{Agachi \cite{romanMPC_Agachi}} szerint:%(Gyakorlatilag egy állapotvisszacsatolás?)
 
 \begin{equation} \label{eq_mpc_cost}
 J = \sum_{i}^{N} \left(w_u \Delta u^2 + w_e (r_i-y_i)^2  \right)
 \end{equation}
 
-a 10.1002@9783527609475.ch2-ből. (itt még csak $r_i=r$ állandó referenciajellel tudtam csinálni. )
-
-ahol N a predikciós horizont, $w_u$ a beavatkozó jel változásának súlya, $w_e$ a hibajel súlya
+%(itt még csak $r_i=r$ állandó referenciajellel tudtam csinálni. )
+ahol N a predikciós horizont, $w_u$ a beavatkozó jel változásának súlya, $w_e$ a hibajel súlya. A referenciajel jövőbeli változásait figyelembe lehet venni a predikciós horizonton belül\footnote{A jövőbeli változásokat ismerhetjük, ha van egy referenciajelünk, vagy lehet becslés rá egy időjárás-előrejelzés.\\Bővebben az elméletről: https://www.mathworks.com/help/mpc/ug/signal-previewing.html,\\illetve a felhasznált Simulink blokkok: https://www.mathworks.com/help/mpc/examples/improving-control-performance-with-look-ahead-previewing.html}.
 
 A költségfüggvényben a hibajelhez és beavatkozó jelekhez, ill. azok változásaihoz különböző súlyok tartozhatnak.
 Nagyobb súlyok nagyobb költséget eredményeznek, így a szabályzó a nagyobb költségű beavatkozójel-sorozatot kisebb valószínűséggel választja.

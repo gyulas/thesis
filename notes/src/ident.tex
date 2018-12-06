@@ -5,49 +5,53 @@ A szabályzó tervezésénél használt szakaszmodell a Simulinkben megvalósít
 
 \input{src/tikz/ident_layout}
 
-A Simulinkben vizsgálójeleket használok: a több bemenetű, egy kimenetű rendszert egyszerre csak egy bemenetén gerjesztem. A tömegáramot szabályzó szelepek nyitott és csukott állapot között folytonosan állíthatók, 0 és 1 közötti beavatkozó jellel. A külső hőmérsékletet a modell kelvinben kapja, kimenete a belső hőmérséklet. 
+A Simulinkben vizsgálójeleket használok: a több bemenetű, egy kimenetű rendszert egyszerre csak egy bemenetén gerjesztem. A tömegáramot szabályzó szelepek nyitott és csukott állapot között folytonosan állíthatók, 0 és 1 közötti beavatkozó jellel. A külső hőmérsékletet a modell kelvinben kapja, kimenete a belső hőmérséklet.
+
+A szelepekkel való beavatkozás hiányában a $T_i$ belső és $T_e$ külső hőmérséklet különbsége (a helyiség időállandójának megfelelően) kiegyenlítődik.
 
  %(\textit{\ref{fig:valve-step}. ábra}). 
 % a kimeneti változást létrehozó hatás egyértelműen beazonosítható kell hogy legyen.
 
 \section{A szakasz ugrásválasza}
 
-Lineáris hálózatoknál gyakori vizsgálójel az egységugrás, illetve az impulzusgerjesztés. Az identifikációhoz ugrásválaszt vizsgáltam, de mivel a rendszernek 3 bemenete 
+Lineáris hálózatoknál gyakori vizsgálójel az egységugrás, illetve az impulzusgerjesztés. Az identifikációhoz ugrásválaszt vizsgáltam, de mivel a rendszernek 3 bemenete van, ezekre nem egyszerre, hanem időben eltolva adtam ugrásgerjesztést, mindig megvárva, hogy az előző hatás tranziense lecsengjen.
 
 \begin{figure}[H]
 	\centering
 	% trim={<left> <lower> <right> <upper>}
-	\includegraphics[trim=0 0 0 0, clip,width=0.9\textwidth]{figures/valve-step}
-	\caption{Szimulációs eredmények a bemeneteket külön-külön gerjesztve}
+	\includegraphics[trim=0 0 0 0, clip,width=0.73\textwidth]{figures/valve-step}
+	\caption{Szimuláció a bemeneteket külön-külön gerjesztve}
 	\label{fig:valve-step}
 \end{figure}
-
-A módszer az, amit a több forrást tartalmazó hálózatok esetén is alkalmazunk: a válasz számításakor mindig egy forrás hatását vizsgáltuk,  hálózatnak egyszerre csak egy bemenetét gerjesztem. Lineáris hálózat vizsgálatakor a kimeneten a válasz szuperpozícióval adódik. 
-
+Lineáris hálózat esetén a kimeneten a válasz az ugrásgerjesztések szuperpozícióval adódik. A fenti ábrán látható, hogy a szelepek teljes kinyitásával kb. \SI{35}{\celsius}-kal emelkedett a belső hőmérséklet. Lineáris hálózat esetén feleakkora beavatkozó jellel \SI{17.5}{\celsius}-os hőmérséklet-emelkedésre számíthatnánk.
+%Ez azt jelentené, hogy ha egy szelepet kétszer jobban kinyitok, az kétszer jobban emeli meg a helyiség belső hőmérsékletét. Illetve ha a két szelepet egyszerre nyitom ki, akkor 
 \begin{figure}[H]
 	\centering
 	% trim={<left> <lower> <right> <upper>}
-	\includegraphics[trim=0 0 0 0, clip,width=0.9\textwidth]{figures/valve-stair}
-	\caption{Szimulációs eredmények a szelepeket lépcsős függvénnyel gerjesztve}
+	\includegraphics[trim=0 0 0 0, clip,width=0.73\textwidth]{figures/valve-stair}
+	\caption{Szimuláció a szelepeket lépcsős függvénnyel gerjesztve}
 	\label{fig:valve-stair}
 \end{figure}
 
-A fűtőtestekben a víz tömegáramát szelepekkel szabályozzuk. Az \textit{\ref{eq_holeadas4}. egyenlet} adja fűtőtestek által leadott hőmennyiséget, ám ez nem lineáris függvénye a tömegáramnak. A \textit{\ref{fig:valve-stair}. ábrán} látszik, hogy kétszer jobban kinyitott szeleppel $t_i$ belső hőmérséklet végértéke csak kicsivel lesz magasabb. Itt nem működik tehát a szuperpozíció elve, a bemenet a [0..1] tartományban sem lineáris\footnote{A szakasz másik nemlinearitása a szaturáció: a szelepet csak [0..1] tartományban lehet működtetni -- a szabályzótervezésnél ezt figyelembe fogom venni.}.
+A fűtőtestekben a víz tömegáramát szelepekkel szabályozzuk. Az \textit{\ref{eq_holeadas4}. egyenlet} adja fűtőtestek által leadott hőmennyiséget, ám ez nem lineáris függvénye a tömegáramnak. A \textit{\ref{fig:valve-stair}. ábrán} látszik, hogy kétszer jobban kinyitott szeleppel $t_i$ belső hőmérséklet végértéke csak kicsivel lesz magasabb. A szelepek tehát nemlineáris bemenetek, a szuperpozíció elve nem működik\footnote{A szakasz másik nemlinearitása a szaturáció: a szelepet csak [0..1] tartományban lehet működtetni -- a szabályzótervezésnél ezt figyelembe fogom venni.}.
 
 A $t_i$ belső hőmérséklet végértéke a tömegáramon kívül a $t_e$ külső hőmérséklettől is függ: ugyanakkora belső hőmérsékletet csak nagyobb tömegárammal, vagy nagyobb $t_w$ előremenő vízhőmérséklettel lehet tartani\footnote{Bár a vízhőmérsékletet nem szabályozom, egyes kazánok rendelkeznek külső hőmérővel, így a vízhőmérsékletet megemelve a hidegben a $t_i$ végértéke "automatikusan" azonos maradhat.}. 
 
 \begin{figure}[H]
 	\centering
 	% trim={<left> <lower> <right> <upper>}
-	\includegraphics[trim=0 0 0 0, clip,width=0.9\textwidth]{figures/valve-step-hot}
+	\includegraphics[trim=0 0 0 0, clip,width=0.72\textwidth]{figures/valve-step-hot}
 	\caption{Szimulációs eredmények a bemeneteket külön-külön gerjesztve}
 	\label{fig:valve-step-hot}
 \end{figure}
 
-Látható, hogy a különböző bemenetekre adott gerjesztések hatása a kimeneten nem számítható szuperpozícióval: \SI{20}{\celsius}-kal megemelt $t_e$ külső hőmérséklet esetén a fűtőtestek nem fognak \SI{20}{\celsius}-kal magasabb belső hőmérsékletre fűteni.
+Látható, hogy a különböző bemenetekre adott gerjesztések hatása a kimeneten sem számítható szuperpozícióval: \SI{20}{\celsius}-kal megemelt $t_e$ külső hőmérséklet esetén a fűtőtestek nem fognak \SI{20}{\celsius}-kal magasabb belső hőmérsékletre fűteni. Ez vonatkozik két szelep együttes kinyitására is: a hőmérséklet nem fog jelentősen megemelkedni.
+
+A fenti hatásokat nemlineáris modellekkel lehetne lekövetni, viszont az ezekkel kapcsolatos (hiányos) ismereteim miatt erre szabályzótervezéssel nem próbálkoztam. Viszont egy nemlineáris modellt tudtam identifikálni a mérési adatokra, ami a fenti problémák egy részét kiküszöbölte.
 
 %A Simulink modellt bemenetein gerjesztem (külső hőmérséklet \SI{40}{\celsius}, majd fűtés \SI{60}{\celsius} előremenő hőmérsékleten valve = 1 állásban.\footnote{A stratégia lehet $t_s$ előremenő hőmérséklet vagy $\xi \cdot \dot m$ tömegáram szabályzása $\alpha$ = [0..1] beavatkozójellel. })
 
+\section{Átviteli függvény illesztése az adatokra}
 
 Az identifikációhoz adatfile-t hozok létre, a Simulinkben IDDATA blokk a be- és kimenetek értékét mintavételi időnként rögzíti és a \textit{Base Workspace}-be (a közös változók közé) menti. Innen a \textit{System Identification} app-ba betölthetők az adatok. %A mintavételi idő először egy másodperc volt. %A Matlab Workspace-ben megjelenik egy iddata, ezt tudom az ident toolboxba importálni.
 Az adatsorra átviteli függvényeket illesztek: a pólusok, zérusok a száma a Simscape modell alapján meghatározható, RC-hálózatok analógiájával. Ekkor pl. a radiátorok felmelegedési idejét is leköveti a modell. A teljes helyiség időállandójához képest viszont pl. a radiátor felmelegedése elhanyagolható. Fél órás mintavételi idő esetén a fűtőtestek egytárolós taggal helyettesíthetők. 

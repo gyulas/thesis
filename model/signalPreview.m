@@ -14,7 +14,7 @@ time = double(0:Ts:(Tstop+p*Ts))';    % time vector - túlnyúlik a stop idõn a pe
 tortresz=rem(time,3600*24);     % half a day
 
 
-ref = ones(size(time))*273+18;
+ref = ones(size(time))*273+20;
 v = ones(size(time))*273;    % measured disturbance signal
 
 for i=1:size(time)
@@ -27,7 +27,7 @@ end
 
 
 % Define the reference signal in structure
-refA=timeseries();
+%refA=timeseries();
 refA.time = time;
 refA.signals.values = ref;
 % Define the measured disturbance

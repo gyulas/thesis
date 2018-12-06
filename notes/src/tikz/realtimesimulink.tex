@@ -5,20 +5,25 @@
 		%outer/.style={draw=gray,dashed,fill=green!1,thick,inner sep=5pt}
 		outer/.style={draw=gray,dashed,thick,inner sep=5pt}
 		]
-	\node[rectangle, minimum height=0.8cm,minimum width=2cm] (ghostDist) at (0,-2) {Zavarás};
 	
 	% Szabályzási kör elemei
 	% ----------------------
 	
 		% Szabályzó
-		\node[draw,rectangle, minimum height=2cm,minimum width=6cm] (MPC) at (2.3,3.5) {\parbox{2cm}{\centering MPC szabályzás}};		
+		\node[draw,rectangle, minimum height=2cm,minimum width=6cm] (MPC) at (3.2,3.5) {\parbox{2cm}{\centering MPC szabályzás}};		
 
 		% Fűtési rendszer
-		\node[draw,rectangle, minimum height=1.5cm,minimum width=5cm] (Heat) at (5,0) {\parbox{2cm}{\centering iContrALL~~~~ \\ vezérlő~~~~}};
+		\node[draw,rectangle, minimum height=1.6cm,minimum width=5cm] (Heat) at (7,0) {\parbox{2cm}{\centering iContrALL~~~~ \\ dimmer~~}};
 	
 		% Ház
-		\node[draw,rectangle, minimum height=1.5cm,minimum width=3cm] (House) at (0,0) {ház modell};
-		\draw[->] (ghostDist.90) --  (House.270) node[above]{$T_e$}; 
+		\node[draw,rectangle, minimum height=1.6cm,minimum width=3.2cm] (House) at (2,0) {ház modell};
+		
+		% Hőmérő
+		\node[draw,rectangle, minimum height=1.6cm,minimum width=3.2cm] (Measure) at (-2,0) {\parbox{2cm}{\centering hőmérséklet\\mérés}};
+		
+		%Zavarás
+		\node[rectangle, minimum height=0.8cm,minimum width=2cm,below=of House, node distance=1cm] (ghostDist)  {Zavarás};
+
 		
 	
 	% Kiegészítő cuccok
@@ -26,18 +31,22 @@
 	
 	% Keret - Matlab
 	\node[draw,outer,rectangle, minimum height=4cm,minimum width=8cm,
-	label={[label distance=-0.1cm, anchor=north]100:Matlab Simulink, számítógépen real-time fut}] (keret) at (2.3,3.5) {};
+	label={[label distance=-0.1cm, anchor=north]100:Simulink, számítógépen real-time fut}] (keret) at (3.2,3.5) {};
 	
 	% Zavarás a modellbemenetre
-	\draw[->] (ghostDist.180) -| ++(-2.5,0)  |-  (MPC.168) node[right]{MD} ;
+	\draw[->] (ghostDist.90) --  (House.270) node[above]{$T_e$};
 	
 	%\draw[->] (ctr.191) node[right]{${u_{2}}$} -| ++(-1.7,1.3)|-  (Numeric.172) node[right]{$\alpha_{floor}$};  %node[above left]{$\alpha_{radiator}$}; 
 	
-	% mért változó
-	\draw[->] (House.180) node[right]{${T_{i}}$}-| ++(-1,0.8)  |-  (MPC.188) node[right]{MO} ;
+	% mért változók
+	\draw[->] (House.180) -- (Measure.0);
+	\draw[->] (Measure.195) node[right]{$T_e$} -| ++(-1.2,0)  |-  (MPC.168) node[right]{MD} ;
+	\draw[->] (Measure.165) node[right]{${T_{i}}$}-| ++(-0.5,0.8)  |-  (MPC.188) node[right]{MO} ;
+
 	
 	%\draw[->] (d.0) node[left]{heat [W]} ->  ++(3,0) ->  (house.180);
-	\draw [->] (MPC.0) node[left]{MV} -| ++(3,-2.5)  |- (Heat.0) node[left]{${PWM_{\%}}$}; %++(1.5cm,0) -- (2cm,0pt) -- (2.5cm,10pt);
+	% Beavatkozó jel
+	\draw [->] (MPC.0) node[left]{MV} -| ++(4,-2.5)  |- (Heat.0) node[left]{${u_1}$}; %++(1.5cm,0) -- (2cm,0pt) -- (2.5cm,10pt);
 	
 	\draw[->] (Heat.180)  node[right]{$Q_{ki}$} -- (House.0) ;
 	%\draw[->] (d.20) -| ++(1,-1) |- (y.350);
@@ -48,10 +57,10 @@
 	% Lehetséges label beállítások:
 		%label={[blue,yshift=0.3cm]above:Z}]
 	
-	\node[draw,outer,rectangle, minimum height=5.5cm,minimum width=13cm,
-	label={[label distance=-0.1cm, anchor=north]270:3 bemenetű, 1 kimenetű szakaszmodell}] (keret) at (0,15) {};
-	
-	
+%	\node[draw,outer,rectangle, minimum height=5.5cm,minimum width=13cm,
+%	label={[label distance=-0.1cm, anchor=north]270:3 bemenetű, 1 kimenetű szakaszmodell}] (keret) at (0,15) {};
+%	
+%	
 	\end{tikzpicture}
 
 	\caption{A szimulációban szereplő elemek kapcsolata}

@@ -1,13 +1,15 @@
 \chapter{Tesztek laborkörülmények között}
 
+\section{A kísérleti rendszer}
 Az elméleti eredmények validálásához elkészítettük egy szoba kicsinyített modelljét. Ez egy kartondobozban kapott helyet. A doboz hőtároló képessége elég csekély, ezért extra hőtároló tömegeket helyeztünk a 
-A fűtési teljesítményt halogén izzókkal juttattuk a rendszerbe. Ezek fényárama szabályozható, a 
-A szimulációt és a fizikai modellt
+A fűtési teljesítményt halogén izzókkal juttattuk a rendszerbe. Ezek teljesítménye szabályozható, így ez a bemenet lineáris a szelepekkel ellentétben, azaz kétszer nagyobb beavatkozójelre kétszer nagyobb teljesítmény kerül a rendszerbe.
+A hőmérsékletet mérjük a dobozban és azon kívül is. Zavarásként a mérőszoba ablakát kinyitjuk, így a doboz környezeti hőmérséklete lecsökken.
 
 \section{A Simulink konfigurálása}
-A real time futáshoz Simulink  Real-time szükséges. A real-time itt nem jelent szigorú megkötéseket, csupán azt jelenti, hogy a szimulációt a Simulink nem a lehető leggyorsabban futtatja le az elérhető számítási teljesítményt kihasználva, hanem csak bizonyos mintavételi időnként. 
-%A Real-time UDP-t használom. %https://uk.mathworks.com/help/xpc/io_ref/udp-transport-protocol.html
+A real time futáshoz Simulink  Real-time szükséges. A real-time működés itt azt jelenti, hogy a szabályzót a Simulink mintavételi időnként futtatja le. Azaz ha a kísérleti rendszerre \SI{30}{\second}-es mintavételi idejű szabályzót tervezek, akkor az MPC félpercenként mintát fog venni a hőmérsékletekből és ki fog adni egy beavatkozójelet. Így a real-time ez esetben nem jelent például szigorú korlátokat a futásidőre.
 
+
+%A Real-time UDP-t használom. %https://uk.mathworks.com/help/xpc/io_ref/udp-transport-protocol.html
 %https://uk.mathworks.com/products/simulink-desktop-real-time.html
 
 A szabályzó a számítógépen fog futni, és mintavételi időnként a jelenlegi hőmérsékletet beolvassa, az MPC-t lefuttatja, a beavatkozó jeleket pedig elküldi a beágyazott számítógépnek.
@@ -15,7 +17,15 @@ A szabályzó a számítógépen fog futni, és mintavételi időnként a jelenl
 \input{src/tikz/realtimesimulink}
 
 
-3600001117-es ID-jű, Raspberry Pi, IP címe fixen 192.168.0.108, 54321-es port.
+% 3600001117-es ID-jű, Raspberry Pi, IP címe fixen 192.168.0.108, 54321-es port.
 
 A PI SPI-n küld a rádióadónak.
 Rádiókommunikáció egyirányú.
+
+\section{Mintavételi idő és predikciós horizont}
+
+Az MPC paraméterezésére \textit{Agachi \cite{romanMPC_Agachi}} könyvében találhatók ajánlások. A predikciós horizontot eszerint úgy kell megválasztani, hogy az a szakasz releváns dinamikáját lefedje. Mivel a felfutási ideje a kísérleti rendszernek kb. 1 óra, ezért ezt ekkorára választottam. A predikciós horizont ajánlott nagysága 10-20 mintavétel, a számítási igény csökkentése miatt. Ezért a mintavételi időt 300 másodpercnek (5 perc) vettem.
+
+A fentiek mellett viszont a szabályzó nem adott ki beavatkozójelet egészen egy predikciós horizontnyi ideig, azaz majdnem 1 órán keresztül\footnote{Ha 30 másodperces mintavételi időt használtam és 100 mintányi predikciós horizontot, ugyanez volt a helyzet. Ez idő alatt az MPC valószínűleg az állapotbecslőjét inicializálja.}. Az MPC képes a költségfüggvényben figyelembe venni a predikciós horizonton belül a referenciajel jövőbeli változásait (ez a \textit{Signal Previewing}), ezt kipróbáltam annak érdekében, hogy ezt a \say{holtidőt} csökkentsem, ám ellentétes hatást értem el.
+
+A Simulink blokk viszont támogatja az MPC-nek kezdeti érték megadását. A kezdeti érték nélküli MPC-t szimulációban futtattam, majd leolvastam annak belső állapotát.
