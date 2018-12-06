@@ -57,13 +57,13 @@ A fenti hatásokat nemlineáris modellekkel lehetne lekövetni, viszont az ezekk
 
 \section{Átviteli függvény illesztése az adatokra}
 
-Az identifikációhoz adatfile-t hozok létre, a Simulinkben IDDATA blokk a be- és kimenetek értékét mintavételi időnként rögzíti és a \textit{Base Workspace}-be (a közös változók közé) menti. Innen a \textit{System Identification} app-ba betölthetők az adatok. %A mintavételi idő először egy másodperc volt. %A Matlab Workspace-ben megjelenik egy iddata, ezt tudom az ident toolboxba importálni.
-Az adatsorra átviteli függvényeket illesztek: a pólusok, zérusok a száma a Simscape modell alapján meghatározható, RC-hálózatok analógiájával. Ekkor pl. a radiátorok felmelegedési idejét is leköveti a modell. A teljes helyiség időállandójához képest viszont pl. a radiátor felmelegedése elhanyagolható. Fél órás mintavételi idő esetén a fűtőtestek egytárolós taggal helyettesíthetők. 
+Az identifikációhoz adatfájlt hozok létre, a Simulinkben IDDATA blokk a be- és kimenetek értékét mintavételi időnként rögzíti és a \textit{Base Workspace}-be (a közös változók közé) menti. Innen a \textit{System Identification} alkalmazásba betölthetőek az adatok. %A mintavételi idő először egy másodperc volt. %A Matlab Workspace-ben megjelenik egy iddata, ezt tudom az ident toolboxba importálni.
+Az adatsorra átviteli függvényeket illesztek: a pólusok, zérusok a száma a Simscape modell alapján meghatározható, RC-hálózatok analógiájával. Ekkor például a radiátorok felmelegedési idejét is leköveti a modell. A teljes helyiség időállandójához képest viszont például a radiátor felmelegedése elhanyagolható. Fél órás mintavételi idő esetén a fűtőtestek egytárolós taggal helyettesíthetők. 
 
 
 
 
-Célszerű az identifikációnál minél nagyobb változásokat mérni - így a rendszer teljes dinamikáját, hőtároló képességét mértem. A beállási idők kb. 30 naposak voltak és több periódusnyi mérésre volt szükség. 
+Célszerű az identifikációnál minél nagyobb változásokat mérni - így a rendszer teljes dinamikáját, hőtároló képességét mértem. A beállási idők körülbelül 30 naposak voltak és több periódusnyi mérésre volt szükség. 
 
 
 %Nem tartottam "értelmét" 1\si{\celsius}-os step jelre identifikálni. Így beállítottam nulla kezdeti értéket a ház összes paraméterére. (Falak, fűtési rendszer, stb. Nyilvánvaló, hogy ilyenkor nem a realizmus a cél, hiszen a nagy változásokra jön elő a rendszer dinamikája.) Nulla kezdeti értékből a környezeti hőmérsékletet 0-ról 40\si{\celsius}-ra emeltem, ennek a beállási ideje több nap volt, majd visszaállítva 0\si{\celsius}-ra megvártam a lecsengést, ezután pedig a beavatkozó szelepeket teljesen kinyitottam. 
@@ -83,7 +83,7 @@ Célszerű az identifikációnál minél nagyobb változásokat mérni - így a 
 	\label{fig:ident}
 \end{figure}
 
-Az identifikáció pontosságának javításához mindhárom bemeneti változó hatását több periódusra rögzítettem, 750 napnyi szimulációval. Ez fél órás mintavételi idő mellett szimulációban kevesebb, mint 1 perc alatt futott le\footnote{7. generációs i5 processzor, 8GB RAM, SSD használatával}. Az identifikációhoz a hőmérsékletet kelvinben rögzítem, mivel \si{\celsius} használata esetén az összefüggések nem lineárisak. (A kelvinben mért hőmérsékletet nevezik termodinamikai hőmérsékletnek.) A fenti esetben a beállási idők kb. 30 naposak az egész rendszert tekintve, ami kb. 10 napos időállandót jelent. Szakirodalom szerint a falszerkezetek időállandója kb. 5 nap, a helyiségre így reálisnak tűnik a közelítés.
+Az identifikáció pontosságának javításához mindhárom bemeneti változó hatását több periódusra rögzítettem, 750 napnyi szimulációval. Ez fél órás mintavételi idő mellett szimulációban kevesebb, mint 1 perc alatt futott le\footnote{7. generációs i5 processzor, 8GB RAM, SSD használatával}. Az identifikációhoz a hőmérsékletet kelvinben rögzítem, mivel \si{\celsius} használata esetén az összefüggések nem lineárisak. (A kelvinben mért hőmérsékletet nevezik termodinamikai hőmérsékletnek.) A fenti esetben a beállási idők nagyjából 30 naposak az egész rendszert tekintve, ami 10 nap körüli időállandót jelent. Szakirodalom szerint a falszerkezetek időállandója megközelítőleg 5 nap, a helyiségre így reálisnak tűnik a közelítés.
 
 Átviteli függvény identifikációjához a fenti nemlinearitásokat okozó gerjesztéseket nem vettem figyelembe. Így az átviteli függvény a rendszer jellegét követte, és a \textit{\ref{fig:valve-step-hot}. ábrán} látható külső hőmérsékletre és teljesen kinyitott szelepekre a végértékek pontosan illeszkednek.
 

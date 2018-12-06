@@ -1,12 +1,12 @@
-function plotMPCWeight(mpcWeight)
+function plotMPCWeight(mpcWeight,ylim)
 
 hTemp=subplot(2,1,1);
 % set(hTemp, 'OuterPosition', [0,0.60, 1, .34]);
 time=mpcWeight(:,1);
 
 plot(...%time, mpcWeight(:,2)-273, 'b', ...
-     time, mpcWeight(:,3)-273, 'k', ...
-     time, mpcWeight(:,4)-273, 'r')%'LineWidth',1)
+     time, mpcWeight(:,3)-273, 'black--', ...
+     time, mpcWeight(:,4)-273, 'black')%'LineWidth',1)
     %cpy.time,cpy.signals(2).values(:,1),'--',...
     %cpy.time,cpy.signals(2).values(:,2),'--',...
  
@@ -14,8 +14,8 @@ plot(...%time, mpcWeight(:,2)-273, 'b', ...
     
 % set limit
 lim=get(gca,'YLim');
-lim(1)=15;
-lim(2)=20;
+lim(1)=ylim(1);
+lim(2)=ylim(2);
 set(gca,'YLim',lim);
 
 ylab=get(gca,'YLabel');

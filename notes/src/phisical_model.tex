@@ -1,12 +1,12 @@
 \chapter{Tesztek laborkörülmények között}
 
 \section{A kísérleti rendszer}
-Az elméleti eredmények validálásához elkészítettük egy szoba kicsinyített modelljét. Ez egy kartondobozban kapott helyet. A doboz hőtároló képessége elég csekély, ezért extra hőtároló tömegeket helyeztünk a 
+Az elméleti eredmények validálásához elkészítettem egy szoba kicsinyített modelljét. Ez egy kartondobozban kapott helyet. A doboz hőtároló képessége elég csekély, ezért extra hőtároló tömegeket helyeztem bele, OSB falapot és egy elektromos kályhából vett samott téglát.
 A fűtési teljesítményt halogén izzókkal juttattuk a rendszerbe. Ezek teljesítménye szabályozható, így ez a bemenet lineáris a szelepekkel ellentétben, azaz kétszer nagyobb beavatkozójelre kétszer nagyobb teljesítmény kerül a rendszerbe.
 A hőmérsékletet mérjük a dobozban és azon kívül is. Zavarásként a mérőszoba ablakát kinyitjuk, így a doboz környezeti hőmérséklete lecsökken.
 
 \section{A Simulink konfigurálása}
-A real time futáshoz Simulink  Real-time szükséges. A real-time működés itt azt jelenti, hogy a szabályzót a Simulink mintavételi időnként futtatja le. Azaz ha a kísérleti rendszerre \SI{30}{\second}-es mintavételi idejű szabályzót tervezek, akkor az MPC félpercenként mintát fog venni a hőmérsékletekből és ki fog adni egy beavatkozójelet. Így a real-time ez esetben nem jelent például szigorú korlátokat a futásidőre.
+A valós idejű futáshoz Simulink  Real-time szükséges. A real-time működés itt azt jelenti, hogy a szabályzót a Simulink mintavételi időnként futtatja le. Azaz ha a kísérleti rendszerre \SI{30}{\second}-es mintavételi idejű szabályzót tervezek, akkor az MPC félpercenként mintát fog venni a hőmérsékletekből és ki fog adni egy beavatkozójelet. Így a real-time ez esetben nem jelent például szigorú korlátokat a futásidőre.
 
 
 %A Real-time UDP-t használom. %https://uk.mathworks.com/help/xpc/io_ref/udp-transport-protocol.html
@@ -39,21 +39,76 @@ A Simulink blokk viszont támogatja az MPC-nek kezdeti érték megadását. A ke
 	\begin{subfigure}[t]{0.32\textwidth}
 		\centering
 		\includegraphics[width=\textwidth]{figures/realsys/mpc-wy-1}
-		\caption{$y=1$ súly}
+		\caption{$w_y=1$}
 		\label{fig:mpc-wy-1}
 	\end{subfigure}
 	~
 	\begin{subfigure}[t]{0.32\textwidth}
 		\centering
 		\includegraphics[width=\textwidth]{figures/realsys/mpc-wy-2}
-		\caption{$y=2$ súly}
+		\caption{$w_y=2$}
 		\label{fig:mpc-wy-2}
 	\end{subfigure}
 	~
 	\begin{subfigure}[t]{0.32\textwidth}
 		\centering
 		\includegraphics[width=\textwidth]{figures/realsys/mpc-wy-5}
-		\caption{$y=5$ súly}
+		\caption{$w_y=5$}
 		\label{fig:mpc-wy-5}
-	\end{subfigure}	
+	\end{subfigure}
+	\caption{MPC viselkedése különböző $w_y$ értékekre}
+	\label{fig:mpc-wy}
+\end{figure}
+
+
+
+\begin{figure}[H]
+\begin{subfigure}[t]{0.32\textwidth}
+	\centering
+	\includegraphics[width=\textwidth]{figures/realsys/mpc-wu-20}
+	\caption{$w_u=20$}
+	\label{fig:mpc-wu-20}
+\end{subfigure}
+~
+\begin{subfigure}[t]{0.32\textwidth}
+	\centering
+	\includegraphics[width=\textwidth]{figures/realsys/mpc-wu-05}
+	\caption{$w_u=5$}
+	\label{fig:mpc-wu-05}
+\end{subfigure}
+~
+\begin{subfigure}[t]{0.32\textwidth}
+	\centering
+	\includegraphics[width=\textwidth]{figures/realsys/mpc-wu-005}
+	\caption{$w_u=0.05$}
+	\label{fig:mpc-wu-005}
+\end{subfigure}
+\caption{MPC viselkedése különböző $w_u$ értékekre, $w_y=5$ mellett}
+\label{fig:mpc-wu}
+\end{figure}
+\pagebreak
+
+\begin{figure}[H]
+\begin{subfigure}[t]{0.32\textwidth}
+	\centering
+	\includegraphics[width=\textwidth]{figures/realsys/mpc-wdu-100}
+	\caption{$w_{\Delta u}=100$}
+	\label{fig:mpc-wdu-100}
+\end{subfigure}
+~
+\begin{subfigure}[t]{0.32\textwidth}
+	\centering
+	\includegraphics[width=\textwidth]{figures/realsys/mpc-wdu-50}
+	\caption{$w_{\Delta u}=50$}
+	\label{fig:mpc-wdu-50}
+\end{subfigure}
+~
+\begin{subfigure}[t]{0.32\textwidth}
+	\centering
+	\includegraphics[width=\textwidth]{figures/realsys/mpc-wdu-10}
+	\caption{$w_{\Delta u}=10$}
+	\label{fig:mpc-wdu-10}
+\end{subfigure}
+\caption{MPC viselkedése  $w_{\Delta u}$ értékekre, $w_y=5$, $w_u=0.05$ mellett}
+\label{fig:mpc-wdu}
 \end{figure}

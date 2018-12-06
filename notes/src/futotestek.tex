@@ -24,7 +24,7 @@ A modell által számolt teljesítményt egy Simscape-ben megvalósított termik
 \section{Állandósult állapotbeli hőleadás numerikus modellje}\label{section:allandosult}
 
 Mivel a vizsgált fűtési rendszerek hője melegvízből származik, a fűtővíz %kazán (hőszivattyú, stb.) által előállított melegvíz
-hőmérséklete, illetve a keringető szivattyú tömegárama lehet a hőleadást befolyásoló paraméter\footnote{A kazánok a víz hőmérsékletét képesek változtatni időjárás függvényében, így az egy külön rendszer része lehet. Nem célom kazánvezérlést írni, az egyszerűség kedvéért feltételezem, hogy a melegvíz például távhő formában rendelkezésre áll.}. Az elképzelésemmel jobban összhangban áll az utóbbi választása, hiszen szelepekkel elosztottan, szobánként is szabályozható az egyes fűtőtestekbe táplált hőmennyiség: a víz tömegáramát folytonosan tudom szabályozni egy szelep segítségével\footnote{A \textit{\ref{chap:feasibility-tech}. részben} mutatom be a megvalósíthatóság technikai feltételeit, például azt, hogy milyen szelep használatos erre a feladatra.}, a fűtőtestekbe betáplált víz hőmérséklete (úgynevezett előremenő hőmérséklet) állandó.
+hőmérséklete, illetve a keringető szivattyú tömegárama lehet a hőleadást befolyásoló paraméter\footnote{A kazánok a víz hőmérsékletét képesek változtatni időjárás függvényében, így az egy külön rendszer része lehet. Nem célom kazánvezérlést írni, az egyszerűség kedvéért feltételezem, hogy a melegvíz például távhő formában rendelkezésre áll.}. Az elképzelésemmel jobban összhangban áll az utóbbi választása, hiszen szelepekkel elosztottan, szobánként is szabályozható az egyes fűtőtestekbe táplált hőmennyiség: a víz tömegáramát folytonosan tudom szabályozni egy szelep segítségével\footnote{A \textit{\ref{chap:feasibility-tech}. fejezetben} mutatom be a megvalósíthatóság technikai feltételeit, például azt, hogy milyen szelep használatos erre a feladatra.}. A fűtőtestekbe betáplált víz hőmérséklete (úgynevezett előremenő hőmérséklet) állandó.
 
 %\vspace{6pt}
 
@@ -172,27 +172,19 @@ Mivel a hőleadást, hőtárolást Simscape-ben valósítottam meg, a radiátorb
 
 \section{Hőátadás tranziensének modellje}\label{section:dinamikus}
 
-
-
-
-
-
-
 % \subsubsection*{Nomenklatúra}
 
-A különböző hőtároló elemek feltöltődése szimulálva adja a dinamikus viselkedést.
-
-%A modell kimenetén külön szerepelhet a sugárzás és a konvekció.
+A különböző hőtároló elemek feltöltődése szimulálva adja a dinamikus viselkedést. A Simscape hálózatok és azok paraméterei az egyes fűtőtesteknél találhatók.
 
 \subsection{Hőkapacitás}
 
-Katalógusból radiátorok tömege és a bennük lévő víz térfogata leolvasható. A hőkapac számítása:
+Katalógusból radiátorok tömege és a bennük lévő víz térfogata leolvasható. A hőkapacitás számítása:
 
 \begin{equation} \label{eq_hotartalom}
 Q = c_{m} ~ m_m ~ \Delta t_k + c_{w} ~ m_w ~ \Delta t_k
 \end{equation}
 
-Ahol m a material, azaz a fűtőtest anyagára utal, w pedig a víz mennyiségére. A hőmennyiség joule-ban adott.
+Ahol m a material, azaz a fűtőtest anyagára utal, $m_w$ pedig a víz mennyiségére. A hőmennyiség joule-ban adott.
 
 
 %\subsection{Hőleadás hőmérsékletfüggése}
@@ -202,7 +194,7 @@ Ahol m a material, azaz a fűtőtest anyagára utal, w pedig a víz mennyiségé
 
 A \textit{REHVA Guidebook} \cite{RehvaGuidebookNo7} címében is szerepel az \textit{alacsony hőmérsékletű fűtés} fogalma. Ez nem paradoxon, csupán azt jelenti, hogy a fűtőfelületek hőmérséklete az átlagosnál alacsonyabb. A levegőnél csak néhány fokkal magasabb hőmérsékletű fűtési rendszerekben pedig alacsonyabb lehet az előremenő vízhőmérséklet. Megújuló energiát használó rendszerekre ez előnyösebb, mint a régi, széntüzelésű kazánok által előállított 80--\SI{90}{\celsius}-os előremenő vízhőmérséklet.
 
-A kis hőmérsékletkülönbség következménye, hogy a levegőnek csak kevés hőt képes leadni a rendszer. Nagyobb részt sugárzással működnek ezek a rendszerek, melyet a fűtetlen felületek nyelnek el. Ezért sugárzó (radiatív) hőátvitel esetén szokásos a $t_{AUST}$ jelölés, ami a fűtetlen felületek hőmérsékletét jeleni\footnote{AUST: Average unheated surface temperature}.
+A kis hőmérsékletkülönbség következménye, hogy a levegőnek csak kevés hőt képes leadni a rendszer. Nagyobb részt sugárzással működnek ezek a rendszerek, melyet a fűtetlen felületek nyelnek el. Ezért sugárzó (radiatív) hőátvitel esetén szokásos a $t_{AUST}$ jelölés, ami a fűtetlen felületek hőmérsékletét jelenti\footnote{AUST: Average unheated surface temperature, azaz a fűtetlen felületek átlagos hőmérséklete}.
 
 A sugárzási hőtranszfer alapegyenletét a Stefan-Boltzmann törvény adja
 
@@ -240,7 +232,7 @@ ahol
 %	\item[] $\Delta t = t_w-t_r$ [\SI{}{\kelvin}] a víz lehűlésének mértéke
 \end{itemize}
 
-A sugárzó hőleadási tényező bevezetésével linearizálhatjuk a hőleadást, a hőleadás így egyszerűen lineárisan függ majd a hőmérséklet-különbségtől. Gyakran összevonják a konvektív és a sugárzási hőátadási tényezőt.
+A sugárzó hőleadási tényező bevezetésével linearizálhatjuk a hőleadást, a hőleadás így egyszerűen lineárisan függ majd a hőmérséklet-különbségtől. Gyakran összevonják a konvektív és a sugárzási hőátadási tényezőt. Én is így használom fel ezeket a padlófűtés modelljében: a felmelegedett padló sugárzással adja át a hőt a falaknak és a mennyezetnek. 
 
 \textit{Cholewa} \cite{CHOLEWA2013599} a $h_r$ paramétert méréssel határozta meg, amivel ezután az alábbi formában számolható a sugárzó hő mennyisége:
 
@@ -336,9 +328,9 @@ Ahol a $t_{drop}$=0 közelítés azért megengedhető, mert a fémtesten kicsi a
 A felmelegedéskor és lehűléskor a pontos hőleadást akkor tudjuk modellezni, ha ismerjük a radiátor hőkapacitását. Ehhez tudnunk kell, hogy a radiátorban mennyi víz van, illetve hogy a radiátortest milyen nehéz.
 A radiátorokat mindig az adott helyiséghez méretezik, ezért az adatokat leolvasással vagy katalógusból kapjuk normál esetben. A modellezéshez választanom kellett egy típust. Itt még csak paraméteresen kellene megadni az értékeket, vagy előbb a ház modelljét, hőszükségletét felírni, hiszen a házhoz tervezzük a fűtést és nem fordítva.
 
-Radiátor katalógusokból\footnote{Purmo Ventil Compact - purmo.com/hu/termekek/lapradiatorok/purmo-ventil-compact.htm} azt találtam, hogy az egyes radiátor típusokra ezek a paraméterek milyen értékűek.
+Radiátor katalógusokból azt találtam, hogy az egyes radiátor típusokra ezek a paraméterek milyen értékűek.
 
-A termikus modell paraméterei egy 90 cm magas, 1,8 m hosszú C22 típusú radiátorra:
+A termikus modell paraméterei egy 90 cm magas, 1,8 m hosszú C22 típusú radiátorra\footnote{Purmo Ventil Compact - purmo.com/hu/termekek/lapradiatorok/purmo-ventil-compact.htm} az alábbi táblázatban találhatóak:
 
 \begin{table}[H]
 	\footnotesize
@@ -384,17 +376,17 @@ A padlófűtések felépítése az alábbi ábrán található. Egy hőszigetel�
 	\label{fig:futotest-padlofutes}
 \end{figure}
 
-\textit{Olesen} számításait használtam a méretezéshez.
+\textit{Olesen} számításait\footnote{A számítások Olesen kurzusának anyagában találhatók. \\
+	\url{https://www.iee-cense.eu/-/media/Sites/Iee-cense/information/information-for-teachers/lecture-,-d-,2/presentation-slides/lecture_2c_dimensioning.ashx}} használtam a méretezéshez.
 A \SI{18}{\metre\squared} alapterületű helyiségben \SI{15}{\metre\squared}-nek vettem a fűtött területet. Ebből, és a hőigényből 45\si[per-mode=symbol]{\watt\per\metre\squared} teljesítményigény adódott.
+Az előremenő vízhőmérséklet kiszámítva $t_w =$\SI{36}{\celsius} biztosan fedezi a hőigényt $\dot{m}=$\SI{0.05}{\kilogram\per\second} tömegáram mellett.
 
-Az előremenő vízhőmérséklet számítása:
-
-Nyilvánvalóan nehéz lenne a felírt modellt egyénileg validálni, főleg hogy sehol sem találkoztam ilyen formában felírt képlettel a szakirodalomban. Szerencsére Cholewa \cite{CHOLEWA2013599} és Koca \cite{Koca} végzett méréseket falfűtés és mennyezetfűtés esetére. Ezen mérési eredmények paramétereit helyettesítettem be a hőleadás egyenletébe ahhoz hogy eldöntsem, helytálló-e a felírt modell. Az említett publikációkban minden adat rendelkezésre áll. A következő eseteket vizsgáltam:
+\textit{Cholewa \cite{CHOLEWA2013599}} és \textit{Koca \cite{Koca}} falfűtés és mennyezetfűtés esetére mért $h_r$ és $h_c$ sugárzó és konvektív hőátadási tényezőket. Ezen mérési eredmények paramétereit helyettesítettem be a hőleadás egyenletébe ahhoz hogy eldöntsem, helytálló-e a felírt modell. Az említett publikációkban minden adat rendelkezésre áll. A következő eseteket vizsgáltam:
 
 \begin{table}[H]
 	\vspace{12pt}
 	\centering
-	\renewcommand{\arraystretch}{1.4} % to increase cell height..
+	\renewcommand{\arraystretch}{1.1} % to increase cell height..
 	\begin{tabular}{
 			l
 			S[table-format=-3.2]
@@ -411,15 +403,17 @@ Nyilvánvalóan nehéz lenne a felírt modellt egyénileg validálni, főleg hog
 		%	\hline
 		$T_{water},\si{\celsius}$      								& 30	& 30	& 40	& 50	& 55   		\\
 		%$\dot{m}$ [\si[per-mode=fraction]{\kilogram\per\second}]  	& 0.0167& 0.055	& 0.0167& 0.0167& 0.055    	\\
-		$\dot{m}$ [\si[per-mode=fraction]{\kilogram\per\minute}]  	& 1		& 3		& 1		& 1		& 3		    \\
+		$\dot{m}$ [\si[per-mode=symbol]{\kilogram\per\minute}]  	& 1		& 3		& 1		& 1		& 3		    \\
 		$T_{surf}$													& 25.3	& 26.2	& 32    & 37.4  & 42.4		\\
 		$T_{a0.6}$       											& 22.3  & 23.3 	& 26.9	& 30.8  & 34.3 		\\
-		$h_{total0.6}$ \small{$\left[ \frac{\si{\watt}}{\si{\metre\squared\kelvin}} \right]$ }
+		$h_{total0.6}$ [\si[per-mode=symbol]{\watt\per\metre\squared\per\kelvin}] 
+		%\small{$\left[ \frac{\si{\watt}}{\si{\metre\squared\kelvin}} \right]$ }
 		& 8.7   & 9.4  	& 9.7  	& 10.5  & 10.8  	\\[5pt] \hline 
 		%$\Delta T$       											& 3     & 2.9	& 5.1  	& 6.6   & 8.1 		\\[5pt] \hline 
-		$q_{total}$ \small{$\left[ \frac{\si{\watt}}{\si{\metre\squared}} \right]$}
+		$q_{total}$ [\si[per-mode=symbol]{\watt\per\metre\squared}]
+		%\small{$\left[ \frac{\si{\watt}}{\si{\metre\squared}} \right]$}
 		& 25.1  & 26.4  & 47.8  &  68.8	& 88.4   	\\[5pt] 		
-		$q_{formula}$ \small{$\left[ \frac{\si{\watt}}{\si{\metre\squared}} \right]$}
+		$q_{formula}$ [\si[per-mode=symbol]{\watt\per\metre\squared}]
 		& 24.6  & 26.7  & 46.3  &  64.5 & 85.5   	\\[5pt] %\hline 
 		Pontosság [\%]
 		& 98	& 101	&  97	& 93.75 & 96.7		\\ %\hline
@@ -434,10 +428,17 @@ Nyilvánvalóan nehéz lenne a felírt modellt egyénileg validálni, főleg hog
 {\Large }
 
 
-A hőleadás egyenletével számolt és a fent hivatkozott, méréssel kapott eredmények elég jól követik egymást. Padlófűtésnél a padló felületi hőmérséklettel számoltam, ugyanis a padló hőmérséklete jóval alacsonyabb, mint a fűtővíz hőmérséklete.
+A hőleadás egyenletével számolt és a fent hivatkozott, méréssel kapott eredmények elég jól követik egymást. Padlófűtésnél a padló felületi hőmérséklettel számoltam, ugyanis a padló hőmérséklete jóval alacsonyabb, mint a fűtővíz hőmérséklete. A Simulink modell is figyelembe veszi a kb. 5 cm-s betonréteg $\lambda=$\SI{1.25}{\watt\per\metre} hővezetési ellenállását, a \textit{REHVA Guidebook \cite{RehvaGuidebookNo7}} szerint.
 A fenti publikációkban figyelembe vették a hőleadási tényező hőmérsékletfüggését.\footnote{Intuitívan is belátható, hogy melegebb testnek nagyobb a konvektív hőleadási tényezője. A konvektív hőátadás mértéke nagyban függ attól, hogy a felületen milyen sebességgel áramlik a levegő, hiszen a forró tea gyorsabban hűl, ha fújjuk, illetve szélben a kinti hőmérséklet kisebbnek érződik. Hasonlóan melegebb tárgy esetén a légáramlás felgyorsul, amiatt hogy a melegebb levegő felfelé száll.} %Nagyobb felületi légáramlás tehát megnövekedett konvektív hőátadást eredményez.}
 Azaz a felfutási tranziens során is változik a hőátadási tényező.
 
+\begin{figure}[H]
+	\centering
+	% trim={<left> <lower> <right> <upper>}
+	\includegraphics[trim=0 0 0 0, clip,width=\textwidth]{figures/simscape/padlo}
+	\caption{Padlófűtés Simscape modellje}
+	\label{fig:SimscapePadlo}
+\end{figure}
 
 
 \pagebreak

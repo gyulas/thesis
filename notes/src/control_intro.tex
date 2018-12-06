@@ -1,11 +1,6 @@
 \chapter{Szabályzó kiválasztása és analízise}\label{chap:control}
 
-A fejezetben a Simulinkben átviteli függvényre megtervezem a szabályzást. A szabályzó választásakor világossá vált, hogy egy egyszerű PID típusú szabályzás nem képes a rendszert jól kezelni. Igaz, hogy a PID közismert és az iparban egyszerűsége miatt széles körben használt, de épületgépészeti alkalmazásnál nem olyan egyértelmű egy szabályzás performanciája. A referenciakövetést például elég egy hibahatáron belül megvalósítani, itt lazábbak a követelmények.
-%A költségek és a károsanyag-kibocsátás egyre fontosabb szempont: előnyösebb, olcsóbb beavatkozó 
-
-
-Már a modell identifikációját is bonyolította az egynél több bemenet. Illetve kettő van kimenetből is. A szabályzásnál különösen nehéz több bemenetű rendszerre tervezni, esetleg a modellek szétválasztásával lehetséges: külön beavatkozójel a 
-
+A fejezetben a Simulinkben átviteli függvényre megtervezem a szabályzást. A szabályzó választásakor világossá vált, hogy egy egyszerű PID típusú szabályzás nem képes a rendszert jól kezelni. Igaz, hogy a PID közismert és az iparban egyszerűsége miatt széles körben használt, de épületgépészeti alkalmazásnál egy szabályzás jóságát többféleképp is értelmezhetjük\footnote{Mást tekintünk jó szabályzásnak egy tisztatérben, egy irodában, vagy egy nagyelőadóban, hiszen mások a felmerülő igények, és így a kritériumok is.}. Egyes esetekben hibahatárt megszabva lazíthatunk például a referenciakövetési feltételeken.
 
 Az identifikált modellekre többféle szabályzót tervezek, illetve próbálok ki.
 
@@ -61,14 +56,14 @@ Az MPC szintézis folyamata:% be kellene tabolni
 	\item létre kell hozni az MPC-t a megfelelő mintavételi frekvenciával,
 	\item be kell állítani a jelek fizikai korlátait és súlyukat a szabályzás költségfüggvényében,
 	%\item Be kell állítani a jelek fizikai korlátait
-	\item hozzá kell adni a Simulink modell Model workspace-éhez a szabályzót és megadni a nevét az Explicit MPC blokkjában (az itt található Review funciót is érdemes használni),
+	\item hozzá kell adni a Simulink modell saját változói közé (Model workspace) a szabályzót és megadni a nevét az Explicit MPC blokkjában (az itt található Review funciót is érdemes használni),
 	\item be kell kötni a jeleket és le kell futtatni a szimulációt.
 	
 \end{enumerate}
 
 %Identifikálni kell a szakaszt.
 
-A \verb|"setmpcsignals()"| függvény használatával egy új átviteli függvényt hozunk létre, amit az MPC függvénynek odaadhatunk. Ez annyival több az identifikált tf-nél, hogy benne vannak a be-és kimenetek típusai is, aszerint, hogy az említett jelek milyen típusúak. A szakasz átviteli függvényének be- és kimeneteit meg kell nevezni, a típusokat a \ref{nomencl_mpcsignals} listából választhatjuk ki. Ezután az \verb|"mpc(tf, Ts)"| függvénnyel létrehozhatjuk az MPC szabályzót a megadott szakaszmodellre.
+A \verb|"setmpcsignals()"| függvény használatával egy új átviteli függvényt hozunk létre, amit az MPC függvénynek odaadhatunk. Ez annyival több az identifikált átviteli függvénynél, hogy benne vannak a be-és kimenetek típusai is, aszerint, hogy az említett jelek milyen típusúak. A szakasz átviteli függvényének be-~és kimeneteit meg kell nevezni, a típusokat az \ref{nomencl_mpcsignals} listából választhatjuk ki. Ezután az \verb|"mpc(tf, Ts)"| függvénnyel létrehozhatjuk az MPC szabályzót a megadott szakaszmodellre.
 
 Ezzel még nem kaptunk használható szabályzót, mert az alapértelmezett súlyok és a normalizálatlan bemenetek miatt a legkisebb költségű beavatkozás az, ha egyszerűen nem csinálunk semmit.
 
@@ -97,9 +92,9 @@ Az MPC blokknak van egy alapértelmezett költségfüggvénye, és ennek a súly
 Külön beállítható a szabályzási és a szimulációs horizont.
 Ezek optimális beállításai 
 
-A kezdeti MPC szabályzót egyszerűen létre lehet hozni az identifikált modellből és a bemenetek típusának megadásával. (A szelep a beavatkozó jel, illetve a plantnek van még egy bemenete, egy mérhető zavarás.) Ezután a bemenetek értékkészletét adtam meg, illetve van egy normalizáló faktor, ami a jellemző\textit{full scale}.
+A kezdeti MPC szabályzót egyszerűen létre lehet hozni az identifikált modellből és a bemenetek típusának megadásával. (A szelep a beavatkozó jel, illetve a plantnek van még egy bemenete, egy mérhető zavarás.) Ezután a bemenetek értékkészletét adtam meg, illetve van egy normalizáló faktor, ami a jellemző "full scale".
 
-Az optimalizálás egy költségfüggvény minimalizálását jelenti, amiben \textit{büntetjük} a referenciajeltől való eltérést és a beavatkozó jelek \textbf{értékét vagy változását}.
+Az optimalizálás egy költségfüggvény minimalizálását jelenti, amiben büntetjük a referenciajeltől való eltérést és a beavatkozó jelek értékét vagy változását.
 
 A fenti a klasszikus MPC, tov. info. Baochang DING, Modern MPC című könyvében olvasható.
 
@@ -245,7 +240,7 @@ A Simulinkben identifikált modellre pontosan lehetett átviteli függvényt ill
 
 \section{A szabályzó paramétereinek finomítása, hangolása, alapbeállítások felülírása}
 
-A mintavételi időt megnöveltem. A ház identifikációját és az MPC tervezést is 5 perces időállandóval végeztem. A lépéseket először egy unit test részben hajtottam végre.
+A mintavételi időt megnöveltem. A ház identifikációját és az MPC tervezést is 5 perces időállandóval végeztem.
 
 \begin{itemize}[noitemsep,topsep=-8pt,parsep=0pt,partopsep=0pt]
 	\item A mintavételi idő növelése a Matlab default workspace-ben magával vonja, hogy a Simulink blokkban is módosul a $T_s$. 
