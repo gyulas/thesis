@@ -1,9 +1,15 @@
 \chapter*{Kivonat}
 
 %szabályozástechnika, hőszabályozás, modell prediktív szabályozás, hőátadás, épületgépészet, intelligens épület, szimuláció, 
-A szakdolgozatban fűtési rendszerek modell-prediktív szabályzásának lehetőségeit vizsgálom Matlab Simulinkben.
-Végighaladok az MPC tervezés lépésein, a tervezést és a validálást is szimulált szakaszmodellen végzem. A szakaszmodellt egy helyiség és annak fűtési rendszere alkotja, a fűtés hője a helyiségből külső homlokzaton távozik a környezet felé. A fűtőtestekben keringő víz tömegáramát arányos szelepekkel lehet korlátozni. Az állandósult állapotban szükséges fűtési teljesítményt képlettel számítom, ebből kapható a beavatkozó jel egy adott teljesítményigényhez. A hőkapacitásokat és hőátadási, hővezetési tényezőket Simscape blokkokkal megvalósított modell tartalmazza, meghatározva a szakasz dinamikáját. Megvizsgálom az MPC predikciós horizontjának, költségfüggvényének illetve mintavételi idejének hatását a zárt szabályzási kör viselkedésére. 
-A tervezési lépéseket ezután laborkörülmények között egy fizikai modellen is elvégzem, így látható lesz, hogy egy valós rendszerre mennyi munkával jár a szabályzó beállítása. Ha a modellezésre, hangolásra fordított idő megtérül, azaz komfortnövekedéssel, illetve az üzemeltetési költségek csökkenésével jár, akkor az iContrALL intelligens otthon rendszerbe is érdemes lehet beilleszteni ezeket a funkciókat.
+A szakdolgozatban fűtési rendszerek modell-prediktív szabályozásának lehetőségeit vizsgálom Matlab Simulinkben.
+Végighaladok az MPC tervezés lépésein, a tervezést és a validálást is szimulált szakaszmodellen végzem. 
+
+A szakaszmodellt egy helyiség és annak fűtési rendszere alkotja, a fűtés hője a helyiségből külső homlokzaton távozik a környezet felé. A fűtőtestekben keringő víz tömegáramát arányos szelepekkel lehet korlátozni. Az állandósult állapotban szükséges fűtési teljesítményt képlettel számítom, ebből kapható a beavatkozó jel egy adott teljesítményigényhez. A hőkapacitásokat és hőátadási, hővezetési tényezőket Simscape blokkokkal megvalósított modell tartalmazza, meghatározva a szakasz dinamikáját. 
+
+Megvizsgálom az MPC predikciós horizontjának, költségfüggvényének illetve mintavételi idejének hatását a zárt szabályozási kör viselkedésére. 
+A tervezési lépéseket ezután laborkörülmények között egy fizikai modellen is elvégzem, így látható lesz, hogy egy valós rendszerre mennyi munkával jár a szabályozó beállítása.
+
+Ha a modellezésre, hangolásra fordított idő megtérül, azaz komfortnövekedéssel, illetve az üzemeltetési költségek csökkenésével jár, akkor az iContrALL intelligens otthon rendszerbe is érdemes lehet beilleszteni ezeket a funkciókat.
 
 \chapter*{Abstract}
 
@@ -68,7 +74,7 @@ A szabályozott szakasz a fűtési rendszer: ezalatt a helyiséget és az ott el
 %(TOVBÁBBI fűtőtestek mérése a \cite[313, 361.~o.]{Herz})
 
 %A belső hőmérsékletet számos jellemző befolyásolhatja. 
-A szabályzás a helyiség hőveszteségét egyenlíti ki, amit az alacsonyabb külső hőmérséklet ($t_e$) okoz. A külső falon és az ablakon hő távozik, amelyet radiátoros és padlófűtéssel egyenlíthetünk ki.
+A szabályozás a helyiség hőveszteségét egyenlíti ki, amit az alacsonyabb külső hőmérséklet ($t_e$) okoz. A külső falon és az ablakon hő távozik, amelyet radiátoros és padlófűtéssel egyenlíthetünk ki.
 
 %A szabályozás helyiségekre van bontva, a modellben is csak egy helyiség és annak fűtési rendszere szerepel. %Ezen a szinten 
 %
@@ -91,7 +97,7 @@ A tervezés lépései a \textit{\ref{chap:ident}-\ref{chap:control}. fejezetben}
 %
 \section{Eredmények gyakorlati kipróbálása, további lehetőségek}
 %
-A szabályzótervezés lépéseit egy fizikai rendszerre is elvégzem, hogy további tapasztalatokat szerezzek. Végül áttekintem, hogy a szabályzás használatának milyen gyakorlati lehetőségei vannak, mind technikai értelemben, mind piacképesség szempontjából. Végül összefoglalom az elért eredményeket.
+A szabályzótervezés lépéseit egy fizikai rendszerre is elvégzem, hogy további tapasztalatokat szerezzek. Végül áttekintem, hogy a szabályozás használatának milyen gyakorlati lehetőségei vannak, mind technikai értelemben, mind piacképesség szempontjából. Végül összefoglalom az elért eredményeket.
 
 
 %, melynek paramétereit energetikai tanúsítványból vehetjük. Ezzel egy közelítő modelljét megkapjuk a háznak, terepi mérések nélkül is lehetséges a szabályzás. A telepítés ideje lecsökkenthető, hiszen a hosszas kalibrálás elmarad.  A modellezéshez külön írom fel a helyiség és a fűtőtestek modelljét.%Természetesen bevethetők zárt körben végzett identifikációs módszerek, adaptív szabályzók is.

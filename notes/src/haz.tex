@@ -2,10 +2,10 @@
 
 % Kiindulás ssc_house_heating_system
 
-A szabályzótervezéshez rendelkezésre kell, hogy álljon a szabályzott szakasz modellje. Ezt két részre bontottam: először az épületszerkezet, azaz a helyiség modelljét írom fel, a fűtőtestekkel a \textit{\ref{chap:futotest}. fejezetben} foglalkozom. A \textit{\ref{fig:Simulink-minimalist}.~ábrán} látható a részekre bontott modell\footnote{A fűtőtestek teljesítménye függ a belső hőmérséklettől is (\textit{lásd \ref{eq_holeadas4}. egyenlet}), emiatt a modellben egy belső visszacsatolás található.}, melyből a helyiség alrendszert tárgyalom ebben a fejezetben. Egy könnyen módosítható, koncentrált paraméterű hálózatot vettem fel, ahol minden elemhez lehet fizikai tartalmat rendelni. A szabályzótervezéshez a teljes modell gerjesztés-válasz kapcsolatára lesz majd szükségem.
+A szabályzótervezéshez rendelkezésre kell, hogy álljon a szabályozott szakasz modellje. Ezt két részre bontottam: először az épületszerkezet, azaz a helyiség modelljét írom fel, a fűtőtestekkel a \textit{\ref{chap:futotest}. fejezetben} foglalkozom. A \textit{\ref{fig:Simulink-minimalist}.~ábrán} látható a részekre bontott modell\footnote{A fűtőtestek teljesítménye függ a belső hőmérséklettől is (\textit{lásd \ref{eq_holeadas4}. egyenlet}), emiatt a modellben egy belső visszacsatolás található.}, melyből a helyiség alrendszert tárgyalom ebben a fejezetben. Egy könnyen módosítható, koncentrált paraméterű hálózatot vettem fel, ahol minden elemhez lehet fizikai tartalmat rendelni. A szabályzótervezéshez a teljes modell gerjesztés-válasz kapcsolatára lesz majd szükségem.
 %todo footnote
 
-Az energetikai jellemzők az épület energetikai tanúsítványából kiolvashatók, így a modell paraméterezhető. A tervezési lépéseket a névleges modellre elvégezve a szabályzás rögtön működőképes, nincs szükség hosszas kalibrációs időszakra beüzemelésnél. A modellbeli eltéréseket később kompenzálni lehet, mérési adatok felhasználásával.% (historikus adatok felhasználásával). %A modellben a bizonytalanságok hatása adaptív szabályozással kezelhető (lesz).
+Az energetikai jellemzők az épület energetikai tanúsítványából kiolvashatók, így a modell paraméterezhető. A tervezési lépéseket a névleges modellre elvégezve a szabályozás rögtön működőképes, nincs szükség hosszas kalibrációs időszakra beüzemelésnél. A modellbeli eltéréseket később kompenzálni lehet, mérési adatok felhasználásával.% (historikus adatok felhasználásával). %A modellben a bizonytalanságok hatása adaptív szabályozással kezelhető (lesz).
 
 \begin{figure}[H]
 	\centering
@@ -57,10 +57,10 @@ A gerjesztés-válasz kapcsolatot megkaphatjuk méréssel, szimulációval vagy 
 %Én összeraktam a fizikai modellt simulinkben (ez white-box) majd annak az ugrásválaszát mértem. Így nem egy állapotteres modell, hanem egy átviteli fv. "keletkezett".
 
 
-Helyiségenkénti hőmérséklet-szabályzás esetén a belső hőmérsékletre adott egy referencia és egy mért érték.
+Helyiségenkénti hőmérséklet-szabályozás esetén a belső hőmérsékletre adott egy referencia és egy mért érték.
 Helyiségenként számos olyan tényező figyelembe vehető, melyek a teljes épületre különbözőek: a helyiség tájolása, az ablakok mérete, a felhasználás módja mind jobban kezelhető helyben, mint egy központi irányítással. Ezek mind-mind zavarásnak számítanak, ha pedig egy-egy helyiség hőmérsékletét mérjük, a zavarások ellenében ott tudunk beavatkozni, ahol azok hatnak. A helyi szabályozás referenciajeleit a lakók, dolgozók komfortérzetének megfelelően kell megadni.
 
-A helyiség levegőjének hőmérsékletét mindenhol ugyanakkorának (homogénnek) feltételezem. A szabályzás a helyiség hőveszteségét egyenlíti ki, amit az alacsonyabb külső hőmérséklet okoz. Nem foglalkozok például szellőzésből, helyiségek közti hő\-mér\-sék\-let-különbségből\footnote{A modellezés egyszerűsítése végett több helyiség egymásra hatását nem veszem figyelembe.}, vagy emberek jelenlétéből származó belső zavarással.
+A helyiség levegőjének hőmérsékletét mindenhol ugyanakkorának (homogénnek) feltételezem. A szabályozás a helyiség hőveszteségét egyenlíti ki, amit az alacsonyabb külső hőmérséklet okoz. Nem foglalkozok például szellőzésből, helyiségek közti hő\-mér\-sék\-let-különbségből\footnote{A modellezés egyszerűsítése végett több helyiség egymásra hatását nem veszem figyelembe.}, vagy emberek jelenlétéből származó belső zavarással.
 
 A fűtést padlófűtés és radiátor biztosítja, mindkettőben szeleppel szabályozható az átfolyó vízmennyiség.
 
@@ -75,13 +75,13 @@ A "vezetékek" így azonos hőmérsékletű (ekvipotenciális) pontokat kötnek 
 A hőáramlást a hőellenállások korlátozzák, mivel azokon hőmérsékletesés mérhető. (Az ábrán mért hőáram a hőellenálláson eső hőmérséklettel arányos, a \textit{\ref{eq_hoaram_alap}. egyenlet} szerint.) A hőtároló elemeknek tömege és fajhője megadja a hőkapacitásukat, így ezek feltöltődhetnek, energiát tárolhatnak.
 
 
-A mintahálózat egy RC-tagnak felel meg, erre a szabályzótervezés lépései a következők lennének\footnote{Tekintsük a mintahálózatot és az itt részletezett lépéseket egy szemléletes példának, ugyanis a szakdolgozatban tárgyalt hálózatra is ezeken a lépéseken fogok végighaladni.}:
+A mintahálózat egy RC-tagnak felel meg, erre a szabályozótervezés lépései a következők lennének\footnote{Tekintsük a mintahálózatot és az itt részletezett lépéseket egy szemléletes példának, ugyanis a szakdolgozatban tárgyalt hálózatra is ezeken a lépéseken fogok végighaladni.}:
 
 Az identifikációnál ismert a rendszer jellege, így 0 zérussal, 1 pólussal átviteli függvényt identifikálnék.
-Erre szabályzót lehetne tervezni. A szimuláció során a termikus hálózat alapjele helyére kerülne a szabályzó beavatkozó jele. A visszacsatolás a hőmérő kimenetéről történne. Ilyen esetben, mivel a tervezés során használt modell és a  szakasz között nincs eltérés (angolul \textit{mismatch}), a szabályzás jól működik.
+Erre szabályzót lehetne tervezni. A szimuláció során a termikus hálózat alapjele helyére kerülne a szabályzó beavatkozó jele. A visszacsatolás a hőmérő kimenetéről történne. Ilyen esetben, mivel a tervezés során használt modell és a  szakasz között nincs eltérés (angolul \textit{mismatch}), a szabályozás jól működik.
 A paraméterek módosításával a szabályzó robusztussága tesztelhető.
 
-Ha pedig ez a hálózat egy tényleges fizikai rendszer (például egy vízforraló) modellje lenne, akkor a szabályzás történhetne úgy, hogy a szabályzó Matlab-ban fut\footnote{A Matlab C kódot is képes generálni, ez is futtatható arra alkalmas eszközön, a számítógép nem feltétlenül szükséges.}, a hőmérsékletet mérjük, illetve a teljesítményelektronikán keresztül be tudunk avatkozni, így egy beállított hőmérsékletet tarthatunk.
+Ha pedig ez a hálózat egy tényleges fizikai rendszer (például egy vízforraló) modellje lenne, akkor a szabályozás történhetne úgy, hogy a szabályzó Matlab-ban fut\footnote{A Matlab C kódot is képes generálni, ez is futtatható arra alkalmas eszközön, a számítógép nem feltétlenül szükséges.}, a hőmérsékletet mérjük, illetve a teljesítményelektronikán keresztül be tudunk avatkozni, így egy beállított hőmérsékletet tarthatunk.
 
 \begin{figure}[H]
 	\begin{subfigure}[t]{\textwidth}
@@ -133,12 +133,12 @@ A hőátvitelnek három alapvető formája van, a hővezetés (kondukció), a h�
 \begin{table}[H]
 	\footnotesize
 	\centering
-	\caption{Hőközlés fajtái}
 	%\renewcommand{\arraystretch}{2} % to increase cell height
 	%\taburulecolor{gray}
 	%\begin{tabular}{|p{0.8cm}|p{1cm}|p{1cm}|p{1cm}|p{1cm}|p{1cm}|p{1cm}|p{1cm}|}
 	%
 	\input{src/table/hokozles_fajtai_table}
+	\caption{Hőközlés fajtái}
 	\label{tab:HeatExchangeTypes}
 	%
 	%\label{tab:TabularExample}
@@ -257,12 +257,13 @@ Ebben az esetben eltérek a szabványban használt módszerektől. Az \textit{MS
 \begin{table}[H]
 	\footnotesize
 	\centering
-	\caption{Jelölések}
+
 	%\renewcommand{\arraystretch}{2} % to increase cell height
 	%\taburulecolor{gray}
 	%\begin{tabular}{|p{0.8cm}|p{1cm}|p{1cm}|p{1cm}|p{1cm}|p{1cm}|p{1cm}|p{1cm}|}
 	%
 	\input{src/table/jelolesek_table}
+	\caption{Jelölések}
 	\label{tab:Nomenclature}
 	%
 	%\label{tab:TabularExample}
@@ -304,10 +305,11 @@ A levegőnek, padlónak, falaknak tömegüknél és fajhőjüknél fogva mind-mi
 \begin{table}[H]
 	\footnotesize
 	\centering
-	\caption{A helyiség hőveszteséget okozó elemei}
+
 	\renewcommand{\arraystretch}{1.3} % to increase cell height
 	\taburulecolor{gray}
 	%\begin{tabular}{|p{0.8cm}|p{1cm}|p{1cm}|p{1cm}|p{1cm}|p{1cm}|p{1cm}|p{1cm}|}
+	\caption{A helyiség hőveszteséget okozó elemei}
 	\input{src/table/house_surface_tableA}
 %	\begin{subtable}
 %		\input{src/table/house_surface_tableB}
@@ -320,11 +322,12 @@ A levegőnek, padlónak, falaknak tömegüknél és fajhőjüknél fogva mind-mi
 \begin{table}[H]
 	\footnotesize
 	\centering
-	\caption{A helyiség veszteségmentes elemei}
+
 	\renewcommand{\arraystretch}{1.3} % to increase cell height
 	\taburulecolor{gray}
 	\input{src/table/house_surface_tableB}
 	\label{table_house_parametersB}
+	\caption{A helyiség veszteségmentes elemei}
 \end{table}
 
 A falak hőtároló tömegénél a teljes válaszfal tömegének csak a felét vettem figyelembe, a másik fele egy másik helyiséghez tartozhat. A fenti értékek becslések, az energetikai tanúsítványban pontosan szerepelnek ezek az értékek is.
@@ -374,7 +377,7 @@ Amennyiben a méretezési hőmérséklet $\Delta T=$ \SI{-2}{\celsius}, ami a t�
 
 \begin{formal}
 	\textbf{Megjegyzés:}
-	Ha a szabályzást egy már meglévő épületre tervezzük, akkor csak a rendszerek adatait kell felvenni, illetve identifikálni. A szakdolgozatban tárgyalt egyszerű példa során csak egy részét ismerem a paramétereknek, tehát méretezési kérdéseket is fogok érinteni.  Szerencsére az új építésű házaknál kötelező energetikai tanúsítás%\footnote{A rendelet \cite{TNM2006}
+	Ha a szabályozást egy már meglévő épületre tervezzük, akkor csak a rendszerek adatait kell felvenni, illetve identifikálni. A szakdolgozatban tárgyalt egyszerű példa során csak egy részét ismerem a paramétereknek, tehát méretezési kérdéseket is fogok érinteni.  Szerencsére az új építésű házaknál kötelező energetikai tanúsítás%\footnote{A rendelet \cite{TNM2006}
 	%TODO konkrétan
 	 %alapján kötelező az energetikai tanúsítvány pl. \textit{átlagos}
 	 %lakóépületekre, irodákra. Adás-vételkor, felújításkor, stb.}
@@ -384,7 +387,7 @@ Amennyiben a méretezési hőmérséklet $\Delta T=$ \SI{-2}{\celsius}, ami a t�
 
 
 
- Az internetre számos tanúsító cég töltött fel minta tanúsítványokat, amiben a számítások levezetése, indoklása is megtalálható. Így az energetikai tanúsítvány lehet egy interface a szakdolgozatban bemutatott modell és a gyakorlati alkalmazások között: a valódi épület tanúsítványa alapján a modellem paraméterezhető.
+ Az internetre számos tanúsító cég töltött fel minta tanúsítványokat, amiben a számítások levezetése, indoklása is megtalálható. Így az energetikai tanúsítvány lehet egy kapcsolódási pont a szakdolgozatban bemutatott modell és a gyakorlati alkalmazások között: a valódi épület tanúsítványa alapján a modellem paraméterezhető.
 
 
 Amikor a fűtési rendszer viselkedését szimulálom, nekem kell megalkotni mind a szabályzott épületrész, mind a fűtési rendszer modelljét. Így tehát ez a modellezésen felül egy méretezési feladat is, amit egy kész épületnél már elvégeztek a tervezés során, és a megfelelő fűtési teljesítmény áll rendelkezésre. %illeszkedik az igényekhez és a körülményekhez.

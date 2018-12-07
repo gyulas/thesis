@@ -1,23 +1,23 @@
 \chapter{Szabályzó kiválasztása és analízise}\label{chap:control}
 
-A fejezetben a Simulinkben átviteli függvényre megtervezem a szabályzást. A szabályzó választásakor világossá vált, hogy egy egyszerű PID típusú szabályzás nem képes a rendszert jól kezelni. Igaz, hogy a PID közismert és az iparban egyszerűsége miatt széles körben használt, de épületgépészeti alkalmazásnál egy szabályzás jóságát többféleképp is értelmezhetjük\footnote{Mást tekintünk jó szabályzásnak egy tisztatérben, egy irodában, vagy egy nagyelőadóban, hiszen mások a felmerülő igények, és így a kritériumok is.}. Egyes esetekben hibahatárt megszabva lazíthatunk például a referenciakövetési feltételeken.
+A fejezetben a Simulinkben átviteli függvényre megtervezem a szabályozást. A szabályzó választásakor világossá vált, hogy egy egyszerű PID típusú szabályozás nem képes a rendszert jól kezelni. Igaz, hogy a PID közismert és az iparban egyszerűsége miatt széles körben használt, de épületgépészeti alkalmazásnál egy szabályozás jóságát többféleképp is értelmezhetjük\footnote{Mást tekintünk jó szabályozásnak egy tisztatérben, egy irodában, vagy egy nagyelőadóban, hiszen mások a felmerülő igények, és így a kritériumok is.}. Egyes esetekben hibahatárt megszabva lazíthatunk például a referenciakövetési feltételeken.
 
 Az identifikált modellre többféle szabályzót tervezek, illetve próbálok ki.
 
-A hasonló feladatokra leggyakrabban modell-prediktív (MPC) szabályzást használnak \cite{AFRAM2014343}. Ehhez szükség van a szakasz modelljére, ami alapján a szabályzó szimulálhatja a szakasz kimenetét. Az MPC egy beavatkozójel kiadása előtt több mintavételi perióduson, egy predikciós horizonton keresztül fut le, minden lehetséges  beavatkozójel-sorozatra a kimenetet szimulálva.
+A hasonló feladatokra leggyakrabban modell-prediktív (MPC) szabályozást használnak \cite{AFRAM2014343}. Ehhez szükség van a szakasz modelljére, ami alapján a szabályzó szimulálhatja a szakasz kimenetét. Az MPC egy beavatkozójel kiadása előtt több mintavételi perióduson, egy predikciós horizonton keresztül fut le, minden lehetséges  beavatkozójel-sorozatra a kimenetet szimulálva.
 %A csúszóablak miatt receding horizon control
 Ezen sorozatok közül a legjobbat kiválasztja és egy lépést végrehajt. Ezután a szimuláció újrakezdődik. A végrehajtott, adott horizonton optimális beavatkozójelet egy költségfüggvény minimalizálásával kapja. A költségfüggvényben különböző eltéréseknek vagy abszolútértékeknek különböző súlya lehet.
 
-A szabályzás tehát képes egy horizontig előre tekinteni, és azon belüli optimális beavatkozást végrehajtani. (Az angol nyelvű irodalom erre \textit{receding horizon} névvel hivatkozik.) Az optimalizációt minden mintavételkor végrehajtja, így képes korrigálni, ha a jósolt kimenet és a tényleges kimenet eltérő.
+A szabályozás tehát képes egy horizontig előre tekinteni, és azon belüli optimális beavatkozást végrehajtani. (Az angol nyelvű irodalom erre \textit{receding horizon} névvel hivatkozik.) Az optimalizációt minden mintavételkor végrehajtja, így képes korrigálni, ha a jósolt kimenet és a tényleges kimenet eltérő.
 
-A zárt szabályzási körben a stabilitás viszont nem garantált, erre külön módszerek léteznek (úgynevezett \textit{terminal cost}, azaz végső költség, illetve időben változó súlyozás). Mivel a vizsgált rendszerem nyílt körben is stabil, ezekkel nem kell foglalkoznom.
+A zárt szabályozási körben a stabilitás viszont nem garantált, erre külön módszerek léteznek (úgynevezett \textit{terminal cost}, azaz végső költség, illetve időben változó súlyozás). Mivel a vizsgált rendszerem nyílt körben is stabil, ezekkel nem kell foglalkoznom.
 
 A stabilitás a beavatkozó jelek és a zavarjel (külső hőmérséklet) korlátosságából fakad. Ezeket is be lehet állítani a szabályzón, így az MPC a szelepekre csak 0 és 1 közötti beavatkozó jelet fog kiadni. A változások hatásait is figyelembe vehetjük, mivel a szelepeket 4-5 perc teljesen kinyitni.
 
 A helyiség hőmérséklet-szabályozásakor a legfontosabb feladat a költségfüggvény súlyainak helyes beállítása\footnote{A súlyozást kiegészíthetik a fizikai korlátok is. Ha a szelepek nyitási- és zárási sebessége korlátos, akkor ezt nem lehet túllépni alacsony súly használatával sem.}. Ezek ugyanis befolyásolják a referenciakövetést - az állandósult állapotbeli hibát és lengést - és a beavatkozójel nagyságát, frekvenciáját is.
 
 Az épületgépészeti rendszereknél a nagyobb frekvenciájú beavatkozójel könnyedén jelenthet alacsonyabb hatásfokot. Viszont ha megengedünk valamennyi ingadozást állandósult állapot körül, a terhelést kiegyenlíthetjük.
-Egy irodában, vagy lakásban  például 0.1\si{\celsius}-os vagy 1\si{\celsius}-os pontosságú hőmérséklet-szabályzás közötti különbség komfortban aligha érezhető.
+Egy irodában, vagy lakásban  például 0.1\si{\celsius}-os vagy 1\si{\celsius}-os pontosságú hőmérséklet-szabályozás közötti különbség komfortban aligha érezhető.
 \vspace{6pt}
 
 \input{src/tikz/mpcinout}
@@ -47,7 +47,7 @@ Egy irodában, vagy lakásban  például 0.1\si{\celsius}-os vagy 1\si{\celsius}
 		\\ 
 		p 		& prediction horizon 			& predikciós horizont 
 		\\ 
-		c 		& control horizon				& szabályzási horizont
+		c 		& control horizon				& szabályozási horizont
 		\\
 		J 		& cost function 				& költségfüggvény
 		\\
@@ -70,7 +70,7 @@ Egy irodában, vagy lakásban  például 0.1\si{\celsius}-os vagy 1\si{\celsius}
 
 
 
-\section{Elvárások a szabályzás teljesítményével szemben}
+\section{Elvárások a szabályozás teljesítményével szemben}
 
 Az MPC hangolása során % működését, tulajdonságait meg tudjam figyelni,
 lépésről lépésre fogom módosítani az alapértelmezett paramétereket, azok hatását megfigyelem.
@@ -80,16 +80,16 @@ Az MPC szintézis folyamata a következő:% be kellene tabolni
 \begin{enumerate}[noitemsep,topsep=0pt,parsep=2pt,partopsep=4pt,leftmargin=30pt]
 	\item a szakaszt identifikálni kell, az átviteli függvény be- és kimeneteinek típusát be kell állítani,
 	\item létre kell hozni az MPC-t a megfelelő mintavételi frekvenciával,
-	\item be kell állítani a jelek fizikai korlátait és súlyukat a szabályzás költségfüggvényében,
+	\item be kell állítani a jelek fizikai korlátait és súlyukat a szabályozás költségfüggvényében,
 	%\item Be kell állítani a jelek fizikai korlátait
-	\item hozzá kell adni a Simulink modell saját változói közé (Model workspace) a szabályzót és megadni a nevét az Explicit MPC blokkjában (az itt található Review funciót is érdemes használni),
+	\item hozzá kell adni a Simulink modell saját változói közé (Model workspace) a szabályozót és megadni a nevét az Explicit MPC blokkjában (az itt található Review funciót is érdemes használni),
 	\item be kell kötni a jeleket és le kell futtatni a szimulációt.
 	
 \end{enumerate}
 
 %Identifikálni kell a szakaszt.
 
-A \verb|"setmpcsignals()"| függvény használatával egy új átviteli függvényt hozunk létre, amit az MPC függvénynek odaadhatunk. Ez annyival több az identifikált átviteli függvénynél, hogy benne vannak a be-és kimenetek típusai is, aszerint, hogy az említett jelek milyen típusúak. A szakasz átviteli függvényének be-~és kimeneteit meg kell nevezni (\verb|MO, MD, MV|) Ezután az \verb|"mpc(tf, Ts)"| függvénnyel létrehozhatjuk az MPC szabályzót a megadott szakaszmodellre.
+A \verb|"setmpcsignals()"| függvény használatával egy új átviteli függvényt hozunk létre, amit az MPC függvénynek odaadhatunk. Ez annyival több az identifikált átviteli függvénynél, hogy benne vannak a be- és kimenetek típusai is, aszerint, hogy az említett jelek milyen típusúak. A szakasz átviteli függvényének be-~és kimeneteit meg kell nevezni (\verb|MO, MD, MV|) Ezután az \verb|"mpc(tf, Ts)"| függvénnyel létrehozhatjuk az MPC szabályozót a megadott szakaszmodellre.
 
 
 
@@ -120,7 +120,7 @@ A költségfüggvény akkor működik jól, ha a modellbemeneteket normáljuk. B
 
 A helyiség modelljénél nagy eltérések vannak, hiszen a szelepek normálva vannak, a hőmérséklet értékeket viszont kelvinben értelmezem. Így a skálafaktort a 30..300 közötti nagyságrendben célszerű választani, mivel a hőmérsékletértékek nagyságrendileg \SI{30}{\degreeCelsius}-nyi tartományban változnak.
 
-A Simulinkben identifikált modell egy munkapont körül (adott környezeti hőmérséklet mellett) volt csak pontos, ám ez a referenciakövetést nem rontotta el. A szabályzás megváltozott paraméterekkel is működött a Simscape hálózatra, a referenciakövetés minősége megmaradt.
+A Simulinkben identifikált modell egy munkapont körül (adott környezeti hőmérséklet mellett) volt csak pontos, ám ez a referenciakövetést nem rontotta el. A szabályozás megváltozott paraméterekkel is működött a Simscape hálózatra, a referenciakövetés minősége megmaradt.
 
 
 %\begin{itemize}[noitemsep,topsep=-8pt,parsep=0pt,partopsep=0pt]
@@ -133,13 +133,13 @@ A Simulinkben identifikált modell egy munkapont körül (adott környezeti hőm
 
 \subsection{Módosítások az MPC-ben}
 
-A súlyozást módosítva adhatunk költséget a beavatkozásnak, csökkentve így pl. annak a frekvenciáját. Ez a referenciakövetést rontja, de esetünkben nem cél a tized \si{\celsius}-os pontosság, hanem az energiamegtakarítás.
-Pontosan fel kellene ezért írni a forintosított költségét a beavatkozásnak, és ezt minimalizálni\footnote{\textit{Feng \cite{FENG2015199}} is szelepet használt, de az ott felírt költségfüggvényt nem pontosan értem.}. Ez viszont egy összetett kapcsolat és jelentősen függ az épületgépészettől. Így általánosan fogom a paraméterváltozások hatásait vizsgálni.
+A súlyozást módosítva adhatunk költséget a beavatkozásnak, csökkentve így például annak a frekvenciáját. Ez a referenciakövetést rontja, de esetünkben nem cél a tized \si{\celsius}-os pontosság, hanem az energiamegtakarítás.
+Pontosan fel kellene ezért írni a forintosított költségét a beavatkozásnak, és ezt minimalizálni. Ez viszont egy összetett kapcsolat és jelentősen függ az épületgépészettől. Így általánosan fogom a paraméterváltozások hatásait vizsgálni.
 
 \subsection{Az MPC költségfüggvénye}
 
 
-A szabályzó a predikciós horizonton belül minden lehetséges beavatkozójel-sorozatra kiszámolja annak (várható, modell szerinti) költségét. Azt a beavatkozójel-sorozatot választja, ami a legkisebb költséggel jár. Eztán a szabályzási horizontnak megfelelő számú beavatkozást végez, nem adja ki a teljes sorozatot. 
+A szabályzó a predikciós horizonton belül minden lehetséges beavatkozójel-sorozatra kiszámolja annak (várható, modell szerinti) költségét. Azt a beavatkozójel-sorozatot választja, ami a legkisebb költséggel jár. Ez után a szabályozási horizontnak megfelelő számú beavatkozást végez, nem adja ki a teljes sorozatot. 
 
 %A legbutább szabályzó szabályzási és predikciós horizontja is 1. Azaz egy lépéssel lát előre és a legkedvezőbb esethez (J költség minimális) tartozó beavatkozó jelet végrehajtja\footnote{Ezt formalizálni kellene egyenletben is.}. $J=w_u u + w_e e$, ahol a hibát a szabályzóban lévő szakaszmodell alapján számítjuk.
 \textit{Agachi \cite{romanMPC_Agachi}} szerint:
@@ -151,17 +151,17 @@ J = \sum_{i}^{p} \left(w_u \Delta u^2 + w_e (r_i-y_i)^2  \right)
 %(itt még csak $r_i=r$ állandó referenciajellel tudtam csinálni. )
 ahol N a predikciós horizont, $w_u$ a beavatkozó jel változásának súlya, $w_e$ a hibajel súlya. A referenciajel jövőbeli változásait figyelembe lehet venni a predikciós horizonton belül\footnote{A jövőbeli változásokat ismerhetjük, ha van egy referenciajelünk, vagy lehet becslés rá egy időjárás-előrejelzés.\\Bővebben az elméletről: https://www.mathworks.com/help/mpc/ug/signal-previewing.html,\\illetve a felhasznált Simulink blokkok: https://www.mathworks.com/help/mpc/examples/improving-control-performance-with-look-ahead-previewing.html}.
 
-A költségfüggvényben a hibajelhez és beavatkozó jelekhez, ill. azok változásaihoz különböző súlyok tartozhatnak.
-Nagyobb súlyok nagyobb költséget eredményeznek, így a szabályzó a nagyobb költségű beavatkozójel-sorozatot kisebb valószínűséggel választja.
+A költségfüggvényben a hibajelhez és beavatkozó jelekhez, illetve azok változásaihoz különböző súlyok tartozhatnak.
+Nagyobb súlyok nagyobb költséget eredményeznek, így a szabályozó a nagyobb költségű beavatkozójel-sorozatot kisebb valószínűséggel választja.
 
 \begin{figure}[H]
 		\centering
 		\includegraphics[width=0.8\textwidth]{figures/simscape/mpc}
-		\caption{A zárt szabályzási kör ugrásválasza}
+		\caption{A zárt szabályozási kör ugrásválasza}
 		\label{fig:mpc-simulated}
 \end{figure}
 
-A fenti ábrán látható a helyesen súlyozott MPC-vel a zárt szabályzási kör viselkedése. Ebben vannak tökéletlenségek, ezekre a fizikai modellnél térek majd rá. A szabályzóparaméterek az alábbi táblázatban láthatók.
+A fenti ábrán látható a helyesen súlyozott MPC-vel a zárt szabályozási kör viselkedése. Ebben vannak tökéletlenségek, ezekre a fizikai modellnél térek majd rá. A szabályozó paraméterei az alábbi táblázatban láthatók.
 \begin{table}[H]
 	\footnotesize
 	\centering
@@ -188,13 +188,13 @@ A fenti ábrán látható a helyesen súlyozott MPC-vel a zárt szabályzási k�
 		\\   \hline
 	\end{tabu}
 	\label{tab:MPCfactors}
-	\caption{MPC szabályzó paraméterei}
+	\caption{MPC szabályozó paraméterei}
 	%
 	%\label{tab:TabularExample}
 	%\tabref{TabularExample}~táblázat
 \end{table}
 
-\subsection{Fejlesztési lehetőségek a szabályzással kapcsolatban}
+\subsection{Fejlesztési lehetőségek a szabályozással kapcsolatban}
 	
-Épületautomatikai rendszerek használatával, például a fűtésszabályzás iContrALL intelligens otthon rendszerével a fellépő zavarásokat (emberek jelenléte, napsütés, szél) mérhetjük. A szabályzás a zavarások hatásmechanizmusának ismeretében jobb zavarelnyomást tud elérni, sőt az integrációval további beavatkozók is használhatók (például árnyékolástechnikai eszközök).
+Épületautomatikai rendszerek használatával, például az iContrALL intelligens otthon rendszerével a fellépő zavarásokat (emberek jelenléte, napsütés, szél) mérhetjük. A szabályozás a zavarások hatásmechanizmusának ismeretében jobb zavarelnyomást tud elérni, sőt az integrációval további beavatkozók is használhatók (például árnyékolástechnikai eszközök).
 

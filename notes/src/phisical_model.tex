@@ -5,14 +5,21 @@ Az elméleti eredmények validálásához elkészítettem egy szoba kicsinyítet
 A fűtési teljesítményt halogén izzókkal juttattuk a rendszerbe. Ezek teljesítménye szabályozható, így ez a bemenet lineáris a szelepekkel ellentétben, azaz kétszer nagyobb beavatkozójelre kétszer nagyobb teljesítmény kerül a rendszerbe.
 A hőmérsékletet mérjük a dobozban és azon kívül is. Zavarásként a mérőszoba ablakát kinyitjuk, így a doboz környezeti hőmérséklete lecsökken.
 
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\textwidth]{figures/realsys/interior2}
+	\caption{A doboz belseje hőmérővel és szabályozható izzókkal}
+	\label{fig:realsys-interior}
+\end{figure}
+
 \section{A Simulink konfigurálása}
-A valós idejű futáshoz Simulink  Real-time szükséges. A real-time működés itt azt jelenti, hogy a szabályzót a Simulink mintavételi időnként futtatja le. Azaz ha a kísérleti rendszerre \SI{30}{\second}-es mintavételi idejű szabályzót tervezek, akkor az MPC félpercenként mintát fog venni a hőmérsékletekből és ki fog adni egy beavatkozójelet. Így a real-time ez esetben nem jelent például szigorú korlátokat a futásidőre.
+A valós idejű futáshoz Simulink  Real-time szükséges. A real-time működés itt azt jelenti, hogy a szabályozót a Simulink mintavételi időnként futtatja le. Azaz ha a kísérleti rendszerre \SI{30}{\second}-es mintavételi idejű szabályzót tervezek, akkor az MPC félpercenként mintát fog venni a hőmérsékletekből és ki fog adni egy beavatkozójelet. Így a real-time ez esetben nem jelent például szigorú korlátokat a futásidőre.
 
 
 %A Real-time UDP-t használom. %https://uk.mathworks.com/help/xpc/io_ref/udp-transport-protocol.html
 %https://uk.mathworks.com/products/simulink-desktop-real-time.html
 
-A szabályzó a számítógépen fog futni, és mintavételi időnként a jelenlegi hőmérsékletet beolvassa, az MPC-t lefuttatja, a beavatkozó jeleket pedig elküldi a beágyazott számítógépnek.
+A szabályzó a számítógépen fut, és mintavételi időnként a jelenlegi hőmérsékletet beolvassa, az MPC-t lefuttatja, a beavatkozó jeleket pedig elküldi a beágyazott számítógépnek.
 
 \input{src/tikz/realtimesimulink}
 
@@ -22,48 +29,48 @@ A szabályzó a számítógépen fog futni, és mintavételi időnként a jelenl
 %A PI SPI-n küld a rádióadónak.
 %Rádiókommunikáció egyirányú.
 
-\section{Kísérleti rendszer identifikációja}
+\section{Szabályozótervezés az identifikált modellre}
+Mivel a kísérleti rendszeremnek nincsen energetikai tanúsítványa, identifikáltam az ugrásválaszával (\ref{fig:realsys-ident}. ábra).
 
-\begin{figure}[H]
+\begin{figure}
 	\centering
-	\includegraphics[width=0.8\textwidth]{figures/realsys/interior2}
-	\caption{A doboz belseje hőmérővel és szabályozható izzókkal}
-	\label{fig:realsys-interior}
-\end{figure}
-
-Mivel a valós rendszeremnek nincsen energetikai tanúsítványa, identifikáltam az ugrásválaszával.
-
-\begin{figure}[H]
-	\centering
-	\includegraphics[width=0.7\textwidth]{figures/realsys/ident}
+	\includegraphics[width=0.65\textwidth]{figures/realsys/ident}
 	\caption{Identfikációhoz használt mérési adatsor}
 	\label{fig:realsys-ident}
 \end{figure}
 
-\section{Szabályozótervezés az identifikált modellre}
+A valós idejű méréshez használni kívánt szabályozót érdemes először szimulációban megvizsgálni. Ekkor adott a szabályzott szakasz identifikált lineáris modellje, az MPC-t pedig létrehoztam  a modellhez az előző fejezet szerint. Az ott felmerülő nehézségeket, problémákat a fizikai rendszeren szerzett tapasztalatok miatt sikerült megoldani. A Simulinkben a tervezés a \textit{\ref{fig:mpc-sim}. ábra} szerinti elrendezésben történt, használva az MPC szabályozás közbeni (online) hangolásának lehetőségét.
 
-A valós idejű méréshez használni kívánt szabályzót érdemes először szimulációban megvizsgálni. Ekkor adott a szabályzott szakasz identifikált lineáris modellje, az MPC-t pedig létrehoztam  a modellhez az előző fejezet szerint. Ám az ott felmerülő nehézségeket, problémákat a fizikai rendszeren szerzett tapasztalatok miatt sikerült megoldani. A Simulinkben a tervezés az alábbi elrendezésben történt, használva az MPC szabályozás közbeni (online) hangolásának lehetőségét:
 
-\begin{figure}[H]
+
+\subsection{Mintavételi idő és predikciós horizont}
+
+Az MPC paraméterezésére \textit{Agachi \cite{romanMPC_Agachi}} könyvében találhatók ajánlások. A predikciós horizontot eszerint úgy kell megválasztani, hogy az a szakasz releváns dinamikáját lefedje. Mivel a felfutási ideje a kísérleti rendszernek körülbelül 1 óra, ezért ezt ekkorára választottam. A predikciós horizont ajánlott nagysága 10-20 mintavétel a számítási igény csökkentése miatt (így $T_s =$ \SI{300}{\second} adódna),  viszont a mérés során gyakrabban szerettem volna látni a változásokat, a mintavételi időt 30 másodpercnek vettem.
+
+\begin{figure}[h]
 	\centering
 	\includegraphics[width=\textwidth]{figures/simscape/simModel}
 	\caption{Lineáris modellre MPC szimulációja}
 	\label{fig:mpc-sim}
 \end{figure}
 
-\subsection{Mintavételi idő és predikciós horizont}
-
-Az MPC paraméterezésére \textit{Agachi \cite{romanMPC_Agachi}} könyvében találhatók ajánlások. A predikciós horizontot eszerint úgy kell megválasztani, hogy az a szakasz releváns dinamikáját lefedje. Mivel a felfutási ideje a kísérleti rendszernek kb. 1 óra, ezért ezt ekkorára választottam. A predikciós horizont ajánlott nagysága 10-20 mintavétel a számítási igény csökkentése miatt (így $T_s =$ \SI{300}{\second} adódna),  viszont a mérés során gyakrabban szerettem volna látni a változásokat, a mintavételi időt 30 másodpercnek vettem.
-
-A fentiek mellett viszont a szabályzó nem adott ki beavatkozójelet egészen egy predikciós horizontnyi ideig, azaz majdnem 1 órán keresztül\footnote{Ha 300 másodperces mintavételi időt használtam és 10 mintányi predikciós horizontot, ugyanez volt a helyzet. Ez idő alatt az MPC valószínűleg az állapotbecslőjét inicializálja.}. Az MPC képes a költségfüggvényben figyelembe venni a predikciós horizonton belül a referenciajel jövőbeli változásait (ez a \textit{Signal Previewing}), ezt kipróbáltam annak érdekében, hogy ezt a \say{holtidőt} csökkentsem, ám ellentétes hatást értem el.
+A fentiek mellett viszont a szabályozó nem adott ki beavatkozójelet egészen egy predikciós horizontnyi ideig, azaz majdnem 1 órán keresztül\footnote{Ha 300 másodperces mintavételi időt használtam és 10 mintányi predikciós horizontot, ugyanez volt a helyzet. Ez idő alatt az MPC valószínűleg az állapotbecslőjét inicializálja.}. Az MPC képes a költségfüggvényben figyelembe venni a predikciós horizonton belül a referenciajel jövőbeli változásait (ez a \textit{Signal Previewing}), ezt kipróbáltam annak érdekében, hogy ezt a \say{holtidőt} csökkentsem, ám ellentétes hatást értem el.
 
 A Simulink blokk viszont támogatja az MPC-nek kezdeti érték megadását. A kezdeti érték nélküli MPC-t szimulációban (azaz nem valós időben) futtattam, majd leolvastam annak belső állapotát. Az \verb|mpcstate| függvénnyel létre kellett hoznom egy objektumot, ami a Simulinkben a szabályzót inicializálja. Ehhez szükség volt a szabályzó állapotteres szakaszmodelljének\footnote{Amikor az MPC-t létrehozzuk, a szakaszmodellt a Matlab állapotteressé alakítja.} becsült állapotára, a zavarjel becsült értékére, a zaj becsült értékére (ez esetben üres vektor), a legutóbbi beavatkozójelre és egy kovarianciamátrixra (ezt nullmátrixnak vettem).
 
 Azzal, hogy a fenti objektumban a legutóbbi beavatkozójelet maximálisnak vettem, valós idejű futás esetén, a fizikai rendszer ugrásválaszánál nem kellett kivárnom egy órát, azaz a predikciós horizontnyi időt, hanem a szabályzó rögtön maximális beavatkozójelet adott ki.
 
-\subsection{A szabályzó költségfüggvénye}
+\subsection{A szabályozó költségfüggvénye}
 
-A költségfüggvény súlyait iteratívan választottam ki. A paraméterek akár a szabályzó futása közben is módosíthatók, hatásuk azonnal látható. Először a referenciakövetést leginkább befolyásoló $w_y$ paramétert állítottam be. 
+A költségfüggvény súlyait iteratívan választottam ki. A paraméterek akár a szabályozó futása közben is módosíthatók, hatásuk azonnal látható. Először a referenciakövetést leginkább befolyásoló $w_y$ paramétert állítottam be.
+ 
+\begin{figure}[H]
+	\centering
+	% trim={<left> <lower> <right> <upper>}
+	\includegraphics[width=0.4\textwidth, trim=0 168 0 0, clip,]{figures/realsys/disturbpar}
+	\caption{Referenciajel és zavarás a szimuláció során}
+	\label{fig:mpc-dist}
+\end{figure}
 
 \begin{figure}[H]
 	\begin{subfigure}[t]{0.32\textwidth}
@@ -145,28 +152,28 @@ A beavatkozást kevésbé büntettem, így a referenciakövetés megmaradt, visz
 \label{fig:mpc-wdu}
 \end{figure}
 
-A \ref{fig:mpc-wdu}. ábrán jól megfigyelhető, hogy nagy súly esetén a beavatkozójel frekvenciája lecsökken. Ez az épületgépészeti rendszerekben alacsonyabb energiafelhasználással járhat. Ám a három esetben különböző mértékű lengés tapasztalható állandósult állapotban: ezek közül az igényeknek, illetve a specifikációnak megfelelőt kell kiválasztani.
-
-Sajnos arra már nem maradt időm, hogy üzemeltetési költség szerint optimális súlyfüggvényt válasszak, de az MPC szabályzás alapjaival sikerült megismerkednem. 
-\pagebreak
-
-A rendszer zavarelnyomását mutatja az alábbi szimuláció:
-
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=0.8\textwidth]{figures/simscape/distrej}
-	\caption{A zárt szabályzási kör ugrásválasza}
+	\includegraphics[width=0.7\textwidth]{figures/simscape/distrej}
+	\caption{A zárt szabályozási kör ugrásválasza}
 	\label{fig:mpc-distrej}
 \end{figure}
 
-Ezután a szabályzót kipróbáltam a valós rendszeren is, a \textit{\ref{fig:realtimesimulink}. ábra} szerinti elrendezésben. A pontozott vonal a doboz környezeti hőmérséklete, a csökkenést az ablak kinyitásával értem el. A referenciakövetést még lehetne javítani, de további mérésekre már nem volt időm. Viszont amikor 85 perc környékén a hőmérséklet csökkenni kezdett, az MPC láthatóan rögtön megnövelte a beavatkozó jelét, és a \SI{23}{\degreeCelsius}-ról \SI{8}{\degreeCelsius}-ra csökkenő külső hőmérséklet mellett is tartotta a referencia értéket.
+A \ref{fig:mpc-wdu}. ábrán jól megfigyelhető, hogy nagy súly esetén a beavatkozójel frekvenciája lecsökken\footnote{A beavatkozás alapfrekvenciáját a \textit{\ref{fig:mpc-dist}. ábra} szerinti zavarjel adja, viszont a felfutás sebessége a $w_{\Delta u}$ paramétertől függ.}. Ez az épületgépészeti rendszerekben alacsonyabb energiafelhasználással járhat. Ám a három esetben különböző mértékű lengés tapasztalható állandósult állapotban: ezek közül az igényeknek, illetve a specifikációnak megfelelőt kell kiválasztani. A zavarelnyomást megvizsgáltam nagyobb tartományban változó külső hőmérséklettel is, ez látható a \textit{\ref{fig:mpc-distrej}. ábrán}.
+
+A szabályzót kipróbáltam a kísérleti rendszeren is, a \textit{\ref{fig:realtimesimulink}. ábra} szerinti elrendezésben. A pontozott vonal a doboz környezeti hőmérséklete, a csökkenést az ablak kinyitásával értem el.
+A külső hőmérséklet 85 perc környékén \SI{23}{\degreeCelsius}-ról csökkenni kezdett egészen \SI{8}{\degreeCelsius}-ra, de az MPC már a zavarás kezdetekor megnövelte a beavatkozó jelét és tartotta a referencia értéket. 
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=\textwidth]{figures/realsys/step}
+	\includegraphics[width=0.95\textwidth]{figures/realsys/step}
 	\caption{Mérés a fizikai rendszeren a behangolt MPC-vel}
 	\label{fig:mpc-step}
 \end{figure}
+
+A tárgyaltakon felül további lehetőségek is vannak a költségfüggvények megadására. \textit{Thieblemont és Schirrer} \cite{SCHIRRER201686} megmutatta, hogy különösen jó eredmény érhető el MPC szabályozás és megújuló energiák kombinált használatával. A költségfüggvényekben például laza megkötéseket is lehet tenni, amik az adott jelet korlátozzák ugyan, de mégis túlléphetők - ilyenek egy napelemes rendszernél könnyen előfordulhatnak. Ekkor a laza felső korlát lehet a napelemes rendszer teljesítménye, de ezen felül is lehet energiát felhasználni a hálózatból.
+
+Szintén \textit{Thieblemont} \cite{THIEBLEMONT2017485} készített felmérést az időjárás-előrejelzéssel kombinált MPC használatáról. (Itt a már korábban említett Signal Prevewing funkció használatos a jövőbeli bemenetek becsléséhez.) Az itt olvasható tapasztalatok és a bemutatott módszerek iránymutatást adhatnak a jövőbeni fejlesztésekhez.
 
 
 %% Feljesztési lehetőségek
