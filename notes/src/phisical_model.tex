@@ -22,7 +22,36 @@ A szabályzó a számítógépen fog futni, és mintavételi időnként a jelenl
 %A PI SPI-n küld a rádióadónak.
 %Rádiókommunikáció egyirányú.
 
-\section{Mintavételi idő és predikciós horizont}
+\section{Kísérleti rendszer identifikációja}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\textwidth]{figures/realsys/interior2}
+	\caption{A doboz belseje hőmérővel és szabályozható izzókkal}
+	\label{fig:realsys-interior}
+\end{figure}
+
+Mivel a valós rendszeremnek nincsen energetikai tanúsítványa, identifikáltam az ugrásválaszával.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.7\textwidth]{figures/realsys/ident}
+	\caption{Identfikációhoz használt mérési adatsor}
+	\label{fig:realsys-ident}
+\end{figure}
+
+\section{Szabályozótervezés az identifikált modellre}
+
+A valós idejű méréshez használni kívánt szabályzót érdemes először szimulációban megvizsgálni. Ekkor adott a szabályzott szakasz identifikált lineáris modellje, az MPC-t pedig létrehoztam  a modellhez az előző fejezet szerint. Ám az ott felmerülő nehézségeket, problémákat a fizikai rendszeren szerzett tapasztalatok miatt sikerült megoldani. A Simulinkben a tervezés az alábbi elrendezésben történt, használva az MPC szabályozás közbeni (online) hangolásának lehetőségét:
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\textwidth]{figures/simscape/simModel}
+	\caption{Lineáris modellre MPC szimulációja}
+	\label{fig:mpc-sim}
+\end{figure}
+
+\subsection{Mintavételi idő és predikciós horizont}
 
 Az MPC paraméterezésére \textit{Agachi \cite{romanMPC_Agachi}} könyvében találhatók ajánlások. A predikciós horizontot eszerint úgy kell megválasztani, hogy az a szakasz releváns dinamikáját lefedje. Mivel a felfutási ideje a kísérleti rendszernek kb. 1 óra, ezért ezt ekkorára választottam. A predikciós horizont ajánlott nagysága 10-20 mintavétel a számítási igény csökkentése miatt (így $T_s =$ \SI{300}{\second} adódna),  viszont a mérés során gyakrabban szerettem volna látni a változásokat, a mintavételi időt 30 másodpercnek vettem.
 
@@ -32,26 +61,9 @@ A Simulink blokk viszont támogatja az MPC-nek kezdeti érték megadását. A ke
 
 Azzal, hogy a fenti objektumban a legutóbbi beavatkozójelet maximálisnak vettem, valós idejű futás esetén, a fizikai rendszer ugrásválaszánál nem kellett kivárnom egy órát, azaz a predikciós horizontnyi időt, hanem a szabályzó rögtön maximális beavatkozójelet adott ki.
 
-%\begin{lstlisting}[
-%style=Matlab-editor,
-%basicstyle=\mlttfamily,
-%escapechar=`,
-%]
-%mpcstate05=mpcstate(mpc_labsys05,[163 81.5 11600],-0.858,[],1,zeros(4))
-%MPCSTATE object with fields
-%Plant: [163 81.5000 11600]
-%Disturbance: -0.8580
-%Noise: [1×0 double]
-%LastMove: 1
-%MATLAB Command Window Page 2
-%Covariance: [4×4 double]
-%\end{lstlisting}
+\subsection{A szabályzó költségfüggvénye}
 
-\section{Szabályozótervezés az identifikált modellre}
-
-A valós idejű méréshez használt szabályzót érdemes először szimulációban megvizsgálni. Ekkor az identifikált lineáris modell a szabályzott szakasz, a szabályzóparaméterek megváltoztatását pedig gyorsan meg lehet figyelni.
-
-
+A költségfüggvény súlyait iteratívan választottam ki. A paraméterek akár a szabályzó futása közben is módosíthatók, hatásuk azonnal látható. Először a referenciakövetést leginkább befolyásoló $w_y$ paramétert állítottam be. 
 
 \begin{figure}[H]
 	\begin{subfigure}[t]{0.32\textwidth}
@@ -78,7 +90,7 @@ A valós idejű méréshez használt szabályzót érdemes először szimuláci�
 	\label{fig:mpc-wy}
 \end{figure}
 
-
+A \ref{fig:mpc-wy-5}.~ábrán látható esetben volt a legjobb a referenciakövetés, így ezt a paramétert rögzítettem. Következőnek a $w_u$ paraméter értékét választottam meg. Ez a beavatkozójel nagyságát bünteti.
 
 \begin{figure}[H]
 \begin{subfigure}[t]{0.32\textwidth}
@@ -104,7 +116,9 @@ A valós idejű méréshez használt szabályzót érdemes először szimuláci�
 \caption{MPC viselkedése különböző $w_u$ értékekre, $w_y=5$ mellett}
 \label{fig:mpc-wu}
 \end{figure}
-\pagebreak
+ A \ref{fig:mpc-wu}.~ábrán látható, hogy nagy súly a költségfüggvényben lecsökkent beavatkozójelet, és így nagy követési hibát okoz. A két felsorolt paraméter valójában egymás ellenében hatnak\footnote{Bővebben a paraméterekről: https://uk.mathworks.com/help/mpc/ug/tuning-weights.html}.
+
+A beavatkozást kevésbé büntettem, így a referenciakövetés megmaradt, viszont a túllövés lecsökkent. Most már két fix paraméter mellett választottam súlyt a beavatkozójel változási sebességéhez.
 
 \begin{figure}[H]
 \begin{subfigure}[t]{0.32\textwidth}
@@ -131,8 +145,28 @@ A valós idejű méréshez használt szabályzót érdemes először szimuláci�
 \label{fig:mpc-wdu}
 \end{figure}
 
+A \ref{fig:mpc-wdu}. ábrán jól megfigyelhető, hogy nagy súly esetén a beavatkozójel frekvenciája lecsökken. Ez az épületgépészeti rendszerekben alacsonyabb energiafelhasználással járhat. Ám a három esetben különböző mértékű lengés tapasztalható állandósult állapotban: ezek közül az igényeknek, illetve a specifikációnak megfelelőt kell kiválasztani.
 
+Sajnos arra már nem maradt időm, hogy üzemeltetési költség szerint optimális súlyfüggvényt válasszak, de az MPC szabályzás alapjaival sikerült megismerkednem. 
+\pagebreak
 
+A rendszer zavarelnyomását mutatja az alábbi szimuláció:
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\textwidth]{figures/simscape/distrej}
+	\caption{A zárt szabályzási kör ugrásválasza}
+	\label{fig:mpc-distrej}
+\end{figure}
+
+Ezután a szabályzót kipróbáltam a valós rendszeren is, a \textit{\ref{fig:realtimesimulink}. ábra} szerinti elrendezésben. A pontozott vonal a doboz környezeti hőmérséklete, a csökkenést az ablak kinyitásával értem el. A referenciakövetést még lehetne javítani, de további mérésekre már nem volt időm. Viszont amikor 85 perc környékén a hőmérséklet csökkenni kezdett, az MPC láthatóan rögtön megnövelte a beavatkozó jelét, és a \SI{23}{\degreeCelsius}-ról \SI{8}{\degreeCelsius}-ra csökkenő külső hőmérséklet mellett is tartotta a referencia értéket.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\textwidth]{figures/realsys/step}
+	\caption{Mérés a fizikai rendszeren a behangolt MPC-vel}
+	\label{fig:mpc-step}
+\end{figure}
 
 
 %% Feljesztési lehetőségek

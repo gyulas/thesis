@@ -121,53 +121,14 @@ Ha pedig ez a hálózat egy tényleges fizikai rendszer (például egy vízforra
 
 \section{Épületfizikai alapösszefüggések}
  
- A fizikai modell felírásához szükség van néhány alapösszefüggésre.
- %TODO ide még valami bevezető
+ A Simscape modell felépítéséhez szükség van néhány alapösszefüggésre.
  
- \subsubsection*{Hőátbocsátási tényező}
- %TODO mi ez és miért jó
  Különböző hőmérsékletű testek közötti energiaátmenetet hőátvitelnek
  (hőtranszportnak) nevezzük. A magasabb hőmérsékletű
  test (a termodinamika második főtételének értelmében) átadja hőjének
- egy részét az alacsonyabb hőmérsékletű testnek.A hőátvitelnek három alapvető formája van, a hővezetés (kondukció), a hőáramlás (konvekció) és a hősugárzás (radiáció)\footnote{A hőátvitel definíciójának forrása: Dr. Fekete Iván, Épületfizika kézikönyv}.
- a rétegrendi hőátbocsátási tényező pedig számba veszi az összes réteg hatását: fal esetén annak két oldalán található levegő hőmérséklet-különbségével arányos hőáramot adja meg. 
+ egy részét az alacsonyabb hőmérsékletű testnek.
+A hőátvitelnek három alapvető formája van, a hővezetés (kondukció), a hőáramlás (konvekció) és a hősugárzás (radiáció)\footnote{A hőátvitel definíciójának forrása: Dr. Fekete Iván, Épületfizika kézikönyv}.
  
- \begin{equation}\label{eq_hoatbcsatas_U}
- \begin{aligned}
- U = \frac{1}{\frac{1}{\alpha_e}+\sum\limits_{i}^{}\frac{d_i}{\lambda_i}+\frac{1}{\alpha_i}}
- \end{aligned}
- \end{equation}
- 
-\subsubsection*{Hővezetés, hőáramlás, hősugárzás}
-
-A hőátadásnak három fajtája van, ezek 
-
-\begin{equation} \label{eq_hoaram_alap}
-\begin{aligned}
-q = U\Delta t = \frac{\Delta t}{R}
-\end{aligned}
-\end{equation}
-
-Ahol 
-
-\begin{itemize}[itemsep=6pt,topsep=0pt,parsep=0pt,partopsep=0pt]
-	\item[] $q$ a hőáram [\si[per-mode=fraction]{\watt\per\metre\squared}]
-	\item[] $\Delta t$ a hőmérséklet-különbség (a potenciálkülönbség analógiájára)
-	\item[] $U$ a hővezetési tényező [\si[per-mode=fraction]{\watt\per\metre\squared\per\kelvin}], reciproka az $R$ hővezetési ellenállás.
-\end{itemize}
-
-
-A külső falon a hőáramsűrűség:
-
-\begin{equation}\label{eq_hoveszteseg}
-\begin{aligned}
-q &= U_{fal}\Delta t = \alpha_i\left(t_i-t_{i,fal}\right)
-\end{aligned}
-\end{equation}
-
-Az U hőátbocsátási tényező szerepe tehát az, hogy a rétegek hatását együttesen kezelhessük. A \ref{table_house_parameters} táblázatban szerepel mindkét féle hőátadási tényező. 
-
-
 
 \begin{table}[H]
 	\footnotesize
@@ -183,6 +144,96 @@ Az U hőátbocsátási tényező szerepe tehát az, hogy a rétegek hatását eg
 	%\label{tab:TabularExample}
 	%\tabref{TabularExample}~táblázat
 \end{table}
+
+\subsection{Hővezetés}
+
+A hővezetés alapegyenlete:
+
+\begin{equation} \label{eq_hovezetes}
+\begin{aligned}
+Q = A \frac{\lambda}{d} \Delta T
+\end{aligned}
+\end{equation}
+
+Ezzel falszerkezeteken keresztüli hőáramot tudjuk megadni. Minden rétegre ismernünk kell a hővezetési tényezőt és a vastagságot.
+
+Több réteg és a levegő hatása együttesen is kezelhető a rétegrendi hőátbocsátási tényezővel: fal esetén annak két oldalán található levegő hőátadási tényezőjét is figyelembe veszi. Külső fal esetén így a hőveszteség felírható a belső és külső levegő hőmérsékletének függvényében. 
+
+\begin{equation}\label{eq_hoatbcsatas_U}
+\begin{aligned}
+U = \frac{1}{\frac{1}{\alpha_e}+\sum\limits_{i}^{}\frac{d_i}{\lambda_i}+\frac{1}{\alpha_i}}\\[10pt]
+Q = AU(t_i - t_e)
+\end{aligned}
+\end{equation}
+
+\subsection{Sugárzó és konvektív hőátadás}
+
+A hőáramlás (konvekció) alapegyenlete:
+
+\begin{equation} \label{eq_konvektiv}
+\dot Q_{le} = h_c ~ A ~ (t_{surf} - t_i)
+\end{equation}
+
+
+A \textit{REHVA Guidebook} \cite{RehvaGuidebookNo7} címében is szerepel az \textit{alacsony hőmérsékletű fűtés} fogalma. Ez nem paradoxon, csupán azt jelenti, hogy a fűtőfelületek hőmérséklete az átlagosnál alacsonyabb. A levegőnél csak néhány fokkal magasabb hőmérsékletű fűtési rendszerekben pedig alacsonyabb lehet az előremenő vízhőmérséklet. Megújuló energiát használó rendszerekre ez előnyösebb, mint a régi, széntüzelésű kazánok által előállított 80--\SI{90}{\celsius}-os előremenő vízhőmérséklet.
+
+A kis hőmérsékletkülönbség következménye, hogy a levegőnek csak kevés hőt képes leadni a rendszer. Nagyobb részt sugárzással működnek ezek a rendszerek, melyet a fűtetlen felületek nyelnek el. Ezért sugárzó (radiatív) hőátvitel esetén szokásos a $t_{AUST}$ jelölés, ami a fűtetlen felületek hőmérsékletét jelenti\footnote{AUST: Average unheated surface temperature, azaz a fűtetlen felületek átlagos hőmérséklete}.
+
+A sugárzási hőtranszfer alapegyenletét a Stefan-Boltzmann törvény adja
+
+
+\begin{equation} \label{eq_stefan_boltzmann}
+\begin{aligned}
+\dot Q_{r} &= \sigma T_{surf}^4
+\end{aligned}
+\end{equation}
+
+ahol
+\begin{itemize}[itemsep=9pt,topsep=0pt,parsep=0pt,partopsep=0pt]
+	\item[] $\sigma$ a Stefan-Boltzmann állandó [\si{W~m^{-2}.K^{-4}}] %\si[per-mode=fraction]{W/m^2K^4}% \si[per-mode=fraction]{\watt\per\metre\squared\per\kelvin\squared\squared} %eh [\si[per-mode = fraction]{\watt\per\metre\squared\per\kelvin^4}]
+	\item[] $T_{surf}$ [\si{\kelvin}] a termodinamikai, azaz kelvinben mért felületi hőmérséklet.
+\end{itemize}
+
+
+(\textit{Kilkis} \cite{KILKIS1994} ):
+
+\begin{equation} \label{eq_radiant_kilkis}
+\begin{aligned}
+\dot Q_{r} &= U_r ~ A~ \left(t_{surf}-t_{AUST}\right)\\[8pt]
+U_r&=rF\sigma\\
+r&=4 \left(\frac{T_{surf}}{2}+\frac{T_{AUST}}{2}\right)^3
+\end{aligned}
+\end{equation}
+
+
+ahol
+\begin{itemize}[itemsep=9pt,topsep=0pt,parsep=0pt,partopsep=0pt]
+	\item[] $T_{surf}, T_{AUST}$ [\si{\kelvin}] a termodinamikai, azaz kelvinben mért hőmérséklet.
+	\item[] $c$ [\si[per-mode = fraction]{\joule\per\kg\per\kelvin}] a víz fajhője
+	%	\item[] $\xi$ a szabályzó beavatkozó jele, $ \xi \in [0,1]$ folytonosan változhat 0 és 1 között
+	%	\item[] $\dot{m}$ [\si[per-mode = fraction]{\kg\per\second}] a víz tömegárama
+	%	\item[] $\Delta t = t_w-t_r$ [\SI{}{\kelvin}] a víz lehűlésének mértéke
+\end{itemize}
+
+A sugárzó hőleadási tényező bevezetésével linearizálhatjuk a hőleadást, a hőleadás így egyszerűen lineárisan függ majd a hőmérséklet-különbségtől. Gyakran összevonják a konvektív és a sugárzási hőátadási tényezőt. Én is így használom fel ezeket a padlófűtés modelljében: a felmelegedett padló sugárzással adja át a hőt a falaknak és a mennyezetnek. 
+
+\textit{Cholewa} \cite{CHOLEWA2013599} a $h_r$ paramétert méréssel határozta meg, amivel ezután az alábbi formában számolható a sugárzó hő mennyisége:
+
+
+
+\begin{equation} \label{eq_radiative_hr_linear}
+\dot Q_{r} = h_r ~ A ~ \left(t_{surf}-t_{AUST}\right)
+\end{equation}
+
+ahol
+\begin{itemize}[itemsep=3pt,topsep=0pt,parsep=0pt,partopsep=0pt]
+	\item[] $\dot{Q}_{r}$ [\SI{}{\watt}] a leadott sugárzó hő
+	\item[] $h_r$ [\si[per-mode = fraction]{\watt\per\meter\squared\per\kelvin}] sugárzó hőleadási tényező
+	\item[] $A$ [\si{\metre\squared}] a padló felülete
+	\item[] $t_{surf}$ [\SI{}{\kelvin}] padló hőmérséklete
+	\item[] $t_{AUST}$ [\SI{}{\kelvin}] fűtetlen felületek átlagos hőmérséklete - a fal hőmérsékletének veszem a Simscapeben
+\end{itemize}
+
 
 \subsubsection*{Hőtároló képesség}
 
@@ -230,41 +281,11 @@ A Matlab Simscape model és \textit{Lapusan} \cite{LAPUSAN2016320}
  hőátadásnál a réteges szerkezetekben számolt konvekcióval és kondukcióval is. Viszont ezek az adatok egyben is kezelhetők, a követelményeket ezekre a költségoptimalizált követelményszint\footnote{ A  költségoptimalizált követelményszintek megtalálhatók a 7/2006. rendelet \cite{TNM2006} 5. mellékletében.} adja meg. Régebbi épületek ezt a szintet nem tudják teljesíteni, ezekre jellemző értékeket adtam meg az alábbi táblázatban. 
 %todo táblázat
 
-Ám nem szabad összekeverni az U értéket (rétegrendi hőátbocsátási tényező) és az $\alpha_i$ konvektív hőátadási tényezőt, amit a válaszfalakra, padlóra és mennyezetre adtam meg, hiszen ezeken a modell szerint a helyiség nem veszt hőt, csak a hőtároló elemeknek adódik át.
-%todo kell-e ez itt. A hőátadási tényező a levegő és egy felület közötti hőátadást mutatja meg, a rétegrendi hőátbocsátási tényező pedig számba veszi az összes réteg hatását: fal esetén annak két oldalán található levegő hőmérséklet-különbségével arányos hőáramot adja meg.
-
-%TODO clarify - Viszont itt célszerű lenne a konvektív hőátadást is beleszámolni. 
-
-
-%(Baromi érdekes, hogy nálunk otthon van egy hőcserélő a használati melegvíz és a fűtési rendszer között, annak a hatásait is lehetne nézni.)
-
-%\begin{table}[ht]
-%	\footnotesize
-%	\centering
-%	\caption{Az órajel-generátor chip órajel-kimenetei.} \label{tab:SysClocks}
-%	\begin{tabular}{ | l | c | c |}
-%		\hline
-%		Órajel & Frekvencia & Cél pin \\ \hline
-%		CLKA & 100 MHz & FPGA CLK0\\
-%		CLKB & 48 MHz  & FPGA CLK1\\
-%		CLKC & 20 MHz  & Processzor\\
-%		CLKD & 25 MHz  & Ethernet chip \\
-%		CLKE & 72 MHz  & FPGA CLK2\\
-%		XBUF & 20 MHz  & FPGA CLK3\\
-%		\hline
-%	\end{tabular}
-%	\label{tab:TabularExample}
-%\end{table}
-
-
-
-
-
+Ám nem szabad összekeverni a külső falakra vonatkozó U értéket (rétegrendi hőátbocsátási tényező) és az $h_c$ konvektív hőátadási tényezőt, amit a válaszfalakra, padlóra és mennyezetre adtam meg, hiszen ezeken a modell szerint a helyiség nem veszt hőt, csak a hőtároló elemeknek adódik át.
 
  A példában a Schönherz Zoltán Kollégium egy szobájának megfelelő méretű helyiséget vettem fel. Minden szobának van ablaka és külső fala, egy átlagos szobát 4 másik vesz körül. A belső falakon nem veszt hőt, csak az ablakon ill. a külső falon. Feltételezzük, hogy a radiátoros fűtést egy szeleppel szabályozhatjuk, amit tetszőleges mértékben nyithatunk ki.
- A napsütés hőnyereségét is figyelembe vehetjük.%, úgy, hogy egy hőforrás a padlót melegíti.
+ %A napsütés hőnyereségét is figyelembe vehetjük.%, úgy, hogy egy hőforrás a padlót melegíti.
 
-\section{A modell}
 \begin{figure}[H]
 	\centering
 	% trim={<left> <lower> <right> <upper>}
@@ -322,7 +343,7 @@ A külső falon
 \end{aligned}
 \end{equation}
 
-Amennyiben a méretezési hőmérséklet $\Delta T=$ \SI{-2}{\celsius}, ami a téli átlaghőmérséklet Magyarországon.
+Amennyiben a méretezési hőmérséklet $\Delta T=$ \SI{-2}{\celsius}, ami a téli átlaghőmérséklet Magyarországon. Ezeket az adatokat fogom méretezéskor figyelembe venni.
 %TODO honnan \footnote{Épületfizika kurzus alapján vettem az átlaghőmérsékletet \SI{-2}{\celsius}-nak.}
 
 

@@ -56,7 +56,9 @@ Egy irodában, vagy lakásban  például 0.1\si{\celsius}-os vagy 1\si{\celsius}
 		$w_{\Delta u}$ 	& weight (rate of control signal) 		& beavatkozó jel változását bünteti
 		\\ 
 		$w_y$ 	& weight (measured output) 		& hibajelet büntető együttható
-		\\   \hline
+		\\
+		SF 		& scale factor 			& skálázási tényező
+		\\    \hline
 	\end{tabu}
 	\label{tab:MPCvariables}
 	\caption{A fejezetben ismertetett rövidítések és angol szakkifejezések}
@@ -136,14 +138,14 @@ Pontosan fel kellene ezért írni a forintosított költségét a beavatkozásna
 
 \subsection{Az MPC költségfüggvénye}
 
-Az MPC diszkrét idejű szabályzó. Lépésszámokban gondolkodik. Alapvetése, hogy a  optimális beavatkozójelet adjon ki.
 
-A szabályzó a predikciós horizonton belül minden lehetséges beavatkozójel-sorozatra kiszámolja annak (várható, modell szerinti) költségét. Azt a beavatkozójel-sorozatot választja, ami a legkisebb költséggel jár. Eztán a szabályzási horizontnak megfelelő számú beavatkozást végez, nem adja ki a teljes sorozatot. (Azaz pred.hor>control hor.)
+A szabályzó a predikciós horizonton belül minden lehetséges beavatkozójel-sorozatra kiszámolja annak (várható, modell szerinti) költségét. Azt a beavatkozójel-sorozatot választja, ami a legkisebb költséggel jár. Eztán a szabályzási horizontnak megfelelő számú beavatkozást végez, nem adja ki a teljes sorozatot. 
 
-A legbutább szabályzó control és prediction horizonja is 1. Azaz egy lépéssel lát előre és a legkedvezőbb esethez (J költség minimális) tartozó beavatkozó jelet végrehajtja\footnote{Ezt formalizálni kellene egyenletben is.}. $J=w_u u + w_e e$, ahol a hibát a szabályzóban lévő szakaszmodell alapján számítjuk. \textit{Agachi \cite{romanMPC_Agachi}} szerint:%(Gyakorlatilag egy állapotvisszacsatolás?)
+%A legbutább szabályzó szabályzási és predikciós horizontja is 1. Azaz egy lépéssel lát előre és a legkedvezőbb esethez (J költség minimális) tartozó beavatkozó jelet végrehajtja\footnote{Ezt formalizálni kellene egyenletben is.}. $J=w_u u + w_e e$, ahol a hibát a szabályzóban lévő szakaszmodell alapján számítjuk.
+\textit{Agachi \cite{romanMPC_Agachi}} szerint:
 
 \begin{equation} \label{eq_mpc_cost}
-J = \sum_{i}^{N} \left(w_u \Delta u^2 + w_e (r_i-y_i)^2  \right)
+J = \sum_{i}^{p} \left(w_u \Delta u^2 + w_e (r_i-y_i)^2  \right)
 \end{equation}
 
 %(itt még csak $r_i=r$ állandó referenciajellel tudtam csinálni. )
@@ -152,43 +154,47 @@ ahol N a predikciós horizont, $w_u$ a beavatkozó jel változásának súlya, $
 A költségfüggvényben a hibajelhez és beavatkozó jelekhez, ill. azok változásaihoz különböző súlyok tartozhatnak.
 Nagyobb súlyok nagyobb költséget eredményeznek, így a szabályzó a nagyobb költségű beavatkozójel-sorozatot kisebb valószínűséggel választja.
 
-%(Ez eszkalálódott):
+\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.8\textwidth]{figures/simscape/mpc}
+		\caption{A zárt szabályzási kör ugrásválasza}
+		\label{fig:mpc-simulated}
+\end{figure}
 
-
-
-
-
-Nem csak a bemenetek értékei súlyozhatók. Az egyik kinyomtatott doksiban nem csak a bemenetek, vagy a hibajel kap súlyozást, hanem a villamos energia aktuális ára is tényező.
-
-Kell keresni egy suitable költségfüggvényt. Illetve megfontolandó lenne vízhőmérsékletre szabályozni, annak a költsége szemléletesebb.
-
-\subsubsection{Súlyozás}
-A beavatkozó jelek és a szakasz kimenete is súlyozható, hogy azok a költségfüggvénybe mennyire szóljanak bele. A MATLAB lehetőséget ad arra, hogy ezeket a súlyokat működés közben befolyásoljuk. A Simulinkben beállítottam, hogy a radiátor szelepének alacsony kimenetére a szelep súlya 1 legyen, viszont 30\%-ban kinyitott szelepre csökkenjen le 0.5-re. Ez nem hozott javulást, ugyanis a nagy súllyal az MPC a predikciós horizonton végrehajtott egy optimalizálást. Ám ha a szelepet kinyitotta, a súlyok megváltoztak, így az optimális költségű beavatkozójel is. Viszont ennek éppen elősegítenie kellett volna a szabályzást, ehelyett összezavarta.
-
-
-Valójában fordítva kell. Kis amplitúdó esetén NULLA pluszköltség még jobban kinyitni ("Szívesen" növekedjen tovább ha még csak kicsit van nyitva.) Csak ha félig van kinyitva, akkor növeljük a költséget.
-
-Sajnos viszont a fenti költségeket nem lehet (nehéz) megfeleltetni forintosított tételeknek.
-
-Fel kellene írni egy ideális scenario-t és ahhoz igazítani a ktsg-fv-t, hogy annak az esetnek a kialakulása legyen valószínűbb.
-
-%
-%\subsection{Offline MPC - supervisory control}
-%
-%\textit{4.4. Approaches without real-time dynamic optimization}\footnote{Thieblemont-ból. A real-time update nélküli MPC a legegyszerűbb és a leggyorsabban kiszámolható. Gyakran más irányítási technikákon alapul.} Döntési fa, affin leképezés ilyenek.
-%
-%Elkészíteni az offline döntési hálót viszont nehezebb.
+A fenti ábrán látható a helyesen súlyozott MPC-vel a zárt szabályzási kör viselkedése. Ebben vannak tökéletlenségek, ezekre a fizikai modellnél térek majd rá. A szabályzóparaméterek az alábbi táblázatban láthatók.
+\begin{table}[H]
+	\footnotesize
+	\centering
+	%\renewcommand{\arraystretch}{2} % to increase cell height
+	%\taburulecolor{gray}
+	%\begin{tabular}{|p{0.8cm}|p{1cm}|p{1cm}|p{1cm}|p{1cm}|p{1cm}|p{1cm}|p{1cm}|}
+	%
+	%\begin{tabulary}{\linewidth}{LLc}
+	\begin{tabu}{@{}cl@{}}
+		\hline
+		$T_s$ 	& 1800 s
+		\\ 
+		p 		& 50 minta (25 óra)
+		\\ 
+		c 		& 1
+		\\
+		$w_u$ 	& 0.005 
+		\\ 
+		$w_{\Delta u}$ 	& 50
+		\\ 
+		$w_y$ 	& 20
+		\\
+		SF 		& 30 
+		\\   \hline
+	\end{tabu}
+	\label{tab:MPCfactors}
+	\caption{MPC szabályzó paraméterei}
+	%
+	%\label{tab:TabularExample}
+	%\tabref{TabularExample}~táblázat
+\end{table}
 
 \subsection{Fejlesztési lehetőségek a szabályzással kapcsolatban}
 	
 Épületautomatikai rendszerek használatával, például a fűtésszabályzás iContrALL intelligens otthon rendszerével a fellépő zavarásokat (emberek jelenléte, napsütés, szél) mérhetjük. A szabályzás a zavarások hatásmechanizmusának ismeretében jobb zavarelnyomást tud elérni, sőt az integrációval további beavatkozók is használhatók (például árnyékolástechnikai eszközök).
-
-
-
-\subsection{Validálás}
-Szimulációval ellenőrizzük a szabályzás robosztusságát. Ehhez megnöveltem a hőtároló tömegeket.
-
-Ötlet: random időpontban lehetne ablaknyitást szimulálni.
-Napsütés hatásmechanizmusa.
-Radiant heat transfer paramétere továbbra sem olyan világos: sok publikációban a hőmérsékletkülönbség lineáris függését tartalmazza és nem a Stefan-Boltzmann törvény szerinti negyedik hatvány szerintit
 
