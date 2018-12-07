@@ -19,20 +19,38 @@ A szabályzó a számítógépen fog futni, és mintavételi időnként a jelenl
 
 % 3600001117-es ID-jű, Raspberry Pi, IP címe fixen 192.168.0.108, 54321-es port.
 
-A PI SPI-n küld a rádióadónak.
-Rádiókommunikáció egyirányú.
+%A PI SPI-n küld a rádióadónak.
+%Rádiókommunikáció egyirányú.
 
 \section{Mintavételi idő és predikciós horizont}
 
-Az MPC paraméterezésére \textit{Agachi \cite{romanMPC_Agachi}} könyvében találhatók ajánlások. A predikciós horizontot eszerint úgy kell megválasztani, hogy az a szakasz releváns dinamikáját lefedje. Mivel a felfutási ideje a kísérleti rendszernek kb. 1 óra, ezért ezt ekkorára választottam. A predikciós horizont ajánlott nagysága 10-20 mintavétel, a számítási igény csökkentése miatt. Ezért a mintavételi időt 300 másodpercnek (5 perc) vettem.
+Az MPC paraméterezésére \textit{Agachi \cite{romanMPC_Agachi}} könyvében találhatók ajánlások. A predikciós horizontot eszerint úgy kell megválasztani, hogy az a szakasz releváns dinamikáját lefedje. Mivel a felfutási ideje a kísérleti rendszernek kb. 1 óra, ezért ezt ekkorára választottam. A predikciós horizont ajánlott nagysága 10-20 mintavétel a számítási igény csökkentése miatt (így $T_s =$ \SI{300}{\second} adódna),  viszont a mérés során gyakrabban szerettem volna látni a változásokat, a mintavételi időt 30 másodpercnek vettem.
 
-A fentiek mellett viszont a szabályzó nem adott ki beavatkozójelet egészen egy predikciós horizontnyi ideig, azaz majdnem 1 órán keresztül\footnote{Ha 30 másodperces mintavételi időt használtam és 100 mintányi predikciós horizontot, ugyanez volt a helyzet. Ez idő alatt az MPC valószínűleg az állapotbecslőjét inicializálja.}. Az MPC képes a költségfüggvényben figyelembe venni a predikciós horizonton belül a referenciajel jövőbeli változásait (ez a \textit{Signal Previewing}), ezt kipróbáltam annak érdekében, hogy ezt a \say{holtidőt} csökkentsem, ám ellentétes hatást értem el.
+A fentiek mellett viszont a szabályzó nem adott ki beavatkozójelet egészen egy predikciós horizontnyi ideig, azaz majdnem 1 órán keresztül\footnote{Ha 300 másodperces mintavételi időt használtam és 10 mintányi predikciós horizontot, ugyanez volt a helyzet. Ez idő alatt az MPC valószínűleg az állapotbecslőjét inicializálja.}. Az MPC képes a költségfüggvényben figyelembe venni a predikciós horizonton belül a referenciajel jövőbeli változásait (ez a \textit{Signal Previewing}), ezt kipróbáltam annak érdekében, hogy ezt a \say{holtidőt} csökkentsem, ám ellentétes hatást értem el.
 
-A Simulink blokk viszont támogatja az MPC-nek kezdeti érték megadását. A kezdeti érték nélküli MPC-t szimulációban futtattam, majd leolvastam annak belső állapotát.
+A Simulink blokk viszont támogatja az MPC-nek kezdeti érték megadását. A kezdeti érték nélküli MPC-t szimulációban (azaz nem valós időben) futtattam, majd leolvastam annak belső állapotát. Az \verb|mpcstate| függvénnyel létre kellett hoznom egy objektumot, ami a Simulinkben a szabályzót inicializálja. Ehhez szükség volt a szabályzó állapotteres szakaszmodelljének\footnote{Amikor az MPC-t létrehozzuk, a szakaszmodellt a Matlab állapotteressé alakítja.} becsült állapotára, a zavarjel becsült értékére, a zaj becsült értékére (ez esetben üres vektor), a legutóbbi beavatkozójelre és egy kovarianciamátrixra (ezt nullmátrixnak vettem).
 
+Azzal, hogy a fenti objektumban a legutóbbi beavatkozójelet maximálisnak vettem, valós idejű futás esetén, a fizikai rendszer ugrásválaszánál nem kellett kivárnom egy órát, azaz a predikciós horizontnyi időt, hanem a szabályzó rögtön maximális beavatkozójelet adott ki.
 
+%\begin{lstlisting}[
+%style=Matlab-editor,
+%basicstyle=\mlttfamily,
+%escapechar=`,
+%]
+%mpcstate05=mpcstate(mpc_labsys05,[163 81.5 11600],-0.858,[],1,zeros(4))
+%MPCSTATE object with fields
+%Plant: [163 81.5000 11600]
+%Disturbance: -0.8580
+%Noise: [1×0 double]
+%LastMove: 1
+%MATLAB Command Window Page 2
+%Covariance: [4×4 double]
+%\end{lstlisting}
 
 \section{Szabályozótervezés az identifikált modellre}
+
+A valós idejű méréshez használt szabályzót érdemes először szimulációban megvizsgálni. Ekkor az identifikált lineáris modell a szabályzott szakasz, a szabályzóparaméterek megváltoztatását pedig gyorsan meg lehet figyelni.
+
 
 
 \begin{figure}[H]
@@ -112,3 +130,32 @@ A Simulink blokk viszont támogatja az MPC-nek kezdeti érték megadását. A ke
 \caption{MPC viselkedése  $w_{\Delta u}$ értékekre, $w_y=5$, $w_u=0.05$ mellett}
 \label{fig:mpc-wdu}
 \end{figure}
+
+
+
+
+
+%% Feljesztési lehetőségek
+%\begin{formal}
+%	Még lehetséges:
+%	\begin{itemize}[noitemsep,topsep=-8pt,parsep=0pt,partopsep=0pt]
+%		%		\item kazán bekapcsolása
+%		%		\item előremenő hőmérséklet - unmeasured VAGY uncontrolled inputként
+%		%		\item 1 db. fűtőtest (most radiátor) szelepének tömegárama (szelep áteresztése)
+%		%		\item Később több fűtőtest vagy többféle fűtőtestek (padlófűtés, különböző teljesítményű radiátorok) szabályozása
+%		\item környezeti hőmérséklet: predikció / szekvencia használata% is lesz rá. Hatása a kimeneten már identifikálva lett, 3 pólussal és 2 zérussal tökéletesen lekövethető.
+%		\item napsugárzás zavaró hatása% - szimulálható  a bizonytalansága valószínűleg nagy lesz
+%	\end{itemize}
+%	
+%	Belső változók - fűtési rendszer és ház kapcsolata
+%	\begin{itemize}[noitemsep,topsep=-6pt,parsep=0pt,partopsep=0pt]
+%		\item napsugárzás - radiatív, az ablak felületével és a szöggel arányos
+%		\item fűtőtestek sugárzó és konvektív hőárama
+%	\end{itemize}
+%	
+%	Paraméterek a plantben nem állandók:
+%	\begin{itemize}[noitemsep,topsep=-6pt,parsep=0pt,partopsep=0pt]
+%		%		\item hőátadási tényezők hőmérsékletfüggők, áramlási sebesség-függők (szél)
+%		\item szellőztetés, belső hőterhelés hatása
+%	\end{itemize}
+%\end{formal}

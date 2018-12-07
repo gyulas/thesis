@@ -2,53 +2,77 @@
 
 A fejezetben a Simulinkben átviteli függvényre megtervezem a szabályzást. A szabályzó választásakor világossá vált, hogy egy egyszerű PID típusú szabályzás nem képes a rendszert jól kezelni. Igaz, hogy a PID közismert és az iparban egyszerűsége miatt széles körben használt, de épületgépészeti alkalmazásnál egy szabályzás jóságát többféleképp is értelmezhetjük\footnote{Mást tekintünk jó szabályzásnak egy tisztatérben, egy irodában, vagy egy nagyelőadóban, hiszen mások a felmerülő igények, és így a kritériumok is.}. Egyes esetekben hibahatárt megszabva lazíthatunk például a referenciakövetési feltételeken.
 
-Az identifikált modellekre többféle szabályzót tervezek, illetve próbálok ki.
+Az identifikált modellre többféle szabályzót tervezek, illetve próbálok ki.
 
-A hasonló feladatokra leggyakrabban modell-prediktív (MPC) szabályzást használnak \cite{AFRAM2014343}. Ehhez szükség van a szakasz modelljére, ami alapján a szabályzó szimulálhatja a szakasz kimenetét. A szimuláció több mintavételi perióduson, egy predikciós horizonton keresztül fut le, minden lehetséges  beavatkozójel-sorozatra a kimenetet szimulálva.
+A hasonló feladatokra leggyakrabban modell-prediktív (MPC) szabályzást használnak \cite{AFRAM2014343}. Ehhez szükség van a szakasz modelljére, ami alapján a szabályzó szimulálhatja a szakasz kimenetét. Az MPC egy beavatkozójel kiadása előtt több mintavételi perióduson, egy predikciós horizonton keresztül fut le, minden lehetséges  beavatkozójel-sorozatra a kimenetet szimulálva.
 %A csúszóablak miatt receding horizon control
-Ezen sorozatok közül a legjobbat kiválasztja és egy lépést végrehajt. Ezután a szimuláció újrakezdődik. Az optimális beavatkozójelet egy költségfüggvény minimalizálásával kapja. A költségfüggvényben különböző eltéréseknek vagy abszolútértékeknek különböző súlya lehet.
+Ezen sorozatok közül a legjobbat kiválasztja és egy lépést végrehajt. Ezután a szimuláció újrakezdődik. A végrehajtott, adott horizonton optimális beavatkozójelet egy költségfüggvény minimalizálásával kapja. A költségfüggvényben különböző eltéréseknek vagy abszolútértékeknek különböző súlya lehet.
 
-Egy irodában, vagy lakásban 0.1\si{\celsius}-os vagy 1\si{\celsius}-os pontosságú hőmérsékletszabályzás közötti különbség komfortban aligha érezhető. Ám a követelmények megengedhető mértékű lazítása az energiafogyasztást nagyban lecsökkentheti.
+A szabályzás tehát képes egy horizontig előre tekinteni, és azon belüli optimális beavatkozást végrehajtani. (Az angol nyelvű irodalom erre \textit{receding horizon} névvel hivatkozik.) Az optimalizációt minden mintavételkor végrehajtja, így képes korrigálni, ha a jósolt kimenet és a tényleges kimenet eltérő.
 
-\begin{formal}
-	Ha az mpc blokknak van külső ktsg fv. bemenete, használjuk azt. Ebből kössük rá a numerikus képleteket. A teljesítmény integrálját és pillanatértékét, ill. túl gyors változását is lehet büntetni és energetikai szempontotkat (kazán hatásfoka, energia ára, napelemmel megtermelt mennyiség, azaz törés az energiaköltségben, ha egy külön blokkban megadjuk ezeket.)
-\end{formal}
+A zárt szabályzási körben a stabilitás viszont nem garantált, erre külön módszerek léteznek (úgynevezett \textit{terminal cost}, azaz végső költség, illetve időben változó súlyozás). Mivel a vizsgált rendszerem nyílt körben is stabil, ezekkel nem kell foglalkoznom.
 
-\section{Ismerkedés az MPC szabályzással}
+A stabilitás a beavatkozó jelek és a zavarjel (külső hőmérséklet) korlátosságából fakad. Ezeket is be lehet állítani a szabályzón, így az MPC a szelepekre csak 0 és 1 közötti beavatkozó jelet fog kiadni. A változások hatásait is figyelembe vehetjük, mivel a szelepeket 4-5 perc teljesen kinyitni.
 
-\subsection*{Nomenklatúra}
+A helyiség hőmérséklet-szabályozásakor a legfontosabb feladat a költségfüggvény súlyainak helyes beállítása\footnote{A súlyozást kiegészíthetik a fizikai korlátok is. Ha a szelepek nyitási- és zárási sebessége korlátos, akkor ezt nem lehet túllépni alacsony súly használatával sem.}. Ezek ugyanis befolyásolják a referenciakövetést - az állandósult állapotbeli hibát és lengést - és a beavatkozójel nagyságát, frekvenciáját is.
 
-\begin{itemize}[noitemsep,topsep=-8pt,parsep=0pt,partopsep=0pt,leftmargin=42pt]
-	\item[\textbf{MPC}] Model Predicive Control
-\end{itemize}
-
-\vspace{12pt}
-
-
-\begin{table*}[h]
-	\caption{Az MPC be-és kimenetei a szabályzási körben}
-	\label{nomencl_mpcsignals}
-	\begin{itemize}[noitemsep,topsep=0pt,parsep=2pt,partopsep=4pt,leftmargin=42pt]
-		\item[\textbf{MO}] Measured output of the plant - a visszacsatolt jel
-		\item[\textbf{REF}] A referenciajel % konstans vagy tomb?
-		\item[\textbf{MD}] Measured disturbance on plant input (?) - ha a zavarjelet lehet mérni, de beavatkozni azon a bemeneten nem lehet
-		\item[\textbf{MV}] Manipulated variable of the plant - beavatkozó jel 
-	\end{itemize}
-\end{table*}
-Egyéb MPC paraméterek: mintavételi idő, predikciós horizont, control horizont, súlyozás, soft vagy hard constraintek, cost, optimum (szuboptimum) , stabliltás / garanciák
-
-%terminal constraint, online optimization, adaptive parameters
-
-%\vspace{12pt}
-
+Az épületgépészeti rendszereknél a nagyobb frekvenciájú beavatkozójel könnyedén jelenthet alacsonyabb hatásfokot. Viszont ha megengedünk valamennyi ingadozást állandósult állapot körül, a terhelést kiegyenlíthetjük.
+Egy irodában, vagy lakásban  például 0.1\si{\celsius}-os vagy 1\si{\celsius}-os pontosságú hőmérséklet-szabályzás közötti különbség komfortban aligha érezhető.
+\vspace{6pt}
 
 \input{src/tikz/mpcinout}
+\vspace{6pt}
 
-\subsection{Elvárások a szabályzás teljesítményével szemben}
+\begin{table}[H]
+	\footnotesize
+	\centering
+	%\renewcommand{\arraystretch}{2} % to increase cell height
+	%\taburulecolor{gray}
+	%\begin{tabular}{|p{0.8cm}|p{1cm}|p{1cm}|p{1cm}|p{1cm}|p{1cm}|p{1cm}|p{1cm}|}
+	%
+	%\begin{tabulary}{\linewidth}{LLc}
+	\begin{tabu}{@{}cll@{}}
+		\hline
+		MPC 	& model predictive control 		& modell-prediktív szabályozás
+		\\
+		MO / OV	& measured output, output variable 	& mért kimenet (szabályzott jellemző)
+		\\
+		MD		& measured disturbance			& mért zavarás 
+		\\
+		MV		& manipulated variable			& beavatkozó jel
+		\\
+		REF 	& reference signal 				& referenciajel
+		\\
+		$T_s$ 	& sampling time					& mintavételi idő
+		\\ 
+		p 		& prediction horizon 			& predikciós horizont 
+		\\ 
+		c 		& control horizon				& szabályzási horizont
+		\\
+		J 		& cost function 				& költségfüggvény
+		\\
+		$w_u$ 	& weight (control signal) 		& beavatkozó jelet büntető együttható
+		\\ 
+		$w_{\Delta u}$ 	& weight (rate of control signal) 		& beavatkozó jel változását bünteti
+		\\ 
+		$w_y$ 	& weight (measured output) 		& hibajelet büntető együttható
+		\\   \hline
+	\end{tabu}
+	\label{tab:MPCvariables}
+	\caption{A fejezetben ismertetett rövidítések és angol szakkifejezések}
+	%
+	%\label{tab:TabularExample}
+	%\tabref{TabularExample}~táblázat
+\end{table}
+\vspace{10pt}
+
+
+
+\section{Elvárások a szabályzás teljesítményével szemben}
 
 Az MPC hangolása során % működését, tulajdonságait meg tudjam figyelni,
 lépésről lépésre fogom módosítani az alapértelmezett paramétereket, azok hatását megfigyelem.
-Az MPC szintézis folyamata:% be kellene tabolni
+Az MPC szintézis folyamata a következő:% be kellene tabolni
 
 
 \begin{enumerate}[noitemsep,topsep=0pt,parsep=2pt,partopsep=4pt,leftmargin=30pt]
@@ -63,21 +87,19 @@ Az MPC szintézis folyamata:% be kellene tabolni
 
 %Identifikálni kell a szakaszt.
 
-A \verb|"setmpcsignals()"| függvény használatával egy új átviteli függvényt hozunk létre, amit az MPC függvénynek odaadhatunk. Ez annyival több az identifikált átviteli függvénynél, hogy benne vannak a be-és kimenetek típusai is, aszerint, hogy az említett jelek milyen típusúak. A szakasz átviteli függvényének be-~és kimeneteit meg kell nevezni, a típusokat az \ref{nomencl_mpcsignals} listából választhatjuk ki. Ezután az \verb|"mpc(tf, Ts)"| függvénnyel létrehozhatjuk az MPC szabályzót a megadott szakaszmodellre.
-
-Ezzel még nem kaptunk használható szabályzót, mert az alapértelmezett súlyok és a normalizálatlan bemenetek miatt a legkisebb költségű beavatkozás az, ha egyszerűen nem csinálunk semmit.
-
-A költségfüggvény akkor működik jól, ha a modellbemeneteket 1-re normáljuk. Be kell állítani tehát az MPC mért változó tulajdonságánál a modell kimenetének 1-re skálázását. 
-
-Alapértelmezés szerint a költségfüggvény súlyai az alábbiak. A zárt szabályzási körben ezek a súlyok a hibajelet büntették a legjobban, ezért nagyon jó referenciakövetést sikerült elérni.
+A \verb|"setmpcsignals()"| függvény használatával egy új átviteli függvényt hozunk létre, amit az MPC függvénynek odaadhatunk. Ez annyival több az identifikált átviteli függvénynél, hogy benne vannak a be-és kimenetek típusai is, aszerint, hogy az említett jelek milyen típusúak. A szakasz átviteli függvényének be-~és kimeneteit meg kell nevezni (\verb|MO, MD, MV|) Ezután az \verb|"mpc(tf, Ts)"| függvénnyel létrehozhatjuk az MPC szabályzót a megadott szakaszmodellre.
 
 
-Követelmények a referenciajelekre:
 
-Thermal comfort - Olesen, ISO EN 7730
-
-Floor temperature - herz-ől is
-
+%Alapértelmezés szerint a költségfüggvény súlyai az alábbiak. A zárt szabályzási körben ezek a súlyok a hibajelet büntették a legjobban, ezért nagyon jó referenciakövetést sikerült elérni.
+%
+%
+%Követelmények a referenciajelekre:
+%
+%Thermal comfort - Olesen, ISO EN 7730
+%
+%Floor temperature - herz-ől is
+%
 
 
 %Az MPC szabályzót létrehoztam a toolbox-szal, az identfikált szakaszból. Beállítottam a be-és kimenetek jellegét, korlátait. A ki-és bemeneteket helyesen bekötve már működött is a szabályzás.
@@ -86,182 +108,31 @@ Floor temperature - herz-ől is
 %A kezdeti cél egy "sima" szabályzás. Kérdés, hogy egyáltalán tud-e ilyet az MPC. Gyanítom, hogy a hibaminimalizáló függvény megfelelő megadásával tud: ha egy négyzetes hibaminimalizáló van rajta, \textit{biztosan "jó"} lesz.\footnote{Bármit is jelentsen a \textit{jó} szabályzás.}
 
 
+%A fenti a klasszikus MPC, tov. info. Baochang DING, Modern MPC című könyvében olvasható.
 
-\subsection{A MATLAB MPC Toolbox elemei}
-Az MPC blokknak van egy alapértelmezett költségfüggvénye, és ennek a súlyozását lehet beállítani.
-Külön beállítható a szabályzási és a szimulációs horizont.
-Ezek optimális beállításai 
+\section{A létrehozott MPC tulajdonságai}
 
-A kezdeti MPC szabályzót egyszerűen létre lehet hozni az identifikált modellből és a bemenetek típusának megadásával. (A szelep a beavatkozó jel, illetve a plantnek van még egy bemenete, egy mérhető zavarás.) Ezután a bemenetek értékkészletét adtam meg, illetve van egy normalizáló faktor, ami a jellemző "full scale".
+Az \verb|"mpc()"| függvény még nem ad azonnal használható szabályzót. Az alapértelmezett súlyok és a normalizálatlan bemenetek miatt a legkisebb költségű beavatkozás akár az is lehet, hogy a szabályzó nagy követési hiba ellenére nulla beavatkozó jelet ad ki.
 
-Az optimalizálás egy költségfüggvény minimalizálását jelenti, amiben büntetjük a referenciajeltől való eltérést és a beavatkozó jelek értékét vagy változását.
+A költségfüggvény akkor működik jól, ha a modellbemeneteket normáljuk. Be kell állítani az MPC mért változóinak tulajdonságánál a modell kimenetének  skálázását, amit az állandósult állapotbeli értékek, illetve a jellemző változásoknak megfelelően kell beállítani.
 
-A fenti a klasszikus MPC, tov. info. Baochang DING, Modern MPC című könyvében olvasható.
+A helyiség modelljénél nagy eltérések vannak, hiszen a szelepek normálva vannak, a hőmérséklet értékeket viszont kelvinben értelmezem. Így a skálafaktort a 30..300 közötti nagyságrendben célszerű választani, mivel a hőmérsékletértékek nagyságrendileg \SI{30}{\degreeCelsius}-nyi tartományban változnak.
 
-
-%\begin{lstlisting}[
-%style=Matlab-editor,
-%basicstyle=\mlttfamily,
-%escapechar=`,
-%]
-%tf_19_toMPC=setmpcsignals(tf19, 'Manipulated',[2 3],'MeasuredDisturbances' ,1)
-%
-%tf_19_toMPC =
-%
-%From input "u1" to output "y1":
-%   3.776e-05 s^2 + 5.958e-09 s + 8.529e-15
-%--------------------------------------------
-%s^3 + 0.002341 s^2 + 9.301e-09 s + 8.241e-15
-%
-%
-%From input "u2" to output "y1":
-%                 7.74 s + 0.000236
-%---------------------------------------------------
-%s^4 + 1.269e04 s^3 + 4262 s^2 + 3.299 s + 8.454e-06
-%
-%
-%From input "u3" to output "y1":
-%  6.361e-05
-%-------------
-%s + 2.637e-06
-%
-%Input groups:
-%       Name                 Channels
-%   Manipulated                 2,3
-%     Measured                   1
-%
-%Output groups:
-%       Name                 Channels
-%     Measured                   1
-%
-%Name: tf19
-%Continuous-time identified transfer function.
-%Parameterization:
-%    Number of poles: [3 4 1] Number of zeros: [2 1 0]
-%    Number of free coefficients: 14
-%    Use "tfdata", "getpvec", "getcov" for parameters and their uncertainties.
-%
-%Status:
-%Estimated using TFEST on time domain data "tf_3in1out__68d".
-%Fit to estimation data: 82.28% (stability enforced)
-%FPE: 1.707, MSE: 1.706 
-%
-%
-%>> mpc_control_slab=mpc(tf_19_toMPC,1)
-%-->Converting linear model from System Identification Toolbox to statespace.
-%-->The "PredictionHorizon" property of "mpc" object is empty. Trying
-%PredictionHorizon = 10.
-%-->The "ControlHorizon" property of the "mpc" object is empty. Assuming 2.
-%-->The "Weights.ManipulatedVariables" property of "mpc" object is empty.
-%Assuming default 0.00000.
-%-->The "Weights.ManipulatedVariablesRate" property of "mpc" object is
-%empty. Assuming default 0.10000.
-%-->The "Weights.OutputVariables" property of "mpc" object is empty.
-%Assuming default 1.00000.
-%MPC object (created on 30-Oct-2018 20:51:50):
-%---------------------------------------------
-%Sampling time: 1 (seconds)
-%Prediction Horizon: 10
-%Control Horizon: 2
-%Plant Model: 
-%MATLAB Command Window Page 6
-%--------------
-%2 manipulated variable(s) -->| 8 states |
-%| |--> 1 measured output
-%(s)
-%1 measured disturbance(s) -->| 3 inputs |
-%| |--> 0 unmeasured
-%output(s)
-%0 unmeasured disturbance(s) -->| 1 outputs |
-%--------------
-%Indices:
-%(input vector) Manipulated variables: [2 3 ]
-%Measured disturbances: [1 ]
-%(output vector) Measured outputs: [1 ]
-%Disturbance and Noise Models:
-%Output disturbance model: default (type "getoutdist
-%(mpc_control_slab)" for details)
-%Measurement noise model: default (unity gain after scaling)
-%Weights:
-%ManipulatedVariables: [0 0]
-%ManipulatedVariablesRate: [0.1000 0.1000]
-%OutputVariables: 1
-%ECR: 100000
-%State Estimation: Default Kalman Filter (type "getEstimator
-%(mpc_control_slab)" for details)
-%Unconstrained
-%>> mpc_control_slab.ManipulatedVariables(1).Min = 0;
-%>> mpc_control_slab.ManipulatedVariables(2).Min = 0;
-%>> mpc_control_slab.ManipulatedVariables(2).Max = 1;
-%mpc_control_slab.ManipulatedVariables(1).Max = 1;
-%
-%\end{lstlisting}
+A Simulinkben identifikált modell egy munkapont körül (adott környezeti hőmérséklet mellett) volt csak pontos, ám ez a referenciakövetést nem rontotta el. A szabályzás megváltozott paraméterekkel is működött a Simscape hálózatra, a referenciakövetés minősége megmaradt.
 
 
-\subsection{A létrehozott MPC tulajdonságai}
-
-\begin{formal}
-	Még lehetséges:
-	\begin{itemize}[noitemsep,topsep=-8pt,parsep=0pt,partopsep=0pt]
-		%		\item kazán bekapcsolása
-		%		\item előremenő hőmérséklet - unmeasured VAGY uncontrolled inputként
-		%		\item 1 db. fűtőtest (most radiátor) szelepének tömegárama (szelep áteresztése)
-		%		\item Később több fűtőtest vagy többféle fűtőtestek (padlófűtés, különböző teljesítményű radiátorok) szabályozása
-		\item környezeti hőmérséklet: predikció / szekvencia használata% is lesz rá. Hatása a kimeneten már identifikálva lett, 3 pólussal és 2 zérussal tökéletesen lekövethető.
-		\item napsugárzás zavaró hatása% - szimulálható  a bizonytalansága valószínűleg nagy lesz
-	\end{itemize}
-	
-	Belső változók - fűtési rendszer és ház kapcsolata
-	\begin{itemize}[noitemsep,topsep=-6pt,parsep=0pt,partopsep=0pt]
-		\item napsugárzás - radiatív, az ablak felületével és a szöggel arányos
-		\item fűtőtestek sugárzó és konvektív hőárama
-	\end{itemize}
-	
-	Paraméterek a plantben nem állandók:
-	\begin{itemize}[noitemsep,topsep=-6pt,parsep=0pt,partopsep=0pt]
-		%		\item hőátadási tényezők hőmérsékletfüggők, áramlási sebesség-függők (szél)
-		\item szellőztetés, belső hőterhelés hatása
-	\end{itemize}
-\end{formal}
-
-%Az elvárás a következő lépésben az, hogy ha egy $t_0$ időpontban a rendszer egy adott állapotban van, és várható egy zavarás $\Delta t$ idő múlva (vagy mértem egy zavarást MOST és a hatása csak később jelenne meg a kimeneten), akkor a rendszer megfelelően beavatkozzon.
-%
-%(Azaz ha fél óra múlva \SI{10}{\celsius}-al melegebb lesz, ne fűtsön.)
-
-\subsubsection{A kezdeti szabályzó problémái}
-Igaz, hogy az alapjelkövetés gyakorlatilag tökéletes volt, de a beavatkozó jelnek a gyakorlatban nem csak a nagysága, hanem a frekvenciája is korlátos. Ezért a beavatkozó szervnek is kell egy átviteli függvény ideális esetben. (Itt most a szelepről van szó.)
-
-A \textit{súlyozatlan} MPC nem vette figyelembe a beavatkozójel változásának \textit{nagy} költségét, ezért irreálisan gyorsan nyitotta és zárta azt.
-A gyakorlatban nincs szükség tűpontos referenciakövetésre, a hőmérséklet kb. \SI{1}{\celsius}-ot ingadozhat. ($\pm$ \SI{0.5}{\celsius}) Ha ezt megengedjük, a beavatkozás költsége lecsökkenhet.
-
-\subsubsection{Robosztusság}
-
-A Simulinkben identifikált modellre pontosan lehetett átviteli függvényt illeszteni, így a szabályzóban futó modell gyakorlatilag tökéletes volt. Gyakorlatban viszont a modellek igencsak pontatlanok lehettek, így megvizsgáltam a szabályzás viselkedését megváltozott paraméterekkel is. Ezt a szabályzás alapvetően jól viselte, a referenciakövetés minősége megmaradt.
-
-\section{A szabályzó paramétereinek finomítása, hangolása, alapbeállítások felülírása}
-
-A mintavételi időt megnöveltem. A ház identifikációját és az MPC tervezést is 5 perces időállandóval végeztem.
-
-\begin{itemize}[noitemsep,topsep=-8pt,parsep=0pt,partopsep=0pt]
-	\item A mintavételi idő növelése a Matlab default workspace-ben magával vonja, hogy a Simulink blokkban is módosul a $T_s$. 
-	\item A Simulinkben az időt a jobb alsó sarokban mindig mp-ben írja ki. Ámde ha a steppingnél 1000 step-et állítok be, az a jobb alsó sarokban $T_s$-sel felskálázva fogja a mp-t mutatni. Azaz 5 perces sampling time esetén 1 step a jobb alsó sarokban T=300 mp-nek felel meg.
-	\item A mintavételi idő megválasztása nagyban meghatározza a költségfüggvény értékét.
-%	\item
-%	\item
-%	\item
-%	\item
-%	\item
-%	\item	
-\end{itemize}
+%\begin{itemize}[noitemsep,topsep=-8pt,parsep=0pt,partopsep=0pt]
+%	\item A mintavételi idő növelése az MPC-ben magával vonja, hogy az a Simulink blokkban is módosul. 
+%	\item A Simulinkben az időt a jobb alsó sarokban mindig mp-ben írja ki. Ámde ha a steppingnél 1000 step-et állítok be, az a jobb alsó sarokban $T_s$-sel felskálázva fogja a mp-t mutatni. Azaz 5 perces sampling time esetén 1 step a jobb alsó sarokban T=300 mp-nek felel meg.
+%	\item A mintavételi idő megválasztása nagyban meghatározza a költségfüggvény értékét.
+%\end{itemize}
 
 
 
-\subsubsection{Módosítások az MPC-ben}
+\subsection{Módosítások az MPC-ben}
 
 A súlyozást módosítva adhatunk költséget a beavatkozásnak, csökkentve így pl. annak a frekvenciáját. Ez a referenciakövetést rontja, de esetünkben nem cél a tized \si{\celsius}-os pontosság, hanem az energiamegtakarítás.
-Pontosan fel kellene ezért írni a forintosított költségét a beavatkozásnak, és ezt minimalizálni\footnote{\textit{Feng \cite{FENG2015199}} is szelepet használt, de az ott felírt költségfüggvényt nem pontosan értem.}
-
-Egyensúlyt kell találni a referenciakövetés és a beavatkozás között. Külön érdekesség, hogy ha nem távfűtést használunk, akkor a kis beavatkozásnak is nagy költsége van. Erre a súlyozásnál egy LUTot lehetne használni. Btw. a hőszivattyúk kis terhelésen is nagy hatásfokkal működnek. Online weight tune elképzelhető, pl. a beavatkozó jeltől függően.
+Pontosan fel kellene ezért írni a forintosított költségét a beavatkozásnak, és ezt minimalizálni\footnote{\textit{Feng \cite{FENG2015199}} is szelepet használt, de az ott felírt költségfüggvényt nem pontosan értem.}. Ez viszont egy összetett kapcsolat és jelentősen függ az épületgépészettől. Így általánosan fogom a paraméterváltozások hatásait vizsgálni.
 
 \subsection{Az MPC költségfüggvénye}
 

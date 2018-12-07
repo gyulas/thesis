@@ -75,13 +75,13 @@ A "vezetékek" így azonos hőmérsékletű (ekvipotenciális) pontokat kötnek 
 A hőáramlást a hőellenállások korlátozzák, mivel azokon hőmérsékletesés mérhető. (Az ábrán mért hőáram a hőellenálláson eső hőmérséklettel arányos, a \textit{\ref{eq_hoaram_alap}. egyenlet} szerint.) A hőtároló elemeknek tömege és fajhője megadja a hőkapacitásukat, így ezek feltöltődhetnek, energiát tárolhatnak.
 
 
-A mintahálózat egy RC-tagnak felel meg, erre a szabályzótervezés lépései a következők lennének:%\footnote{Tekintsük a mintahálózatot és az itt részletezett lépéseket egy szemléletes példának, ugyanis a szakdolgozatban tárgyalt hálózatra is ezeken a lépéseken fogok végighaladni.}:
+A mintahálózat egy RC-tagnak felel meg, erre a szabályzótervezés lépései a következők lennének\footnote{Tekintsük a mintahálózatot és az itt részletezett lépéseket egy szemléletes példának, ugyanis a szakdolgozatban tárgyalt hálózatra is ezeken a lépéseken fogok végighaladni.}:
 
 Az identifikációnál ismert a rendszer jellege, így 0 zérussal, 1 pólussal átviteli függvényt identifikálnék.
-Erre szabályzót lehetne tervezni. A szimuláció során a termikus hálózat alapjele helyére kerülne a szabályzó beavatkozó jele. A visszacsatolás a hőmérő kimenetéről történne. Ekkor, mivel a tervezés során használt modell és a  szakasz között nincs eltérés (angolul \textit{mismatch}), a szabályzás jól működik.
-A paraméterek módosításával a szabályzó robusztusságát lehet tesztelni.
+Erre szabályzót lehetne tervezni. A szimuláció során a termikus hálózat alapjele helyére kerülne a szabályzó beavatkozó jele. A visszacsatolás a hőmérő kimenetéről történne. Ilyen esetben, mivel a tervezés során használt modell és a  szakasz között nincs eltérés (angolul \textit{mismatch}), a szabályzás jól működik.
+A paraméterek módosításával a szabályzó robusztussága tesztelhető.
 
-Ha ez a hálózat egy tényleges fizikai rendszer (például egy vízforraló) modellje lenne, akkor a szabályzás történhetne úgy, hogy a szabályzó egy beágyazott számítógépen fut, majd a teljesítményelektronikán keresztül a kívánt teljesítményt szolgáltatja, hogy például azonos hőmérsékleten tartsa benne a teát.
+Ha pedig ez a hálózat egy tényleges fizikai rendszer (például egy vízforraló) modellje lenne, akkor a szabályzás történhetne úgy, hogy a szabályzó Matlab-ban fut\footnote{A Matlab C kódot is képes generálni, ez is futtatható arra alkalmas eszközön, a számítógép nem feltétlenül szükséges.}, a hőmérsékletet mérjük, illetve a teljesítményelektronikán keresztül be tudunk avatkozni, így egy beállított hőmérsékletet tarthatunk.
 
 \begin{figure}[H]
 	\begin{subfigure}[t]{\textwidth}
@@ -124,9 +124,12 @@ Ha ez a hálózat egy tényleges fizikai rendszer (például egy vízforraló) m
  A fizikai modell felírásához szükség van néhány alapösszefüggésre.
  %TODO ide még valami bevezető
  
- \subsubsection*{Hőátbocsátási tényező számítása}
+ \subsubsection*{Hőátbocsátási tényező}
  %TODO mi ez és miért jó
- A hőátadási tényező a levegő és egy felület közötti hőátadást mutatja meg,
+ Különböző hőmérsékletű testek közötti energiaátmenetet hőátvitelnek
+ (hőtranszportnak) nevezzük. A magasabb hőmérsékletű
+ test (a termodinamika második főtételének értelmében) átadja hőjének
+ egy részét az alacsonyabb hőmérsékletű testnek.A hőátvitelnek három alapvető formája van, a hővezetés (kondukció), a hőáramlás (konvekció) és a hősugárzás (radiáció)\footnote{A hőátvitel definíciójának forrása: Dr. Fekete Iván, Épületfizika kézikönyv}.
  a rétegrendi hőátbocsátási tényező pedig számba veszi az összes réteg hatását: fal esetén annak két oldalán található levegő hőmérséklet-különbségével arányos hőáramot adja meg. 
  
  \begin{equation}\label{eq_hoatbcsatas_U}
@@ -217,8 +220,7 @@ Ebben az esetben eltérek a szabványban használt módszerektől. Az \textit{MS
 
 \section{A megvalósított modell}
 
-Figyelembe kell vennem a ház hőveszteségeit és hőtároló képességét is, a () és () egyenletek alapján, melynek paraméterei a \ref{table_house_parameters}. táblázatban találhatók.
-%Ennek paraméterei: a határoló elemek felszíne, hőátbocsátási tényezője, a hőtároló elemek fajhője.
+Figyelembe kell vennem a ház hőveszteségeit és hőtároló képességét is, a \textit{\ref{eq_hotarolo-tomeg}. egyenlet} alapján, melynek paraméterei a \ref{table_house_parameters}. táblázatban találhatók.
 Az alábbi táblázat értékeinek nagy részét ki lehet tölteni a tanúsítványból. Feltételezem, hogy ez rendelkezésre áll, hiszen ennek elkészítésére elég sok esetben szükség van (adásvétel, felújítás, stb.).
 Az épület éves hőigénye numerikusan is szerepel a tanúsítványban. Itt a fűtési rendszer tulajdonságain kívül a várható napsütéses órák számát és a használati melegvíz előállításának energiaigényét figyelembe veszi\footnote{A hőigény számításához törvényi előírások alapján különböző korrekciós tényezőket használnak.}.
 %TODO hol van ez a törvényben?

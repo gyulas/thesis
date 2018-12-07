@@ -2,27 +2,21 @@
 
 %szabályozástechnika, hőszabályozás, modell prediktív szabályozás, hőátadás, épületgépészet, intelligens épület, szimuláció, 
 A szakdolgozatban fűtési rendszerek modell-prediktív szabályzásának lehetőségeit vizsgálom Matlab Simulinkben.
-Végighaladok az MPC tervezés lépésein, a tervezést és a validálást is szimulált szakaszmodellen végzem. A szakaszmodellt egy helyiség és annak fűtési rendszere alkotja, a fűtés hője a helyiségből külső homlokzaton távozik a környezet felé. Az állandósult állapotban szükséges fűtési teljesítményt képlettel számítom, ebből kapható a beavatkozó jel egy adott teljesítményigényhez. A hőkapacitásokat és hőátadási, hővezetési tényezőket Simscape modell tartalmazza%(\ref{table_heater_parameters}. és \ref{table_house_parameters}. táblázat)
-, meghatározva a szakasz dinamikáját. Megvizsgálom az MPC predikciós horizontjának, költségfüggvényének illetve mintavételi idejének hatását a zárt szabályzási kör viselkedésére. 
-
-%tranziens viselkedését
-%A szimulációhoz felállított modellhez számításokra is szükség van,
-%Állandósult állapotra felírt képlet adja a szükséges fűtési teljesítményt
-
-A tervezési lépéseket ezután valós, fizikai modellen is elvégzem, így látható lesz, hogy egy kész házra, vagy annak egy részére mennyi munkával jár a szabályzó beállítása. Ha a modellezésre, hangolásra fordított idő megtérül, azaz komfortnövekedéssel, illetve az üzemeltetési költségek csökkenésével jár, akkor az iContrALL intelligens otthon rendszerbe is beilleszthetők lesznek az új funkciók.
+Végighaladok az MPC tervezés lépésein, a tervezést és a validálást is szimulált szakaszmodellen végzem. A szakaszmodellt egy helyiség és annak fűtési rendszere alkotja, a fűtés hője a helyiségből külső homlokzaton távozik a környezet felé. A fűtőtestekben keringő víz tömegáramát arányos szelepekkel lehet korlátozni. Az állandósult állapotban szükséges fűtési teljesítményt képlettel számítom, ebből kapható a beavatkozó jel egy adott teljesítményigényhez. A hőkapacitásokat és hőátadási, hővezetési tényezőket Simscape blokkokkal megvalósított modell tartalmazza, meghatározva a szakasz dinamikáját. Megvizsgálom az MPC predikciós horizontjának, költségfüggvényének illetve mintavételi idejének hatását a zárt szabályzási kör viselkedésére. 
+A tervezési lépéseket ezután laborkörülmények között egy fizikai modellen is elvégzem, így látható lesz, hogy egy valós rendszerre mennyi munkával jár a szabályzó beállítása. Ha a modellezésre, hangolásra fordított idő megtérül, azaz komfortnövekedéssel, illetve az üzemeltetési költségek csökkenésével jár, akkor az iContrALL intelligens otthon rendszerbe is érdemes lehet beilleszteni ezeket a funkciókat.
 
 \chapter*{Abstract}
 
 %control theory, Model Predictive Control (MPC), Building Automation, building control, heat transfer, simulations, intelligent building, 
-In my Bachelor's Thesis I inspect the possibilities of MPC control design and validation in Matlab Simulink. I am going step-by-step through the MPC design procedure with simulated plant model. The plant model consists of a room and its heating system with proportional valves to control the water mass flow, thus providing heat for the room. Losses at the facade was taken int consideration (outer walls and window), I assume no heat loss to the neighboring rooms.
+In my Bachelor's Thesis I inspect the possibilities of MPC control design and validation in Matlab Simulink. I am going step-by-step through the MPC design procedure with simulated plant model. The plant model consists of a room and its heating system with proportional valves to control the water mass flow, thus providing heat for the room. Losses at the facade was taken into consideration (outer walls and window), I assume no heat loss to the neighboring rooms.
 
-The steady-state heat input for the room model is calculated by formula and then fed to a Simscape thermal network. This network gives the transient response of the room by simulating the charging of the heat capacities, such as air and the mass of the building / room itself. %TODO fajhő
-I design an MPC controller for the identified model of the plant. In the design procedure I study the impact of different control parameters to the control performance, such as the sampling time of the controller, the prediction and control horizon or the weights of the cost function.
+The steady-state heat input for the room model is calculated by a formula and then fed to a Simscape thermal network. This network gives the transient response of the room by simulating the charging of the heat capacities, such as air and the mass of the room itself.
+I design an MPC controller for the identified plant model. In the design procedure I study the impact of different control parameters to the control performance, such as the sampling time of the controller, the prediction and control horizon or the weights of the cost function.
 
-Then, for a real phisical system, an MPC controller is also designed. A paper box with some wood and some brick with reasonable heat capacity is studied. The heating mechanism is substituted by car headlights. 
+Then, for a real physical system, an MPC controller is also designed. A paper box with some wood and some brick with reasonable heat capacity is studied. The heating mechanism is substituted by car headlights. 
 Designing an MPC controller for this system shows the challenges we facing in real applications, such as computing times, effect of measurement uncertainities and disturbances.
 
-If the time spent for modeling and designing of the controller increases the comfort and/or reduces operating costs, the method can be feasible for real applications and integrated to an intelligent building system
+If the time spent for modeling and designing of the controller increases the comfort and/or reduces operating costs, the method can be feasible for real applications and integrated to an intelligent building system.
 
 
 \chapter{Bevezetés}

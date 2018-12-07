@@ -1,81 +1,22 @@
 \begin{figure}[h]
 	\centering
 	\begin{tikzpicture}[>=stealth]
-
-			%	\node [draw,label={[label distance=1cm]90:label}] at (9,0) {Node};
-			%	
-			%	\node (n) at (-5,5) {n};
-			%	\draw [<-] (n.north) -- +(0,5mm) node[above]{Mért értékek};
-			%	\draw [<-] (n.west) -- +(-5mm,0);
-			%	\draw [<-] (n.south) -- +(0,-5mm);
-	
-	% Szabályzási kör elemei
-
 	% Controller
 	% ----------
-	\node[draw,rectangle, minimum height=3cm,minimum width=6cm,
+	\node[draw,rectangle, minimum height=2cm,minimum width=5cm,
 		  %label={[xshift=1.0cm, yshift=0.3cm]Label},
 		  %label={[xshift=-4.1cm, yshift=-0.7cm]Label},
 		  ]
 		  (MPC) at (2.3,2.5) {\parbox{2cm}{\centering MPC}};	
 	
 	% az MPC doboz bemenetei
-	\draw [<-] (MPC.160) node[right]{MO} -- +(-15mm,0) node[left]{$T_i$};
-	\draw [<-] (MPC.170) node[right]{REF} -- +(-15mm,0) node[left]{$T_{ref}$};
+	\draw [<-] (MPC.165) node[right]{MO} -- +(-15mm,0) node[left]{$T_i$};
+	\draw [<-] (MPC.180) node[right]{REF} -- +(-15mm,0) node[left]{$T_{ref}$};
 	\draw [->] (MPC.0) node[left]{MV} -- +(15mm,0) node[right]{$\alpha$ [\si{\percent}]};
-	\draw [<-] (MPC.180) node[right]{MD} -- +(-15mm,0) node[left]{$T_e$};
-	
-%	\draw [<-] (MPC.160) node[right]{MO} -- +(-15mm,0) node[left]{Mért értékek};
-%	\draw [<-] (MPC.170) node[right]{REF} -- +(-15mm,0) node[left]{Referenciajel};
-%	\draw [->] (MPC.0) node[left]{MV} -- +(15mm,0) node[right]{Beavatkozó jel};
-%	\draw [<-] (MPC.180) node[right]{MD} -- +(-15mm,0) node[left]{Mért zavarjelek};
-
-	
-	%	\node[rectangle, minimum height=1cm,minimum width=1cm] (ghostRef) at (-3,3.6) {};	
-%	\node[rectangle, minimum height=1cm,minimum width=1cm] (ghostMeas) at (-3,2.85) {};	
-%	\node[rectangle, minimum height=1cm,minimum width=1cm] (ghostDist) at (-3,2.15) {};
-	
-	%\node[draw,rectangle, minimum height=2cm,minimum width=5.5cm] (Simsc) at (9,2.5) {\parbox{2cm}{\centering fűtési rendszer Simscape}};
-	%\node[draw,rectangle, minimum height=1.5cm,minimum width=3cm] (house) at (5,0) {\parbox{2cm}{\centering ház Simscape}};
-	%\node[draw,rectangle, minimum height=1.5cm,minimum width=3cm] (ctr) at (0,0) {controller};
-	
-	
-	%\draw[->] (ghostRef.0) node[left]{Referenciajel} --  (MPC.160) node[right]{REF};  %node[above left]{$\alpha_{radiator}$}; 
-	%\draw[->] (ghostMeas.0) node[left]{Mért értékek} --  (MPC.173) node[right]{MO};  %node[above left]{$\alpha_{radiator}$}; 
-	%\draw[->] (ghostDist.0) node[left]{Mért zavarás} --  (MPC.186) node[right]{MD};  %node[above left]{$\alpha_{radiator}$}; 
-	
-	%\draw[->] (ctr.191) node[right]{${u_{2}}$} -| ++(-1.7,1.3)|-  (Numeric.182) node[right]{$\alpha_{floor}$};  %node[above left]{$\alpha_{radiator}$}; 
-	%\draw[->] (ctr.169) node[right]{${u_{1}}$}-| ++(-1,0.8)  |-  (Numeric.195) node[right]{$\alpha_{radiator}$} ;
-	
-	%\draw[->] (d.0) node[left]{heat [W]} ->  ++(3,0) ->  (house.180);
-	%\draw [->] (MPC.0) node[left]{$Q_r, Q_c$ [W]} -| ++(2,-2.5)  |- (house.0) node[left]{${Q_{be}}$}; %++(1.5cm,0) -- (2cm,0pt) -- (2.5cm,10pt);
-	
-	%\draw[->] (house.180)  node[right]{${T_i}$} -- (ctr.0) ;
-	%\draw[->] (d.20) -| ++(1,-1) |- (y.350);
-	
-	%\path 
-	%(d.150)	 edge[<->] 	node[anchor=north,above]{valvePercent}	(y.270);
+	\draw [<-] (MPC.195) node[right]{MD} -- +(-15mm,0) node[left]{$T_e$};
 	
 	\end{tikzpicture}
 
 	\caption{Az MPC be- és kimenetei}
 	\label{fig_mpcinout}
 \end{figure}
-
-%\begin{tikzpicture}[>=stealth,remember picture]
-%\node[draw,rectangle,inner sep=0.5cm] (y) at (0,0) {$A$};
-%\node[draw] (d) at (0,2) {%
-%%	\begin{tikzpicture}[remember picture]
-%%	\matrix [matrix of math nodes] (mat)
-%%	{
-%%		B & \phantom{C}   \\
-%%		\phantom{B} & C \\
-%%	};
-%%	\end{tikzpicture}
-%%};
-%%\draw[->,shorten >= 6pt] (y.west) -| ++(-1,1) |- (mat-1-1);
-%%\draw[->,shorten >= 6pt] (y.west) -| ++(-0.8,1) |- (mat-2-1);
-%%\draw[->] ($(mat-2-2)+(14pt,0)$) -| ++(0.8,-1) |- (y.east);
-%%\draw[->] ($(mat-1-2)+(14pt,0)$) -| ++(1,-1) |- (y.east);
-%\end{tikzpicture}
-
