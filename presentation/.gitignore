@@ -1,0 +1,7 @@
+#Latex files in this folder
+
+*.aux
+*.out
+*.gz
+*.toc
+*.log
