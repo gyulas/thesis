@@ -53,7 +53,7 @@
 	\setlength{\itemsep}{6pt}
 	\item Szabályozástechnikai tudás elményítése
 	\item Kutatási eredmények megismerése
-	\item Törekvés piacképes termékre	
+	\item Mindeközben törekvés a piacképességre is	
 \end{itemize}
 \end{frame}
 
@@ -112,13 +112,17 @@ Mire van igény a piacon?
 	\setlength{\itemsep}{7pt}
 	\item Van egy problémakör:
 	\begin{itemize}
+		\item energiahatékonyság (törvényi megfelelőség)
 		\item nagy kibocsátás
 		\item magas költségek
 		\item diszkomfort
 	\end{itemize}
+	\pause
+	
 	\item Megoldási lehetőség:
 	\begin{itemize}
-		\item egy korszerű fűtésszabályozás?
+		\item egy korszerű fűtésszabályozás,\\
+		ami teljesíti a követelményeket?
 		%\item intelligens otthonok (marketinggel fűszerezve)
 	\end{itemize}
 \end{itemize}
@@ -129,24 +133,113 @@ Mire van igény a piacon?
 \begin{frame}{Tudásalapú termékfejlesztés}
 
 Mit szeretnék csinálni?
+\pause
+\vspace{6pt}
 
 \begin{itemize}
-	\setlength{\itemsep}{7pt}
+	\setlength{\itemsep}{12pt}
 	\item Szabályozástechnika (analízis és tervezés):
 	\begin{itemize}
 		\item MIMO rendszerek paraméterbizonytalansággal
 		\item mérhető vagy becsülhető zavarások
 		\item prediktív szabályozás
 	\end{itemize}
+	\pause
+
 	\item Fejlesztési lehetőség:
 	\begin{itemize}
-		\item egy korszerű fűtésszabályozás?
+		\item egy korszerű fűtésszabályozás, \\
+		amivel a fentiek vizsgálhatók, szemléltethetők?
 		%\item intelligens otthonok (marketinggel fűszerezve)
+	\end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{A kiválasztott irány}
+
+Szabályozástechnikai feladat:
+
+\begin{itemize}
+	\item helyiségenkénti hőmérsékletszabályozás,
+	\item radiátoros és padlófűtéssel
+\end{itemize}
+\vspace{6pt}
+
+Ehhez szükséges:
+
+
+\begin{itemize}
+	\item a szakasz paraméterezhető modellje
+	\item egy modell-prediktív szabályozó
+\end{itemize}
+
+
+\end{frame}
+
+
+\begin{frame}{MPC szabályozás}
+
+Publikációk alapján a leggyakoribb korszerű szabályozó
+
+\begin{itemize}
+	\setlength{\itemsep}{12pt}
+	\item Modellalapú működés - kép a Simulinkből
+	\begin{itemize}
+		\item épület
+		\item fűtési rendszer
+		\item prediktív szabályozás
+	\end{itemize}
+	\item Követelményei:
+	\begin{itemize}
+		\item radiátorszelep
+		\item hőmérő
 	\end{itemize}
 \end{itemize}
 \end{frame}
 
 
 
+\begin{frame}{Szimuláció, modellalkotás}
+
+A modell nagyon részletesen szerepel a dolgozatban, elvi újdonságot nem tartlalmaz (RC-hálózat) és a szabályozás rész érdekesebb, azzal foglalkoznék.
+
+Tervezés szimulációval.
+
+%\begin{itemize}
+%\setlength{\itemsep}{10pt}
+%\item Szabályozástechnika (analízis és tervezés):
+%\begin{itemize}
+%	\item MIMO rendszerek paraméterbizonytalansággal
+%	\item mérhető vagy becsülhető zavarások
+%	\item prediktív szabályozás
+%\end{itemize}
+%\item Fejlesztési lehetőség:
+%\begin{itemize}
+%	\item egy korszerű fűtésszabályozás?
+%	%\item intelligens otthonok (marketinggel fűszerezve)
+%\end{itemize}
+%\end{itemize}
+
+
+\end{frame}
+
+\begin{frame}{Tervezés lépései}
+
+Szimuláció:
+\begin{itemize}
+	\item valós rendszer modelljének paraméterezése
+	\item modell identifikáció
+	\item szabályozás tervezése, validálása
+\end{itemize}
+\vspace{6pt}
+
+Valós rendszerre:
+\begin{itemize}
+	\item a tervezett szabályozó kipróbálása
+	\item finomítás
+\end{itemize}
+
+
+\end{frame}
 
 \end{document}
