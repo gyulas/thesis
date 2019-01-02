@@ -79,25 +79,7 @@
 \end{itemize}
 \end{frame}
 
-\begin{frame}{Műszaki tartalom}
 
-Piacvezérelt vagy tudásalapú terméket szeretnék?
-
-\begin{itemize}
-	\setlength{\itemsep}{7pt}
-	\item tudományos: korszerű szabályozások, pl.
-	\begin{itemize}
-		\item optimális
-		\item prediktív
-		\item robosztus%szabályozástechnikai ismeretekre van szükség
-	\end{itemize}
-	\item piacivezérelt: igények alapján
-	\begin{itemize}
-		\item PI-szabályzós termosztát (önhangoló)
-		\item intelligens otthonok (marketinggel fűszerezve)
-	\end{itemize}
-\end{itemize}
-\end{frame}
 
 
 %\begin{frame}{Műszaki tartalom}
@@ -179,13 +161,14 @@ Piacvezérelt vagy tudásalapú terméket szeretnék?
 \centering
 \begin{tikzpicture}[thick,scale=0.65, every node/.style={scale=0.65}]
 \path[mindmap,concept color=black,text=white]
-node[concept] {\normalsize Termékfejlesztés}
+node[concept] {\normalsize Termékfejlesztés,\\innováció}
 [counterclockwise from=210, level 1 concept/.append style={sibling angle=120}]
 
 child[concept color=red] {
 node[concept] {Piacvezérelt\\ ötlet}
-[clockwise from=-90, level 2 concept/.append style={sibling angle=120}]
+[clockwise from=-75, level 2 concept/.append style={sibling angle=60}]
 child { node[concept] {törvényi \\ előírások} }
+child { node[concept] {marketing} }
 child { node[concept] {piaci \\ igények,\\trendek} }
 }
 child[concept color=green!50!black] {
@@ -202,6 +185,26 @@ child {
 %child { node[concept] {pro\-gramming languages} }
 };
 \end{tikzpicture}
+\end{frame}
+
+\begin{frame}{Műszaki tartalom}
+
+Piacvezérelt vagy tudásalapú terméket szeretnék?
+
+\begin{itemize}
+	\setlength{\itemsep}{7pt}
+	\item tudományos: korszerű szabályozások, pl.
+	\begin{itemize}
+		\item optimális
+		\item prediktív
+		\item robosztus%szabályozástechnikai ismeretekre van szükség
+	\end{itemize}
+	\item piacvezérelt: igények alapján
+	\begin{itemize}
+		\item PI-szabályzós termosztát (önhangoló)
+		\item intelligens otthonok (marketinggel fűszerezve)
+	\end{itemize}
+\end{itemize}
 \end{frame}
 
 
@@ -374,28 +377,28 @@ Valós rendszerre:
 \Fontvi
 \centering
 \begin{tikzpicture}[thick,scale=0.65, every node/.style={scale=0.65}]
-\tikzstyle{root concept}+=[concept color=blue!80]
 %\tikzset{level 1 concept/.append style={level distance = 90mm, scale=0.5}}
-\path[mindmap,concept color=black,text=white]
-node[concept] {\normalsize Tervezes}
+\path[mindmap,concept color=blue!66!green!90!gray,text=white]
+node[concept] {\normalsize MPC szabályozó\\tervezés}
 [counterclockwise from=210, level 1 concept/.append style={node distance=6cm,sibling angle=120}]
 
-child[concept color=red] {
-	node[concept] {Piacvezérelt\\ ötlet}
-	[clockwise from=-90, level 2 concept/.append style={sibling angle=120}]
-	child { node[concept] {törvényi \\ előírások} }
-	child { node[concept] {piaci \\ igények,\\trendek} }
+child[concept color=yellow!80!gray!90!red] {
+	node[concept] {Matlab}
+	[clockwise from=-70, level 2 concept/.append style={sibling angle=70}]
+	child { node[concept] {szimuláció} }
+	%child { node[concept] {energetikai\\tanúsítvány} }
+	child { node[concept] {\scalebox{0.9}{szabályozó-}\\ \scalebox{0.9}{tervezés}} }
+	child { node[concept] {modell-\\alkotás} }
 }
-child[concept color=green!50!black] {
-	node[concept] {Tudás-\\vezérelt\\ötlet}
+child[concept color=blue!25!red] {
+	node[concept] {Valós rendszer}
 	[clockwise from=15, level 2 concept/.append style={sibling angle=90}]
-	child { node[concept] {épületfizika} }
+	child { node[concept] {teszt} }
 	child {
-		node[concept] {\scalebox{0.9}{szabályozás-}\\ \scalebox{0.9}{technika}}
+		node[concept] {\scalebox{0.9}{adaptív}\\ \scalebox{0.9}{hangolás}}
 		[clockwise from=-15, level 3 concept/.append style={sibling angle=60, thick,scale=1.1}]
-		child { node[concept] {MIMO\\rendszerek} }
-		child { node[concept] {zavarások\\hatása} }
-		child { node[concept, scale=1.2] { \scalebox{0.9}{prediktív}\\ \scalebox{0.9}{szabályozás}} }
+		%child { node[concept] {historikus\\adatok} }
+		%child { node[concept, scale=1.2] { \scalebox{0.9}{prediktív}\\ \scalebox{0.9}{szabályozás}} }
 	}
 	%child { node[concept] {pro\-gramming languages} }
 };
@@ -403,33 +406,5 @@ child[concept color=green!50!black] {
 \end{frame}
 
 
-
-
-%\begin{frame}{Mindmap}
-%
-%
-%\begin{tikzpicture}
-%\path[mindmap,concept color=black,text=white]
-%node[concept] {Termékfejlesztés}
-%[clockwise from=0]
-%child[concept color=green!50!black] {
-%	node[concept] {practical}
-%	[clockwise from=90]
-%	child { node[concept] {algorithms} }
-%	child { node[concept] {data structures} }
-%	child { node[concept] {pro\-gramming languages} }
-%	child { node[concept] {software engineer\-ing} }
-%}  
-%child[concept color=blue] {
-%	node[concept] {applied}
-%	[clockwise from=-30]
-%	child { node[concept] {databases} }
-%	child { node[concept] {WWW} }
-%}
-%child[concept color=red] { node[concept] {technical} }
-%child[concept color=orange] { node[concept] {theoretical} };
-%\end{tikzpicture}
-%
-%\end{frame}
 
 \end{document}
