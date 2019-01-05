@@ -4,6 +4,23 @@
 \usepackage[T1]{fontenc}
 \usepackage[magyar]{babel}
 \usetheme{default}
+\usepackage{subcaption} %subfigure
+
+%\usepackage{pgfpages}
+%\pgfpagesuselayout{4 on 1}[a4paper,border shrink=5mm]
+% print with space for notes
+%\usepackage{handoutWithNotes} 
+% put 3 slides on 1 page with space for notes
+%\pgfpagesuselayout{3 on 1 with notes}[a4paper, border shrink=5mm]
+
+%oldalszam
+\addtobeamertemplate{navigation symbols}{}{%
+	\usebeamerfont{footline}%
+	\usebeamercolor[fg]{footline}%
+	\hspace{1em}%
+	\insertframenumber/\inserttotalframenumber
+}
+
 %\usepackage{enumitem} %settings of itemize, e.g. itemsep
 
 
@@ -39,36 +56,36 @@
 \begin{document}
 	
 	\frame{\titlepage}
-\begin{frame}{Bevezető}
-
-%[shrink=-25]
-    \begin{itemize}
-        \item Témaválasztás szempontjai
-        \pause
-        \setlength{\itemsep}{6pt}
-        \begin{itemize}
-            \item szabályozástechnikai vonatkozás
-            \item gyakorlati haszon, piaci igény 
-        \end{itemize}
-    	\pause
-    	\item \underline{Korszerű fűtési rendszerek szabályozása}
-    	\pause
-        \begin{itemize}
-            \setlength{\itemsep}{3pt}
-        	\item a fenti kívánalmaknak megfelel
-        	        	
-	    	\item a témában érintett szakterületek:
-	    	\pause
-	        \begin{itemize}
-	            \item Épületgépészet
-	            \item Szabályozástechnika
-	            \item Jogszabályok, pénzügy és marketing 
-	            %környezetgazdaságtan
-	        \end{itemize}
-        \end{itemize}
-    \end{itemize}
-
-\end{frame}
+%\begin{frame}{Bevezető}
+%
+%%[shrink=-25]
+%    \begin{itemize}
+%        \item Témaválasztás szempontjai
+%        \pause
+%        \setlength{\itemsep}{6pt}
+%        \begin{itemize}
+%            \item szabályozástechnikai vonatkozás
+%            \item gyakorlati haszon, piaci igény 
+%        \end{itemize}
+%    	\pause
+%    	\item \underline{Korszerű fűtési rendszerek szabályozása}
+%    	\pause
+%        \begin{itemize}
+%            \setlength{\itemsep}{3pt}
+%        	\item a fenti kívánalmaknak megfelel
+%        	        	
+%	    	\item a témában érintett szakterületek:
+%	    	\pause
+%	        \begin{itemize}
+%	            \item Épületgépészet
+%	            \item Szabályozástechnika
+%	            \item Jogszabályok, pénzügy és marketing 
+%	            %környezetgazdaságtan
+%	        \end{itemize}
+%        \end{itemize}
+%    \end{itemize}
+%
+%\end{frame}
 
 \begin{frame}{A munka célja}
 \begin{itemize}
@@ -187,34 +204,34 @@ child {
 \end{tikzpicture}
 \end{frame}
 
+%\begin{frame}{Műszaki tartalom}
+%
+%Piacvezérelt vagy tudásalapú terméket szeretnék?
+%
+%\begin{itemize}
+%	\setlength{\itemsep}{7pt}
+%	\item tudományos: korszerű szabályozások, pl.
+%	\begin{itemize}
+%		\item optimális
+%		\item prediktív
+%		\item robosztus%szabályozástechnikai ismeretekre van szükség
+%	\end{itemize}
+%	\item piacvezérelt: igények alapján
+%	\begin{itemize}
+%		\item PI-szabályzós termosztát (önhangoló)
+%		\item intelligens otthonok (marketinggel fűszerezve)
+%	\end{itemize}
+%\end{itemize}
+%\end{frame}
+
+
 \begin{frame}{Műszaki tartalom}
 
 Piacvezérelt vagy tudásalapú terméket szeretnék?
 
 \begin{itemize}
 	\setlength{\itemsep}{7pt}
-	\item tudományos: korszerű szabályozások, pl.
-	\begin{itemize}
-		\item optimális
-		\item prediktív
-		\item robosztus%szabályozástechnikai ismeretekre van szükség
-	\end{itemize}
-	\item piacvezérelt: igények alapján
-	\begin{itemize}
-		\item PI-szabályzós termosztát (önhangoló)
-		\item intelligens otthonok (marketinggel fűszerezve)
-	\end{itemize}
-\end{itemize}
-\end{frame}
-
-
-\begin{frame}{Műszaki tartalom}
-
-Piacvezérelt vagy tudásalapú terméket szeretnék?
-
-\begin{itemize}
-	\setlength{\itemsep}{7pt}
-	\item Modellalapú szabályozás
+	\item Modellalapú szabályozás (optimális, prediktív)
 	\begin{itemize}
 		\item nagyobb komfort, alacsonyabb költségek
 		\item innovatív, kutatják, publikálják az eredményeket
@@ -225,8 +242,8 @@ Piacvezérelt vagy tudásalapú terméket szeretnék?
 	\end{itemize}
 	\item Kiindulás a piacon elérhető megoldásokból
 	\begin{itemize}
-		\item felkapott: intelligens otthon rendszerek
-		\item multicégek termékei: Siemens, Bosch, Johnson Controls, Honeywell, Danfoss termosztátjai, okos rendszerei
+		\item felkapott: intelligens otthon rendszerek (marketing)
+		\item multicégek termékei: Siemens, Bosch, Johnson Controls, Honeywell, Danfoss termosztátjai, okos rendszerei (max. egy PI-szabályozó)
 		%\item fontosabb a szabályozás minősége, mint hogy univerzális legyen
 		%\item mérhető és nem mérhető zavarások figyelembe vétele
 	\end{itemize}
@@ -306,74 +323,7 @@ Ehhez szükséges:
 \end{frame}
 
 
-\begin{frame}{MPC szabályozás}
-
-Publikációk alapján a leggyakoribb korszerű szabályozó
-
-\begin{itemize}
-	\setlength{\itemsep}{12pt}
-	\item Modellalapú működés - kép a Simulinkből
-	\begin{itemize}
-		\item épület
-		\item fűtési rendszer
-		\item prediktív szabályozás
-	\end{itemize}
-	\item Követelményei:
-	\begin{itemize}
-		\item radiátorszelep
-		\item hőmérő
-	\end{itemize}
-\end{itemize}
-\end{frame}
-
-
-
-\begin{frame}{Szimuláció, modellalkotás}
-
-A modell nagyon részletesen szerepel a dolgozatban, elvi újdonságot nem tartlalmaz (RC-hálózat) és a szabályozás rész érdekesebb, azzal foglalkoznék.
-
-Tervezés szimulációval.
-
-%\begin{itemize}
-%\setlength{\itemsep}{10pt}
-%\item Szabályozástechnika (analízis és tervezés):
-%\begin{itemize}
-%	\item MIMO rendszerek paraméterbizonytalansággal
-%	\item mérhető vagy becsülhető zavarások
-%	\item prediktív szabályozás
-%\end{itemize}
-%\item Fejlesztési lehetőség:
-%\begin{itemize}
-%	\item egy korszerű fűtésszabályozás?
-%	%\item intelligens otthonok (marketinggel fűszerezve)
-%\end{itemize}
-%\end{itemize}
-
-
-\end{frame}
-
 \begin{frame}{Tervezés lépései}
-
-Szimuláció:
-\begin{itemize}
-	\item valós rendszer modelljének paraméterezése
-	\item modell identifikáció
-	\item szabályozás tervezése, validálása
-\end{itemize}
-\vspace{6pt}
-
-Valós rendszerre:
-\begin{itemize}
-	\item a tervezett szabályozó kipróbálása
-	\item finomítás
-\end{itemize}
-
-\end{frame}
-
-
-
-
-\begin{frame}{Műszaki tartalom2}
 \Fontvi
 \centering
 \begin{tikzpicture}[thick,scale=0.65, every node/.style={scale=0.65}]
@@ -406,5 +356,148 @@ child[concept color=blue!25!red] {
 \end{frame}
 
 
+
+
+%TODO
+\begin{frame}{Modell struktúrája}
+
+Simulink modell Simscape elemekkel:
+\begin{itemize}
+	\item RC-hálózat
+	\item paraméterezehető az \\ energetikai tanúsítványból
+\end{itemize}
+
+\begin{figure}
+	\centering
+	\includegraphics[width=\textwidth]{picture/simulink-network-minimalist-layout-comment.PNG}	
+\end{figure}
+\end{frame}
+
+
+
+
+%\begin{frame}{Szimuláció, modellalkotás}
+%
+%A modell nagyon részletesen szerepel a dolgozatban, elvi újdonságot nem tartlalmaz (RC-hálózat) és a szabályozás rész érdekesebb, azzal foglalkoznék.
+%
+%Tervezés szimulációval.
+%\end{frame}
+
+%\begin{frame}{Tervezés lépései}
+%
+%Szimuláció:
+%\begin{itemize}
+%	\item valós rendszer modelljének paraméterezése
+%	\item modell identifikáció
+%	\item szabályozás tervezése, validálása
+%\end{itemize}
+%\vspace{6pt}
+%
+%Valós rendszerre:
+%\begin{itemize}
+%	\item a tervezett szabályozó kipróbálása
+%	\item finomítás
+%\end{itemize}
+%
+%\end{frame}
+
+
+
+\begin{frame}{MPC szabályozás}
+
+Publikációk alapján a leggyakoribb korszerű szabályozó
+
+\begin{itemize}
+	\setlength{\itemsep}{12pt}
+	\item Modellalapú működés
+	\begin{itemize}
+		\item fűtési rendszer (helyiség + fűtőtest)
+		\item prediktív szabályozás
+	\end{itemize}
+	\item Követelményei:
+	\begin{itemize}
+		\item radiátorszelep
+		\item hőmérő
+	\end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Simulink}
+
+Tervezés az identifikált lineáris modellből:
+% itt nincs model mismatch.
+
+
+%\begin{itemize}
+%\item RC-hálózat
+%\item paraméterezehető az \\ energetikai tanúsítványból
+%\end{itemize}
+
+\begin{figure}
+	\centering
+	\includegraphics[width=\textwidth]{picture/3-simModel.PNG}	
+\end{figure}
+
+\end{frame}
+
+
+\begin{frame}{MPC tesztrendszer}
+
+%Tesztrendszer, hogy ne csak szimuláció legyen
+%\vspace{20pt}
+
+\begin{itemize}
+	\item Működik a modellre tervezett szabályozás?
+	\item Mennyi idő a funkciók fejlesztése?
+	\item Segít megérteni a szabályozást
+\end{itemize}
+
+
+\begin{figure}
+	\begin{subfigure}[t]{0.45\textwidth}
+			%			\centering
+			%			% trim={<left> <lower> <right> <upper>}
+			%			\includegraphics[trim={0cm 11cm 0 0},clip,width=8cm]{figures/hw/sindyCANwirecolor}
+			\centering
+			\includegraphics[width=\textwidth]{picture/inside2.jpg}	
+		\end{subfigure}
+		~
+		\begin{subfigure}[t]{0.45\textwidth}
+			\centering
+			\includegraphics[width=\textwidth]{picture/outside.jpg}	
+		\end{subfigure}
+\end{figure}
+
+\end{frame}
+
+
+\begin{frame}{Tesztrendszer viselkedése}
+
+\begin{figure}
+	\centering
+	\includegraphics[width=\textwidth]{picture/4-step.eps}	
+\end{figure}
+
+\end{frame}
+
+
+
+\begin{frame}{Értékelés szempontjai}
+
+A tesztrendszer
+
+Referenciakövetés:
+\begin{itemize}
+	\item megnövekedett komfort
+	\item zavarelnyomás
+\end{itemize}
+\vspace{6pt}
+
+Energiamegtakarítás:
+\begin{itemize}
+	\item beavatkozás forintosított költségei
+\end{itemize}
+
+\end{frame}
 
 \end{document}
