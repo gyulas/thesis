@@ -90,9 +90,9 @@
 \begin{frame}{A munka célja}
 \begin{itemize}
 	\setlength{\itemsep}{6pt}
-	\item Szabályozástechnikai tudás elményítése
-	\item Kutatási eredmények megismerése
-	\item Mindeközben törekvés a piacképességre is	
+	\item Szabályozástechnikai tudás elmélyítése \pause
+	\item Kutatási eredmények megismerése \pause
+	\item Törekvés a piacképességre is	
 \end{itemize}
 \end{frame}
 
@@ -136,40 +136,6 @@
 %
 %
 %
-%\begin{frame}{Műszaki tartalom}
-%\Fontvi
-%\centering
-%\begin{tikzpicture}[thick,scale=0.65, every node/.style={scale=0.65}]
-%\path[mindmap,concept color=black,text=white]
-%node[concept] {\normalsize Termékfejlesztés}
-%[clockwise from=150, level 1 concept/.append style={sibling angle=120}]
-%
-%child[concept color=red] {
-%	node[concept] {Piacvezérelt\\ ötlet}
-%	[clockwise from=-120, level 2 concept/.append style={sibling angle=120}]
-%	child { node[concept] {törvényi \\ előírások} }
-%	child { node[concept] {piaci \\ igények} }
-%}
-%child[concept color=green!50!black] {
-%	node[concept] {Tudás-\\vezérelt\\ötlet}
-%	[clockwise from=45, level 2 concept/.append style={sibling angle=100}]
-%	child { node[concept] {épületfizika} }
-%	child {
-%		node[concept] {szabályozástechnika}
-%		[clockwise from=60, level 3 concept/.append style={sibling angle=100, thick,scale=1.1}]
-%		child { node[concept] {MIMO\\rendszerek} }
-%		child { node[concept, scale=1.2] { \scalebox{0.9}{prediktív}\\ \scalebox{0.9}{szabályozás}} }
-%	}
-%	%child { node[concept] {pro\-gramming languages} }
-%}
-%child[concept color=blue] {
-%	node[concept] {applied}
-%	%	[clockwise from=-30]
-%	%	child { node[concept] {databases} }
-%	%	child { node[concept] {WWW} }
-%};
-%\end{tikzpicture}
-%\end{frame}
 
 
 
@@ -204,55 +170,10 @@ child {
 \end{tikzpicture}
 \end{frame}
 
-%\begin{frame}{Műszaki tartalom}
-%
-%Piacvezérelt vagy tudásalapú terméket szeretnék?
-%
-%\begin{itemize}
-%	\setlength{\itemsep}{7pt}
-%	\item tudományos: korszerű szabályozások, pl.
-%	\begin{itemize}
-%		\item optimális
-%		\item prediktív
-%		\item robosztus%szabályozástechnikai ismeretekre van szükség
-%	\end{itemize}
-%	\item piacvezérelt: igények alapján
-%	\begin{itemize}
-%		\item PI-szabályzós termosztát (önhangoló)
-%		\item intelligens otthonok (marketinggel fűszerezve)
-%	\end{itemize}
-%\end{itemize}
-%\end{frame}
-
-
-\begin{frame}{Műszaki tartalom}
-
-Piacvezérelt vagy tudásalapú terméket szeretnék?
-
-\begin{itemize}
-	\setlength{\itemsep}{7pt}
-	\item Modellalapú szabályozás (optimális, prediktív)
-	\begin{itemize}
-		\item nagyobb komfort, alacsonyabb költségek
-		\item innovatív, kutatják, publikálják az eredményeket
-		\item komplex modellek, MIMO rendszerek kezelése
-		\item optimalizációra visszavezethető beavatkozás\footnote{Az optimális beavatkozásnak sokféle kritériuma lehet.}
-		%\item fontosabb a szabályozás minősége, mint hogy univerzális legyen
-		%\item mérhető és nem mérhető zavarások figyelembe vétele
-	\end{itemize}
-	\item Kiindulás a piacon elérhető megoldásokból
-	\begin{itemize}
-		\item felkapott: intelligens otthon rendszerek (marketing)
-		\item multicégek termékei: Siemens, Bosch, Johnson Controls, Honeywell, Danfoss termosztátjai, okos rendszerei (max. egy PI-szabályozó)
-		%\item fontosabb a szabályozás minősége, mint hogy univerzális legyen
-		%\item mérhető és nem mérhető zavarások figyelembe vétele
-	\end{itemize}
-\end{itemize}
-\end{frame}
-
 \begin{frame}{Piacvezérelt termékfejlesztés}
 
 Mire van igény a piacon?
+\pause
 
 \begin{itemize}
 	\setlength{\itemsep}{7pt}
@@ -274,8 +195,6 @@ Mire van igény a piacon?
 \end{itemize}
 \end{frame}
 
-
-
 \begin{frame}{Tudásalapú termékfejlesztés}
 
 Mit szeretnék csinálni?
@@ -286,7 +205,7 @@ Mit szeretnék csinálni?
 	\setlength{\itemsep}{12pt}
 	\item Szabályozástechnika (analízis és tervezés):
 	\begin{itemize}
-		\item MIMO rendszerek paraméterbizonytalansággal
+		\item MISO rendszer, bizonytalansággal
 		\item mérhető vagy becsülhető zavarások
 		\item prediktív szabályozás
 	\end{itemize}
@@ -313,13 +232,27 @@ Szabályozástechnikai feladat:
 
 Ehhez szükséges:
 
-
 \begin{itemize}
-	\item a szakasz paraméterezhető modellje
-	\item egy modell-prediktív szabályozó
+	\item szakaszmodell
+	\item modell-prediktív szabályozó
 \end{itemize}
 
 
+\end{frame}
+
+
+\begin{frame}{Modell struktúrája}
+
+Simulink modell Simscape elemekkel:
+\begin{itemize}
+	\item RC-hálózat
+	\item paraméterezehető az \\ energetikai tanúsítványból
+\end{itemize}
+
+\begin{figure}
+	\centering
+	\includegraphics[width=\textwidth]{picture/simulink-network-minimalist-layout.PNG}	
+\end{figure}
 \end{frame}
 
 
@@ -343,9 +276,9 @@ child[concept color=yellow!80!gray!90!red] {
 child[concept color=blue!25!red] {
 	node[concept] {Valós rendszer}
 	[clockwise from=15, level 2 concept/.append style={sibling angle=90}]
-	child { node[concept] {teszt} }
+	child { node[concept] {validálás} }
 	child {
-		node[concept] {\scalebox{0.9}{adaptív}\\ \scalebox{0.9}{hangolás}}
+		node[concept] {\scalebox{0.9}{zavarások}\\ \scalebox{0.9}{hatása}}
 		[clockwise from=-15, level 3 concept/.append style={sibling angle=60, thick,scale=1.1}]
 		%child { node[concept] {historikus\\adatok} }
 		%child { node[concept, scale=1.2] { \scalebox{0.9}{prediktív}\\ \scalebox{0.9}{szabályozás}} }
@@ -355,23 +288,6 @@ child[concept color=blue!25!red] {
 \end{tikzpicture}
 \end{frame}
 
-
-
-
-%TODO
-\begin{frame}{Modell struktúrája}
-
-Simulink modell Simscape elemekkel:
-\begin{itemize}
-	\item RC-hálózat
-	\item paraméterezehető az \\ energetikai tanúsítványból
-\end{itemize}
-
-\begin{figure}
-	\centering
-	\includegraphics[width=\textwidth]{picture/simulink-network-minimalist-layout-comment.PNG}	
-\end{figure}
-\end{frame}
 
 
 
@@ -403,75 +319,158 @@ Simulink modell Simscape elemekkel:
 
 
 
-\begin{frame}{MPC szabályozás}
+%\begin{frame}{MPC szabályozás}
+%
+%Publikációk alapján a leggyakoribb korszerű szabályozó
+%
+%\begin{itemize}
+%	\setlength{\itemsep}{12pt}
+%	\item Modellalapú működés
+%	\begin{itemize}
+%		\item fűtési rendszer (helyiség + fűtőtest)
+%		\item prediktív szabályozás
+%	\end{itemize}
+%	\item Követelményei:
+%	\begin{itemize}
+%		\item radiátorszelep
+%		\item hőmérő
+%	\end{itemize}
+%\end{itemize}
+%\end{frame}
 
-Publikációk alapján a leggyakoribb korszerű szabályozó
+
+
+\begin{frame}{MPC tervezés}
 
 \begin{itemize}
-	\setlength{\itemsep}{12pt}
-	\item Modellalapú működés
-	\begin{itemize}
-		\item fűtési rendszer (helyiség + fűtőtest)
-		\item prediktív szabályozás
-	\end{itemize}
-	\item Követelményei:
-	\begin{itemize}
-		\item radiátorszelep
-		\item hőmérő
-	\end{itemize}
+\item tervezéshez lineáris modell szükséges
+\item szakasz nemlinearitással
 \end{itemize}
-\end{frame}
-
-\begin{frame}{Simulink}
-
-Tervezés az identifikált lineáris modellből:
-% itt nincs model mismatch.
-
-
-%\begin{itemize}
-%\item RC-hálózat
-%\item paraméterezehető az \\ energetikai tanúsítványból
-%\end{itemize}
 
 \begin{figure}
 	\centering
-	\includegraphics[width=\textwidth]{picture/3-simModel.PNG}	
+	\includegraphics[width=0.8\textwidth]{picture/identModelOutputMatch.eps}	
 \end{figure}
 
 \end{frame}
 
+
+\begin{frame}{MPC tervezés}
+
+\begin{itemize}
+\item Simscape modell
+\item szabályozás gyengeségei
+\end{itemize}
+
+\begin{figure}
+\centering
+\includegraphics[width=0.8\textwidth]{picture/mpc.eps}	
+\end{figure}
+
+\end{frame}
 
 \begin{frame}{MPC tesztrendszer}
 
 %Tesztrendszer, hogy ne csak szimuláció legyen
 %\vspace{20pt}
 
+Segít megérteni a szabályozás működését:
 \begin{itemize}
-	\item Működik a modellre tervezett szabályozás?
-	\item Mennyi idő a funkciók fejlesztése?
-	\item Segít megérteni a szabályozást
+	\item tervezés továbbra is részben szimulációval
+	\item teszt a gyakorlatban
+	\item fűtés izzóval
+	\item hőtároló anyagok használata
+%	\item Működik a modellre tervezett szabályozás?
+%	\item Mennyi idő a funkciók fejlesztése?
+%	\item Segít megérteni a szabályozást
 \end{itemize}
 
 
 \begin{figure}
 	\begin{subfigure}[t]{0.45\textwidth}
-			%			\centering
-			%			% trim={<left> <lower> <right> <upper>}
-			%			\includegraphics[trim={0cm 11cm 0 0},clip,width=8cm]{figures/hw/sindyCANwirecolor}
-			\centering
-			\includegraphics[width=\textwidth]{picture/inside2.jpg}	
-		\end{subfigure}
-		~
-		\begin{subfigure}[t]{0.45\textwidth}
-			\centering
-			\includegraphics[width=\textwidth]{picture/outside.jpg}	
-		\end{subfigure}
+		%			\centering
+		%			% trim={<left> <lower> <right> <upper>}
+		%			\includegraphics[trim={0cm 11cm 0 0},clip,width=8cm]{figures/hw/sindyCANwirecolor}
+		\centering
+		\includegraphics[width=\textwidth]{picture/inside2.jpg}	
+	\end{subfigure}
+	~
+	\begin{subfigure}[t]{0.45\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{picture/outside.jpg}	
+	\end{subfigure}
+\end{figure}
+
+\end{frame}
+
+\begin{frame}{MPC tervezés}
+
+\begin{itemize}
+	\item predikciós horizont, korlátok
+	\item költségfüggvény súlyai
+	\item zavarás hatása
+\end{itemize}
+
+\begin{figure}
+	\centering
+	\includegraphics[width=0.9\textwidth]{picture/3-simModel.PNG}	
 \end{figure}
 
 \end{frame}
 
 
+\begin{frame}{MPC költségfüggvénye}
+
+Súlyozás - követelmény alapján
+
+\begin{figure}
+	\begin{subfigure}[t]{0.35\textwidth}
+		%			\centering
+		%			% trim={<left> <lower> <right> <upper>}
+		%			\includegraphics[trim={0cm 11cm 0 0},clip,width=8cm]{figures/hw/sindyCANwirecolor}
+		\centering
+		\includegraphics[width=\textwidth]{picture/mpc-wu-20.eps}
+		\caption{$w_{u}$=20}	
+	\end{subfigure}
+	~
+	\begin{subfigure}[t]{0.35\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{picture/mpc-wu-005.eps}	
+		\caption{$w_{u}$=0.05}	
+	\end{subfigure}
+\end{figure}
+
+\end{frame}
+
+\begin{frame}{Beavatkozójel változásának költsége}
+
+
+\begin{figure}
+\begin{subfigure}[t]{0.35\textwidth}
+	%			\centering
+	%			% trim={<left> <lower> <right> <upper>}
+	%			\includegraphics[trim={0cm 11cm 0 0},clip,width=8cm]{figures/hw/sindyCANwirecolor}
+	\centering
+	\includegraphics[width=\textwidth]{picture/mpc-wdu-100.eps}
+	\caption{$w_{\Delta u}$=100}	
+\end{subfigure}
+~
+\begin{subfigure}[t]{0.35\textwidth}
+	\centering
+	\includegraphics[width=\textwidth]{picture/mpc-wdu-10.eps}	
+	\caption{$w_{\Delta u}$=10}	
+\end{subfigure}
+\end{figure}
+
+\end{frame}
+
+
+
+
+
 \begin{frame}{Tesztrendszer viselkedése}
+
+Mérési eredmények:
 
 \begin{figure}
 	\centering
@@ -484,20 +483,46 @@ Tervezés az identifikált lineáris modellből:
 
 \begin{frame}{Értékelés szempontjai}
 
-A tesztrendszer
-
-Referenciakövetés:
-\begin{itemize}
-	\item megnövekedett komfort
-	\item zavarelnyomás
-\end{itemize}
-\vspace{6pt}
-
-Energiamegtakarítás:
-\begin{itemize}
-	\item beavatkozás forintosított költségei
-\end{itemize}
-
+	Referenciakövetés:
+	\begin{itemize}
+		\item megnövekedett komfort
+		\item zavarelnyomás
+	\end{itemize}
+	\vspace{6pt}
+	
+	Energiamegtakarítás:
+	\begin{itemize}
+		\item beavatkozás forintosított költségei
+		\item integráció okos otthonba
+	\end{itemize}
 \end{frame}
+
+%\begin{frame}{További feladatok}
+%
+%	Szabályozó:
+%	\begin{itemize}
+%		\item megnövekedett komfort
+%		\item zavarelnyomás
+%	\end{itemize}
+%	\vspace{6pt}
+%	
+%	Energiamegtakarítás:
+%	\begin{itemize}
+%		\item beavatkozás forintosított költségei
+%	\end{itemize}
+%
+%\end{frame}
+
+\begin{frame}{}
+	\begin{center}
+		\vspace{18pt}
+		\large
+		{\usebeamercolor[fg]{structure} 
+			Köszönöm a figyelmet, \\
+			várom a kérdéseket!
+		}
+	\end{center}
+\end{frame}
+
 
 \end{document}
