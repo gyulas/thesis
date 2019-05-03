@@ -21,7 +21,7 @@ timeUnit_1day=timeUnit_1hour*24;
 timeUnit_1week=7*timeUnit_1day;
 
 % TinIC = initial indoor temperature = 20 deg C
-TinIC = 0;
+TinIC = 273;
 TinHeatK=273+0; %[K] heating elements
 supp_water_initial_temp=0;         %   [Celsius]
 
