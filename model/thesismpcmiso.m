@@ -23,16 +23,16 @@ model = setmpcsignals(model,'MV',1,'MD',2);
 
 % Create the controller object with sampling period, prediction and control
 % horizons:
-horizonPred=1000; %23000/Ts
+horizonPred=500; %23000/Ts
 mpcobj = mpc(model,Ts,horizonPred,1);
 
 %mpcobj.ManipulatedVariables.ScaleFactor = 25;
-mpcobj.DisturbanceVariables.ScaleFactor = 30;
-mpcobj.OutputVariables.ScaleFactor = 30;
+mpcobj.DisturbanceVariables.ScaleFactor = 273;
+mpcobj.OutputVariables.ScaleFactor = 273;
 
-mpcobj.Weights.OutputVariables = {15};
-mpcobj.Weights.ManipulatedVariables = {0.03};
-mpcobj.Weights.ManipulatedVariablesRate = {50};
+mpcobj.Weights.OutputVariables = {70};
+mpcobj.Weights.ManipulatedVariables = {0.002};
+mpcobj.Weights.ManipulatedVariablesRate = {0.3};
 
 % Define constraints on the manipulated variable. 
 mpcobj.MV = struct('Min',0,'Max',1,'RateMin',-10,'RateMax',10);
@@ -40,22 +40,24 @@ mpcobj.MV = struct('Min',0,'Max',1,'RateMin',-10,'RateMax',10);
 %% BASIC SIMULATION - DO NOT MODIFY
 % Simulate Closed-Loop Response Using the SIM Command
 % Specify simulation parameters.
-Tstop = 3600*24*30;                               % simulation time
+Tstop = 3600*24*10;                               % simulation time
 Tf = round(Tstop/Ts);                     % number of simulation steps
-r = 1*ones(Tf,1);                           % reference signal
+r = 5*ones(Tf,1);                           % reference signal
 v = [zeros(Tf/3,1);ones(2*Tf/3,1)];       % measured disturbance signal
 
 t_sq=0:Ts:(Tstop-1);
 v_sq=(2*square(2*pi/3600/10*t_sq,30)-2)';
 
 % Run the closed-loop simulation and plot results.
-[y_1,t_1,u_1,xp_1] = sim(mpcobj,Tf,r,v_sq);
+[y_1,t_1,u_1,xp_1] = sim(mpcobj,Tf,r,v_sq,simOptions);
+
+
 
 %% mpcmove test
 MPCopt = mpcmoveopt;
-MPCopt.OutputWeights = 50;
-MPCopt.MVWeights = 0.01;
-MPCopt.MVRateWeights = 1;
+MPCopt.OutputWeights = 10;
+MPCopt.MVWeights = 0.03;
+MPCopt.MVRateWeights = 50;
 
 MPCopt.MVMin = 0;
 MPCopt.MVMax = 1;
@@ -66,7 +68,7 @@ for i = 1:Tf
     if i == 5
     	MPCopt.MVMax = 1;
     end
-    [u(i), info(i)] = mpcmove(mpcobj,x,y(i),r,[],MPCopt);
+    [u(i), info(i)] = mpcmove(mpcobj,x,y(i),r,v,MPCopt);
 end
 
 
@@ -87,8 +89,9 @@ SimOptions.MDLookAhead='on';
 figure
 subplot(311)
 plot(0:Tf-1,y_1,'DisplayName','Basic')
+
 hold on
-%plot(0:Tf-1,y_2,'DisplayName','Preview disturbance')
+% plot(0:Tf-1,y_2,'DisplayName','Preview disturbance')
 plot(0:Tf-1,r,'DisplayName','Reference')
 title('Output');
 legend('show')
@@ -98,8 +101,9 @@ subplot(312)
 %plot(0:Tf-1,u_1,0:Tf-1,u_2)
 plot(0:Tf-1,u_1,'DisplayName','Basic')
 hold on
-%plot(0:Tf-1,u_2,'DisplayName','Preview disturbance')
+% plot(0:Tf-1,u_2,'DisplayName','Preview disturbance')
 legend('show')
+
 title('Valve input');
 grid
 
