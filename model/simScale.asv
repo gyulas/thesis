@@ -5,8 +5,8 @@ C=mpc(tf_19_toMPC,1800,20,1);
 C.MV = struct('Min',{0;0},'Max',1,'RateMin',-1,'RateMax',1);
 C.OV = struct('Min',0,'Max',320,'ScaleFactor',1);
 C.D.ScaleFactor=1;
-C.Weights.OutputVariables = {0.1};
-C.Weights.ManipulatedVariables = {[0.1,0.01;0.01,0.005]};
+C.Weights.OutputVariables = {0.18};
+C.Weights.ManipulatedVariables = {[0.4,0.01;0.01,0.01]};
 C.Weights.ManipulatedVariablesRate = {[4,2;1.5,4]};
 
 

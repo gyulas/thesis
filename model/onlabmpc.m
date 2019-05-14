@@ -12,7 +12,7 @@
 
 load('C:\Users\Gyulai László\Documents\thesis másolata\model\subsystems\mpc_model_and_initial_controller.mat')
 model=ss(tf(tf_valve_and_t_e));
-Ts = 60;                                % sampling time
+Ts = 1800;                                % sampling time
 
 % Design MPC Controller
 % Define type of input signals: the first signal is a manipulated variable,
@@ -23,19 +23,20 @@ model = setmpcsignals(model,'MV',1,'MD',2);
 
 % Create the controller object with sampling period, prediction and control
 % horizons:
-horizonPred=500; %23000/Ts
+horizonPred=48; %23000/Ts
 mpcobj = mpc(model,Ts,horizonPred,1);
 
 %mpcobj.ManipulatedVariables.ScaleFactor = 25;
-mpcobj.DisturbanceVariables.ScaleFactor = 273;
-mpcobj.OutputVariables.ScaleFactor = 273;
+mpcobj.DisturbanceVariables.ScaleFactor = 1/273;
+mpcobj.OutputVariables.ScaleFactor = 1/273;
 
 mpcobj.Weights.OutputVariables = {70};
-mpcobj.Weights.ManipulatedVariables = {0.002};
-mpcobj.Weights.ManipulatedVariablesRate = {0.3};
+mpcobj.Weights.ManipulatedVariables = {10000};
+mpcobj.Weights.ManipulatedVariablesRate = {500};
 
 % Define constraints on the manipulated variable. 
 mpcobj.MV = struct('Min',0,'Max',1,'RateMin',-10,'RateMax',10);
+mpc2=mpcobj;
 
 % %% BASIC SIMULATION - DO NOT MODIFY
 % % Simulate Closed-Loop Response Using the SIM Command
