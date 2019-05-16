@@ -20,8 +20,8 @@ C2.Weights.ManipulatedVariablesRate = {[20,0;0,5]};
 
 %% C3 -- csak radiatorozik es fos
 C3=C;
-C3.Weights.OutputVariables = {0.01};
-C3.Weights.ManipulatedVariables = {[10,0;1,0.15]};
+C3.Weights.OutputVariables = {0.1};
+C3.Weights.ManipulatedVariables = {[0,0;1,0.15]};
 C3.Weights.ManipulatedVariablesRate = {[20,0;0,5]};
 
 %% C4 -- 0.01-es hiba, alacsony energia, mindketto beavatkozo
