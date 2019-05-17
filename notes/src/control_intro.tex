@@ -198,3 +198,164 @@ A fenti ábrán látható a helyesen súlyozott MPC-vel a zárt szabályozási k
 	
 Épületautomatikai rendszerek használatával, például az iContrALL intelligens otthon rendszerével a fellépő zavarásokat (emberek jelenléte, napsütés, szél) mérhetjük. A szabályozás a zavarások hatásmechanizmusának ismeretében jobb zavarelnyomást tud elérni, sőt az integrációval további beavatkozók is használhatók (például árnyékolástechnikai eszközök).
 
+\pagebreak
+
+\chapter{Önálló labor munka}
+
+
+
+\pagebreak
+
+A munka során célul tűztem ki, hogy gyakorlatban használható, a felmerülő igényeket jobban kielégítő szabályozást állítsak fel.
+
+Számos szempont merülhet fel,
+
+
+
+A korábban identifikált lineáris modellt használtam fel
+
+
+\section{Költségek figyelembe vétele}
+
+A fűtés energiaköltségét legkönnyebben az összes felhasznált energia mennyiségéből kaphatjuk meg. Ezen kívül célszerű még megvizsgálni a maximális teljesítményigényt is (peak demand), illetve az energiaátalakítás teljesítményszintektől függő hatásfokát.
+
+A csúcsidőszakban lecsökkent teljesítményigény különösen előnyös lehet akkor, ha a tarifák ebben az időszakban magasabbak.
+
+
+A helyiség Simscape modelljéből ki lehetett vezetni a ténylegesen leadott hőmennyiséget, amiből már meg lehet állapítani a forintosított költségeket.
+
+
+\section{Komfort figyelembe vétele}
+
+A szabályozás ezen minőségi jellemzője a hibajellel arányos. Ennek átlaga egy referenciától mért átlagos eltérést ad, abszolút integrálva a hibát pedig kiválaszthatjuk a zavarokra minimális hibával működő szabályozást.
+
+\subsection{Kritérium a szabályozásra}
+Előírt tartományban kell a hőmérsékletnek maradnia (lásd szabvány ill. ETH Zürich).
+
+\subsection{Hőérzetbeli különbségek}
+Az időjárás-előrejelzések is megadnak hőérzetet a napsütés, szél függvényében.
+Napos időben és szélcsendben melegebbnek tőnik az idő: hasonlóan kijelenthető, hogy sugárzó fűtések használatával a levegő hőmérséklete alacsonyabban is tartható ugyanakkora komfort eléréséhez.
+
+Ezért célszerű $T_{AUST}$-t is megvizsgálni.
+
+\section{Zavarelnyomás}
+
+\section{Alapjel követése}
+
+\subsection{Komfort -- Hibajel minimalizálása}
+\subsection{Költség -- Beavatkozó jelek és a teljesítmény, peak demand}
+
+\section{Reference preview slope nélkül}
+
+ 
+\begin{figure}[H]
+	\centering
+	% trim={<left> <lower> <right> <upper>}
+	\includegraphics[width=0.35\textwidth, trim=0 0 0 0, clip,]{figures/onlab/NoSlope/CLast10ClosedLoop}
+	\caption{Referenciajel figyelembe vétele a teljes horizontra CLast10ClosedLoop}
+	\label{fig:onlab-refprev1}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+% trim={<left> <lower> <right> <upper>}
+\includegraphics[width=0.35\textwidth, trim=0 0 0 0, clip,]{figures/onlab/NoSlope/C1Last10ClosedLoop}
+\caption{Referenciajel figyelembe vétele a teljes horizontra C1Last10ClosedLoop}
+\label{fig:onlab-refprev2}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+% trim={<left> <lower> <right> <upper>}
+\includegraphics[width=0.35\textwidth, trim=0 0 0 0, clip,]{figures/onlab/NoSlope/C2Last10ClosedLoop}
+\caption{Referenciajel figyelembe vétele a teljes horizontra C2Last10ClosedLoop}
+\label{fig:onlab-refprev3}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+% trim={<left> <lower> <right> <upper>}
+\includegraphics[width=0.35\textwidth, trim=0 0 0 0, clip,]{figures/onlab/NoSlope/C4Last10ClosedLoop}
+\caption{Referenciajel figyelembe vétele a teljes horizontra C4Last10ClosedLoop}
+\label{fig:onlab-refprev4}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+% trim={<left> <lower> <right> <upper>}
+\includegraphics[width=0.35\textwidth, trim=0 0 0 0, clip,]{figures/onlab/NoSlope/C5Last10ClosedLoop}
+\caption{Referenciajel figyelembe vétele a teljes horizontra C5Last10ClosedLoop}
+\label{fig:onlab-refprev5}
+\end{figure}
+
+\subsection{Összahsonlítás}
+\begin{figure}[H]
+	\centering
+	% trim={<left> <lower> <right> <upper>}
+	\includegraphics[width=0.35\textwidth, trim=0 0 0 0, clip,]{figures/onlab/NoSlope/compareControllerJustPreview}
+	\caption{compareControllerJustPreview}
+	\label{fig:onlab-refprevComp}
+\end{figure}
+
+\pagebreak
+
+
+\section{Reference preview slopepal}
+
+\begin{figure}[H]
+	\centering
+	% trim={<left> <lower> <right> <upper>}
+	\includegraphics[width=0.35\textwidth, trim=0 0 0 0, clip,]{figures/onlab/Slope/CLast10ClosedLoop}
+	\caption{Referenciajel figyelembe vétele a teljes horizontra CLast10ClosedLoop}
+	\label{fig:onlab-refslprev}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	% trim={<left> <lower> <right> <upper>}
+	\includegraphics[width=0.35\textwidth, trim=0 0 0 0, clip,]{figures/onlab/Slope/C1Last10ClosedLoop}
+	\caption{Referenciajel figyelembe vétele a teljes horizontra C1Last10ClosedLoop}
+	\label{fig:onlab-refslprev2}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	% trim={<left> <lower> <right> <upper>}
+	\includegraphics[width=0.35\textwidth, trim=0 0 0 0, clip,]{figures/onlab/Slope/C2Last10ClosedLoop}
+	\caption{Referenciajel figyelembe vétele a teljes horizontra C2Last10ClosedLoop}
+	\label{fig:onlab-refslprev3}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	% trim={<left> <lower> <right> <upper>}
+	\includegraphics[width=0.35\textwidth, trim=0 0 0 0, clip,]{figures/onlab/Slope/C4Last10ClosedLoop}
+	\caption{Referenciajel figyelembe vétele a teljes horizontra C4Last10ClosedLoop}
+	\label{fig:onlab-refslprev4}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	% trim={<left> <lower> <right> <upper>}
+	\includegraphics[width=0.35\textwidth, trim=0 0 0 0, clip,]{figures/onlab/Slope/C5Last10ClosedLoop}
+	\caption{Referenciajel figyelembe vétele a teljes horizontra C5Last10ClosedLoop}
+	\label{fig:onlab-refslprev5}
+\end{figure}
+
+\subsection{Összahsonlítás}
+\begin{figure}[H]
+	\centering
+	% trim={<left> <lower> <right> <upper>}
+	\includegraphics[width=0.35\textwidth, trim=0 0 0 0, clip,]{figures/onlab/Slope/compareControllerPreviewSlope}
+	\caption{compareControllerPreviewSlope}
+	\label{fig:onlab-refSlprevComp}
+\end{figure}
+
+
+\pagebreak
+
+
+
+
+
+
