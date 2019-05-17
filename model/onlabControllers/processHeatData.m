@@ -19,6 +19,8 @@ CLast10.signals(4).values=max(CLast10.signals(2).values());
 CLast10.signals(4).values(2,:)=mean(CLast10.signals(2).values());
 CLast10.signals(4).values(3,:)=min(CLast10.signals(2).values());
 CLast10.signals(4).values(4,:)=sum(abs(CLast10.signals(2).values()))/1000;
+CLast10.signals(4).values(4,9)=CLast10.signals(4).values(4,9)*500; %kelvinóra
+
 
 CLast10.signals(4).values
 end
