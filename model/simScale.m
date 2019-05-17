@@ -8,13 +8,12 @@ C.D.ScaleFactor=1;
 
 %% C1
 C1=C;
-C1.Weights.OutputVariables = {0.1};
-C1.Weights.ManipulatedVariables = {[0.1,0.2;0.01,0.1]};
+C1.Weights.OutputVariables = {0.075};
+C1.Weights.ManipulatedVariables = {[2,0.5;0.5,0.5]};
 C1.Weights.ManipulatedVariablesRate = {[4,2;1.5,4]};
 
 %% C2 -- csak radiatorozik
 C2=C;
-C2.PredictionHorizon=36;
 C2.Weights.OutputVariables = {0.3};
 C2.Weights.ManipulatedVariables = {[0.2,0;0,0.1]};
 C2.Weights.ManipulatedVariablesRate = {[20,0;0,5]};
@@ -27,11 +26,9 @@ C3.Weights.ManipulatedVariablesRate = {[10,2.5;2.5,1]};
 
 %% C4 -- 0.01-es hiba, alacsony energia, mindketto beavatkozo
 C4=C;
-C4.PredictionHorizon=48;
-C4.Weights.OutputVariables = {2}; % akar felmehet 0.145-ig is
-C4.Weights.ManipulatedVariables = {[1,0.1;0.1,0.7]};
-C4.Weights.ManipulatedVariablesRate = {[20,0;0,5]};
-
+C4.Weights.OutputVariables = {1.5}; % akar felmehet 0.145-ig is
+C4.Weights.ManipulatedVariables = {[1,0.3;0.3,0.7]};
+C4.Weights.ManipulatedVariablesRate = {[500,0;0,100]};
 
 %% C5 -- nagy komfort (referencia kovetes) sok radiatorral
 C5=C;
@@ -64,3 +61,22 @@ v= [v1 v2];
 plot(0:Tf-1,y_1)
 
 plot(0:Tf-1,u_1)
+
+
+%% analysis
+
+%% C4
+plot(C4Last10.time, C4Last10.signals(2).values)
+%%
+C4Last10=processHeatData(C4Last10);
+
+C1Last10=processHeatData(C1Last10);
+
+C2Last10=processHeatData(C2Last10);
+
+CLast10=processHeatData(CLast10);
+
+% elterest szeretnek szamolni
+
+
+
