@@ -1,22 +1,10 @@
-\chapter{A szabályozás áttekintése}\label{chap:control}
-
-A hasonló feladatokra leggyakrabban modell-prediktív (MPC) szabályozást használnak \cite{AFRAM2014343}. Ehhez szükség van a szakasz modelljére, ami alapján a szabályzó szimulálhatja a szakasz kimenetét. Az MPC egy beavatkozójel kiadása előtt több mintavételi perióduson, egy predikciós horizonton keresztül fut le, minden lehetséges  beavatkozójel-sorozatra a kimenetet szimulálva.
-%A csúszóablak miatt receding horizon control
-Ezen sorozatok közül a legjobbat kiválasztja és egy lépést végrehajt. Ezután a szimuláció újrakezdődik. A végrehajtott, adott horizonton optimális beavatkozójelet egy költségfüggvény minimalizálásával kapja. A költségfüggvényben különböző eltéréseknek vagy abszolútértékeknek különböző súlya lehet.
-
-A szabályozás tehát képes egy horizontig előre tekinteni, és azon belüli optimális beavatkozást végrehajtani. (Az angol nyelvű irodalom erre \textit{receding horizon} névvel hivatkozik.) Az optimalizációt minden mintavételkor végrehajtja, így képes korrigálni, ha a jósolt kimenet és a tényleges kimenet eltérő.
-
-A stabilitás a beavatkozó jelek és a zavarjel (külső hőmérséklet) korlátosságából fakad. Ezeket is be lehet állítani a szabályzón, így az MPC a szelepekre csak 0 és 1 közötti beavatkozó jelet fog kiadni.
-
-\vspace{6pt}
 
 
-
-\subsection{Fejlesztési lehetőségek a szabályozással kapcsolatban}
-	
-Épületautomatikai rendszerek használatával, például az iContrALL intelligens otthon rendszerével a fellépő zavarásokat (emberek jelenléte, napsütés, szél) mérhetjük. A szabályozás a zavarások hatásmechanizmusának ismeretében jobb zavarelnyomást tud elérni, sőt az integrációval további beavatkozók is használhatók (például árnyékolástechnikai eszközök).
-
-\pagebreak
+%\subsection{Fejlesztési lehetőségek a szabályozással kapcsolatban}
+%	
+%Épületautomatikai rendszerek használatával, például az iContrALL intelligens otthon rendszerével a fellépő zavarásokat (emberek jelenléte, napsütés, szél) mérhetjük. A szabályozás a zavarások hatásmechanizmusának ismeretében jobb zavarelnyomást tud elérni, sőt az integrációval további beavatkozók is használhatók (például árnyékolástechnikai eszközök).
+%
+%\pagebreak
 
 \chapter{Önálló labor munka}
 
@@ -102,14 +90,12 @@ A modell-prediktív szabályozást alapjaiban a szakdolgozatomban mutattam be. A
 \vspace{10pt}
 
 
-Az eddigiek rövid összefoglalása:
-
 A kiindulási MPC-t már létrehoztam az alábbi lépésekkel:% be kellene tabolni
 
 
 \begin{enumerate}[noitemsep,topsep=0pt,parsep=2pt,partopsep=4pt,leftmargin=30pt]
 	\item a 2 bemenetű, 1 kimenetű szakaszt identifikáltam átviteli függvényével
-	\item létrehoztam az MPC-t a megfelelő mintavételi idővel, beállítottam a jelek fizikai korlátait, illetve a skálázást
+	\item létrehoztam az MPC-t a megfelelő mintavételi idővel, beállítottam a jelek fizikai korlátait, illetve a skálázást. Az MPC két beavatkozó jele a modell 2 szelepének nyitásához tartozik.
 	\item Simulinkben futtatam a szimulációt, Scope használatával mentve az adatokat az analízishez
 	
 \end{enumerate}
@@ -155,7 +141,7 @@ A projekt összefoglalója egy szabályzóval hasonlítja össze a hagyományos 
 	% trim={<left> <lower> <right> <upper>}
 	%\includegraphics[trim=0 0 0 0, clip,width=\textwidth]{figures/simulink-network-minimalist-layout2}
 	\includegraphics[trim=10 50 10 0, clip,width=\textwidth]{figures/onlab/preview}
-	%\caption{Fűtési rendszer modellje - fűtőtest és helyiség}
+	\caption{Signal previewing hatása (forrás: \cite{BemporadLecture1})}
 	\label{fig:preview-bemporad}
 \end{figure}
 
@@ -343,13 +329,15 @@ Ezért célszerű $T_{AUST}$-t is megvizsgálni.
 
 \section{Zavarelnyomás}
 
-\section{Alapjel követése}
+\section{Preview nélküli eset}
 
 \subsection{Komfort -- Hibajel minimalizálása}
 \subsection{Költség -- Beavatkozó jelek és a teljesítmény, peak demand}
 
 
+Ha a szabályozó csak a pillanatnyi zavarás értékét ismeri, akkor ennek megváltozásakor a referenciajel is hirtelen megváltozhat. Amennyiben a szabályozó a zavarás becsült értékét előre ismeri, optimalizálni tudja az energiafelhasználást. Ha például a külső hőmérséklet hirtelen emelkedik, akkor könnyen túlmelegedhet a helyiség, felesleges energiafogyasztást eredményezve.
 
+A következőkben a preview nélküli szabályozók viselkedése látható.
 
 
 
