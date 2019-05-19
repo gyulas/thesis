@@ -1,8 +1,4 @@
-\chapter{Szabályzó kiválasztása és analízise}\label{chap:control}
-
-A fejezetben a Simulinkben átviteli függvényre megtervezem a szabályozást. A szabályzó választásakor világossá vált, hogy egy egyszerű PID típusú szabályozás nem képes a rendszert jól kezelni. Igaz, hogy a PID közismert és az iparban egyszerűsége miatt széles körben használt, de épületgépészeti alkalmazásnál egy szabályozás jóságát többféleképp is értelmezhetjük\footnote{Mást tekintünk jó szabályozásnak egy tisztatérben, egy irodában, vagy egy nagyelőadóban, hiszen mások a felmerülő igények, és így a kritériumok is.}. Egyes esetekben hibahatárt megszabva lazíthatunk például a referenciakövetési feltételeken.
-
-Az identifikált modellre többféle szabályzót tervezek, illetve próbálok ki.
+\chapter{A szabályozás áttekintése}\label{chap:control}
 
 A hasonló feladatokra leggyakrabban modell-prediktív (MPC) szabályozást használnak \cite{AFRAM2014343}. Ehhez szükség van a szakasz modelljére, ami alapján a szabályzó szimulálhatja a szakasz kimenetét. Az MPC egy beavatkozójel kiadása előtt több mintavételi perióduson, egy predikciós horizonton keresztül fut le, minden lehetséges  beavatkozójel-sorozatra a kimenetet szimulálva.
 %A csúszóablak miatt receding horizon control
@@ -10,15 +6,52 @@ Ezen sorozatok közül a legjobbat kiválasztja és egy lépést végrehajt. Ezu
 
 A szabályozás tehát képes egy horizontig előre tekinteni, és azon belüli optimális beavatkozást végrehajtani. (Az angol nyelvű irodalom erre \textit{receding horizon} névvel hivatkozik.) Az optimalizációt minden mintavételkor végrehajtja, így képes korrigálni, ha a jósolt kimenet és a tényleges kimenet eltérő.
 
-A zárt szabályozási körben a stabilitás viszont nem garantált, erre külön módszerek léteznek (úgynevezett \textit{terminal cost}, azaz végső költség, illetve időben változó súlyozás). Mivel a vizsgált rendszerem nyílt körben is stabil, ezekkel nem kell foglalkoznom.
+A stabilitás a beavatkozó jelek és a zavarjel (külső hőmérséklet) korlátosságából fakad. Ezeket is be lehet állítani a szabályzón, így az MPC a szelepekre csak 0 és 1 közötti beavatkozó jelet fog kiadni.
 
-A stabilitás a beavatkozó jelek és a zavarjel (külső hőmérséklet) korlátosságából fakad. Ezeket is be lehet állítani a szabályzón, így az MPC a szelepekre csak 0 és 1 közötti beavatkozó jelet fog kiadni. A változások hatásait is figyelembe vehetjük, mivel a szelepeket 4-5 perc teljesen kinyitni.
-
-A helyiség hőmérséklet-szabályozásakor a legfontosabb feladat a költségfüggvény súlyainak helyes beállítása\footnote{A súlyozást kiegészíthetik a fizikai korlátok is. Ha a szelepek nyitási- és zárási sebessége korlátos, akkor ezt nem lehet túllépni alacsony súly használatával sem.}. Ezek ugyanis befolyásolják a referenciakövetést - az állandósult állapotbeli hibát és lengést - és a beavatkozójel nagyságát, frekvenciáját is.
-
-Az épületgépészeti rendszereknél a nagyobb frekvenciájú beavatkozójel könnyedén jelenthet alacsonyabb hatásfokot. Viszont ha megengedünk valamennyi ingadozást állandósult állapot körül, a terhelést kiegyenlíthetjük.
-Egy irodában, vagy lakásban  például 0.1\si{\celsius}-os vagy 1\si{\celsius}-os pontosságú hőmérséklet-szabályozás közötti különbség komfortban aligha érezhető.
 \vspace{6pt}
+
+
+
+\subsection{Fejlesztési lehetőségek a szabályozással kapcsolatban}
+	
+Épületautomatikai rendszerek használatával, például az iContrALL intelligens otthon rendszerével a fellépő zavarásokat (emberek jelenléte, napsütés, szél) mérhetjük. A szabályozás a zavarások hatásmechanizmusának ismeretében jobb zavarelnyomást tud elérni, sőt az integrációval további beavatkozók is használhatók (például árnyékolástechnikai eszközök).
+
+\pagebreak
+
+\chapter{Önálló labor munka}
+
+
+
+{\Large \underline{Motiváció}} \cite{Opticontrol-II}A szakdolgozatban elkezdett munkát folytatva a cél az ottani MPC szabályozás finomhangolása, továbbfejlesztése volt. 
+A felállított Simulink modellen a szabályozást kvantitatíven vizsgáltam meg, koncentrálva a költségek és a komfort közötti egyensúlyra. 
+
+
+{\large \underline{A modell}}
+A korábbiakban használt \textit{fűtési rendszer modelljét} nem változtattam meg, viszont a modellből kivezetve mértem a pillanatnyi hőleadást. Így megkaptam a hőmennyiségeket, amik a beavatkozás forintosított költségével arányosak. 
+
+
+\begin{figure}[H]
+	\centering
+	% trim={<left> <lower> <right> <upper>}
+	%\includegraphics[trim=0 0 0 0, clip,width=\textwidth]{figures/simulink-network-minimalist-layout2}
+	\includegraphics[trim=0 0 0 0, clip,width=\textwidth]{figures/simulink-network-minimalist-layout}
+	\caption{Fűtési rendszer modellje - fűtőtest és helyiség}
+	\label{fig:Simulink-minimalist}
+\end{figure}
+
+Adott környezeti hőmérséklet és belső hőmérséklet (alapjel) mellett ez az energiamennyiég azonos volt, mivel a helyiség hőveszteségei csak ennek különbségétől függnek. Az energiamegtakarítást tehát nem itt kell keresni, hanem a primer energia felhasználásánál. Ennek okai a következők:
+
+Az alacsony hőmérsékletű (sugárzó) fűtések, pl. a padlófűtés használata gazdaságosabb lehet a hagyományos radiátoros fűtéseknél a megújulók használatával. Ugyanannyi leadott energia így olcsóbb ilyen rendszerekkel\footnote{Sugárzó fűtésekkel kevesebb primer energia szükséges a jobb hatásfok, kisebb veszteségek miatt.}, emellett pedig jobb hőérzetet biztosítanak.
+
+A modellben a kétféle fűtőtesthez két külön beavatkozó jel tartozik, mely a két szelep kinyitásának mértéke. A beavatkozók dinamikája is eltér, a prediktív irányítás ezt figyelembe véve tud egy egyensúlyt találni.
+
+A csúcsterhelés csökkentése számos előnnyel jár. Szakaszos üzem helyett folyamatos teljesítményigény esetén a megújuló források előnyösebben hasznosíthatók. 
+
+\section{MPC áttekintés}
+
+A modell-prediktív szabályozást alapjaiban a szakdolgozatomban mutattam be. A szabályozó, illetve a zárt szabályozási kör blokkvázlata és a rövidítések magyarázata szerepel az alábbiakban.
+\cite{MPCtoolboxGuide} alapján
+
 
 \input{src/tikz/mpcinout}
 \vspace{6pt}
@@ -60,7 +93,7 @@ Egy irodában, vagy lakásban  például 0.1\si{\celsius}-os vagy 1\si{\celsius}
 		SF 		& scale factor 			& skálázási tényező
 		\\    \hline
 	\end{tabu}
-	\label{tab:MPCvariables}
+	\label{tab:mpcoverview}
 	\caption{A fejezetben ismertetett rövidítések és angol szakkifejezések}
 	%
 	%\label{tab:TabularExample}
@@ -69,72 +102,17 @@ Egy irodában, vagy lakásban  például 0.1\si{\celsius}-os vagy 1\si{\celsius}
 \vspace{10pt}
 
 
+Az eddigiek rövid összefoglalása:
 
-\section{Elvárások a szabályozás teljesítményével szemben}
-
-Az MPC hangolása során % működését, tulajdonságait meg tudjam figyelni,
-lépésről lépésre fogom módosítani az alapértelmezett paramétereket, azok hatását megfigyelem.
-Az MPC szintézis folyamata a következő:% be kellene tabolni
+A kiindulási MPC-t már létrehoztam az alábbi lépésekkel:% be kellene tabolni
 
 
 \begin{enumerate}[noitemsep,topsep=0pt,parsep=2pt,partopsep=4pt,leftmargin=30pt]
-	\item a szakaszt identifikálni kell, az átviteli függvény be- és kimeneteinek típusát be kell állítani,
-	\item létre kell hozni az MPC-t a megfelelő mintavételi frekvenciával,
-	\item be kell állítani a jelek fizikai korlátait és súlyukat a szabályozás költségfüggvényében,
-	%\item Be kell állítani a jelek fizikai korlátait
-	\item hozzá kell adni a Simulink modell saját változói közé (Model workspace) a szabályozót és megadni a nevét az Explicit MPC blokkjában (az itt található Review funciót is érdemes használni),
-	\item be kell kötni a jeleket és le kell futtatni a szimulációt.
+	\item a 2 bemenetű, 1 kimenetű szakaszt identifikáltam átviteli függvényével
+	\item létrehoztam az MPC-t a megfelelő mintavételi idővel, beállítottam a jelek fizikai korlátait, illetve a skálázást
+	\item Simulinkben futtatam a szimulációt, Scope használatával mentve az adatokat az analízishez
 	
 \end{enumerate}
-
-%Identifikálni kell a szakaszt.
-
-A \verb|"setmpcsignals()"| függvény használatával egy új átviteli függvényt hozunk létre, amit az MPC függvénynek odaadhatunk. Ez annyival több az identifikált átviteli függvénynél, hogy benne vannak a be- és kimenetek típusai is, aszerint, hogy az említett jelek milyen típusúak. A szakasz átviteli függvényének be-~és kimeneteit meg kell nevezni (\verb|MO, MD, MV|) Ezután az \verb|"mpc(tf, Ts)"| függvénnyel létrehozhatjuk az MPC szabályozót a megadott szakaszmodellre.
-
-
-
-%Alapértelmezés szerint a költségfüggvény súlyai az alábbiak. A zárt szabályzási körben ezek a súlyok a hibajelet büntették a legjobban, ezért nagyon jó referenciakövetést sikerült elérni.
-%
-%
-%Követelmények a referenciajelekre:
-%
-%Thermal comfort - Olesen, ISO EN 7730
-%
-%Floor temperature - herz-ől is
-%
-
-
-%Az MPC szabályzót létrehoztam a toolbox-szal, az identfikált szakaszból. Beállítottam a be-és kimenetek jellegét, korlátait. A ki-és bemeneteket helyesen bekötve már működött is a szabályzás.
-%Fontos, hogy helyesen válasszuk meg a mintavételi időt, illetve a súlyokat
-
-%A kezdeti cél egy "sima" szabályzás. Kérdés, hogy egyáltalán tud-e ilyet az MPC. Gyanítom, hogy a hibaminimalizáló függvény megfelelő megadásával tud: ha egy négyzetes hibaminimalizáló van rajta, \textit{biztosan "jó"} lesz.\footnote{Bármit is jelentsen a \textit{jó} szabályzás.}
-
-
-%A fenti a klasszikus MPC, tov. info. Baochang DING, Modern MPC című könyvében olvasható.
-
-\section{A létrehozott MPC tulajdonságai}
-
-Az \verb|"mpc()"| függvény még nem ad azonnal használható szabályzót. Az alapértelmezett súlyok és a normalizálatlan bemenetek miatt a legkisebb költségű beavatkozás akár az is lehet, hogy a szabályzó nagy követési hiba ellenére nulla beavatkozó jelet ad ki.
-
-A költségfüggvény akkor működik jól, ha a modellbemeneteket normáljuk. Be kell állítani az MPC mért változóinak tulajdonságánál a modell kimenetének  skálázását, amit az állandósult állapotbeli értékek, illetve a jellemző változásoknak megfelelően kell beállítani.
-
-A helyiség modelljénél nagy eltérések vannak, hiszen a szelepek normálva vannak, a hőmérséklet értékeket viszont kelvinben értelmezem. Így a skálafaktort a 30..300 közötti nagyságrendben célszerű választani, mivel a hőmérsékletértékek nagyságrendileg \SI{30}{\degreeCelsius}-nyi tartományban változnak.
-
-A Simulinkben identifikált modell egy munkapont körül (adott környezeti hőmérséklet mellett) volt csak pontos, ám ez a referenciakövetést nem rontotta el. A szabályozás megváltozott paraméterekkel is működött a Simscape hálózatra, a referenciakövetés minősége megmaradt.
-
-
-%\begin{itemize}[noitemsep,topsep=-8pt,parsep=0pt,partopsep=0pt]
-%	\item A mintavételi idő növelése az MPC-ben magával vonja, hogy az a Simulink blokkban is módosul. 
-%	\item A Simulinkben az időt a jobb alsó sarokban mindig mp-ben írja ki. Ámde ha a steppingnél 1000 step-et állítok be, az a jobb alsó sarokban $T_s$-sel felskálázva fogja a mp-t mutatni. Azaz 5 perces sampling time esetén 1 step a jobb alsó sarokban T=300 mp-nek felel meg.
-%	\item A mintavételi idő megválasztása nagyban meghatározza a költségfüggvény értékét.
-%\end{itemize}
-
-
-
-\subsection{Módosítások az MPC-ben}
-
-A súlyozást módosítva adhatunk költséget a beavatkozásnak, csökkentve így például annak a frekvenciáját. Ez a referenciakövetést rontja, de esetünkben nem cél a tized \si{\celsius}-os pontosság, hanem az energiamegtakarítás.
-Pontosan fel kellene ezért írni a forintosított költségét a beavatkozásnak, és ezt minimalizálni. Ez viszont egy összetett kapcsolat és jelentősen függ az épületgépészettől. Így általánosan fogom a paraméterváltozások hatásait vizsgálni.
 
 \subsection{Az MPC költségfüggvénye}
 
@@ -149,19 +127,162 @@ J = \sum_{i}^{p} \left(w_u \Delta u^2 + w_e (r_i-y_i)^2  \right)
 \end{equation}
 
 %(itt még csak $r_i=r$ állandó referenciajellel tudtam csinálni. )
-ahol N a predikciós horizont, $w_u$ a beavatkozó jel változásának súlya, $w_e$ a hibajel súlya. A referenciajel jövőbeli változásait figyelembe lehet venni a predikciós horizonton belül\footnote{A jövőbeli változásokat ismerhetjük, ha van egy referenciajelünk, vagy lehet becslés rá egy időjárás-előrejelzés.\\Bővebben az elméletről: https://www.mathworks.com/help/mpc/ug/signal-previewing.html,\\illetve a felhasznált Simulink blokkok: https://www.mathworks.com/help/mpc/examples/improving-control-performance-with-look-ahead-previewing.html}.
+ahol N a predikciós horizont, $w_u$ a beavatkozó jel változásának súlya, $w_e$ a hibajel súlya. A referenciajel jövőbeli változásait figyelembe lehet venni a predikciós horizonton belül.
 
 A költségfüggvényben a hibajelhez és beavatkozó jelekhez, illetve azok változásaihoz különböző súlyok tartozhatnak.
 Nagyobb súlyok nagyobb költséget eredményeznek, így a szabályozó a nagyobb költségű beavatkozójel-sorozatot kisebb valószínűséggel választja.
 
+
+\section{OptiControl projekt}
+Az ETH Zürich kutatássorozata, az OptiControl \cite{Opticontrol-II} (2007 és 2013 között) a prediktív irányítások használatát vizsgálta és tesztelte irodaépületeken. Az egyetem mellett a Siemens mérnökeit és más partnereket is bevontak. A projektből számos ötletet merítettem, és szimuláltam ezeket a Simulink környezetben.
+
+
+A projektben MPC szabályozás és RBC (Rule Based Control) performanciáját vetették össze.
+
+Az általuk használt MPC modell meglehetősen részletes: figyelembe veszi a napsütés, illetve az irodában használt elektromos fogyasztók hatását is.
+
+A projekt összefoglalója egy szabályzóval hasonlítja össze a hagyományos megoldásokat, én viszont arra voltam kíváncsi, hogy az általuk használt stratégiák mennyiben befolyásolják az MPC viselkedését.
+
+
+
+\section{Peak demand csökkentése}
+
+{\large 1) \underline{SIGNAL PREVIEW} -- }A prediktív szabályozókban lehetőség van arra, hogy a predikciós horizonton belül a szabályozó figyelembe vegye a referenciajel jövőbeli változását, illetve a mérhető zavarások várható értékét. (Erre previewing vagy look-ahead néven szokás hivatkozni.)
+
+
 \begin{figure}[H]
-		\centering
-		\includegraphics[width=0.8\textwidth]{figures/simscape/mpc}
-		\caption{A zárt szabályozási kör ugrásválasza}
-		\label{fig:mpc-simulated}
+	\centering
+	% trim={<left> <lower> <right> <upper>}
+	%\includegraphics[trim=0 0 0 0, clip,width=\textwidth]{figures/simulink-network-minimalist-layout2}
+	\includegraphics[trim=10 50 10 0, clip,width=\textwidth]{figures/onlab/preview}
+	%\caption{Fűtési rendszer modellje - fűtőtest és helyiség}
+	\label{fig:preview-bemporad}
 \end{figure}
 
-A fenti ábrán látható a helyesen súlyozott MPC-vel a zárt szabályozási kör viselkedése. Ebben vannak tökéletlenségek, ezekre a fizikai modellnél térek majd rá. A szabályozó paraméterei az alábbi táblázatban láthatók.
+Erre abban az esetben van lehetőség, ha például elő van írva a napi hőmérséklet alapjel, ahogyan ez megtehető egyszerű programozható termosztátoknál is, amelyek egyszerű RBC (Rule Based Control) elven kapcsolnak be vagy ki.
+
+Időjárás-előrejelzést figyelembe véve pedig a külső hőmérséklet értékére adható becslés, ami tovább csökkentheti az energiafelhasználást.
+
+{\large 2) \underline{SÚLYOZÁS MÓDOSÍTÁSA} -- } A költségfüggvényben a beavatkozóknak különböző súlyokat rendelhetünk, ezzel szintén korlátozhatók a beavatkozó jelek. 
+
+Még jobb eredményt lehet elérni időben változó súlyokat használva, ami például csúcsidőben magasabb energiaárakat elkerülve kiegyenlítheti a fogyasztást.
+%
+%
+%\begin{figure}[H]
+%	\centering
+%	% trim={<left> <lower> <right> <upper>}
+%	%\includegraphics[trim=0 0 0 0, clip,width=\textwidth]{figures/simulink-network-minimalist-layout2}
+%	\includegraphics[trim=0 0 0 0, clip,width=0.4\textwidth]{figures/onlab/constRefPrev/Cconstref}
+%	\caption{C szabályozó}
+%	\label{fig:peak2-plottempC}
+%\end{figure}
+%
+%
+%\begin{figure}[H]
+%	\centering
+%	% trim={<left> <lower> <right> <upper>}
+%	%\includegraphics[trim=0 0 0 0, clip,width=\textwidth]{figures/simulink-network-minimalist-layout2}
+%	\includegraphics[trim=0 0 0 0, clip,width=0.4\textwidth]{figures/onlab/constRefPrev/Cconstref}
+%	\caption{C szabályozó}
+%	\label{fig:peak2-plottempC}
+%\end{figure}
+
+
+\begin{table}[H]
+	\footnotesize
+	\centering
+	%\renewcommand{\arraystretch}{2} % to increase cell height
+	%\taburulecolor{gray}
+	%\begin{tabular}{|p{0.8cm}|p{1cm}|p{1cm}|p{1cm}|p{1cm}|p{1cm}|p{1cm}|p{1cm}|}
+	%
+	%\begin{tabulary}{\linewidth}{LLc}
+	\begin{tabu}{@{}clll@{}}
+		\hline
+		$T_s$ 	& \multicolumn{3}{c}{30 perc}
+		\\ 
+		p & \multicolumn{3}{c}{48 óra}
+		\\ 
+		c 		& \multicolumn{3}{c}{1}
+		\\ \hline
+		szabályozó & C & C2 & C4
+		\\
+		
+		$w_u$ 	& 0 & &
+		\\ 
+		$w_{\Delta u}$ 	& 50&&
+		\\ 
+		$w_y$ 	& 20&&
+		\\
+		SF 		& 30 &&
+		\\   \hline
+	\end{tabu}
+	\label{tab:severalMPCweights}
+	\caption{MPC szabályozó paraméterei}
+	%
+	%\label{tab:TabularExample}
+	%\tabref{TabularExample}~táblázat
+\end{table}
+
+
+\begin{figure}[H]
+	\begin{subfigure}[t]{0.32\textwidth}
+		\centering
+		\includegraphics[trim=0 0 0 0, clip,width=\textwidth]{figures/onlab/constRefPrev/Cconstref}
+		\caption{C szabályozó}
+		\label{fig:constrefc}
+	\end{subfigure}
+	~
+	\begin{subfigure}[t]{0.32\textwidth}
+		\centering
+		\includegraphics[trim=0 0 0 0, clip,width=\textwidth]{figures/onlab/constRefPrev/C2constref}
+		\caption{C2 szabályozó}
+		\label{fig:mpc-wy-2}
+	\end{subfigure}
+	~
+	\begin{subfigure}[t]{0.32\textwidth}
+		\centering
+		\includegraphics[trim=0 0 0 0, clip,width=\textwidth]{figures/onlab/constRefPrev/C4constref}
+		\caption{C4 szabályozó}
+		\label{fig:mpc-wy-5}
+	\end{subfigure}
+	\caption{MPC viselkedése -- previewing, kül. súlyokkal}
+	\label{fig:mpc-previeWeight}
+\end{figure}
+
+A fentiekkel a szabályozók beavatkozóinak hőleadása:
+
+Peak demandja:
+
+\begin{figure}[H]
+	%	% trim={<left> <lower> <right> <upper>}
+	\begin{subfigure}[t]{0.48\textwidth}
+		\centering
+		\includegraphics[trim=0 0 0 0, clip,width=1.1\textwidth]{figures/onlab/constRefPrev/summaryEnergy}
+		\caption{Leadott homennyiseg megoszlasa}
+		\label{fig:constrefHeat}
+	\end{subfigure}
+	~
+	\begin{subfigure}[t]{0.48\textwidth}
+		\centering
+		\includegraphics[trim=0 0 0 0, clip,width=1.1\textwidth]{figures/onlab/constRefPrev/summaryPeakDemand}
+		\caption{C2 szabályozó}
+		\label{fig:constrefPeak}
+	\end{subfigure}
+\end{figure}
+
+
+\pagebreak
+
+A munka során célul tűztem ki, hogy gyakorlatban használható, a felmerülő igényeket jobban kielégítő szabályozást állítsak fel.
+
+Számos szempont merülhet fel,
+
+
+
+A korábban identifikált lineáris modellt használtam fel
+
+
+
 \begin{table}[H]
 	\footnotesize
 	\centering
@@ -187,32 +308,12 @@ A fenti ábrán látható a helyesen súlyozott MPC-vel a zárt szabályozási k
 		SF 		& 30 
 		\\   \hline
 	\end{tabu}
-	\label{tab:MPCfactors}
+	\label{tab:severalMPCfactors}
 	\caption{MPC szabályozó paraméterei}
 	%
 	%\label{tab:TabularExample}
 	%\tabref{TabularExample}~táblázat
 \end{table}
-
-\subsection{Fejlesztési lehetőségek a szabályozással kapcsolatban}
-	
-Épületautomatikai rendszerek használatával, például az iContrALL intelligens otthon rendszerével a fellépő zavarásokat (emberek jelenléte, napsütés, szél) mérhetjük. A szabályozás a zavarások hatásmechanizmusának ismeretében jobb zavarelnyomást tud elérni, sőt az integrációval további beavatkozók is használhatók (például árnyékolástechnikai eszközök).
-
-\pagebreak
-
-\chapter{Önálló labor munka}
-
-
-
-\pagebreak
-
-A munka során célul tűztem ki, hogy gyakorlatban használható, a felmerülő igényeket jobban kielégítő szabályozást állítsak fel.
-
-Számos szempont merülhet fel,
-
-
-
-A korábban identifikált lineáris modellt használtam fel
 
 
 \section{Költségek figyelembe vétele}
@@ -229,6 +330,8 @@ A helyiség Simscape modelljéből ki lehetett vezetni a ténylegesen leadott h�
 
 A szabályozás ezen minőségi jellemzője a hibajellel arányos. Ennek átlaga egy referenciától mért átlagos eltérést ad, abszolút integrálva a hibát pedig kiválaszthatjuk a zavarokra minimális hibával működő szabályozást.
 
+A szabványok igen széles tartományban adják meg a komfortos 
+
 \subsection{Kritérium a szabályozásra}
 Előírt tartományban kell a hőmérsékletnek maradnia (lásd szabvány ill. ETH Zürich).
 
@@ -244,115 +347,6 @@ Ezért célszerű $T_{AUST}$-t is megvizsgálni.
 
 \subsection{Komfort -- Hibajel minimalizálása}
 \subsection{Költség -- Beavatkozó jelek és a teljesítmény, peak demand}
-
-\section{Reference preview slope nélkül}
-
- 
-\begin{figure}[H]
-	\centering
-	% trim={<left> <lower> <right> <upper>}
-	\includegraphics[width=0.35\textwidth, trim=0 0 0 0, clip,]{figures/onlab/NoSlope/CLast10ClosedLoop}
-	\caption{Referenciajel figyelembe vétele a teljes horizontra CLast10ClosedLoop}
-	\label{fig:onlab-refprev1}
-\end{figure}
-
-\begin{figure}[H]
-\centering
-% trim={<left> <lower> <right> <upper>}
-\includegraphics[width=0.35\textwidth, trim=0 0 0 0, clip,]{figures/onlab/NoSlope/C1Last10ClosedLoop}
-\caption{Referenciajel figyelembe vétele a teljes horizontra C1Last10ClosedLoop}
-\label{fig:onlab-refprev2}
-\end{figure}
-
-\begin{figure}[H]
-\centering
-% trim={<left> <lower> <right> <upper>}
-\includegraphics[width=0.35\textwidth, trim=0 0 0 0, clip,]{figures/onlab/NoSlope/C2Last10ClosedLoop}
-\caption{Referenciajel figyelembe vétele a teljes horizontra C2Last10ClosedLoop}
-\label{fig:onlab-refprev3}
-\end{figure}
-
-\begin{figure}[H]
-\centering
-% trim={<left> <lower> <right> <upper>}
-\includegraphics[width=0.35\textwidth, trim=0 0 0 0, clip,]{figures/onlab/NoSlope/C4Last10ClosedLoop}
-\caption{Referenciajel figyelembe vétele a teljes horizontra C4Last10ClosedLoop}
-\label{fig:onlab-refprev4}
-\end{figure}
-
-\begin{figure}[H]
-\centering
-% trim={<left> <lower> <right> <upper>}
-\includegraphics[width=0.35\textwidth, trim=0 0 0 0, clip,]{figures/onlab/NoSlope/C5Last10ClosedLoop}
-\caption{Referenciajel figyelembe vétele a teljes horizontra C5Last10ClosedLoop}
-\label{fig:onlab-refprev5}
-\end{figure}
-
-\subsection{Összahsonlítás}
-\begin{figure}[H]
-	\centering
-	% trim={<left> <lower> <right> <upper>}
-	\includegraphics[width=0.35\textwidth, trim=0 0 0 0, clip,]{figures/onlab/NoSlope/compareControllerJustPreview}
-	\caption{compareControllerJustPreview}
-	\label{fig:onlab-refprevComp}
-\end{figure}
-
-\pagebreak
-
-
-\section{Reference preview slopepal}
-
-\begin{figure}[H]
-	\centering
-	% trim={<left> <lower> <right> <upper>}
-	\includegraphics[width=0.35\textwidth, trim=0 0 0 0, clip,]{figures/onlab/Slope/CLast10ClosedLoop}
-	\caption{Referenciajel figyelembe vétele a teljes horizontra CLast10ClosedLoop}
-	\label{fig:onlab-refslprev}
-\end{figure}
-
-\begin{figure}[H]
-	\centering
-	% trim={<left> <lower> <right> <upper>}
-	\includegraphics[width=0.35\textwidth, trim=0 0 0 0, clip,]{figures/onlab/Slope/C1Last10ClosedLoop}
-	\caption{Referenciajel figyelembe vétele a teljes horizontra C1Last10ClosedLoop}
-	\label{fig:onlab-refslprev2}
-\end{figure}
-
-\begin{figure}[H]
-	\centering
-	% trim={<left> <lower> <right> <upper>}
-	\includegraphics[width=0.35\textwidth, trim=0 0 0 0, clip,]{figures/onlab/Slope/C2Last10ClosedLoop}
-	\caption{Referenciajel figyelembe vétele a teljes horizontra C2Last10ClosedLoop}
-	\label{fig:onlab-refslprev3}
-\end{figure}
-
-\begin{figure}[H]
-	\centering
-	% trim={<left> <lower> <right> <upper>}
-	\includegraphics[width=0.35\textwidth, trim=0 0 0 0, clip,]{figures/onlab/Slope/C4Last10ClosedLoop}
-	\caption{Referenciajel figyelembe vétele a teljes horizontra C4Last10ClosedLoop}
-	\label{fig:onlab-refslprev4}
-\end{figure}
-
-\begin{figure}[H]
-	\centering
-	% trim={<left> <lower> <right> <upper>}
-	\includegraphics[width=0.35\textwidth, trim=0 0 0 0, clip,]{figures/onlab/Slope/C5Last10ClosedLoop}
-	\caption{Referenciajel figyelembe vétele a teljes horizontra C5Last10ClosedLoop}
-	\label{fig:onlab-refslprev5}
-\end{figure}
-
-\subsection{Összahsonlítás}
-\begin{figure}[H]
-	\centering
-	% trim={<left> <lower> <right> <upper>}
-	\includegraphics[width=0.35\textwidth, trim=0 0 0 0, clip,]{figures/onlab/Slope/compareControllerPreviewSlope}
-	\caption{compareControllerPreviewSlope}
-	\label{fig:onlab-refSlprevComp}
-\end{figure}
-
-
-\pagebreak
 
 
 
