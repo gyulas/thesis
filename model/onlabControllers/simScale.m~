@@ -175,7 +175,7 @@ grid on
 %bar(2, RequiredPower.max(1), 'yellow')
 %bar(3, RequiredPower.max(1), 'green')
 
-title({'Költségek (Peak Demand)';'nincs preview, konstans referenciajel'})
+title('Költségek (Peak Demand)';'nincs preview, konstans referenciajel')
 
 
 %legend('Peak Demand [W]','EnergyConsumption [kJ]')
