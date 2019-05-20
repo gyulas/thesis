@@ -109,20 +109,40 @@ C4Last10=processHeatData(C4Last10);
 
 %C5Last10=processHeatData(C5Last10);
 %C1Last10=processHeatData(C1Last10);
+%%
+load('CompareC.mat')
+
+plotTemp(A_C_PreviewRef0_Dist0)
+plotTemp(A_C_PreviewRef0_Dist10)
+plotTemp(A_C_PreviewRef5_Dist10)
+plotTemp(A_C_PreviewRef5_Dist48)
+plotTemp(A_C_PrevRef10Dist48)
 
 %%
-EnergyConsumption.radiator=[CLast10.signals(4).values(4,6) ...
-                        C2Last10.signals(4).values(4,6) ...
-                        C4Last10.signals(4).values(4,6)];
-EnergyConsumption.padlofutes=[CLast10.signals(4).values(4,7) ...
-                        C2Last10.signals(4).values(4,7) ...
-                        C4Last10.signals(4).values(4,7)];
+
+A_C_PreviewRef0_Dist0=processHeatData(A_C_PreviewRef0_Dist0);
+A_C_PreviewRef0_Dist10=processHeatData(A_C_PreviewRef0_Dist10);
+A_C_PreviewRef5_Dist10=processHeatData(A_C_PreviewRef5_Dist10);
+A_C_PreviewRef5_Dist48=processHeatData(A_C_PreviewRef5_Dist48);
+A_C_PrevRef10Dist48=processHeatData(A_C_PrevRef10Dist48);
+
+%%
+EnergyConsumption.radiator=[A_C_PreviewRef0_Dist0.signals(4).values(4,6) ...
+                        A_C_PreviewRef0_Dist10.signals(4).values(4,6) ...
+                        A_C_PreviewRef5_Dist10.signals(4).values(4,6) ...
+                        A_C_PreviewRef5_Dist48.signals(4).values(4,6) ...
+                        A_C_PrevRef10Dist48.signals(4).values(4,6)];
+EnergyConsumption.padlofutes=[A_C_PreviewRef0_Dist0.signals(4).values(4,7) ...
+                        A_C_PreviewRef0_Dist10.signals(4).values(4,7) ...
+                        A_C_PreviewRef5_Dist10.signals(4).values(4,7) ...
+                        A_C_PreviewRef5_Dist48.signals(4).values(4,7) ...
+                        A_C_PrevRef10Dist48.signals(4).values(4,7)];
 EnergyConsumption.both=[EnergyConsumption.radiator' EnergyConsumption.padlofutes'];
 figure
-bar([1 2 3], EnergyConsumption.both, 0.65,'stacked')
+bar([1 2 3 4 5], EnergyConsumption.both, 0.65,'stacked')
 grid on
-set(gca,'XTickLabel',{'CLast10','C1Last10','C2Last10','C4Last10','C5Last10'})
-title('previewing nélkül konstans referencia')
+set(gca,'XTickLabel',{'Nincs','R0D10','R5D10','R5D48','R10D48'})
+title('Previewing hatása a leadott hő arányára')
 legend('Radiátor','Padlofutes')
 grid on
 
@@ -135,19 +155,23 @@ grid on
 %%
 % Komfort violation:
 f1=figure;
-title('Költségek és komfort reference preview nélkül')    
+title('Költségek és komfort')    
 
 set(f1, 'OuterPosition', [672 441 576 622]);
 
 hManipulated=subplot(2,1,1);
 set(hManipulated, 'OuterPosition', [0,0.65, 1, .35]);
 
-ComfortViolation.max=[CLast10.signals(4).values(4,9) ...
-                        C2Last10.signals(4).values(4,9) ...
-                        C4Last10.signals(4).values(4,9)];                        
-bar([1 2 3], ComfortViolation.max)
+ComfortViolation.max=[A_C_PreviewRef0_Dist0.signals(4).values(4,9) ...
+                        A_C_PreviewRef0_Dist10.signals(4).values(4,9) ...
+                        A_C_PreviewRef5_Dist10.signals(4).values(4,9) ...
+                        A_C_PreviewRef5_Dist48.signals(4).values(4,9) ...
+                        A_C_PrevRef10Dist48.signals(4).values(4,9)];                       
+bar([1 2 3 4 5], ComfortViolation.max)
 grid on
-title('Hibaintegrál')    
+title('Hibaintegrál')
+
+set(gca,'XTickLabel',{'Nincs','R0D10','R5D10','R5D48','R10D48'})
 ylab=get(gca,'YLabel');
 ylab.String={'hiba abszolút összege';'[Celsius fok * óra]'};
 set(gca,'YLabel',ylab)
@@ -162,20 +186,25 @@ hManipulated=subplot(2,1,2);
 set(hManipulated, 'OuterPosition', [0,0, 1, .65]);
 
 % Energia:
-RequiredPower.max=[CLast10.signals(4).values(1,8) ...
-                        C2Last10.signals(4).values(1,8) ...
-                        C4Last10.signals(4).values(1,8)];
-EnergyConsumption.sum=[CLast10.signals(4).values(4,8) ...
-                        C2Last10.signals(4).values(4,8) ...
-                        C4Last10.signals(4).values(4,8)];
-bar([1 2 3], RequiredPower.max)
+RequiredPower.max=[A_C_PreviewRef0_Dist0.signals(4).values(1,8) ...
+                        A_C_PreviewRef0_Dist10.signals(4).values(1,8) ...
+                        A_C_PreviewRef5_Dist10.signals(4).values(1,8) ...
+                        A_C_PreviewRef5_Dist48.signals(4).values(1,8) ...
+                        A_C_PrevRef10Dist48.signals(4).values(1,8)];
+EnergyConsumption.sum=[A_C_PreviewRef0_Dist0.signals(4).values(4,8) ...
+                        A_C_PreviewRef0_Dist10.signals(4).values(4,8) ...
+                        A_C_PreviewRef5_Dist10.signals(4).values(4,8) ...
+                        A_C_PreviewRef5_Dist48.signals(4).values(4,8) ...
+                        A_C_PrevRef10Dist48.signals(4).values(4,8)];
+bar([1 2 3 4 5], RequiredPower.max)
+
 %bar(1,  RequiredPower.max(1), 'red')
 %hold on
 grid on
 %bar(2, RequiredPower.max(1), 'yellow')
 %bar(3, RequiredPower.max(1), 'green')
 
-title({'Költségek (Peak Demand)';'nincs preview, konstans referenciajel'})
+title({'Peak Demand - max. teljesítményigény';'Previewing hatása'})
 
 
 %legend('Peak Demand [W]','EnergyConsumption [kJ]')
@@ -188,9 +217,9 @@ lim(1)=500;
 %lim(2)=700;
 set(gca,'YLim',lim);
 
-set(gca,'XTickLabel',{'CLast10','C2Last10','C4Last10'})
+set(gca,'XTickLabel',{'Nincs','R0D10','R5D10','R5D48','R10D48'})
 xlab=get(gca,'XLabel');
-xlab.String='idő (nap)';
+xlab.String='szabályozó';
 set(gca,'XLabel',xlab)
 
 shg

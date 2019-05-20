@@ -26,12 +26,12 @@ set(gca,'XLim',lim);
 %set X axes label
 plotting_axesLabel_Day()
 
-legend('Radiátor szelep','Padlófűtés szelep')
+legend('Radiátor szelep','Padlóf�t�s szelep')
 leg=get(gca, 'Legend');
 leg.Position =[0.6638 0.9000 0.2414 0.0650];
 
 subtitle=get(hManipulated,'Title');
-subtitle.String={'Áthangolt súlyozás';'Beavatkozó jelek'};
+subtitle.String='Beavatkoz� jelek';
 subtitle.FontSize=11;
 shg %show it
 
@@ -57,8 +57,8 @@ plot(CLast10.time, CLast10.signals(2).values(:,2)-273,'k-',...
 %grid on
 
 lim=get(gca,'YLim');
-lim(1)=20.5;
-lim(2)=23.5;
+lim(1)=18.5;
+lim(2)=21.5;
 set(gca,'YLim',lim);
 
 lim=get(gca,'XLim');
@@ -75,12 +75,12 @@ set(gca,'XLim',lim);
 
 %set X axes label
 plotting_axesLabel_Day()
-legend('Referenciajel t_{ref}','Helyiség hőmérséklete t_i')
+legend('Referenciajel t_{ref}','Helyis�g h�m�rs�klete t_i')
 %,'Nemline�ris modell t_i','Lineariz�lt modell t_i')
 leg=get(gca, 'Legend');
 leg.Position = [0.6598 0.5855 0.3134 0.0722];%[0.5930 0.5337 0.3134 0.0722];
 subtitle=get(hMeasured,'Title');
-subtitle.String='Belső hőmérséklet';
+subtitle.String='Bels� h�m�rs�klet';
 subtitle.FontSize=11;
 
 
@@ -90,7 +90,7 @@ shg %show it
 hMeasured=subplot(3,1,3);
 set(hMeasured, 'OuterPosition', [0,0, 1, .3]);
 plot(CLast10.time, CLast10.signals(2).values(:,1)-273,'b-')
-legend('Külső hőmérséklet t_e')
+legend('K�ls� h�m�rs�klet t_e')
 
 
 lim=get(gca,'YLim');
@@ -104,7 +104,7 @@ lim(2)=1800*2*24*55;
 set(gca,'XLim',lim);
 
 subtitle=get(hMeasured,'Title');
-subtitle.String='Külső hőmérséklet';
+subtitle.String='K�ls� h�m�rs�klet';
 subtitle.FontSize=11;
 plotting_axesLabel_Day()
 
@@ -118,5 +118,5 @@ set(gca,'XTick',0:24*3600:3600*24*7*120)
 %set(gca,'XTick',0:30*24*3600:3600*24*7*120)%honap
 set(gca,'XTickLabel',{'0','1','0','1','2','3','4','5','6','7','8','9','10','0','1','2','3','4','5','6','7','8','9','10','7','8','9','10','6','7','8','9'});%,'13','14','15','16'})
 xlab=get(gca,'XLabel');
-xlab.String='idő (nap)';
+xlab.String='id� (nap)';
 set(gca,'XLabel',xlab)

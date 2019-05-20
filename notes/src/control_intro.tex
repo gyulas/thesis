@@ -6,15 +6,13 @@
 %
 %\pagebreak
 
-\chapter{Önálló labor munka}
+\chapter{Bevezetés}
 
-
-
-{\Large \underline{Motiváció}} \cite{Opticontrol-II}A szakdolgozatban elkezdett munkát folytatva a cél az ottani MPC szabályozás finomhangolása, továbbfejlesztése volt. 
+\section{Motiváció} A szakdolgozatban elkezdett munkát folytatva a cél az ottani MPC szabályozás finomhangolása, továbbfejlesztése volt. 
 A felállított Simulink modellen a szabályozást kvantitatíven vizsgáltam meg, koncentrálva a költségek és a komfort közötti egyensúlyra. 
 
 
-{\large \underline{A modell}}
+\section{A modell}
 A korábbiakban használt \textit{fűtési rendszer modelljét} nem változtattam meg, viszont a modellből kivezetve mértem a pillanatnyi hőleadást. Így megkaptam a hőmennyiségeket, amik a beavatkozás forintosított költségével arányosak. 
 
 
@@ -100,6 +98,17 @@ A kiindulási MPC-t már létrehoztam az alábbi lépésekkel:% be kellene tabol
 	
 \end{enumerate}
 
+
+\begin{figure}[H]
+	\centering
+	% trim={<left> <lower> <right> <upper>}
+	%\includegraphics[trim=0 0 0 0, clip,width=\textwidth]{figures/simulink-network-minimalist-layout2}
+	\includegraphics[trim=70 0 65 0, clip,width=\textwidth]{figures/onlab/comparepng}
+	\caption{Szabályzó szimulációja Simulinkben}
+	\label{fig:simulink-mpc}
+\end{figure}
+
+
 \subsection{Az MPC költségfüggvénye}
 
 
@@ -118,6 +127,7 @@ ahol N a predikciós horizont, $w_u$ a beavatkozó jel változásának súlya, $
 A költségfüggvényben a hibajelhez és beavatkozó jelekhez, illetve azok változásaihoz különböző súlyok tartozhatnak.
 Nagyobb súlyok nagyobb költséget eredményeznek, így a szabályozó a nagyobb költségű beavatkozójel-sorozatot kisebb valószínűséggel választja.
 
+\chapter{Költség- és komfortoptimum elérése}
 
 \section{OptiControl projekt}
 Az ETH Zürich kutatássorozata, az OptiControl \cite{Opticontrol-II} (2007 és 2013 között) a prediktív irányítások használatát vizsgálta és tesztelte irodaépületeken. Az egyetem mellett a Siemens mérnökeit és más partnereket is bevontak. A projektből számos ötletet merítettem, és szimuláltam ezeket a Simulink környezetben.
@@ -133,7 +143,16 @@ A projekt összefoglalója egy szabályzóval hasonlítja össze a hagyományos 
 
 \section{Peak demand csökkentése}
 
-{\large 1) \underline{SIGNAL PREVIEW} -- }A prediktív szabályozókban lehetőség van arra, hogy a predikciós horizonton belül a szabályozó figyelembe vegye a referenciajel jövőbeli változását, illetve a mérhető zavarások várható értékét. (Erre previewing vagy look-ahead néven szokás hivatkozni.)
+
+
+\subsection{Signal Preview} A prediktív szabályozókban lehetőség van arra, hogy a predikciós horizonton belül a szabályozó figyelembe vegye a referenciajel jövőbeli változását, illetve a mérhető zavarások várható értékét. (Erre previewing vagy look-ahead néven szokás hivatkozni.)
+
+
+Erre abban az esetben van lehetőség, ha például elő van írva a napi hőmérséklet alapjel, ahogyan ez megtehető egyszerű programozható termosztátoknál is, amelyek egyszerű RBC (Rule Based Control) elven kapcsolnak be vagy ki.
+
+
+Időjárás-előrejelzést figyelembe véve pedig a külső hőmérséklet értékére adható becslés, ami tovább csökkentheti az energiafelhasználást: Ha a szabályozó csak a pillanatnyi zavarás értékét ismeri, akkor ennek megváltozásakor a referenciajel is hirtelen megváltozhat. Amennyiben a szabályozó a zavarás becsült értékét előre ismeri, optimalizálni tudja az energiafelhasználást. Ha például a külső hőmérséklet hirtelen emelkedik, akkor könnyen túlmelegedhet a helyiség, felesleges energiafogyasztást eredményezve.
+
 
 
 \begin{figure}[H]
@@ -145,199 +164,172 @@ A projekt összefoglalója egy szabályzóval hasonlítja össze a hagyományos 
 	\label{fig:preview-bemporad}
 \end{figure}
 
-Erre abban az esetben van lehetőség, ha például elő van írva a napi hőmérséklet alapjel, ahogyan ez megtehető egyszerű programozható termosztátoknál is, amelyek egyszerű RBC (Rule Based Control) elven kapcsolnak be vagy ki.
+\subsection{Súlyozás módosítása} A költségfüggvényben a beavatkozóknak különböző súlyokat rendelhetünk, ezzel szintén korlátozhatók a beavatkozó jelek. 
 
-Időjárás-előrejelzést figyelembe véve pedig a külső hőmérséklet értékére adható becslés, ami tovább csökkentheti az energiafelhasználást.
+A csúcsidőszakban csökkenthető a teljesítményigény, ha a tarifákidőben változnak. Ez elérhető például a súlyok futás közbeni módosításával.
 
-{\large 2) \underline{SÚLYOZÁS MÓDOSÍTÁSA} -- } A költségfüggvényben a beavatkozóknak különböző súlyokat rendelhetünk, ezzel szintén korlátozhatók a beavatkozó jelek. 
+Ezt vizsgálták az \textit{OptiControl projektben} \cite{Opticontrol-II} is, kora reggel és késő este alacsonyabb tarifát feltételezve. (A TABS jelenti a padlófűtést, a Ventilation pedig a légfűtést.)
 
-Még jobb eredményt lehet elérni időben változó súlyokat használva, ami például csúcsidőben magasabb energiaárakat elkerülve kiegyenlítheti a fogyasztást.
-%
-%
-%\begin{figure}[H]
-%	\centering
-%	% trim={<left> <lower> <right> <upper>}
-%	%\includegraphics[trim=0 0 0 0, clip,width=\textwidth]{figures/simulink-network-minimalist-layout2}
-%	\includegraphics[trim=0 0 0 0, clip,width=0.4\textwidth]{figures/onlab/constRefPrev/Cconstref}
-%	\caption{C szabályozó}
-%	\label{fig:peak2-plottempC}
-%\end{figure}
-%
-%
-%\begin{figure}[H]
-%	\centering
-%	% trim={<left> <lower> <right> <upper>}
-%	%\includegraphics[trim=0 0 0 0, clip,width=\textwidth]{figures/simulink-network-minimalist-layout2}
-%	\includegraphics[trim=0 0 0 0, clip,width=0.4\textwidth]{figures/onlab/constRefPrev/Cconstref}
-%	\caption{C szabályozó}
-%	\label{fig:peak2-plottempC}
-%\end{figure}
-
-
-\begin{table}[H]
-	\footnotesize
-	\centering
-	%\renewcommand{\arraystretch}{2} % to increase cell height
-	%\taburulecolor{gray}
-	%\begin{tabular}{|p{0.8cm}|p{1cm}|p{1cm}|p{1cm}|p{1cm}|p{1cm}|p{1cm}|p{1cm}|}
-	%
-	%\begin{tabulary}{\linewidth}{LLc}
-	\begin{tabu}{@{}clll@{}}
-		\hline
-		$T_s$ 	& \multicolumn{3}{c}{30 perc}
-		\\ 
-		p & \multicolumn{3}{c}{48 óra}
-		\\ 
-		c 		& \multicolumn{3}{c}{1}
-		\\ \hline
-		szabályozó & C & C2 & C4
-		\\
-		
-		$w_u$ 	& 0 & &
-		\\ 
-		$w_{\Delta u}$ 	& 50&&
-		\\ 
-		$w_y$ 	& 20&&
-		\\
-		SF 		& 30 &&
-		\\   \hline
-	\end{tabu}
-	\label{tab:severalMPCweights}
-	\caption{MPC szabályozó paraméterei}
-	%
-	%\label{tab:TabularExample}
-	%\tabref{TabularExample}~táblázat
-\end{table}
 
 
 \begin{figure}[H]
-	\begin{subfigure}[t]{0.32\textwidth}
+	\centering
+	% trim={<left> <lower> <right> <upper>}
+	%\includegraphics[trim=0 0 0 0, clip,width=\textwidth]{figures/simulink-network-minimalist-layout2}
+	\includegraphics[trim=90 60 90 470, clip,width=\textwidth]{cite/loadshift}
+	\caption{Különböző tarifák figyelembe vétele az OptiControl projektben}
+	\label{fig:loadshift}
+\end{figure}
+
+
+%\begin{figure}[H]
+%	\centering
+%	% trim={<left> <lower> <right> <upper>}
+%	%\includegraphics[trim=0 0 0 0, clip,width=\textwidth]{figures/simulink-network-minimalist-layout2}
+%	\includegraphics[trim=0 0 0 0, clip,width=0.4\textwidth]{figures/onlab/constRefPrev/Cconstref}
+%	\caption{C szabályozó}
+%	\label{fig:peak2-plottempC}
+%\end{figure}
+%
+%
+%\begin{figure}[H]
+%	\centering
+%	% trim={<left> <lower> <right> <upper>}
+%	%\includegraphics[trim=0 0 0 0, clip,width=\textwidth]{figures/simulink-network-minimalist-layout2}
+%	\includegraphics[trim=0 0 0 0, clip,width=0.4\textwidth]{figures/onlab/constRefPrev/Cconstref}
+%	\caption{C szabályozó}
+%	\label{fig:peak2-plottempC}
+%\end{figure}
+
+
+%\begin{table}[H]
+%	\footnotesize
+%	\centering
+%	%\renewcommand{\arraystretch}{2} % to increase cell height
+%	%\taburulecolor{gray}
+%	%\begin{tabular}{|p{0.8cm}|p{1cm}|p{1cm}|p{1cm}|p{1cm}|p{1cm}|p{1cm}|p{1cm}|}
+%	%
+%	%\begin{tabulary}{\linewidth}{LLc}
+%	\begin{tabu}{@{}clll@{}}
+%		\hline
+%		$T_s$ 	& \multicolumn{3}{c}{30 perc}
+%		\\ 
+%		p & \multicolumn{3}{c}{48 óra}
+%		\\ 
+%		c 		& \multicolumn{3}{c}{1}
+%		\\ \hline
+%		szabályozó & C & C2 & C4
+%		\\
+%		
+%		$w_u$ 	& 0 & &
+%		\\ 
+%		$w_{\Delta u}$ 	& 50&&
+%		\\ 
+%		$w_y$ 	& 20&&
+%		\\
+%		SF 		& 30 &&
+%		\\   \hline
+%	\end{tabu}
+%	\label{tab:severalMPCweights}
+%	\caption{MPC szabályozó paraméterei}
+%	%
+%	%\label{tab:TabularExample}
+%	%\tabref{TabularExample}~táblázat
+%\end{table}
+
+\chapter{Szimulációs eredmények}
+
+Az alábbiakban a signal previewing hatása látható. A referenciajel nappal \SI{22}{\celsius}, éjszaka \SI{21}{\celsius} volt. A külső hőmérséklet \SI{-3}{\celsius} és \SI{7}{\celsius} között változott, \SI{1.8}{\celsius}/óra változási sebességgel. A referenciajel fel- és lefutása hasonlóan korlátos volt. A szimuláció blokkvázlata a preview blokkokkal a \ref{fig:simulink-mpc}. ábrán látható.
+
+A grafikonokon a szimuláció 10 napnyi szelete látható, a nagyobb felfűtési tranziensek lecsengése után. A legfelső ábra mutatja a  beavatkozó  jeleket, a középső a belső hőmérsékletet, az alsó pedig a külső hőmérsékletet (mért zavarás).
+
+Több esetet vizsgáltam: a \ref{fig:mpc-pr0d0} ábrán látható szabályozás a referenciajel és a zavarjel pillanatnyi értékét ismerte csak. A \ref{fig:mpc-pr0d10}. ábra szerinti referenciakövetés adódott, ha a zavarás értéket 5 órával előre ismertük. Ez jelentősen lecsökkentette a maximális teljesítményigényt (lásd \ref{fig:mpc-PeakDemand}. ábra). A \ref{fig:mpc-pr5d10}. ábrán látható esetben a referenciajel is előre ismert volt, 2.5 órával. Látható, hogy az alapjel felfutása előtt megáll a hőmérséklet csökkenése.
+
+
+\begin{figure}[H]
+	\begin{subfigure}[t]{0.305\textwidth}
 		\centering
-		\includegraphics[trim=0 0 0 0, clip,width=\textwidth]{figures/onlab/constRefPrev/Cconstref}
-		\caption{C szabályozó}
-		\label{fig:constrefc}
+		%	% trim={<left> <lower> <right> <upper>}
+		\includegraphics[trim=0 0 0 27, clip,width=\textwidth]{figures/onlab/compare/A_C_P0D0}
+		\caption{Preview nélkül}
+		\label{fig:mpc-pr0d0}
 	\end{subfigure}
 	~
 	\begin{subfigure}[t]{0.32\textwidth}
 		\centering
-		\includegraphics[trim=0 0 0 0, clip,width=\textwidth]{figures/onlab/constRefPrev/C2constref}
-		\caption{C2 szabályozó}
-		\label{fig:mpc-wy-2}
+		\includegraphics[trim=0 0 0 27, clip,width=\textwidth]{figures/onlab/compare/A_C_P0D10}
+		\caption{Disturbance preview 10 step}
+		\label{fig:mpc-pr0d10}
 	\end{subfigure}
 	~
 	\begin{subfigure}[t]{0.32\textwidth}
 		\centering
-		\includegraphics[trim=0 0 0 0, clip,width=\textwidth]{figures/onlab/constRefPrev/C4constref}
-		\caption{C4 szabályozó}
-		\label{fig:mpc-wy-5}
+		\includegraphics[trim=0 0 0 27, clip,width=\textwidth]{figures/onlab/compare/A_C_P5D10}
+		\caption{Reference preview 5 step, disturbance preview 10 step}
+		\label{fig:mpc-pr5d10}
 	\end{subfigure}
-	\caption{MPC viselkedése -- previewing, kül. súlyokkal}
+	\caption{MPC viselkedése -- previewing hatása}
 	\label{fig:mpc-previeWeight}
 \end{figure}
 
-A fentiekkel a szabályozók beavatkozóinak hőleadása:
 
-Peak demandja:
+Meg kell jegyezni, hogy a previewing néhány esetben egy siettetést hozott a rendszerbe, azaz még \SI{21}{\celsius}-os alapjel volt előírva, amikor már jóval megemelte a hőmérsékletet. Ha ezeket a követési tulajdonságokat módosítani szeretnénk, érdemes a szabályozó súlyfüggvényében további módosítást végezni.
+
+
+\begin{figure}[H]
+	\begin{subfigure}[t]{0.47\textwidth}
+		\centering
+		\includegraphics[trim=0 0 0 0, clip,width=\textwidth]{figures/onlab/compare/A_C_P5D48}
+		\caption{Preview r5d48}
+		\label{fig:mpc-pr5d48}
+	\end{subfigure}
+	~
+	\begin{subfigure}[t]{0.51\textwidth}
+		\centering
+		\includegraphics[trim=0 0 0 0, clip,width=\textwidth]{figures/onlab/compare/A_C_P10D48}
+		\caption{r10d48}
+		\label{fig:mpc-pr10d48}
+	\end{subfigure}
+\end{figure}
+
+
+\section{Költségek figyelembe vétele}
+
+
+A fűtés energiaköltségét legkönnyebben az összes felhasznált energia mennyiségéből kaphatjuk meg. Ezen kívül célszerű még megvizsgálni a maximális teljesítményigényt is (peak demand), illetve az energiaátalakítás teljesítményszintektől függő hatásfokát.
+
+A szimulációban helyiség Simscape modelljéből kivezettem a ténylegesen leadott hőmennyiséget, amiből a radiátoros- és padlófűtés közötti arányra voltam kíváncsi. Abból adódóan, hogy továbi zavarást nem iktattam a rendszerbe, minden szabályozó beállítás mellett az összes energiafelhasználás azonos volt. Valós környezetben történő méréseknél lehetne vizsgálni azt, hogy mely konfiguráció a legelőnyösebb, ezért én csak a módszert mutatom be, ami alapján lehetséges megtalálni az ideális értéket.
+
+
+\section{Komfort figyelembe vétele}
+
+A szabályozás ezen minőségi jellemzője a hibajellel arányos. Ennek átlaga egy referenciától mért átlagos eltérést ad (ez az állandósult állapotbeli hiba). Ha a hiba abszolút integrálját vesszük, akkor kiválaszthatjuk a zavarokra minimális hibával működő szabályozást. Ezt a mennyiséget Kh, azaz kelvinóra mértékegységben értjük. 
+
+Az alábbi ábrákon látható a költségek és komfort metrikája egyes szabályozókra, a previewing függvényében. (A rövidebb jelölésrendszer érdekében R0 jelöli, ha a referenciajelből csak az aktuális értéket ismerjük, D10 pedig azt, ha a zavarjel (disturbance) értékét 10 lépésre előre ismerjük.)
 
 \begin{figure}[H]
 	%	% trim={<left> <lower> <right> <upper>}
 	\begin{subfigure}[t]{0.48\textwidth}
 		\centering
-		\includegraphics[trim=0 0 0 0, clip,width=1.1\textwidth]{figures/onlab/constRefPrev/summaryEnergy}
+		\includegraphics[trim=0 0 0 0, clip,width=1.1\textwidth]{figures/onlab/compare/A_compareEnergy}
 		\caption{Leadott homennyiseg megoszlasa}
 		\label{fig:constrefHeat}
 	\end{subfigure}
 	~
 	\begin{subfigure}[t]{0.48\textwidth}
 		\centering
-		\includegraphics[trim=0 0 0 0, clip,width=1.1\textwidth]{figures/onlab/constRefPrev/summaryPeakDemand}
+		\includegraphics[trim=0 0 0 0, clip,width=1.1\textwidth]{figures/onlab/compare/A_compareComfort}
 		\caption{C2 szabályozó}
-		\label{fig:constrefPeak}
+		\label{fig:mpc-PeakDemand}
 	\end{subfigure}
 \end{figure}
 
-
-\pagebreak
-
-A munka során célul tűztem ki, hogy gyakorlatban használható, a felmerülő igényeket jobban kielégítő szabályozást állítsak fel.
-
-Számos szempont merülhet fel,
-
-
-
-A korábban identifikált lineáris modellt használtam fel
-
-
-
-\begin{table}[H]
-	\footnotesize
-	\centering
-	%\renewcommand{\arraystretch}{2} % to increase cell height
-	%\taburulecolor{gray}
-	%\begin{tabular}{|p{0.8cm}|p{1cm}|p{1cm}|p{1cm}|p{1cm}|p{1cm}|p{1cm}|p{1cm}|}
-	%
-	%\begin{tabulary}{\linewidth}{LLc}
-	\begin{tabu}{@{}cl@{}}
-		\hline
-		$T_s$ 	& 1800 s
-		\\ 
-		p 		& 50 minta (25 óra)
-		\\ 
-		c 		& 1
-		\\
-		$w_u$ 	& 0.005 
-		\\ 
-		$w_{\Delta u}$ 	& 50
-		\\ 
-		$w_y$ 	& 20
-		\\
-		SF 		& 30 
-		\\   \hline
-	\end{tabu}
-	\label{tab:severalMPCfactors}
-	\caption{MPC szabályozó paraméterei}
-	%
-	%\label{tab:TabularExample}
-	%\tabref{TabularExample}~táblázat
-\end{table}
-
-
-\section{Költségek figyelembe vétele}
-
-A fűtés energiaköltségét legkönnyebben az összes felhasznált energia mennyiségéből kaphatjuk meg. Ezen kívül célszerű még megvizsgálni a maximális teljesítményigényt is (peak demand), illetve az energiaátalakítás teljesítményszintektől függő hatásfokát.
-
-A csúcsidőszakban lecsökkent teljesítményigény különösen előnyös lehet akkor, ha a tarifák ebben az időszakban magasabbak.
-
-
-A helyiség Simscape modelljéből ki lehetett vezetni a ténylegesen leadott hőmennyiséget, amiből már meg lehet állapítani a forintosított költségeket.
-
-
-\section{Komfort figyelembe vétele}
-
-A szabályozás ezen minőségi jellemzője a hibajellel arányos. Ennek átlaga egy referenciától mért átlagos eltérést ad, abszolút integrálva a hibát pedig kiválaszthatjuk a zavarokra minimális hibával működő szabályozást.
-
-A szabványok igen széles tartományban adják meg a komfortos 
-
-\subsection{Kritérium a szabályozásra}
-Előírt tartományban kell a hőmérsékletnek maradnia (lásd szabvány ill. ETH Zürich).
-
 \subsection{Hőérzetbeli különbségek}
-Az időjárás-előrejelzések is megadnak hőérzetet a napsütés, szél függvényében.
-Napos időben és szélcsendben melegebbnek tőnik az idő: hasonlóan kijelenthető, hogy sugárzó fűtések használatával a levegő hőmérséklete alacsonyabban is tartható ugyanakkora komfort eléréséhez.
 
-Ezért célszerű $T_{AUST}$-t is megvizsgálni.
+A szabályozás performanciáját tovább árnyalja, hogy azonos levegőhőmérséklet esetén is lehet különböző a hőérzetünk. Elég arra gondolni, hogy az időjárás-előrejelzések is megadnak hőérzetet is, amely napsütés esetén a ténylegesnél magasabb, szél esetén alacsonyabb lehet.
 
-\section{Zavarelnyomás}
+A épületekben a sugárzó fűtések magasabb hőérzetet biztosítanak, ezért a referenciajelet alacsonyabbra is lehet állítani.
 
-\section{Preview nélküli eset}
-
-\subsection{Komfort -- Hibajel minimalizálása}
-\subsection{Költség -- Beavatkozó jelek és a teljesítmény, peak demand}
-
-
-Ha a szabályozó csak a pillanatnyi zavarás értékét ismeri, akkor ennek megváltozásakor a referenciajel is hirtelen megváltozhat. Amennyiben a szabályozó a zavarás becsült értékét előre ismeri, optimalizálni tudja az energiafelhasználást. Ha például a külső hőmérséklet hirtelen emelkedik, akkor könnyen túlmelegedhet a helyiség, felesleges energiafogyasztást eredményezve.
-
-A következőkben a preview nélküli szabályozók viselkedése látható.
-
+\section{Súlyozás további hangolása}
 
 
