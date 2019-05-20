@@ -290,6 +290,7 @@ Meg kell jegyezni, hogy a previewing néhány esetben egy siettetést hozott a r
 		\caption{r10d48}
 		\label{fig:mpc-pr10d48}
 	\end{subfigure}
+		\caption{Szabályozók különböző \textit{singal preview-val}}
 \end{figure}
 
 
@@ -311,17 +312,19 @@ Az alábbi ábrákon látható a költségek és komfort metrikája egyes szabá
 	%	% trim={<left> <lower> <right> <upper>}
 	\begin{subfigure}[t]{0.48\textwidth}
 		\centering
-		\includegraphics[trim=0 0 0 0, clip,width=1.1\textwidth]{figures/onlab/compare/A_compareEnergy}
-		\caption{Leadott homennyiseg megoszlasa}
+		\includegraphics[trim=0 -40 0 0, clip,width=1.1\textwidth]{figures/onlab/compare/A_compareEnergy}
+		\caption{Leadott hőmennyiseg megoszlása a beavatkozók között}
 		\label{fig:constrefHeat}
 	\end{subfigure}
 	~
 	\begin{subfigure}[t]{0.48\textwidth}
 		\centering
 		\includegraphics[trim=0 0 0 0, clip,width=1.1\textwidth]{figures/onlab/compare/A_compareComfort}
-		\caption{C2 szabályozó}
+		\caption{"Comfort violation" (abszolút hibaintegrál) és "peak demand"}
 		\label{fig:mpc-PeakDemand}
 	\end{subfigure}
+	\label{fig:mpcComfortCost}
+	\caption{Szabályozók összehasonlítása komfort és költség szempontjából}
 \end{figure}
 
 \subsection{Hőérzetbeli különbségek}
@@ -332,4 +335,89 @@ A épületekben a sugárzó fűtések magasabb hőérzetet biztosítanak, ezért
 
 \section{Súlyozás további hangolása}
 
+A korábbi szimulációkból látható, hogy azonos költségfüggvény esetén is más-más lesz a szabályozók viselkedése. Ezért a previewing beállítása után is szükség lehet a súlyok állítására, ezt vizsgáltam meg az alábbiakban.
 
+Kiválasztottam a \ref{fig:mpc-PeakDemand}. ábra szerint a két legalacsonyabb teljesítményigényű szabályozót. Az \textit{R10D48} szabályozó (a previewing lépésszámából következik a jelölés, ld. az alábbi táblázat) súlyait tovább hangoltam, ez szintén leolvasható a táblázatból.
+
+\begin{table}[H]
+	\footnotesize
+	\centering
+	%\renewcommand{\arraystretch}{2} % to increase cell height
+	%\taburulecolor{gray}
+	%\begin{tabular}{|p{0.8cm}|p{1cm}|p{1cm}|p{1cm}|p{1cm}|p{1cm}|p{1cm}|p{1cm}|}
+	%
+	%\begin{tabulary}{\linewidth}{LLc}
+	\begin{tabu}{@{}cll@{}}
+		\hline
+		$T_s$ 	& \multicolumn{2}{c}{30 perc}
+		\\ 
+		p & \multicolumn{2}{c}{24 óra (48 lépés)}
+		\\ 
+		c 		& \multicolumn{2}{c}{1}
+		\\ \hline
+		szabályozó & eredeti & súlyozott
+		\\
+		$w_u$ 	& [0 0] & [0.01 0.005]
+		\\ 
+		$w_{\Delta u}$ 	& [0.1 0.1]& [0.1 0.05]
+		\\ 
+		$w_y$ 	& 1 & 1
+		\\
+		SF		& 1 & 300 (MV,DV)
+		\\
+		Ref. preview	& 5 & 10
+		\\
+		Dist. preview	& 10 & 48
+		\\   \hline
+	\end{tabu}
+	\label{tab:severalMPCweights}
+	\caption{MPC szabályozó paraméterei}
+	%
+	%\label{tab:TabularExample}
+	%\tabref{TabularExample}~táblázat
+\end{table}
+
+
+Összehasonlítható a két vizsgált szabályozó viselkedése:
+
+\begin{figure}[H]
+	\begin{subfigure}[t]{0.49\textwidth}
+		\centering
+		\includegraphics[trim=0 0 0 0, clip,width=\textwidth]{figures/onlab/compare/A_C_P5D10}
+		\caption{Referencia 5 lépéssel, zavarás 10 lépéssel előre ismert}
+		\label{fig:mpc-c-p5d10}
+	\end{subfigure}
+	~
+	\begin{subfigure}[t]{0.49\textwidth}
+		\centering
+		\includegraphics[trim=0 0 0 0, clip,width=\textwidth]{figures/onlab/compare/A_Cdiff_P10D48}
+		\caption{Referencia 10 lépéssel, zavarás 48 lépéssel előre ismert, módosított súlyozással}
+		\label{fig:mpc-cdiff-p10d48}
+	\end{subfigure}
+\end{figure}
+
+A számszerű eredmények azt mutatják, hogy az abszolút hibaintegrált tovább tudtuk csökkenteni, és eközben (a korábbihoz képest, ld. \ref{fig:constrefHeat}. ábra) jobban használtuk a padlófűtést.
+
+
+\begin{figure}[H]
+	\begin{subfigure}[t]{0.49\textwidth}
+		\centering
+			%	% trim={<left> <lower> <right> <upper>}
+		\includegraphics[trim=0 -40 0 0, clip,width=\textwidth]{figures/onlab/compare/A_diff_compareEnergy}
+		\caption{Referencia 5 lépéssel, zavarás 10 lépéssel előre ismert}
+		\label{fig:mpc-c-p5d10}
+	\end{subfigure}
+	~
+	\begin{subfigure}[t]{0.49\textwidth}
+		\centering
+		\includegraphics[trim=0 0 0 0, clip,width=\textwidth]{figures/onlab/compare/A_diff_compareComfort}
+		\caption{Referencia 10 lépéssel, zavarás 48 lépéssel előre ismert, módosított súlyozással}
+		\label{fig:mpc-cdiff-p10d48}
+	\end{subfigure}
+\end{figure}
+
+\chapter{Összefoglalás}
+
+Az elvégzett munka célja gyakorlatban is alkalmazható MPC hangolási módszerek kipróbálása volt. A forrásaim alapján megvizsgáltam, hogy a signal previewing és a súlyozás hogyan befolyásolja a szabályozást, mind a beavatkozó jelekkel arányos költségeket, mind az alapjelkövetéssel arányos komfortot.
+
+Azt hiszem, hogy ezeket a módszereket a gyakorlatban is ki lehet használni és a hagyományos megoldásoknál alacsonyab energiafelhasználást lehet elérni.
