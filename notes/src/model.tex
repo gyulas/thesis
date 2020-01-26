@@ -1,76 +1,178 @@
-\section{Modellalkotás, irodalomkutatás}
+\chapter*{Kivonat}
 
-Munkámban elsősorban a különböző fűtési típusok közti különbségeket szeretném megvizsgálni. A ház modelljét először adottnak venném, az eltérést pedig a különböző fűtési módok jelentenék.
-Azaz megpróbálom felírni a környezet belső hőmérsékletre való ráhatását, eztán pedig modellezem többféle fűtőtest viselkedését.
+%szabályozástechnika, hőszabályozás, modell prediktív szabályozás, hőátadás, épületgépészet, intelligens épület, szimuláció, 
+A szakdolgozatban fűtési rendszerek modell-prediktív szabályozásának lehetőségeit vizsgálom Matlab Simulinkben.
+Végighaladok az MPC tervezés lépésein, a tervezést és a validálást is szimulált szakaszmodellen végzem. 
 
-Ehhez először áttekintettem a hőátadás lehetséges formáit és forrásait. Arra jutottam, hogy ha a levegő hőmérsékletére szabályzok, akkor az abba beleszóló tényezőket veszem sorra:
-\begin{itemize}[noitemsep,topsep=0pt,parsep=0pt,partopsep=0pt]
-	\item konvektív hőátadás: a felszín közelében felmelegedett levegő áramlani kezd
-	\item radiatív hőátadás: sugárzással kibocsátott energia a környezetbe
-\end{itemize}
+A szakaszmodellt egy helyiség és annak fűtési rendszere alkotja, a fűtés hője a helyiségből külső homlokzaton távozik a környezet felé. A fűtőtestekben keringő víz tömegáramát arányos szelepekkel lehet korlátozni. Az állandósult állapotban szükséges fűtési teljesítményt képlettel számítom, ebből kapható a beavatkozó jel egy adott teljesítményigényhez. A hőkapacitásokat és hőátadási, hővezetési tényezőket Simscape blokkokkal megvalósított modell tartalmazza, meghatározva a szakasz dinamikáját. 
 
-\begin{figure}[h]
-	\centering
-	\includegraphics[width=8cm]{figures/konvrad}
-	\caption{Alacsony hőmérsékletű fűtés és magas hőmérsékletű hűtés c. könyv ábrája}
-		%\footnote{Jan Babiak, rehva Guidebook No.7}
-\end{figure}
+Megvizsgálom az MPC predikciós horizontjának, költségfüggvényének illetve mintavételi idejének hatását a zárt szabályozási kör viselkedésére. 
+A tervezési lépéseket ezután laborkörülmények között egy fizikai modellen is elvégzem, így látható lesz, hogy egy valós rendszerre mennyi munkával jár a szabályozó beállítása.
+
+Ha a modellezésre, hangolásra fordított idő megtérül, azaz komfortnövekedéssel, illetve az üzemeltetési költségek csökkenésével jár, akkor az iContrALL intelligens otthon rendszerbe is érdemes lehet beilleszteni ezeket a funkciókat.
+
+\chapter*{Abstract}
+
+%control theory, Model Predictive Control (MPC), Building Automation, building control, heat transfer, simulations, intelligent building, 
+In my Bachelor's Thesis I inspect the possibilities of MPC control design and validation in Matlab Simulink. I am going step-by-step through the MPC design procedure with simulated plant model. The plant model consists of a room and its heating system with proportional valves to control the water mass flow, thus providing heat for the room. Losses at the facade was taken into consideration (outer walls and window), I assume no heat loss to the neighboring rooms.
+
+The steady-state heat input for the room model is calculated by a formula and then fed to a Simscape thermal network. This network gives the transient response of the room by simulating the charging of the heat capacities, such as air and the mass of the room itself.
+I design an MPC controller for the identified plant model. In the design procedure I study the impact of different control parameters to the control performance, such as the sampling time of the controller, the prediction and control horizon or the weights of the cost function.
+
+Then, for a real physical system, an MPC controller is also designed. A paper box with some wood and some brick with reasonable heat capacity is studied. The heating mechanism is substituted by car headlights. 
+Designing an MPC controller for this system shows the challenges we facing in real applications, such as computing times, effect of measurement uncertainities and disturbances.
+
+If the time spent for modeling and designing of the controller increases the comfort and/or reduces operating costs, the method can be feasible for real applications and integrated to an intelligent building system.
 
 
-A levegő hőmérsékletére ezek a következőképp hatnak a leginkább:
-\begin{itemize}[noitemsep,topsep=0pt,parsep=0pt,partopsep=0pt]
-	\item a fűtőtestek konvektív és radiatív hőátadással is melegítik a környezetet
-	\item a radiatív energiát a tárgyak, falak nyelik el, amik ezáltal felmelegszenek (mintegy kapacitásként lesz egy hőtároló tömeg, ami a fűtés kikapcsolásával fenntartja a hőmérsékletet / lassítja a hűlést)
-	\item a fűtetlen falfelületek hűtik a szobát (külső hőmérséklet befolyása)
-\end{itemize}
+\chapter{Bevezetés}
+Az Európai Unió energiafogyasztásának 40\%-át az épületek adják, a szén-dioxid-kibocsátás 36\%-áért felelősek. Az energiahatékonyság növelése kiemelten fontos: a korszerűbb közintézmények, munkahelyek, lakóingatlanok olcsóbban fenntarthatók és alacsonyabb károsanyag-kibocsátás mellett az emberek életminőségét is javítják.
 
-Így a kezdeti modellben azzal a feltételezéssel élek, hogy ezen kívül más hatás nem lép fel.
+Az új épületekre egyre szigorodó követelmények vonatkoznak\footnote{2021-ben használatba vett ingatlanoknak már teljesíteniük kell a közel nulla energiaigényű épületekre \cite{NZEB} vonatkozó szabályokat. }.
+A törvények előírják energetikai tanúsítvány készítését szerte az Unióban, ami ellenőrzi az épület megfelelőségét energetikai szempontból.
+Azok a legújabb építésű, fenntartható irodaházak, amelyek LEED, illetve WELL minősítést kapnak, az emberek egészségének és jó közérzetének fenntartását is segítik\footnote{A LEED egy komplex minősítési rendszer, a szakdolgozat tematikájához az \textit{Energia és légkör} kategóriája tartozik leginkább. Bővebben: https://www.terc.hu/tudastar/leed \\
+A WELL hét szempont alapján értékel - víz, egészséges táplálkozás, természetes fény, testmozgás, kényelem és szellemi frissesség ‒ és ezek technikai feltételeire tesz javaslatokat.}.
 
-A modellben feltételezem, hogy a fűtőtest felületi hőmérsékletével tudunk beavatkozni. A modellben paraméter a fűtőtestek hőátadási tényezője és felülete. Zavarásként (?) hat a külső hőmérséklet értéke, amit mérni is tudunk. Kimenet a belső hőmérséklet (térben konstansnak véve azt / átlagolva a szoba levegőjére)
+Ilyen fejlett technológiákat felvonultató épületekben nagy szerepet játszanak az épületgépészeti rendszerek\footnote{Épületgépészeti rendszer a \cite{TNM2006} rendelet szerint a  HVAC (heating, ventilation, and air conditioning), a melegvíz-ellátásra és világításra szolgáló berendezések összessége.},
+a 7/2006. TNM rendelet \cite{TNM2006} is megfogalmaz szabályokat és ajánlásokat ezzel kapcsolatban. Eszerint \say{új fűtési rendszer létesítésekor és meglévő fűtési rendszer korszerűsítésekor a helyiségenkénti hőmérséklet-szabályozást javasolt megvalósítani gazdaságossági számítás\footnote{A gazdaságossági számítás egy teljes élettartamra vonatkozó minimumköltséget céloz meg.} alapján}.
+	
+	%    Ezekhez tartozó költségoptimalizált szint: az energiahatékonyság azon szintje, amely egy épület, vagy valamely az épületek energetikai jellemzőinek meghatározásáról szóló rendeletben meghatározott épületelem becsült gazdasági élettartama folyamán a legalacsonyabb költséget eredményezi.
+	% https://ec.europa.eu/energy/en/content/eu-countries-2018-cost-optimal-reports}}. 
 
-A modell felírásához a fűtőtest tulajdonságain kívül szükség van a szobában található levegő mennyiségére is. A zavarás hatását is fel kell írni, azaz hogy egy külső hőmérsékletváltozás hogyan jelenik meg a kimeneten. (Célszerű itt egy átviteli függvényt felírni először, szuperpozíciószerűen. A zavarás viszont nem a modell bemenetén és nem is a kimenetén hat.)
+	% Számos megtakarítási forma már régóta él a köztudatban, például a szigetelés, az ablakcsere. Alacsonyabb besorolás esetén az energetikai tanúsítványban is szerepel javaslat a korszerűsítésre. %Az ágazat úttörői az építészek, többnyire a szerkezetek tervezésénél veszik figyelembe a fenti szempontokat.
+	%Az üzemeltetési időszakra viszont kevesebb figyelem kerül, szerencsére manapság már a teljes élettartamra vetített költséget is figyelembe szokás venni.
 
-A felírandó átviteli függvények:
+	%Sokszor ilyen esetben csak az épületszerkezetek kialakítására fordítanak kellő figyelmet - az előírások is erre vonatkoznak, az épületgépészeti rendszerek automatizálása viszont kevésbé elterjedt.
 
-\begin{itemize}[noitemsep,topsep=0pt,parsep=0pt,partopsep=0pt]
-	\item levegő felmelegedése konstans külső hőmérsékletet feltételezve, fűtőtest egységugrással
-	\item levegő felmelegedése fűtés kikapcsolt állapota mellett, környezeti hőmérséklet ugrásával
-\end{itemize}
+Munkámban szeretnék megvalósítani egy helyiségenkénti hőmérséklet-szabályozást, ezen keresztül pedig megmutatni a különböző fűtési típusok viselkedését egy helyiségen belül.
 
-Ezeket ráadtam a rendszerre és két bemenetű, egy kimenetű rendszerként identifikáltam.
 
-\pagebreak
+
+%\section{A modell felírásához tartozó megállapítások}
+
+%\paragraph{A szabályzó:}
+
+ 
+
+% a szabályzót ezután egy fizikai rendszerre is megtervezem, hogy azt laborkörülmények közt kipróbáljam. A szabályzás beavatkozó jelei a szelepek, amellyel a fűtési teljesítmény befolyásolható, a visszacsatolás belső hőmérséklet mérésével adódik.
+
+\section{A modell típusa, hatóköre}
+
+A szabályozáshoz a klasszikus elképzelések szerint ismerjük a szabályzott szakasz viselkedését, ellenkező esetben identifikálnunk kell azt. Ismert hálózatokra felírható gerjesztés-válasz kapcsolat, például átviteli függvények formájában. % Viszont akkor is érdemes lehet identifikálni, ha analitikusan túl hosszadalmas volna az átviteli függvény felírása.
+%Épületfizikai összefüggéseket felhasználva egyenleteket is fel lehet írni a hőfelvételre, hőleadásra. Ezen összefüggésekkel egyenértékű átviteli függvény is felírható, ha a rendszer bemeneteire gerjesztéseket adunk és mérjük a kimeneteket.  %\cite{AFRAM2014343}
+
+A szabályozott szakasz a fűtési rendszer: ezalatt a helyiséget és az ott elhelyezett, vagy beépített fűtőtestet értem. A fűtési rendszer modellje több helyen és több formában is megjelenik: fizikai rendszerként a \textit{\ref{chap:helyiseg}-\ref{chap:futotest}. fejezetekben}, az identifikációkor és szabályzótervezéskor pedig lineáris rendszerrel közelítve. A szabályzó ez alapján a modell alapján fogja a beavatkozó jelet meghatározni.
+
+%A fizikai modell a hálózat felépítését követi, elemei beazonosíthatók, ezzel szimulációkat lehet futtatni, paraméterek hatásait vizsgálni.
+%A fizikai hálózatnak gerjesztés-válasz kapcsolata alapján helyettesíthető egy nemlineáris rendszerrel - ám a szabályzótervezéskor kénytelen vagyok lineáris rendszerrel közelíteni..
+
+
+%Első lépésben egy szimulált hálózat\footnote{A szimulációban sokkal könnyebben megfigyelhető az egyes paraméterek hatása, így lépésről lépésre megérthető a rendszer viselkedése.}, emiatt fizikai modell felírása mellett döntöttem.
+ 
+%A \textit{\ref{chap:helyiseg}-\ref{chap:futotest}. fejezetekben} felállítom egy helyiség és a hozzátartozó fűtőtestek modelljét, ami a \ref{tikz:simulation-basic}. ábrán látható módon, a Matlab-ban fut. %A modellalkotást méretezési szabályok is befolyásolják. Publikációk, könyvek, adatlapok alapján validálom a felírt összefüggéseket, az ottani mérések adataiból kiindulva. 
+
+%(TOVBÁBBI fűtőtestek mérése a \cite[313, 361.~o.]{Herz})
+
+%A belső hőmérsékletet számos jellemző befolyásolhatja. 
+A szabályozás a helyiség hőveszteségét egyenlíti ki, amit az alacsonyabb külső hőmérséklet ($t_e$) okoz. A külső falon és az ablakon hő távozik, amelyet radiátoros és padlófűtéssel egyenlíthetünk ki.
+
+%A szabályozás helyiségekre van bontva, a modellben is csak egy helyiség és annak fűtési rendszere szerepel. %Ezen a szinten 
+%
+%A 2.1 fejezetet kellene itt bevezetni.
+%
+%
+%\footnote{A referenciajelbe az időjárás-előrejelzési adatok is beleszólhatnak a energiamegtakarítás érdekében.}.
+%
+\input{src/tikz/simulation_layout}
+%
+\section{A szabályozás folyamata, szabályzótervezés}
+A szabályzó a  modell alapján olyan szelepekkel képes beavatkozni, melyekkel a fűtőtestbe beáramló vízmennyiség  korlátozható. A szelepek ($u_1, u_2$) állását folytonosan tudom változtatni. A modell bemenetei a szelepek állásai és a külső hőmérséklet, kimenete a belső hőmérséklet ($t_i$).  A belső és külső hőmérsékletet mérem, a szabályzott jellemző a belső hőmérséklet.
+%
+A tervezés lépései a \textit{\ref{chap:ident}-\ref{chap:control}. fejezetben} olvashatóak.
+%Az alapértelmezett paramétereket módosítom a fizikai korlátoknak megfelelően,  amelyek a beavatkozókra vagy a szakaszra vonatkoznak.
+%
+%Az MPC-nek rendkívül sok paraméterezési lehetősége van, amitől függően a szabályzás agresszívebb vagy robusztusabb lehet.   %---- (kazánok \cite[235.~o.]{Herz} szerint: kazánok hatásfoka, túlméretezése. )
+%Az MPC szabályozás gyakorlati kipróbálásához fizikai tesztrendszert állítunk fel, itt az MPC tervezési kérdésekre koncentrálok, átviteli függvény modellből.
+%
+%
+\section{Eredmények gyakorlati kipróbálása, további lehetőségek}
+%
+A szabályzótervezés lépéseit egy fizikai rendszerre is elvégzem, hogy további tapasztalatokat szerezzek. Végül áttekintem, hogy a szabályozás használatának milyen gyakorlati lehetőségei vannak, mind technikai értelemben, mind piacképesség szempontjából. Végül összefoglalom az elért eredményeket.
+
+
+%, melynek paramétereit energetikai tanúsítványból vehetjük. Ezzel egy közelítő modelljét megkapjuk a háznak, terepi mérések nélkül is lehetséges a szabályzás. A telepítés ideje lecsökkenthető, hiszen a hosszas kalibrálás elmarad.  A modellezéshez külön írom fel a helyiség és a fűtőtestek modelljét.%Természetesen bevethetők zárt körben végzett identifikációs módszerek, adaptív szabályzók is.
+
+
+
+
+%Ehhez először áttekintettem a hőátadás lehetséges formáit és forrásait.
+%Ezután fűtőtestek modelljét állítom fel.
+
+
+
+
+%\pagebreak
+
+ %Arra jutottam, hogy ha a levegő hőmérsékletére szabályzok, akkor az abba beleszóló tényezőket veszem sorra:
+%\begin{itemize}[noitemsep,topsep=0pt,parsep=0pt,partopsep=0pt]
+%	\item konvektív hőátadás: a felszín közelében felmelegedett levegő áramlani kezd
+%	\item radiatív hőátadás: sugárzással kibocsátott energia a környezetbe
+%\end{itemize}
+
+%\begin{figure}[h]
+%	\centering
+%	\includegraphics[width=8cm]{figures/konvrad}
+%	\caption{Alacsony hőmérsékletű fűtés és magas hőmérsékletű hűtés c. könyv ábrája}
+%		%\footnote{Jan Babiak, rehva Guidebook No.7}
+%\end{figure}
+
+
+%A levegő hőmérsékletére ezek a következőképp hatnak a leginkább:
+%\begin{itemize}[noitemsep,topsep=0pt,parsep=0pt,partopsep=0pt]
+%	\item a fűtőtestek konvektív és radiatív hőátadással is melegítik a környezetet
+%	\item a radiatív energiát a tárgyak, falak nyelik el, amik ezáltal felmelegszenek (mintegy kapacitásként lesz egy hőtároló tömeg, ami a fűtés kikapcsolásával fenntartja a hőmérsékletet / lassítja a hűlést)
+%	\item a fűtetlen falfelületek hűtik a szobát (külső hőmérséklet befolyása)
+%\end{itemize}
+%
+%Így a kezdeti modellben azzal a feltételezéssel élek, hogy ezen kívül más hatás nem lép fel.
+%
+%A modellben feltételezem, hogy a fűtőtest felületi hőmérsékletével tudunk beavatkozni. A modellben paraméter a fűtőtestek hőátadási tényezője és felülete. Zavarásként (?) hat a külső hőmérséklet értéke, amit mérni is tudunk. Kimenet a belső hőmérséklet (térben konstansnak véve azt / átlagolva a szoba levegőjére)
+%
+%A modell felírásához a fűtőtest tulajdonságain kívül szükség van a szobában található levegő mennyiségére is. A zavarás hatását is fel kell írni, azaz hogy egy külső hőmérsékletváltozás hogyan jelenik meg a kimeneten. (Célszerű itt egy átviteli függvényt felírni először, szuperpozíciószerűen. A zavarás viszont nem a modell bemenetén és nem is a kimenetén hat.)
+
+%A felírandó átviteli függvények:
+%
+%\begin{itemize}[noitemsep,topsep=0pt,parsep=0pt,partopsep=0pt]
+%	\item levegő felmelegedése konstans külső hőmérsékletet feltételezve, fűtőtest egységugrással
+%	\item levegő felmelegedése fűtés kikapcsolt állapota mellett, környezeti hőmérséklet ugrásával
+%\end{itemize}
+%
+%Ezeket ráadtam a rendszerre és két bemenetű, egy kimenetű rendszerként identifikáltam.
+
+%\pagebreak
 
 
 %\subsubsection{Modellparaméterek}
 
-\subsection{Felírandó modellek}
-
-Fűtési típusok szerint:
-
-\begin{itemize}[noitemsep,topsep=0pt,parsep=0pt,partopsep=0pt]
-	\item radiátoros fűtés hőátvitele
-	\item padlófűtés hőátvitele
-\end{itemize}
-
-A fentiekre különböző értékű lesz a 
-
-\begin{itemize}[noitemsep,topsep=0pt,parsep=0pt,partopsep=0pt]
-	\item hőátadási tényező
-	\item hőtároló tömeg
-	\item költségfüggvény?
-	\item előremenő vízhőmérséklet és ezzel a leadott teljesítmény maximumértéke
-\end{itemize}
-
-ami így eltérő ház-modelleket fog eredményezni.
-
-
-
-
-
-
-
-
+%\subsection{-----}
+%
+%Fűtési típusok szerint:
+%
+%\begin{itemize}[noitemsep,topsep=0pt,parsep=0pt,partopsep=0pt]
+%	\item radiátoros fűtés hőátvitele
+%	\item padlófűtés hőátvitele
+%\end{itemize}
+%
+%A fentiekre különböző értékű lesz a 
+%
+%\begin{itemize}[noitemsep,topsep=0pt,parsep=0pt,partopsep=0pt]
+%	\item hőátadási tényező
+%	\item hőtároló tömeg
+%	\item költségfüggvény?
+%	\item előremenő vízhőmérséklet és ezzel a leadott teljesítmény maximumértéke
+%\end{itemize}
+%
+%ami így eltérő ház-modelleket fog eredményezni.
 
 
 \pagebreak

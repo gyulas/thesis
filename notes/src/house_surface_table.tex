@@ -1,23 +1,29 @@
 \newcolumntype{C}[1]{>{\centering\arraybackslash}p{#1}}
 \newcolumntype{R}[1]{>{\raggedleft\arraybackslash}p{#1}}
 
-\begin{tabu}{|p{3cm}|p{1cm}|p{3cm}|p{3cm}|p{3cm}|}
+\begin{tabu}{@{}p{3.5cm}p{1.2cm}p{2cm}p{3cm}p{3cm}@{}}
+	%\begin{tabu}{|p{3cm}|p{1.2cm}|p{2cm}|p{3cm}|p{3cm}|}
 	%{p{1.5cm}|C{0.8cm}|C{0.8cm}|C{0.8cm}|C{0.8cm}|C{0.8cm}|C{0.8cm}|C{0.8cm}|C{0.8cm}|}
 	%\multicolumn{1}{l}{}&\multicolumn{8}{l}{SDO header (első adatbyte) - master kérése}
 	%\\ 		\cline{2-9}\cline{2-9}
-	\hline
-	felület& méret & kalorikus hőátbocsátási tényező    & hőtároló tömeg & hőkapac
-	\\ \hline
-	külső fal & 4.5 \si{\metre\squared} & 2 \si[per-mode=fraction]{\watt\per\metre\squared\per\kelvin} & 4.5*200kg & e.g. 4.5*200*840 \si[per-mode=fraction]{\joule\per\kelvin}
-	\\ \hline
-	ablak & 4 \si{\metre\squared} & 4 \si[per-mode=fraction]{\watt\per\metre\squared\per\kelvin} & 0 & 0
-	\\ \hline
-	belső válaszfalak & 50 \si{\metre\squared} & 7 & 50*100kg & 50*100*840	
-	\\ \hline
-	padló & 16 \si{\metre\squared} & 11 & 16*200kg & 169*200*840	
-	\\ \hline
-	mennyezet & 16 \si{\metre\squared} & ? rad / conv &  & 	
-	\\ \hline
+
+	veszteséges elemek& méret & $U$    & hőtároló tömeg & hőkapacitás
+	\\ \hline%\hhline{=====}
+	külső fal & 4.5 \si{\metre\squared} & 2 \si[per-mode=fraction]{\watt\per\metre\squared\per\kelvin} & 900kg & 756 \si[per-mode=fraction]{\kilo\joule\per\kelvin}
+	\\ %\hline
+	ablak & 4 \si{\metre\squared} & 4 \si[per-mode=fraction]{\watt\per\metre\squared\per\kelvin} & - & -
+	\\ %\hline
+\end{tabu}
+\vspace*{10pt}
+\begin{tabu}{@{}p{3.5cm}p{1.2cm}p{2cm}p{3cm}p{3cm}@{}}
+	csak hőtároló elemek & méret & $h_t$    & hőtároló tömeg & hőkapacitás \\	\hline%\hhline{=====}
+	belső válaszfalak & 50 \si{\metre\squared} & 7 \si[per-mode=fraction]{\watt\per\metre\squared\per\kelvin} & 5000kg & 4.2 \si[per-mode=fraction]{\mega\joule\per\kelvin}	
+	\\ %\hline
+	padló & 16 \si{\metre\squared} & 11 \si[per-mode=fraction]{\watt\per\metre\squared\per\kelvin}  & 3200kg &2.7 \si[per-mode=fraction]{\mega\joule\per\kelvin}
+	\\ %\hline
+	mennyezet & 16 \si{\metre\squared} & 5 \si[per-mode=fraction]{\watt\per\metre\squared\per\kelvin} & 3200kg &2.7 \si[per-mode=fraction]{\mega\joule\per\kelvin}	
+	\\ %\hline
+
 %	belső válaszfalak & 50 \si{\metre\squared} & 7 & 50*100kg & 50*100*840		
 %	\\ \hline
 %	11 & Internal limit active

@@ -1,0 +1,22 @@
+\begin{figure}[h]
+	\centering
+	\begin{tikzpicture}[>=stealth]
+	% Controller
+	% ----------
+	\node[draw,rectangle, minimum height=2cm,minimum width=5cm,
+		  %label={[xshift=1.0cm, yshift=0.3cm]Label},
+		  %label={[xshift=-4.1cm, yshift=-0.7cm]Label},
+		  ]
+		  (MPC) at (2.3,2.5) {\parbox{2cm}{\centering MPC}};	
+	
+	% az MPC doboz bemenetei
+	\draw [<-] (MPC.165) node[right]{MO} -- +(-15mm,0) node[left]{$T_i$};
+	\draw [<-] (MPC.180) node[right]{REF} -- +(-15mm,0) node[left]{$T_{ref}$};
+	\draw [->] (MPC.0) node[left]{MV} -- +(15mm,0) node[right]{$\alpha$ [\si{\percent}]};
+	\draw [<-] (MPC.195) node[right]{MD} -- +(-15mm,0) node[left]{$T_e$};
+	
+	\end{tikzpicture}
+
+	\caption{Az MPC be- és kimenetei}
+	\label{fig_mpcinout}
+\end{figure}

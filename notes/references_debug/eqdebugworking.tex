@@ -1,0 +1,41 @@
+\documentclass[12pt,a4paper,oneside, hidelinks]{report}             % Single-side
+
+%\frenchspacing
+%\usepackage{ragged2e}
+%\usepackage[utf8]{inputenc}
+%\usepackage[T1]{fontenc}
+%\usepackage[magyar]{babel}
+%\usepackage{graphicx}
+%\usepackage{float}
+
+
+\usepackage{amsmath}
+%\usepackage{amssymb}
+
+
+% for page layout
+\usepackage{anysize}
+
+%for figure
+\usepackage{graphicx}
+
+
+
+
+%--------------------------------------------------------------------------------------
+% Page layout setup
+%--------------------------------------------------------------------------------------
+% we need to redefine the pagestyle plain
+% another possibility is to use the body of this command without \fancypagestyle
+% and use \pagestyle{fancy} but in that case the special pages
+% (like the ToC, the References, and the Chapter pages)remain in plane style
+
+\pagestyle{plain}
+\setlength{\parindent}{0pt} % áttekinthetőbb, angol nyelvű dokumentumokban jellemző
+\setlength{\parskip}{9pt plus 3pt minus 3pt} % áttekinthetőbb, angol nyelvű dokumentumokban jellemző
+\marginsize{35mm}{25mm}{15mm}{15mm} % anysize package - VÉGLEGESHEZ
+
+
+\begin{document}
+	\input{eqref}
+\end{document}

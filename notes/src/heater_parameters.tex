@@ -1,0 +1,56 @@
+\begin{table}[H]
+	\centering
+	
+	\renewcommand{\arraystretch}{2} % to increase cell height
+	\taburulecolor{gray}
+	
+	%\begin{tabular}{|p{0.8cm}|p{1cm}|p{1cm}|p{1cm}|p{1cm}|p{1cm}|p{1cm}|p{1cm}|}
+	
+	\newcolumntype{C}[1]{>{\centering\arraybackslash}p{#1}}
+	\newcolumntype{R}[1]{>{\raggedleft\arraybackslash}p{#1}}
+	
+	\begin{tabu}{p{2.5cm}p{3cm}p{3cm}p{2.8cm}c}
+		%\cline{2-5}
+		\multicolumn{1}{l}{} 	& Komponens & Hőleadás & Hőtároló tömeg & Fajhő \\ %\cline{2-5}
+%		\multicolumn{5}{c}{}\\ %\hline
+		% header
+%		\multirow{2}{*}
+%		{Radiátor} & \multicolumn{2}{c|}{Time} \\	\cline{2-3}
+%		& First flight & Second flight\\ 
+
+		\hline
+		\multirow{2}{*}
+					{Radiátor} 	 & víz 		& a fémtestnek	& 8.9 \si[per-mode=symbol]{\kilogram\per\metre} 	& 4189 \si[per-mode=symbol]{\joule\per\kilogram\per\kelvin}	\\ % \cline{2-5}
+								 & fémtest 	& a levegőnek	& 50.1 \si[per-mode=symbol]{\kilogram\per\metre}	& 464 \si[per-mode=symbol]{\joule\per\kilogram\per\kelvin}	\\  %\hline
+								 
+		\hline
+		
+		\multirow{3}{*}
+					{Padlófűtés} & Padló betonja 	& hővezetés	& 840  \si[per-mode=fraction]{\kilogram\per\metre\squared}	&	\\  %\cline{2-5}
+								 & Padló burkolat 	& hővezetés 	&	& 	\\  \hline
+	\end{tabu}						
+		% entries - event names aligned left with multicolumn
+%		\multicolumn{1}{|l|}{flightHAT turned on} 	& & \\ \hline
+%%		{|p{3cm}|p{1cm}|p{3cm}|p{3cm}|p{3cm}|}
+%		%{p{1.5cm}|C{0.8cm}|C{0.8cm}|C{0.8cm}|C{0.8cm}|C{0.8cm}|C{0.8cm}|C{0.8cm}|C{0.8cm}|}
+%		%\multicolumn{1}{l}{}&\multicolumn{8}{l}{SDO header (első adatbyte) - master kérése}
+%		%\\ 		\cline{2-9}\cline{2-9}
+%		\hline
+%		felület& méret & kalorikus hőátbocsátási tényező    & hőtároló tömeg & hőkapac
+%		
+%		\\ \hline
+%		külső fal & 4.5 \si{\metre\squared} & 2 \si[per-mode=fraction]{\watt\per\metre\squared\per\kelvin} & 4.5*200kg & e.g. 4.5*200*840 \si[per-mode=fraction]{\joule\per\kelvin}
+%		\\ \hline
+%		ablak & 4 \si{\metre\squared} & 4 \si[per-mode=fraction]{\watt\per\metre\squared\per\kelvin} & 0 & 0
+%		\\ \hline
+%		belső válaszfalak & 50 \si{\metre\squared} & 7 & 50*100kg & 50*100*840	
+%		\\ \hline
+%		padló & 16 \si{\metre\squared} & 11 & 16*200kg & 169*200*840	
+%		\\ \hline
+%		mennyezet & 16 \si{\metre\squared} & ? rad / conv &  & 	
+%%		\\ \hline
+
+	
+	\caption{Fűtőtestek termikus tulajdonságai}
+	\label{table_heater_parameters}
+\end{table}
